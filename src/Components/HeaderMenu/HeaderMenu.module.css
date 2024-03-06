@@ -1,0 +1,12 @@
+.itemModalMenu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  border-bottom: 1px solid gainsboro;
+}
+
+.firstElListMenu {
+  font-weight: 700;
+}

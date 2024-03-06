@@ -47,6 +47,40 @@
   height: 24px;
 }
 
+.menuBox {
+  position: relative;
+  width: 320px;
+  height: 100%;
+  padding: 10px 0;
+  background-color: #fff;
+}
+
+.modalMenuHeader {
+  padding: 0 20px;
+  margin-bottom: 20px;
+}
+
+.closeBox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 1%;
+  top: 3%;
+  width: 16px;
+  height: 16px;
+}
+
+.iconClose {
+  border: none;
+  background-color: transparent;
+}
+
+.modalMenuList {
+  padding: 0 20px;
+  margin-bottom: 70px;
+}
+
 .logoHeader {
   width: 130px;
 }
