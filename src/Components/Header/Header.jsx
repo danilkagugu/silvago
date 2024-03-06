@@ -46,7 +46,7 @@ const Header = () => {
                   <a className={css.logoHeader} href="index.html">
                     <img
                       className={css.logoHeader}
-                      src="src/Img/logo.png"
+                      src="/src/Img/logo.png"
                       alt="SILVAGO"
                     />
                   </a>
@@ -65,7 +65,7 @@ const Header = () => {
               </div>
             </Modal>
             <a className={css.logoHeader} href="index.html">
-              <img src="src/Img/logo.png" alt="SILVAGO" />
+              <img src="/src/Img/logo.png" alt="SILVAGO" />
             </a>
             <form className={css.formSearch} action="">
               <input
