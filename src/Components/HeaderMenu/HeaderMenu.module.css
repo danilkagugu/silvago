@@ -10,3 +10,15 @@
 .firstElListMenu {
   font-weight: 700;
 }
+
+.dropdownBtn {
+  border: none;
+  background-color: transparent;
+}
+
+.dropDownMenu {
+  display: none;
+}
+.dropDownMenu.isActive {
+  display: block;
+}

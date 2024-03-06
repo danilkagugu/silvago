@@ -41,7 +41,7 @@ const Header = () => {
               onRequestClose={() => setModalIsOpen(false)}
               ariaHideApp={false}
             >
-              <div className={css.menuBox}>
+              <div>
                 <div className={css.modalMenuHeader}>
                   <a className={css.logoHeader} href="index.html">
                     <img className={css.logoHeader} src={Logo} alt="SILVAGO" />
