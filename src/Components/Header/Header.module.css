@@ -1,0 +1,86 @@
+/* .header {
+  border-bottom: 1px solid #e7e9fc;
+  box-shadow: 0px 2px 1px rgba(46, 47, 66, 0.08),
+    0px 1px 1px rgba(46, 47, 66, 0.16), 0px 1px 6px rgba(46, 47, 66, 0.08);
+} */
+
+.topHeader {
+  background-color: rgb(69, 68, 68);
+  margin-bottom: 20px;
+}
+
+@media screen and (max-width: 1157.98px) {
+  .topHeader {
+    display: none;
+  }
+}
+
+.topHeaderList {
+  display: flex;
+  flex-direction: row;
+  color: #fff;
+  padding: 10px;
+  justify-content: space-between;
+}
+
+.headerMenu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+.leftHeader {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 56%;
+}
+
+.btnMenu {
+  border: none;
+  background-color: transparent;
+}
+
+.iconMenu {
+  width: 24px;
+  height: 24px;
+}
+
+.logoHeader {
+  width: 130px;
+}
+
+.formSearch {
+  border: 1px solid #ddd;
+}
+
+@media screen and (max-width: 1157.98px) {
+  .formSearch {
+    display: none;
+  }
+}
+
+.inputSearch {
+  padding: 0 10px;
+  height: 42px;
+  width: 350px;
+}
+
+.headerRightList {
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 1157.98px) {
+  .iconHeart {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 1158px) {
+  .iconSearch {
+    display: none;
+  }
+}
