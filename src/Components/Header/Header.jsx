@@ -5,7 +5,7 @@ import { CiSearch } from "react-icons/ci";
 import { CiUser } from "react-icons/ci";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { IoMdClose } from "react-icons/io";
-
+import Logo from "../../Img/logo.png";
 import Modal from "react-modal";
 import { useState } from "react";
 
@@ -44,11 +44,7 @@ const Header = () => {
               <div className={css.menuBox}>
                 <div className={css.modalMenuHeader}>
                   <a className={css.logoHeader} href="index.html">
-                    <img
-                      className={css.logoHeader}
-                      src="/src/Img/logo.png"
-                      alt="SILVAGO"
-                    />
+                    <img className={css.logoHeader} src={Logo} alt="SILVAGO" />
                   </a>
                   <div className={css.closeBox}>
                     <button
@@ -65,7 +61,7 @@ const Header = () => {
               </div>
             </Modal>
             <a className={css.logoHeader} href="index.html">
-              <img src="/src/Img/logo.png" alt="SILVAGO" />
+              <img src={Logo} alt="SILVAGO" />
             </a>
             <form className={css.formSearch} action="">
               <input
