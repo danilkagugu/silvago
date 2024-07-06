@@ -1,0 +1,22 @@
+.catalogy {
+  display: none;
+}
+
+@media screen and (min-width: 1440px) {
+  .catalogy {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+  .catologyList {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 22px;
+  }
+  .catologyChevron {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+}

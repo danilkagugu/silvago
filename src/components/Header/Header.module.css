@@ -1,0 +1,76 @@
+.header {
+  display: flex;
+  align-items: center;
+}
+@media screen and (min-width: 350px) and (max-width: 1440px) {
+  .header {
+    justify-content: space-between;
+  }
+}
+.container {
+  padding: 20px 16px;
+  margin: 0 auto;
+}
+
+.leftHeaderMenu {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.searchBox {
+  display: none;
+}
+
+.iconBox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+@media screen and (min-width: 1440px) {
+  .container {
+    max-width: 1440px;
+    padding: 37px 100px;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+  .searchBox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 62px;
+    background: rgb(240, 240, 240);
+  }
+  .iconMenu {
+    display: none;
+  }
+
+  .icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .iconSearch {
+    fill: #00000066;
+  }
+
+  .iconSearchMob {
+    display: none;
+  }
+
+  .inputSearch {
+    border: none;
+    background-color: transparent;
+    width: 400px;
+  }
+
+  .iconBox {
+    gap: 20px;
+  }
+}
