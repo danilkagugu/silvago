@@ -1,0 +1,93 @@
+.mobWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background: rgba(50, 50, 54, 0.3);
+  z-index: 100;
+}
+
+.mobMenuBox,
+.mobMenuBoxHidden {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  width: 100%;
+  max-width: 325px;
+  z-index: 100;
+  padding: 53px 25px 30px 15px;
+  overflow-y: auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+.mobMenuBox {
+  transform: translateX(0);
+}
+
+.mobMenuBoxHidden {
+  transform: translateX(-100%);
+}
+
+.mobMenuClose {
+  position: absolute;
+  right: 7%;
+  top: 3%;
+}
+
+.mobMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mobMenuItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.catalogHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 25px;
+}
+
+.mobCatalogList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.mobCatalogItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.catalogBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.dropDownMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.downMenuItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.backIcon {
+  transform: rotate(180deg);
+}
