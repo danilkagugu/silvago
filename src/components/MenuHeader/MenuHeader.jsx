@@ -4,19 +4,17 @@ import { FaChevronDown } from "react-icons/fa6";
 
 const MenuHeader = () => {
   return (
-    <nav>
-      <ul className={css.MenuHeader}>
-        <li className={`${css.menuList} ${css.menuChevron}`}>
-          Каталог <FaChevronDown />
-          <div className={css.catalogyBox}>
-            <Catalogy />
-          </div>
-        </li>
-        <li className={css.menuList}>Бренди</li>
-        <li className={css.menuList}>Доставка і оплата</li>
-        <li className={css.menuList}>Про нас</li>
-      </ul>
-    </nav>
+    <ul className={css.MenuHeader}>
+      <li className={`${css.menuList} ${css.menuChevron}`}>
+        Каталог <FaChevronDown />
+        <div className={css.catalogyBox}>
+          <Catalogy />
+        </div>
+      </li>
+      <li className={css.menuList}>Бренди</li>
+      <li className={css.menuList}>Доставка і оплата</li>
+      <li className={css.menuList}>Про нас</li>
+    </ul>
   );
 };
 
