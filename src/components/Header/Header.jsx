@@ -1,5 +1,5 @@
 import css from "./Header.module.css";
-import Catalogy from "../Catalogy/Catalogy";
+import Catalogy from "../MenuHeader/MenuHeader";
 import Logo from "../Logo/Logo";
 import { IoSearch } from "react-icons/io5";
 import { SlBasket } from "react-icons/sl";

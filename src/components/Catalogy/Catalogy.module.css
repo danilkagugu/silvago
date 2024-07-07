@@ -1,22 +1,93 @@
-.catalogy {
-  display: none;
-}
-
 @media screen and (min-width: 1440px) {
-  .catalogy {
+  .catalogyList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .catologyItem {
+    position: relative;
+    padding: 15px;
+    background: white;
+    border: 1px solid #d6d6d6;
+    box-shadow: 0 2px 3px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 7px;
+    transition: 0.2s all;
+  }
+  .catalogyList:hover .catologyItem {
+    filter: blur(3px);
+    opacity: 0.5;
+    transform: scale(0.98);
+    box-shadow: none;
+  }
+  .catalogyList:hover .catologyItem:hover {
+    transform: scale(1);
+    filter: blur(0px);
+    opacity: 1;
+    box-shadow: 0 8px 20px 0px rgba(0, 0, 0, 0.125);
+  }
+  .catologyBox {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 24px;
+    justify-content: space-between;
+    position: relative;
+    padding: 10px 20px;
+    cursor: pointer;
   }
-  .catologyList {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 22px;
+
+  .itemText {
+    font-size: 20px;
   }
-  .catologyChevron {
+
+  .dropDownMenu {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 250px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    color: grey;
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+    z-index: 9999;
+    box-shadow: 0px 465px 186px rgba(153, 153, 153, 0.01),
+      0px 261px 157px rgba(153, 153, 153, 0.05),
+      0px 116px 116px rgba(153, 153, 153, 0.09),
+      0px 29px 64px rgba(153, 153, 153, 0.1),
+      0px 0px 0px rgba(153, 153, 153, 0.1);
+    border-radius: 10px;
+  }
+  /*------------------------------------------------------------------------Hover для li випадаючого меню----------------------------*/
+  .downMenuItem {
+    --b: 0.1em;
+    --c: #1095c1;
+
+    color: #0000;
+    padding-block: var(--b);
+    background: linear-gradient(var(--c) 50%, #000 0) 0%
+        calc(100% - var(--_p, 0%)) / 100% 200%,
+      linear-gradient(var(--c) 0 0) 0% var(--_p, 0%) / var(--_p, 0%) var(--b)
+        no-repeat;
+    -webkit-background-clip: text, padding-box;
+    background-clip: text, padding-box;
+    transition: 0.3s var(--_s, 0s) linear,
+      background-size 0.3s calc(0.3s - var(--_s, 0s));
+  }
+  .downMenuItem:hover {
+    --_p: 100%;
+    --_s: 0.3s;
+  }
+  /*------------------------------------------------------------------------Hover для li випадаючого меню----------------------------*/
+  .catologyItem:hover .dropDownMenu {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     gap: 7px;
+  }
+
+  .downMenuText {
+    font-size: 20px;
+    line-height: 25px;
   }
 }
