@@ -7,9 +7,11 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { MdOutlineMenu } from "react-icons/md";
 import { useState } from "react";
 import MobMenu from "../MobMenu/MobMenu";
+import LoginForm from "../LoginForm/LoginForm";
 
 const Header = () => {
   const [openMobMenu, setOpenMobMenu] = useState(false);
+  const [openLoginForm, setOpenLoginForm] = useState(false);
   return (
     <div className={css.container}>
       <div className={css.header}>
@@ -31,8 +33,16 @@ const Header = () => {
         <div className={css.iconBox}>
           <IoSearch className={`${css.iconSearchMob} ${css.icon}`} />
           <SlBasket className={css.icon} />
-          <FaRegUserCircle className={css.icon} />
+          <FaRegUserCircle
+            className={css.icon}
+            onClick={() => {
+              setOpenLoginForm(true);
+            }}
+          />
         </div>
+        {openLoginForm && (
+          <LoginForm openLogin={openLoginForm} closeLogin={setOpenLoginForm} />
+        )}
       </div>
     </div>
   );
