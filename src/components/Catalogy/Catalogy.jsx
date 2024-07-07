@@ -1,18 +1,28 @@
 import css from "./Catalogy.module.css";
-import { FaChevronDown } from "react-icons/fa6";
+import { IoMdArrowDropright } from "react-icons/io";
+import catologyJson from "./NextCatalog.json";
 
 const Catalogy = () => {
   return (
-    <nav>
-      <ul className={css.catalogy}>
-        <li className={`${css.catologyList} ${css.catologyChevron}`}>
-          Каталог <FaChevronDown />
+    <ul className={css.catalogyList}>
+      {catologyJson.map((category, index) => (
+        <li className={css.catologyItem} key={index}>
+          <div className={css.catologyBox}>
+            <p className={css.itemText}>{category.name}</p>
+            <IoMdArrowDropright />
+          </div>
+          {category.items && (
+            <ul className={css.dropDownMenu}>
+              {category.items.map((item, i) => (
+                <li className={css.downMenuItem} key={i}>
+                  <p className={css.downMenuText}>{item}</p>
+                </li>
+              ))}
+            </ul>
+          )}
         </li>
-        <li className={css.catologyList}>Бренди</li>
-        <li className={css.catologyList}>Доставка і оплата</li>
-        <li className={css.catologyList}>Про нас</li>
-      </ul>
-    </nav>
+      ))}
+    </ul>
   );
 };
 

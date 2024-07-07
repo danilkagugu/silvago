@@ -1,0 +1,48 @@
+.catalogy {
+  display: none;
+}
+
+@media screen and (min-width: 1440px) {
+  .MenuHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+  .menuList {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 22px;
+    position: relative;
+  }
+  .menuChevron {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .catalogyBox {
+    position: absolute;
+    display: none;
+    left: 0;
+    top: 100%;
+    width: 400px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+    z-index: 1000;
+    box-shadow: 0px 465px 186px rgba(153, 153, 153, 0.01),
+      0px 261px 157px rgba(153, 153, 153, 0.05),
+      0px 116px 116px rgba(153, 153, 153, 0.09),
+      0px 29px 64px rgba(153, 153, 153, 0.1),
+      0px 0px 0px rgba(153, 153, 153, 0.1);
+    border-radius: 30px;
+  }
+  .menuList:hover .catalogyBox {
+    display: block;
+  }
+}
