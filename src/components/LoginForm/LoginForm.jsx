@@ -1,7 +1,7 @@
 import css from "./LoginForm.module.css";
 import { IoCloseSharp } from "react-icons/io5";
 
-const LoginForm = ({ openLogin, closeLogin }) => {
+const LoginForm = ({ openLogin, closeLogin, regFormOn }) => {
   return (
     <div className={css.loginContainer}>
       <div className={openLogin ? css.login : css.loginHidden}>
@@ -43,7 +43,15 @@ const LoginForm = ({ openLogin, closeLogin }) => {
           </div>
           <div className={css.formRegisterInfo}>
             <p>Ще немає облікового запису?</p>
-            <p className={css.registerNow}>Зареєструйтесь зараз</p>
+            <p
+              className={css.registerNow}
+              onClick={() => {
+                closeLogin(false);
+                regFormOn();
+              }}
+            >
+              Зареєструйтесь зараз
+            </p>
           </div>
         </form>
       </div>

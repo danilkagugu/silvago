@@ -8,10 +8,23 @@ import { MdOutlineMenu } from "react-icons/md";
 import { useState } from "react";
 import MobMenu from "../MobMenu/MobMenu";
 import LoginForm from "../LoginForm/LoginForm";
+import RegisterForm from "../RegisterForm/RegisterForm";
 
 const Header = () => {
   const [openMobMenu, setOpenMobMenu] = useState(false);
   const [openLoginForm, setOpenLoginForm] = useState(false);
+  const [openRegisterForm, setOpenRegisterForm] = useState(false);
+
+  const regForm = () => {
+    setOpenRegisterForm(true);
+    setOpenLoginForm(false);
+  };
+
+  const loginForm = () => {
+    setOpenRegisterForm(false);
+    setOpenLoginForm(true);
+  };
+
   return (
     <div className={css.container}>
       <div className={css.header}>
@@ -41,7 +54,18 @@ const Header = () => {
           />
         </div>
         {openLoginForm && (
-          <LoginForm openLogin={openLoginForm} closeLogin={setOpenLoginForm} />
+          <LoginForm
+            openLogin={openLoginForm}
+            closeLogin={setOpenLoginForm}
+            regFormOn={regForm}
+          />
+        )}
+        {openRegisterForm && (
+          <RegisterForm
+            openLogin={openRegisterForm}
+            closeLogin={setOpenRegisterForm}
+            loginFormOn={loginForm}
+          />
         )}
       </div>
     </div>
