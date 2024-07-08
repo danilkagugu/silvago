@@ -72,6 +72,10 @@
   margin-bottom: 15px;
 }
 
+.inputForm:hover {
+  background-color: #fff;
+}
+
 .btnLogin {
   font-weight: 700;
   font-size: 1rem;
@@ -118,4 +122,5 @@
   transition-duration: 300ms;
   font-weight: 700;
   color: #0f2d52;
+  cursor: pointer;
 }
