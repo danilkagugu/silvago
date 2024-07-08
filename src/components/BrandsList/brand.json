@@ -1,17 +1,17 @@
 [
-  { "name": "Benton", "src": "./public/brandImg/benton.png" },
-  { "name": "Dr.Ceuracle", "src": "./public/brandImg/dr.ceuracle.png" },
-  { "name": "Hiskin", "src": "./public/brandImg/hiskin.png" },
-  { "name": "Medi Peel", "src": "./public/brandImg/medi-peel.png" },
-  { "name": "Needly", "src": "./public/brandImg/needly.png" },
-  { "name": "Round Lub", "src": "./public/brandImg/round-lub.png" },
+  { "name": "Benton", "src": "../public/brandImg/benton.png" },
+  { "name": "Dr.Ceuracle", "src": "../public/brandImg/dr.ceuracle.png" },
+  { "name": "Hiskin", "src": "../public/brandImg/hiskin.png" },
+  { "name": "Medi Peel", "src": "../public/brandImg/medi-peel.png" },
+  { "name": "Needly", "src": "../public/brandImg/needly.png" },
+  { "name": "Round Lub", "src": "../public/brandImg/round-lub.png" },
   {
     "name": "The Elements",
-    "src": "./public/brandImg/the-elements.png"
+    "src": "../public/brandImg/the-elements.png"
   },
-  { "name": "Q+A", "src": "./public/brandImg/q+a.png" },
-  { "name": "Purito", "src": "./public/brandImg/purito.png" },
-  { "name": "Top Beauty", "src": "./public/brandImg/top-beauty.png" },
-  { "name": "Inebrya", "src": "./public/brandImg/inebrya.png" },
-  { "name": "MiniMi", "src": "./public/brandImg/minimi.png" }
+  { "name": "Q+A", "src": "../public/brandImg/q+a.png" },
+  { "name": "Purito", "src": "../public/brandImg/purito.png" },
+  { "name": "Top Beauty", "src": "../public/brandImg/top-beauty.png" },
+  { "name": "Inebrya", "src": "../public/brandImg/inebrya.png" },
+  { "name": "MiniMi", "src": "../public/brandImg/minimi.png" }
 ]
