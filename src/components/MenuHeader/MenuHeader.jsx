@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Catalogy from "../Catalogy/Catalogy";
 import css from "./MenuHeader.module.css";
 import { FaChevronDown } from "react-icons/fa6";
@@ -11,7 +12,11 @@ const MenuHeader = () => {
           <Catalogy />
         </div>
       </li>
-      <li className={css.menuList}>Бренди</li>
+      <li className={css.menuList}>
+        <Link className={css.brandLink} to={"/brands"}>
+          Бренди
+        </Link>
+      </li>
       <li className={css.menuList}>Доставка і оплата</li>
       <li className={css.menuList}>Про нас</li>
     </ul>
