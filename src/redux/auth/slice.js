@@ -4,6 +4,7 @@ import {
   apiRefreshUser,
   apiRegisterUser,
   getUserInfo,
+  apiLogoutUser,
 } from "./operations";
 
 const INITIAL_STATE = {
@@ -31,6 +32,9 @@ const authSlice = createSlice({
         state.token = action.payload.token;
         state.isLoggedIn = true;
       })
+      .addCase(apiLogoutUser.fulfilled, () => {
+        return INITIAL_STATE;
+      })
       .addCase(apiRefreshUser.pending, (state) => {
         state.isRefresh = true;
         state.error = false;
@@ -52,7 +56,8 @@ const authSlice = createSlice({
         isAnyOf(
           apiRegisterUser.pending,
           apiLoginUser.pending,
-          getUserInfo.pending
+          getUserInfo.pending,
+          apiLogoutUser.pending
         ),
         (state) => {
           state.loading = true;
@@ -63,7 +68,8 @@ const authSlice = createSlice({
         isAnyOf(
           apiRegisterUser.rejected,
           apiLoginUser.rejected,
-          getUserInfo.rejected
+          getUserInfo.rejected,
+          apiLogoutUser.rejected
         ),
         (state) => {
           state.loading = false;

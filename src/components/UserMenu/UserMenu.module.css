@@ -1,0 +1,22 @@
+.container {
+  width: 50%;
+}
+
+.list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+}
+
+/* .icon {
+}
+
+.text {
+} */

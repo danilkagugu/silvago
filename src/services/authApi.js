@@ -32,3 +32,9 @@ export const requestGetCurrentUser = async () => {
 
   return data;
 };
+
+export const requestLogout = async () => {
+  const { data } = await instance.post("/api/auth/logout");
+
+  return data;
+};
