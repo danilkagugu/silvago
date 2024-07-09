@@ -9,12 +9,16 @@ import { useState } from "react";
 import MobMenu from "../MobMenu/MobMenu";
 import LoginForm from "../LoginForm/LoginForm";
 import RegisterForm from "../RegisterForm/RegisterForm";
+import { useSelector } from "react-redux";
+import { selectIsLoggedIn } from "../../redux/auth/selectors";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const [openMobMenu, setOpenMobMenu] = useState(false);
   const [openLoginForm, setOpenLoginForm] = useState(false);
   const [openRegisterForm, setOpenRegisterForm] = useState(false);
-
+  const login = useSelector(selectIsLoggedIn);
+  const navigate = useNavigate();
   const regForm = () => {
     setOpenRegisterForm(true);
     setOpenLoginForm(false);
@@ -49,7 +53,7 @@ const Header = () => {
           <FaRegUserCircle
             className={css.icon}
             onClick={() => {
-              setOpenLoginForm(true);
+              !login ? setOpenLoginForm(true) : navigate("/user-cabinet");
             }}
           />
         </div>
