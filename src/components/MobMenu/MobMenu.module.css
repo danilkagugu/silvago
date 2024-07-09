@@ -31,6 +31,12 @@
   transform: translateX(-100%);
 }
 
+.logoBox {
+  position: absolute;
+  top: -1%;
+  left: 40%;
+}
+
 .mobMenuClose {
   position: absolute;
   right: 7%;
@@ -90,4 +96,8 @@
 
 .backIcon {
   transform: rotate(180deg);
+}
+
+.linkBrand {
+  color: black;
 }
