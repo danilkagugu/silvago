@@ -13,12 +13,20 @@ const MenuHeader = () => {
         </div>
       </li>
       <li className={css.menuList}>
-        <Link className={css.brandLink} to={"/brands"}>
+        <Link className={css.link} to={"/brands"}>
           Бренди
         </Link>
       </li>
-      <li className={css.menuList}>Доставка і оплата</li>
-      <li className={css.menuList}>Про нас</li>
+      <li className={css.menuList}>
+        <Link className={css.link} to={"/delivery-and-payment"}>
+          Доставка і оплата
+        </Link>
+      </li>
+      <li className={css.menuList}>
+        <Link className={css.link} to={"/about-us"}>
+          Про нас
+        </Link>
+      </li>
     </ul>
   );
 };
