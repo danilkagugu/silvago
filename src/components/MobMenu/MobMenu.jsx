@@ -3,6 +3,8 @@ import { IoCloseSharp } from "react-icons/io5";
 import { FaChevronRight } from "react-icons/fa6";
 import catalog from "../Catalogy/NextCatalog.json";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import logo from "../../assets/img/sv-logo.png";
 
 const MobMenu = ({ closeMenu }) => {
   const [openMenu, setOpenMenu] = useState({
@@ -26,17 +28,29 @@ const MobMenu = ({ closeMenu }) => {
   return (
     <div className={css.mobWrapper}>
       <div className={openMenu.main ? css.mobMenuBox : css.mobMenuBoxHidden}>
+        <div className={css.logoBox}>
+          <Link to={"/"}>
+            <img src={logo} alt="" width={55} />
+          </Link>
+        </div>
         <IoCloseSharp
           className={`${css.iconClose} ${css.mobMenuClose}`}
           onClick={() => closeMenu(false)}
         />
         <ul className={css.mobMenu}>
-          <li className={css.mobMenuItem}>
+          <li
+            className={css.mobMenuItem}
+            onClick={() => handleCategoryMenu("Каталог")}
+          >
             <p>Каталог</p>
-            <FaChevronRight onClick={() => handleCategoryMenu("Каталог")} />
+            <FaChevronRight />
           </li>
           <li>
-            <p>Бренди</p>
+            <p>
+              <Link className={css.linkBrand} to={"/brands"}>
+                Бренди
+              </Link>
+            </p>
           </li>
           <li>
             <p>Доставка і оплата</p>

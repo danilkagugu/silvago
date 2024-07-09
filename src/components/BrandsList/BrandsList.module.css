@@ -2,8 +2,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 50px;
-  padding: 50px;
+  margin-top: 20px;
+  padding: 20px;
 }
 
 .list {
@@ -11,12 +11,11 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 10px;
 }
+
 .listItem {
-  width: 16%;
-  flex-basis: calc((100% - 20px) / 6);
-  box-sizing: border-box;
+  width: 200px;
 }
 
 .cardContainer {
@@ -27,8 +26,27 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
 }
-
 .cardContainer:hover {
   transform: translateY(-5px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+@media screen and (min-width: 1440px) {
+  .container {
+    margin-top: 50px;
+    padding: 50px;
+  }
+
+  .list {
+    gap: 20px;
+  }
+  .listItem {
+    width: 16%;
+    flex-basis: calc((100% - 20px) / 6);
+    box-sizing: border-box;
+  }
+
+  .cardContainer:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
 }
