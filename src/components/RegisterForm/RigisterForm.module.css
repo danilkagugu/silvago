@@ -115,3 +115,10 @@
   color: #0f2d52;
   cursor: pointer;
 }
+
+.error {
+  color: red;
+  font-size: 14px;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
