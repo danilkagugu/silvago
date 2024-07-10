@@ -1,9 +1,14 @@
 import MaskedInput from "react-text-mask";
+import React from "react";
 
-const CustomMaskedInput = (props) => {
+const CustomMaskedInput = React.forwardRef(function CustomMaskedInput(
+  props,
+  ref
+) {
   return (
     <MaskedInput
       {...props}
+      ref={ref}
       mask={[
         "+",
         "3",
@@ -27,6 +32,6 @@ const CustomMaskedInput = (props) => {
       ]}
     />
   );
-};
+});
 
 export default CustomMaskedInput;
