@@ -3,7 +3,7 @@ import css from "./UserSettings.module.css";
 import CustomMaskedInput from "../RegisterForm/CustomMaskedInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUserData } from "../../redux/auth/selectors";
 import { useEffect, useState } from "react";
 import {
@@ -11,28 +11,27 @@ import {
   getPostOffice,
   getCities,
 } from "../../services/NovaPoshtaApi";
+import { useNavigate } from "react-router-dom";
+import { apiUpdateUser } from "../../redux/auth/operations";
 
 const UserRegisterSchema = Yup.object().shape({
   name: Yup.string(),
   serName: Yup.string(),
   phone: Yup.string(),
-  email: Yup.string()
-    .email("Уведіть валідний email")
-    .required("Поле Email є обов'язковим"),
-  password: Yup.string()
-    .min(6, "Короткий")
-    .max(50, "Довгий")
-    .required("Поле 'Пароль' є обов'язковим"),
-  repeatPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Паролі різні")
-    .required("Поле 'Пароль' є обов'язковим"),
+  email: Yup.string().email("Уведіть валідний email"),
+  area: Yup.string(),
+  city: Yup.string(),
+  office: Yup.string(),
 });
 
 const UserSettings = () => {
-  const { name, serName, phone, email } = useSelector(selectUserData);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { name, serName, phone, email, area, city, office } =
+    useSelector(selectUserData);
   const [areas, setAreas] = useState([]);
   const [cities, setCities] = useState([]);
-  const [office, setOffices] = useState([]);
+  const [offices, setOffices] = useState([]);
 
   useEffect(() => {
     const fetchAreas = async () => {
@@ -88,11 +87,14 @@ const UserSettings = () => {
     serName,
     phone,
     email,
+    area,
+    city,
+    office,
   };
 
   const {
     register,
-    // handleSubmit,
+    handleSubmit,
     control,
     formState: { errors, touchedFields },
   } = useForm({
@@ -100,9 +102,20 @@ const UserSettings = () => {
     defaultValues: INITIAL_FORM_DATA,
   });
 
+  const onSubmit = async (data) => {
+    try {
+      const response = dispatch(apiUpdateUser(data));
+      if (response) {
+        navigate("/user-cabinet");
+      }
+    } catch (error) {
+      console.error("Error updating user: ", error);
+    }
+  };
+
   return (
     <div>
-      <form className={css.form}>
+      <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
         <div className={css.boxUserInfo}>
           <div className={css.inputBox}>
             <label className={css.visuallyHidden} htmlFor="name">
@@ -166,14 +179,15 @@ const UserSettings = () => {
         <div>
           <h1>Адреса доставки</h1>
           <div>
-            <label className={css.visuallyHidden} htmlFor="areas">
+            <label className={css.visuallyHidden} htmlFor="area">
               Область
             </label>
+
             <select
               className={css.inputForm}
-              id="areas"
+              id="area"
               type="text"
-              {...register("areas")}
+              {...register("area")}
               onChange={handleAreaChange}
             >
               <option value="">Виберіть область</option>
@@ -184,21 +198,24 @@ const UserSettings = () => {
                   </option>
                 ))}
             </select>
-            <label className={css.visuallyHidden} htmlFor="cities">
+
+            <label className={css.visuallyHidden} htmlFor="city">
               Місто
             </label>
+
             <select
               className={css.inputForm}
-              id="cities"
-              {...register("cities")}
+              id="city"
+              {...register("city")}
               onChange={handleCityChange}
             >
               <option value="">Виберіть місто</option>
-              {cities.map((city) => (
-                <option key={city} value={city}>
-                  {city}
-                </option>
-              ))}
+              {cities &&
+                cities.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
             </select>
             <label className={css.visuallyHidden} htmlFor="office">
               Віділення
@@ -209,14 +226,18 @@ const UserSettings = () => {
               {...register("office")}
             >
               <option value="">Виберіть віділення</option>
-              {office.map((offic) => (
-                <option key={offic} value={offic}>
-                  {offic}
-                </option>
-              ))}
+              {offices &&
+                offices.map((offic) => (
+                  <option key={offic} value={offic}>
+                    {offic}
+                  </option>
+                ))}
             </select>
           </div>
         </div>
+        <button className={css.btnLogin} type="submit">
+          Зберегти зміни
+        </button>
       </form>
     </div>
   );
