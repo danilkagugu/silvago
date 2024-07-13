@@ -5,11 +5,14 @@ import { CiSettings } from "react-icons/ci";
 import { LuUserX } from "react-icons/lu";
 import { useDispatch } from "react-redux";
 import { apiLogoutUser } from "../../redux/auth/operations";
+import { useNavigate } from "react-router-dom";
 
 const UserMenu = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const onLogout = () => {
     dispatch(apiLogoutUser());
+    navigate("/");
   };
 
   return (

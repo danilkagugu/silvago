@@ -4,6 +4,7 @@ import {
   requestLogout,
   requestSignIn,
   requestSignUp,
+  requestUpdate,
   setToken,
 } from "../../services/authApi";
 
@@ -70,6 +71,18 @@ export const getUserInfo = createAsyncThunk(
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const apiUpdateUser = createAsyncThunk(
+  "user/update",
+  async (body, thunkAPI) => {
+    try {
+      const response = await requestUpdate(body);
+      return response.data.user;
+    } catch (e) {
+      return thunkAPI.rejectWithValue(e.message);
     }
   }
 );

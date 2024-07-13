@@ -27,14 +27,21 @@ export const requestSignIn = async (formData) => {
   return data;
 };
 
-export const requestGetCurrentUser = async () => {
-  const { data } = await instance.get("/api/auth/current");
+export const requestLogout = async () => {
+  const { data } = await instance.post("/api/auth/logout");
 
   return data;
 };
 
-export const requestLogout = async () => {
-  const { data } = await instance.post("/api/auth/logout");
+export const requestGetCurrentUser = async () => {
+  const { data } = await instance.get("/api/auth/current");
+  // console.log("data: ", data);
+
+  return data;
+};
+
+export const requestUpdate = async (body) => {
+  const data = await instance.patch("/api/auth/update", body);
 
   return data;
 };

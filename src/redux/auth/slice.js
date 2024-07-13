@@ -5,6 +5,7 @@ import {
   apiRegisterUser,
   getUserInfo,
   apiLogoutUser,
+  apiUpdateUser,
 } from "./operations";
 
 const INITIAL_STATE = {
@@ -48,6 +49,11 @@ const authSlice = createSlice({
         state.isRefresh = false;
         state.error = true;
       })
+      .addCase(apiUpdateUser.fulfilled, (state, action) => {
+        state.userData = action.payload;
+        state.loading = false;
+        console.log(state.userData);
+      })
       .addCase(getUserInfo.fulfilled, (state, action) => {
         state.userData = action.payload;
         state.loading = false;
@@ -57,7 +63,8 @@ const authSlice = createSlice({
           apiRegisterUser.pending,
           apiLoginUser.pending,
           getUserInfo.pending,
-          apiLogoutUser.pending
+          apiLogoutUser.pending,
+          apiUpdateUser.pending
         ),
         (state) => {
           state.loading = true;
@@ -69,7 +76,8 @@ const authSlice = createSlice({
           apiRegisterUser.rejected,
           apiLoginUser.rejected,
           getUserInfo.rejected,
-          apiLogoutUser.rejected
+          apiLogoutUser.rejected,
+          apiUpdateUser.rejected
         ),
         (state) => {
           state.loading = false;
