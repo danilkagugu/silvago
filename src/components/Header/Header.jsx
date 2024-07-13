@@ -5,6 +5,7 @@ import { IoSearch } from "react-icons/io5";
 import { SlBasket } from "react-icons/sl";
 import { FaRegUserCircle } from "react-icons/fa";
 import { MdOutlineMenu } from "react-icons/md";
+import { CiHeart } from "react-icons/ci";
 import { useState } from "react";
 import MobMenu from "../MobMenu/MobMenu";
 import LoginForm from "../LoginForm/LoginForm";
@@ -50,10 +51,18 @@ const Header = () => {
         <div className={css.iconBox}>
           <IoSearch className={`${css.iconSearchMob} ${css.icon}`} />
           <SlBasket className={css.icon} />
+          <CiHeart
+            className={css.icon}
+            onClick={() => {
+              navigate("/user-cabinet/favorite");
+            }}
+          />
           <FaRegUserCircle
             className={css.icon}
             onClick={() => {
-              !login ? setOpenLoginForm(true) : navigate("/user-cabinet");
+              !login
+                ? setOpenLoginForm(true)
+                : navigate("/user-cabinet/settings");
             }}
           />
         </div>

@@ -10,6 +10,10 @@ const UserCabinet = lazy(() => import("../../pages/UserCabinet/UserCabinet"));
 const DeliveryAndPayment = lazy(() =>
   import("../../pages/DeliveryAndPayment/DeliveryAndPayment")
 );
+const Catalog = lazy(() => import("../../pages/Catalog/Catalog"));
+const Favorite = lazy(() => import("../../pages/Favorite/Favorite"));
+const History = lazy(() => import("../../pages/History/History"));
+const Settings = lazy(() => import("../../pages/Settings/Settings"));
 const NotFound = lazy(() => import("../../pages/NotFound/NotFound"));
 const App = () => {
   const dispatch = useDispatch();
@@ -18,13 +22,18 @@ const App = () => {
     dispatch(apiRefreshUser());
   }, [dispatch]);
   return (
-    <Suspense>
+    <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/brands" element={<Brands />} />
         <Route path="/delivery-and-payment" element={<DeliveryAndPayment />} />
-        <Route path="/user-cabinet" element={<UserCabinet />} />
+        <Route path="/user-cabinet/*" element={<UserCabinet />}>
+          <Route path="favorite" element={<Favorite />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="history" element={<History />} />
+        </Route>
+        <Route path="/catalog/:category/:item" element={<Catalog />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

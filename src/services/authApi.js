@@ -42,6 +42,7 @@ export const requestGetCurrentUser = async () => {
 
 export const requestUpdate = async (body) => {
   const data = await instance.patch("/api/auth/update", body);
+  console.log("data: ", data);
 
   return data;
 };
