@@ -1,6 +1,7 @@
 import css from "./Catalogy.module.css";
 import { IoMdArrowDropright } from "react-icons/io";
 import catologyJson from "./NextCatalog.json";
+import { Link } from "react-router-dom";
 
 const Catalogy = () => {
   return (
@@ -15,7 +16,14 @@ const Catalogy = () => {
             <ul className={css.dropDownMenu}>
               {category.items.map((item, i) => (
                 <li className={css.downMenuItem} key={i}>
-                  <p className={css.downMenuText}>{item}</p>
+                  <Link
+                    to={`/catalog/${encodeURIComponent(
+                      category.name
+                    )}/${encodeURIComponent(item)}`}
+                    className={css.downMenuLink}
+                  >
+                    <p className={css.downMenuText}>{item}</p>
+                  </Link>
                 </li>
               ))}
             </ul>
