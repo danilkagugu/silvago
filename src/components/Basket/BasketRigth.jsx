@@ -1,34 +1,60 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getBasketProduct, productById } from "../../services/productApi";
 import css from "./BasketRigth.module.css";
+import FavoriteItem from "../FavoriteItem/FavoriteItem";
 
 const BasketRigth = () => {
-  const [basketItems, setBasketItems] = useState([]);
+  const [basket, setBasket] = useState([]);
+  const [productDetails, setProductDetails] = useState({});
 
-  const addToBasket = (product) => {
-    const existingItem = basketItems.find((item) => item._id === product._id);
-    if (existingItem) {
-      // If product already exists in basket, increase its quantity
-      const updatedItems = basketItems.map((item) =>
-        item._id === product._id
-          ? { ...item, quantity: item.quantity + 1 }
-          : item
-      );
-      setBasketItems(updatedItems);
-    } else {
-      // If product is not in basket, add it with quantity 1
-      setBasketItems([...basketItems, { ...product, quantity: 1 }]);
-    }
-  };
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const basketData = await getBasketProduct();
+        console.log("Fetched basket data:", basketData);
+
+        if (!basketData || !basketData.products) {
+          console.error("Invalid basket data format:", basketData);
+          return;
+        }
+        setBasket(basketData.products);
+
+        // Fetch details for all products in the basket
+        const details = {};
+        for (const basketItem of basketData.products) {
+          const response = await productById(basketItem.product);
+          details[basketItem.product] = response;
+        }
+        setProductDetails(details);
+      } catch (error) {
+        console.error("Error fetching basket products:", error);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   return (
     <div className={css.container}>
       <h2>Basket</h2>
       <ul>
-        {basketItems.map((item) => (
-          <li key={item._id}>
-            {item.name} - Quantity: {item.quantity}
-          </li>
-        ))}
+        {basket.map((product) => {
+          const details = productDetails[product.product];
+          return (
+            <li key={product._id}>
+              <p>BASKET ITEM ID: {product._id}</p>
+              {details && (
+                <FavoriteItem
+                  productImg={details.image}
+                  productName={details.name}
+                  productPrice={details.price}
+                />
+              )}
+              <button onClick={() => console.log("Product details:", details)}>
+                View Details
+              </button>
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

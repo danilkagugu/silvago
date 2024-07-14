@@ -24,6 +24,7 @@ export const requestSignIn = async (formData) => {
   const { data } = await instance.post("/api/auth/login", formData);
   console.log("data: ", data.token);
   setToken(data.token);
+
   return data;
 };
 
@@ -41,8 +42,7 @@ export const requestGetCurrentUser = async () => {
 };
 
 export const requestUpdate = async (body) => {
-  const data = await instance.patch("/api/auth/update", body);
-  console.log("data: ", data);
+  const { data } = await instance.patch("/api/auth/update", body);
 
   return data;
 };

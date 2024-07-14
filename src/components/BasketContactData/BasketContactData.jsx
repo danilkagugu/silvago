@@ -1,16 +1,18 @@
-import { useSelector } from "react-redux";
-import css from "./BasketContactData.module.css";
-import * as Yup from "yup";
-import { selectUserData } from "../../redux/auth/selectors";
 import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import css from "./BasketContactData.module.css";
 import CustomMaskedInput from "../RegisterForm/CustomMaskedInput";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUserData } from "../../redux/auth/selectors";
 import { useEffect, useState } from "react";
 import {
   getArea,
-  getCities,
   getPostOffice,
+  getCities,
 } from "../../services/NovaPoshtaApi";
+import { useNavigate } from "react-router-dom";
+import { apiUpdateUser } from "../../redux/auth/operations";
 
 const UserRegisterSchema = Yup.object().shape({
   name: Yup.string(),
@@ -22,43 +24,30 @@ const UserRegisterSchema = Yup.object().shape({
   office: Yup.string(),
 });
 
-const BasketContactData = () => {
+const UserSettings = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const userData = useSelector(selectUserData) || {};
+  const { name, serName, phone, email, area, city, office } = userData;
+
   const [areas, setAreas] = useState([]);
   const [cities, setCities] = useState([]);
   const [offices, setOffices] = useState([]);
 
-  const { name, serName, phone, email, area, city, office } =
-    useSelector(selectUserData);
   useEffect(() => {
     const fetchAreas = async () => {
       try {
         const areasData = await getArea();
         setAreas(areasData);
       } catch (error) {
-        console.error("Error fetching cities:", error);
+        console.error("Error fetching areas:", error);
       }
     };
 
     fetchAreas();
   }, []);
-  const INITIAL_FORM_DATA = {
-    name,
-    serName,
-    phone,
-    email,
-    area,
-    city,
-    office,
-  };
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, touchedFields },
-  } = useForm({
-    resolver: yupResolver(UserRegisterSchema),
-    defaultValues: INITIAL_FORM_DATA,
-  });
+
   const handleAreaChange = async (e) => {
     const selectedAreaRef = e.target.value;
     const selectedArea = areas.find((area) => area.Ref === selectedAreaRef);
@@ -94,13 +83,54 @@ const BasketContactData = () => {
       setOffices([]);
     }
   };
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors, touchedFields },
+    setValue,
+  } = useForm({
+    resolver: yupResolver(UserRegisterSchema),
+    defaultValues: {
+      name: "",
+      serName: "",
+      phone: "",
+      email: "",
+      area: "",
+      city: "",
+      office: "",
+    },
+  });
+
+  useEffect(() => {
+    setValue("name", name);
+    setValue("serName", serName);
+    setValue("phone", phone);
+    setValue("email", email);
+    // setValue("area", area);
+    // setValue("city", city);
+    // setValue("office", office);
+  }, [name, serName, phone, email, area, city, office, setValue]);
+
+  const onSubmit = async (data) => {
+    try {
+      const response = await dispatch(apiUpdateUser(data));
+      if (response) {
+        navigate("/user-cabinet");
+      }
+    } catch (error) {
+      console.error("Error updating user: ", error);
+    }
+  };
+
   return (
-    <div className={css.container}>
-      <form className={css.form}>
+    <div>
+      <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
         <div className={css.boxUserInfo}>
           <div className={css.inputBox}>
             <label className={css.visuallyHidden} htmlFor="name">
-              Імя
+              Ім'я
             </label>
             <input
               className={css.inputForm}
@@ -224,4 +254,4 @@ const BasketContactData = () => {
   );
 };
 
-export default BasketContactData;
+export default UserSettings;

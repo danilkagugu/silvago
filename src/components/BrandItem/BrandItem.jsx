@@ -1,5 +1,8 @@
+import { setToken } from "../../services/authApi";
 import css from "./BrandItem.module.css";
 const BrandItem = ({ brandImg, brandTitle }) => {
+  const token = setToken();
+  console.log("token: ", token);
   return (
     <div className={css.cardBox}>
       <div className={css.imgBox}>

@@ -50,9 +50,9 @@ const authSlice = createSlice({
         state.error = true;
       })
       .addCase(apiUpdateUser.fulfilled, (state, action) => {
-        state.userData = action.payload;
+        state.userData = action.payload.user;
         state.loading = false;
-        console.log(state.userData);
+        console.log(state.userData.user);
       })
       .addCase(getUserInfo.fulfilled, (state, action) => {
         state.userData = action.payload;

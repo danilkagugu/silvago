@@ -27,8 +27,10 @@ const UserRegisterSchema = Yup.object().shape({
 const UserSettings = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { name, serName, phone, email, area, city, office } =
-    useSelector(selectUserData);
+
+  const userData = useSelector(selectUserData) || {};
+  const { name, serName, phone, email, area, city, office } = userData;
+
   const [areas, setAreas] = useState([]);
   const [cities, setCities] = useState([]);
   const [offices, setOffices] = useState([]);
@@ -39,7 +41,7 @@ const UserSettings = () => {
         const areasData = await getArea();
         setAreas(areasData);
       } catch (error) {
-        console.error("Error fetching cities:", error);
+        console.error("Error fetching areas:", error);
       }
     };
 
@@ -82,29 +84,38 @@ const UserSettings = () => {
     }
   };
 
-  const INITIAL_FORM_DATA = {
-    name,
-    serName,
-    phone,
-    email,
-    area,
-    city,
-    office,
-  };
-
   const {
     register,
     handleSubmit,
     control,
     formState: { errors, touchedFields },
+    setValue,
   } = useForm({
     resolver: yupResolver(UserRegisterSchema),
-    defaultValues: INITIAL_FORM_DATA,
+    defaultValues: {
+      name: "",
+      serName: "",
+      phone: "",
+      email: "",
+      area: "",
+      city: "",
+      office: "",
+    },
   });
+
+  useEffect(() => {
+    setValue("name", name);
+    setValue("serName", serName);
+    setValue("phone", phone);
+    setValue("email", email);
+    // setValue("area", area);
+    // setValue("city", city);
+    // setValue("office", office);
+  }, [name, serName, phone, email, area, city, office, setValue]);
 
   const onSubmit = async (data) => {
     try {
-      const response = dispatch(apiUpdateUser(data));
+      const response = await dispatch(apiUpdateUser(data));
       if (response) {
         navigate("/user-cabinet");
       }
@@ -119,7 +130,7 @@ const UserSettings = () => {
         <div className={css.boxUserInfo}>
           <div className={css.inputBox}>
             <label className={css.visuallyHidden} htmlFor="name">
-              Імя
+              Ім'я
             </label>
             <input
               className={css.inputForm}
