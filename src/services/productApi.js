@@ -6,12 +6,17 @@ export const instance = axios.create({
   baseURL: BASE_URL,
 });
 
-export const createWaterRecord = async (body) => {
-  const data = await instance.post("/api/product", body);
-  return data;
-};
+// export const createWaterRecord = async (body) => {
+//   const data = await instance.post("/api/product", body);
+//   return data;
+// };
 
 export const getProducts = async () => {
   const { data } = await instance.get("/api/product");
+  return data;
+};
+export const addProductToFavorite = async (productId) => {
+  const data = await instance.patch(`/api/product/${productId}/favorite`);
+  console.log("data: ", data);
   return data;
 };
