@@ -50,7 +50,12 @@ const Header = () => {
         </div>
         <div className={css.iconBox}>
           <IoSearch className={`${css.iconSearchMob} ${css.icon}`} />
-          <SlBasket className={css.icon} />
+          <SlBasket
+            className={css.icon}
+            onClick={() => {
+              navigate("/basket");
+            }}
+          />
           <CiHeart
             className={css.icon}
             onClick={() => {
