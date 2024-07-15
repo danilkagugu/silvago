@@ -21,13 +21,22 @@ export const addProductToFavorite = async (productId) => {
   return data;
 };
 
-export const addProductToBasket = async (productId) => {
-  const { data } = await instance.post(`/api/product/${productId}/basket`);
+export const addProductToBasket = async (productId, quantity) => {
+  const { data } = await instance.post(`/api/product/${productId}/basket`, {
+    quantity,
+  });
   return data;
 };
 
 export const getBasketProduct = async () => {
   const { data } = await instance.get("/api/product/basket");
+  return data;
+};
+
+export const updateProductQuantity = async (productId, quantity) => {
+  const { data } = await instance.patch(`/api/product/basket/${productId}`, {
+    quantity,
+  });
   return data;
 };
 
