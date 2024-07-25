@@ -3,7 +3,7 @@ import css from "./BasketContactData.module.css";
 import CustomMaskedInput from "../RegisterForm/CustomMaskedInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectUserData } from "../../redux/auth/selectors";
 import { useEffect, useState } from "react";
 import {
@@ -11,8 +11,8 @@ import {
   getPostOffice,
   getCities,
 } from "../../services/NovaPoshtaApi";
-import { useNavigate } from "react-router-dom";
-import { apiUpdateUser } from "../../redux/auth/operations";
+import { sendOrder } from "../../services/productApi";
+import { selectBasket } from "../../redux/basket/selectors";
 
 const UserRegisterSchema = Yup.object().shape({
   name: Yup.string(),
@@ -24,10 +24,7 @@ const UserRegisterSchema = Yup.object().shape({
   office: Yup.string(),
 });
 
-const UserSettings = () => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
+const BasketContactData = () => {
   const userData = useSelector(selectUserData) || {};
   const { name, serName, phone, email, area, city, office } = userData;
 
@@ -112,25 +109,46 @@ const UserSettings = () => {
     // setValue("city", city);
     // setValue("office", office);
   }, [name, serName, phone, email, area, city, office, setValue]);
-
-  const onSubmit = async (data) => {
+  const basketData = useSelector(selectBasket);
+  const submitOrder = async (formData) => {
     try {
-      const response = await dispatch(apiUpdateUser(data));
-      if (response) {
-        navigate("/user-cabinet");
+      console.log("Form Data:", formData);
+      console.log("Basket Data:", basketData);
+
+      const { name, serName, phone, email, area, city, office } = formData;
+      const basket = basketData;
+      const user = {
+        name,
+        serName,
+        phone,
+        email,
+        address: {
+          area,
+          city,
+          office,
+        },
+      };
+
+      const response = await sendOrder({ user, basket });
+      console.log("Response:", response);
+
+      if (response && response.message === "Order created successfully") {
+        console.log("Order created successfully:", response.order);
+      } else {
+        console.error("Failed to create order:", response.message);
       }
     } catch (error) {
-      console.error("Error updating user: ", error);
+      console.error("Error creating order:", error);
     }
   };
 
   return (
     <div>
-      <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
+      <form className={css.form} onSubmit={handleSubmit(submitOrder)}>
         <div className={css.boxUserInfo}>
           <div className={css.inputBox}>
             <label className={css.visuallyHidden} htmlFor="name">
-              Ім'я
+              Імя
             </label>
             <input
               className={css.inputForm}
@@ -247,11 +265,11 @@ const UserSettings = () => {
           </div>
         </div>
         <button className={css.btnLogin} type="submit">
-          Зберегти зміни
+          Оформити замовлення
         </button>
       </form>
     </div>
   );
 };
 
-export default UserSettings;
+export default BasketContactData;

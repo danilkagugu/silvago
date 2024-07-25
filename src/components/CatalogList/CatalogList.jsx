@@ -3,16 +3,20 @@ import { useParams } from "react-router-dom";
 import {
   addProductToBasket,
   addProductToFavorite,
+  getBasketProduct,
   getProducts,
 } from "../../services/productApi";
 import { CiHeart } from "react-icons/ci";
 import CatalogItem from "../CatalogItem/CatalogItem";
 import css from "./CatalogList.module.css";
+import { useDispatch } from "react-redux";
 
 const CatalogList = () => {
   const { item } = useParams();
   const [products, setProducts] = useState([]);
   const [quantities, setQuantities] = useState({});
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -37,20 +41,18 @@ const CatalogList = () => {
     }));
   };
   const handleProductClick = (productId) => {
-    console.log("ID товару", productId);
+    // console.log("ID товару", productId);
   };
 
-  const handleAddToBasket = async (productId) => {
+  const handleAddToBasket = async (productId, quantity) => {
     try {
-      const data = await addProductToBasket(productId);
+      const data = await addProductToBasket(productId, quantity);
+      // const basket = await getBasketProduct();
       console.log("Product added to basket:", data);
     } catch (error) {
       console.log(error);
     }
   };
-  const tokenString = localStorage.getItem("token");
-  const token = JSON.parse(tokenString);
-  console.log("token: ", token);
   return (
     <div>
       <ul className={css.list}>
@@ -95,7 +97,9 @@ const CatalogList = () => {
                 </div>
                 <button
                   className={css.buyButton}
-                  onClick={() => handleAddToBasket(product._id)}
+                  onClick={() =>
+                    handleAddToBasket(product._id, quantities[product._id])
+                  }
                 >
                   Buy
                 </button>
