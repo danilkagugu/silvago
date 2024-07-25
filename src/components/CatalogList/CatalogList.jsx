@@ -9,11 +9,14 @@ import {
 import { CiHeart } from "react-icons/ci";
 import CatalogItem from "../CatalogItem/CatalogItem";
 import css from "./CatalogList.module.css";
+import { useDispatch } from "react-redux";
 
 const CatalogList = () => {
   const { item } = useParams();
   const [products, setProducts] = useState([]);
   const [quantities, setQuantities] = useState({});
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -44,7 +47,7 @@ const CatalogList = () => {
   const handleAddToBasket = async (productId, quantity) => {
     try {
       const data = await addProductToBasket(productId, quantity);
-      const basket = await getBasketProduct();
+      // const basket = await getBasketProduct();
       console.log("Product added to basket:", data);
     } catch (error) {
       console.log(error);

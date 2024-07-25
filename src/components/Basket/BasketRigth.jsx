@@ -6,30 +6,31 @@ import {
 } from "../../services/productApi";
 import css from "./BasketRigth.module.css";
 import FavoriteItem from "../FavoriteItem/FavoriteItem";
+// import { useSelector } from "react-redux";
+// import { selectBasket } from "../../redux/basket/selectors";
 
 const BasketRigth = () => {
   const [basket, setBasket] = useState([]);
   const [productDetails, setProductDetails] = useState({});
-
+  // const basketData = useSelector(selectBasket);
+  // console.log("basketData: ", basketData);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const basketData = await getBasketProduct();
         console.log("Отримані дані кошика:", basketData);
+        if (basketData && Array.isArray(basketData.products)) {
+          setBasket(basketData.products);
 
-        if (!basketData || !basketData.products) {
+          const details = {};
+          for (const basketItem of basketData.products) {
+            const response = await productById(basketItem.product);
+            details[basketItem.product] = response;
+          }
+          setProductDetails(details);
+        } else {
           console.error("Недійсний формат даних кошика:", basketData);
-          return;
         }
-        setBasket(basketData.products);
-
-        // Fetch details for all products in the basket
-        const details = {};
-        for (const basketItem of basketData.products) {
-          const response = await productById(basketItem.product);
-          details[basketItem.product] = response;
-        }
-        setProductDetails(details);
       } catch (error) {
         console.error("Помилка отримання продуктів у кошику:", error);
       }
