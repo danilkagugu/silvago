@@ -21,6 +21,20 @@ export const getArea = async () => {
     throw error;
   }
 };
+export const getAreaByRef = async (ref) => {
+  try {
+    const { data } = await instance.post("", {
+      apiKey: "c0c77fd4e35911237acd01d7278060a0",
+      modelName: "AddressGeneral",
+      calledMethod: "getAreas",
+      methodProperties: { Ref: ref },
+    });
+    return data.data;
+  } catch (error) {
+    console.error("Error fetching areas:", error);
+    throw error;
+  }
+};
 
 export const getCities = async (selectedArea) => {
   try {

@@ -56,14 +56,16 @@ export const productById = async (productId) => {
 
 export const sendOrder = async ({ user, basket }) => {
   const instance = createAxiosInstance();
-  console.log("basket: ", basket);
-  console.log("user: ", user);
 
-  console.log("Sending order with basket:", basket);
   const { data } = await instance.post("/api/product/basket/order", {
     user,
     basket,
   });
-  console.log("Order response:", data);
+  return data;
+};
+
+export const getOrder = async () => {
+  const instance = createAxiosInstance();
+  const { data } = await instance.get("/api/product/order");
   return data;
 };

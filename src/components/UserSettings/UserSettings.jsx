@@ -130,7 +130,7 @@ const UserSettings = () => {
         <div className={css.boxUserInfo}>
           <div className={css.inputBox}>
             <label className={css.visuallyHidden} htmlFor="name">
-              Ім'я
+              Імя
             </label>
             <input
               className={css.inputForm}

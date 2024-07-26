@@ -1,0 +1,115 @@
+/* OrderHistory.module.css */
+
+/* Загальний стиль для таблиці */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-family: Arial, sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.table th,
+.table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.table td button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+.table td button:hover {
+  background-color: #0056b3;
+}
+
+.nestedTable {
+  width: 100%; /* Переконайтеся, що вкладена таблиця займає всю ширину */
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+.nestedTable th,
+.nestedTable td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.nestedTable th {
+  background-color: #e9ecef;
+  font-weight: bold;
+}
+
+.nestedTable td {
+  background-color: #ffffff;
+}
+
+.productImage {
+  width: 100px;
+  height: 100px;
+  margin-right: 10px;
+  vertical-align: middle;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.nestedTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+.nestedTable img {
+  vertical-align: middle;
+}
+
+.orderTable {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 40px;
+}
+.tableWrap {
+  width: 80%;
+}
+
+.infoWrap {
+  width: 35%;
+}
+
+/* const AddressInfo = ({ areaRef, city, office }) => {
+  const [areaName, setAreaName] = useState("");
+
+  useEffect(() => {
+    const fetchAreaName = async () => {
+      try {
+        const data = await getAreaByRef(areaRef);
+        console.log("data: ", data);
+        setAreaName(data[0].Description);
+      } catch (error) {
+        console.error("Помилка отримання даних про область:", error);
+      }
+    };
+    fetchAreaName();
+  }, [areaRef]);
+  console.log("areaName: ", areaName);
+  return (
+    <>
+      {areaName}, {city}, {office}
+    </>
+  );
+}; */

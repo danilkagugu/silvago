@@ -1,5 +1,11 @@
+import OrderHistory from "../../components/OrderHistory/OrderHistory";
+
 const History = () => {
-  return <div>History</div>;
+  return (
+    <div>
+      <OrderHistory />
+    </div>
+  );
 };
 
 export default History;

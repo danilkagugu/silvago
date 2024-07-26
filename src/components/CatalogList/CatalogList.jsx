@@ -3,20 +3,20 @@ import { useParams } from "react-router-dom";
 import {
   addProductToBasket,
   addProductToFavorite,
-  getBasketProduct,
+  // getBasketProduct,
   getProducts,
 } from "../../services/productApi";
 import { CiHeart } from "react-icons/ci";
 import CatalogItem from "../CatalogItem/CatalogItem";
 import css from "./CatalogList.module.css";
-import { useDispatch } from "react-redux";
+// import { useDispatch } from "react-redux";
 
 const CatalogList = () => {
   const { item } = useParams();
   const [products, setProducts] = useState([]);
   const [quantities, setQuantities] = useState({});
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -40,9 +40,9 @@ const CatalogList = () => {
       [productId]: Math.max(1, (prevQuantities[productId] || 1) + amount),
     }));
   };
-  const handleProductClick = (productId) => {
-    // console.log("ID товару", productId);
-  };
+  // const handleProductClick = (productId) => {
+  //   // console.log("ID товару", productId);
+  // };
 
   const handleAddToBasket = async (productId, quantity) => {
     try {
@@ -62,9 +62,9 @@ const CatalogList = () => {
               key={index}
               className={css.listItem}
               id={product._id}
-              onClick={() => {
-                handleProductClick(product._id);
-              }}
+              // onClick={() => {
+              //   handleProductClick(product._id);
+              // }}
             >
               <div className={css.cardContainer}>
                 <CiHeart
