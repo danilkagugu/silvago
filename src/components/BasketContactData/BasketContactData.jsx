@@ -143,7 +143,7 @@ const BasketContactData = () => {
   };
 
   return (
-    <div>
+    <div className={css.container}>
       <form className={css.form} onSubmit={handleSubmit(submitOrder)}>
         <div className={css.boxUserInfo}>
           <div className={css.inputBox}>

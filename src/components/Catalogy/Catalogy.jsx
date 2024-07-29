@@ -2,6 +2,7 @@ import css from "./Catalogy.module.css";
 import { IoMdArrowDropright } from "react-icons/io";
 import catologyJson from "./NextCatalog.json";
 import { Link } from "react-router-dom";
+import transliterate from "../../helpers/transliterate";
 
 const Catalogy = () => {
   return (
@@ -17,9 +18,9 @@ const Catalogy = () => {
               {category.items.map((item, i) => (
                 <li className={css.downMenuItem} key={i}>
                   <Link
-                    to={`/catalog/${encodeURIComponent(
+                    to={`/catalog/${transliterate(
                       category.name
-                    )}/${encodeURIComponent(item)}`}
+                    )}/${transliterate(item)}`} // Використання транслітерації
                     className={css.downMenuLink}
                   >
                     <p className={css.downMenuText}>{item}</p>

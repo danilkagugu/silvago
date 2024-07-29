@@ -5,19 +5,20 @@ import {
   updateProductQuantity,
 } from "../../services/productApi";
 import css from "./BasketRigth.module.css";
-import FavoriteItem from "../FavoriteItem/FavoriteItem";
+// import FavoriteItem from "../FavoriteItem/FavoriteItem";
+// import { useNavigate } from "react-router-dom";
+import CatalogItem from "../CatalogItem/CatalogItem";
 // import { useSelector } from "react-redux";
 // import { selectBasket } from "../../redux/basket/selectors";
 
 const BasketRigth = () => {
   const [basket, setBasket] = useState([]);
   const [productDetails, setProductDetails] = useState({});
-  // const basketData = useSelector(selectBasket);
-  // console.log("basketData: ", basketData);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const basketData = await getBasketProduct();
+        console.log("basketData: ", basketData);
         console.log("Отримані дані кошика:", basketData);
         if (basketData && Array.isArray(basketData.products)) {
           setBasket(basketData.products);
@@ -62,49 +63,67 @@ const BasketRigth = () => {
       return total;
     }, 0);
   };
+  console.log("basket:", basket);
+  // const handleProductClick = (productId) => {
+  //   navigate(`/product/${productId}`);
+  // };
   return (
     <div className={css.container}>
       <h2>Кошик</h2>
-      <ul>
+      <ul className={css.basketList}>
         {basket.map((product) => {
           const details = productDetails[product.product];
           return (
-            <li key={product._id}>
-              <p>Ідентифікатор ПОЗИЦІЇ КОШИКА: {product._id}</p>
-              {details && (
-                <>
-                  <FavoriteItem
-                    productImg={details.image}
-                    productName={details.name}
-                    productPrice={details.price}
-                  />
-                  <p>Кількість: {product.quantity}</p>
-                  <p>Сума: {product.quantity * details.price}</p>
-                </>
-              )}
+            <li
+              key={product.product}
+              // onClick={() => handleProductClick(product.product)}
+            >
+              {/* <p>Ідентифікатор ПОЗИЦІЇ КОШИКА: {product._id}</p> */}
+              <div>
+                {details && (
+                  <>
+                    <CatalogItem
+                      productImg={details.image}
+                      productName={details.name}
+                      productPrice={details.price}
+                      id={product.product}
+                    />
+                    <p>Кількість: {product.quantity}</p>
+                    <p>Сума: {product.quantity * details.price}</p>
+                  </>
+                )}
 
-              <div className={css.quantityContainer}>
+                <div className={css.quantityContainer}>
+                  <button
+                    className={css.quantityButton}
+                    onClick={() =>
+                      handleQuantityChange(
+                        product.product,
+                        product.quantity - 1
+                      )
+                    }
+                  >
+                    -
+                  </button>
+                  <span className={css.quantity}>{product.quantity}</span>
+                  <button
+                    className={css.quantityButton}
+                    onClick={() =>
+                      handleQuantityChange(
+                        product.product,
+                        product.quantity + 1
+                      )
+                    }
+                  >
+                    +
+                  </button>
+                </div>
                 <button
-                  className={css.quantityButton}
-                  onClick={() =>
-                    handleQuantityChange(product.product, product.quantity - 1)
-                  }
+                  onClick={() => console.log("Product details:", details)}
                 >
-                  -
-                </button>
-                <span className={css.quantity}>{product.quantity}</span>
-                <button
-                  className={css.quantityButton}
-                  onClick={() =>
-                    handleQuantityChange(product.product, product.quantity + 1)
-                  }
-                >
-                  +
+                  Переглянути деталі
                 </button>
               </div>
-              <button onClick={() => console.log("Product details:", details)}>
-                Переглянути деталі
-              </button>
             </li>
           );
         })}

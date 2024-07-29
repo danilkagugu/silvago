@@ -1,15 +1,20 @@
+import { useNavigate } from "react-router-dom";
 import css from "./CatalogItem.module.css";
 
-const CatalogItem = ({ productImg, productName, productPrice }) => {
+const CatalogItem = ({ productImg, productName, productPrice, id }) => {
+  const navigate = useNavigate();
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
   return (
-    <div className={css.cardBox}>
+    <div className={css.cardBox} onClick={() => handleProductClick(id)}>
       <div className={css.imgBox}>
         <img
           className={css.imgBrand}
           src={productImg}
           alt={productName}
-          width={120}
-          height={120}
+          width={100}
+          height={100}
         />
       </div>
       <div className={css.boxInfo}>

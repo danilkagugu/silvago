@@ -12,6 +12,9 @@ const DeliveryAndPayment = lazy(() =>
   import("../../pages/DeliveryAndPayment/DeliveryAndPayment")
 );
 const Catalog = lazy(() => import("../../pages/Catalog/Catalog"));
+const ProductDetail = lazy(() =>
+  import("../../pages/ProductDetail/ProductDetail")
+);
 const Favorite = lazy(() => import("../../pages/Favorite/Favorite"));
 const History = lazy(() => import("../../pages/History/History"));
 const Settings = lazy(() => import("../../pages/Settings/Settings"));
@@ -37,6 +40,7 @@ const App = () => {
           <Route path="history" element={<History />} />
         </Route>
         <Route path="/catalog/:category/:item" element={<Catalog />} />
+        <Route path="/product/:productId" element={<ProductDetail />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

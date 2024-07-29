@@ -22,7 +22,20 @@ export const getProducts = async () => {
 
 export const addProductToFavorite = async (productId) => {
   const instance = createAxiosInstance();
-  const { data } = await instance.patch(`/api/product/${productId}/favorite`);
+  const { data } = await instance.post(`/api/product/${productId}/favorite`);
+
+  return data;
+};
+export const deleteProductFromFavorite = async (productId) => {
+  const instance = createAxiosInstance();
+  const { data } = await instance.delete(`/api/product/favorite/${productId}`);
+
+  return data;
+};
+export const getFavoriteProduct = async () => {
+  const instance = createAxiosInstance();
+  const { data } = await instance.get(`/api/product/favorite`);
+
   return data;
 };
 
