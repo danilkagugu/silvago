@@ -28,6 +28,12 @@
 }
 
 .cardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  height: 500px;
+  padding: 10px;
   border: 1px solid #d7d7d7;
   border-radius: 7px;
   overflow: hidden;
@@ -58,4 +64,57 @@
     transform: translateY(-5px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   } */
+}
+
+.imgBrand {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+}
+
+.brandTitle {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.brandPrice {
+  text-align: center;
+  font-weight: 700;
+}
+
+.priceBox {
+  display: flex;
+  gap: 10px;
+}
+
+.quantityContainer {
+  width: 100px;
+}
+
+.quantityInputWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid gray;
+  background-color: #f9f9f9;
+}
+
+.quantityButton {
+  background-color: transparent;
+}
+
+.quantityInput {
+  text-align: center;
+  border: none;
+  background-color: transparent;
+  width: 30px;
+}
+
+.buyButton {
+  width: 100px;
+  background-color: blue;
+  color: white;
 }

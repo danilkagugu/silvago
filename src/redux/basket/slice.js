@@ -15,6 +15,7 @@ const basketSlice = createSlice({
     builder
       .addCase(getBasketInfo.fulfilled, (state, action) => {
         state.items = action.payload;
+        console.log("state.items: ", state.items);
         state.totalPrice = action.payload.reduce(
           (total, item) => total + item.price * item.quantity,
           0
