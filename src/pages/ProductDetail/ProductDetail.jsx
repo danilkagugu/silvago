@@ -1,12 +1,11 @@
-import Header from "../../components/Header/Header";
+import Layout from "../../components/Layout/Layout";
 import ProductInfo from "../../components/ProductInfo/ProductInfo";
 
 const ProductDetail = () => {
   return (
-    <div>
-      <Header />
+    <Layout>
       <ProductInfo />
-    </div>
+    </Layout>
   );
 };
 

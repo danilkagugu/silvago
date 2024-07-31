@@ -1,11 +1,10 @@
-import Header from "../../components/Header/Header";
+import Layout from "../../components/Layout/Layout";
 
 const AboutUs = () => {
   return (
-    <div>
-      <Header />
+    <Layout>
       <p>About Us</p>
-    </div>
+    </Layout>
   );
 };
 

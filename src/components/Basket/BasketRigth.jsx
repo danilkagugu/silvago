@@ -18,8 +18,8 @@ const BasketRigth = () => {
     const fetchProducts = async () => {
       try {
         const basketData = await getBasketProduct();
-        console.log("basketData: ", basketData);
-        console.log("Отримані дані кошика:", basketData);
+        // console.log("basketData: ", basketData);
+        // console.log("Отримані дані кошика:", basketData);
         if (basketData && Array.isArray(basketData.products)) {
           setBasket(basketData.products);
 
@@ -63,7 +63,7 @@ const BasketRigth = () => {
       return total;
     }, 0);
   };
-  console.log("basket:", basket);
+  // console.log("basket:", basket);
   // const handleProductClick = (productId) => {
   //   navigate(`/product/${productId}`);
   // };

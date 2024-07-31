@@ -1,14 +1,16 @@
 import BrandsList from "../../components/BrandsList/BrandsList";
 import css from "./Brands.module.css";
-import Header from "../../components/Header/Header";
+
+import Layout from "../../components/Layout/Layout";
 
 const Brands = () => {
   return (
-    <div className={css.qqq}>
-      <Header />
-      <h1 className={css.title}>Бренди</h1>
-      <BrandsList />
-    </div>
+    <Layout>
+      <div className={css.qqq}>
+        <h1 className={css.title}>Бренди</h1>
+        <BrandsList />
+      </div>
+    </Layout>
   );
 };
 

@@ -1,0 +1,124 @@
+.productContainer {
+}
+
+.productWrapper {
+  display: flex;
+}
+
+.productTitle {
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 1.25;
+  margin-bottom: 5px;
+}
+
+.productDetailBox {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 700px;
+}
+
+.infoProduct {
+  display: flex;
+  gap: 8px;
+  flex-direction: row;
+  align-items: center;
+}
+
+.info {
+  font-weight: 400;
+  line-height: 1.25;
+  display: flex;
+  align-items: center;
+  padding-left: 4.375px;
+  padding-right: 4.375px;
+  color: #9e9d9d;
+  font-size: 16px;
+}
+
+.productImage {
+  width: 335px;
+  height: 335px;
+}
+
+.priceBox {
+  bottom: 50px;
+  display: flex;
+  gap: 10px;
+}
+
+.quantityWrapper {
+  width: 100px;
+}
+
+.inputWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid gray;
+  background-color: #f9f9f9;
+}
+
+.btnChange {
+  background-color: transparent;
+}
+
+.inputQuantity {
+  text-align: center;
+  border: none;
+  background-color: transparent;
+  width: 30px;
+}
+
+.btnBuy {
+  width: 100px;
+  background-color: blue;
+  color: white;
+}
+
+.characteristicList {
+  display: flex;
+  gap: 25px;
+}
+
+.characteristicItem {
+  width: 50%;
+}
+
+.characteristicTitle {
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.25;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  line-height: 1.25;
+  border-bottom: 1px solid #9e9d9d;
+  padding-left: 20px;
+}
+
+.characteristicInfo {
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  min-width: 360px;
+  width: 100%;
+  height: 100%;
+  color: #2e2d2d;
+}
+
+.characteristicDescription {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.characteristicDescriptionItem {
+  display: flex;
+  gap: 40px;
+}
+
+.characteristicDescriptionSpan {
+  width: 150px;
+}

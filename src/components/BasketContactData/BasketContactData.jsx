@@ -110,6 +110,7 @@ const BasketContactData = () => {
     // setValue("office", office);
   }, [name, serName, phone, email, area, city, office, setValue]);
   const basketData = useSelector(selectBasket);
+
   const submitOrder = async (formData) => {
     try {
       console.log("Form Data:", formData);
