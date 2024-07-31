@@ -1,28 +1,30 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { addProductToBasket, getCategories } from "../../services/productApi";
-import { CiHeart } from "react-icons/ci";
-import { FaHeart } from "react-icons/fa";
-import css from "./CatalogList.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { selectProducts } from "../../redux/product/selectors";
+import { useEffect, useState } from "react";
 import { getAllProduct } from "../../redux/product/operations";
+import { getBrands } from "../../services/productApi";
+import { useNavigate, useParams } from "react-router-dom";
+import css from "./ProductsByBrand.module.css";
 import {
   fetchFavoriteProducts,
+  handleAddToBasket,
+  handleQuantityChange,
+  handleQuantityInputChange,
   handleToggleFavorite,
 } from "../../helpers/productActions";
+import { FaHeart } from "react-icons/fa";
+import { CiHeart } from "react-icons/ci";
 
-const CatalogList = () => {
-  const dispatch = useDispatch();
+const ProductsByBrand = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const [favoriteProducts, setFavoriteProducts] = useState(new Set());
+  const [brands, setBrands] = useState();
   const [quantities, setQuantities] = useState({});
-  const [categories, setCategories] = useState();
+  const [favoriteProducts, setFavoriteProducts] = useState(new Set());
+  const { brandName } = useParams();
 
   const dataProducts = useSelector(selectProducts);
-
-  const { categorySlug, subCategorySlug } = useParams();
 
   useEffect(() => {
     dispatch(getAllProduct());
@@ -31,13 +33,12 @@ const CatalogList = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await getCategories();
-        setCategories(data);
+        const data = await getBrands();
+        setBrands(data);
         const initialQuantities = {};
         dataProducts.forEach((p) => {
           initialQuantities[p._id] = 1;
         });
-        setQuantities(initialQuantities);
       } catch (error) {
         console.log("Error fetching products:", error);
       }
@@ -45,52 +46,20 @@ const CatalogList = () => {
 
     fetchProducts();
     fetchFavoriteProducts(setFavoriteProducts);
-  }, [dataProducts, favoriteProducts]);
+  }, [dataProducts]);
 
-  const handleQuantityChange = (productId, amount) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: Math.max(1, (prevQuantities[productId] || 1) + amount),
-    }));
-  };
+  const filteredProducts = dataProducts.filter((product) => {
+    if (!brands) return false;
 
-  const handleAddToBasket = async (productId, quantity) => {
-    try {
-      const data = await addProductToBasket(productId, quantity);
-      console.log("Product added to basket:", data);
-    } catch (error) {
-      console.log("Error adding product to basket:", error);
-    }
-  };
+    const brand = brands.find((cat) => cat.name === brandName);
+    if (!brand) return false;
+
+    return product.brand === brand.name;
+  });
 
   const handleProductClick = (productId) => {
     navigate(`/product/${productId}`);
   };
-
-  const handleQuantityInputChange = (productId, value) => {
-    const newValue = Math.max(1, parseInt(value, 10) || 1);
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: newValue,
-    }));
-  };
-
-  const filteredProducts = dataProducts.filter((product) => {
-    if (!categories) return false;
-
-    const category = categories.find((cat) => cat.slug === categorySlug);
-    if (!category) return false;
-
-    const subCategory = category.items.find(
-      (item) => item.slug === subCategorySlug
-    );
-    if (!subCategory) return false;
-
-    return (
-      product.category === category.name &&
-      product.subcategory === subCategory.name
-    );
-  });
 
   return (
     <div>
@@ -115,7 +84,6 @@ const CatalogList = () => {
                   onClick={() =>
                     handleToggleFavorite(
                       product._id,
-
                       favoriteProducts,
                       setFavoriteProducts
                     )
@@ -144,7 +112,9 @@ const CatalogList = () => {
                   <div className={css.quantityInputWrapper}>
                     <button
                       className={css.quantityButton}
-                      onClick={() => handleQuantityChange(product._id, -1)}
+                      onClick={() =>
+                        handleQuantityChange(product._id, -1, setQuantities)
+                      }
                     >
                       -
                     </button>
@@ -153,13 +123,19 @@ const CatalogList = () => {
                       className={css.quantityInput}
                       value={quantities[product._id] || 1}
                       onChange={(e) =>
-                        handleQuantityInputChange(product._id, e.target.value)
+                        handleQuantityInputChange(
+                          product._id,
+                          e.target.value,
+                          setQuantities
+                        )
                       }
                       min="1"
                     />
                     <button
                       className={css.quantityButton}
-                      onClick={() => handleQuantityChange(product._id, 1)}
+                      onClick={() =>
+                        handleQuantityChange(product._id, 1, setQuantities)
+                      }
                     >
                       +
                     </button>
@@ -181,5 +157,4 @@ const CatalogList = () => {
     </div>
   );
 };
-
-export default CatalogList;
+export default ProductsByBrand;

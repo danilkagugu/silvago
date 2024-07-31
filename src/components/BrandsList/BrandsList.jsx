@@ -1,14 +1,42 @@
+import { useEffect, useState } from "react";
 import BrandItem from "../BrandItem/BrandItem";
-import catalogBrand from "./brand.json";
 import css from "./BrandsList.module.css";
+import { getBrands } from "../../services/productApi";
+import { useNavigate } from "react-router-dom";
 const BrandsList = () => {
+  const navigate = useNavigate();
+
+  const [brands, setBrands] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const brands = await getBrands();
+        setBrands(brands);
+      } catch (error) {
+        console.log("Error fetching brands:", error);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  const handleBrandClick = (brandId) => {
+    navigate(`/brand/${brandId}`);
+  };
+
   return (
     <div className={css.container}>
       <ul className={css.list}>
-        {catalogBrand.map((item, index) => (
-          <li key={index} className={css.listItem}>
+        {brands.map((item) => (
+          <li
+            key={item._id}
+            className={css.listItem}
+            onClick={() => {
+              handleBrandClick(item.name);
+            }}
+          >
             <div className={css.cardContainer}>
-              <BrandItem brandImg={item.src} brandTitle={item.name} />
+              <BrandItem brandImg={item.image} brandTitle={item.name} />
             </div>
           </li>
         ))}

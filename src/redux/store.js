@@ -12,6 +12,7 @@ import {
 import storage from "redux-persist/lib/storage";
 import { authReducer } from "./auth/slice";
 import { basketReducer } from "./basket/slice";
+import { productsReducer } from "./product/slice";
 
 const authConfig = {
   key: "auth",
@@ -22,10 +23,15 @@ const basketConfig = {
   key: "basket",
   storage,
 };
+// const productsConfig = {
+//   key: "products",
+//   storage,
+// };
 export const store = configureStore({
   reducer: {
     auth: persistReducer(authConfig, authReducer),
     basket: persistReducer(basketConfig, basketReducer),
+    products: productsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

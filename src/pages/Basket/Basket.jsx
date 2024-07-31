@@ -1,18 +1,18 @@
 import BasketRigth from "../../components/Basket/BasketRigth";
 import BasketContactData from "../../components/BasketContactData/BasketContactData";
-import Header from "../../components/Header/Header";
+
+import Layout from "../../components/Layout/Layout";
 
 import css from "./Basket.module.css";
 
 const Basket = () => {
   return (
-    <div>
-      <Header />
+    <Layout>
       <div className={css.containerBasket}>
         <BasketContactData />
         <BasketRigth />
       </div>
-    </div>
+    </Layout>
   );
 };
 

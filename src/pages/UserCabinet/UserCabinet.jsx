@@ -1,15 +1,15 @@
 import { Outlet } from "react-router-dom";
-import Header from "../../components/Header/Header";
+
 import UserMenu from "../../components/UserMenu/UserMenu";
+import Layout from "../../components/Layout/Layout";
 // import UserSettings from "../../components/UserSettings/UserSettings";
 
 const UserCabinet = () => {
   return (
-    <div>
-      <Header />
+    <Layout>
       <UserMenu />
       <Outlet />
-    </div>
+    </Layout>
   );
 };
 

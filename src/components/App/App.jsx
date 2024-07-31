@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 // import Header from "../Header/Header";
 import { Route, Routes } from "react-router-dom";
 import { apiRefreshUser } from "../../redux/auth/operations";
+import BrandProducts from "../../pages/BrandProducts/BrandProducts";
 const Home = lazy(() => import("../../pages/Home/Home"));
 const AboutUs = lazy(() => import("../../pages/AboutUs/AboutUs"));
 const Basket = lazy(() => import("../../pages/Basket/Basket"));
@@ -39,8 +40,12 @@ const App = () => {
           <Route path="settings" element={<Settings />} />
           <Route path="history" element={<History />} />
         </Route>
-        <Route path="/catalog/:category/:item" element={<Catalog />} />
+        <Route
+          path="/catalog/:categorySlug/:subCategorySlug"
+          element={<Catalog />}
+        />
         <Route path="/product/:productId" element={<ProductDetail />} />
+        <Route path="/brand/:brandName" element={<BrandProducts />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
