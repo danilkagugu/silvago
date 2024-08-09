@@ -22,6 +22,7 @@ const ProductsByBrand = () => {
   const [brands, setBrands] = useState();
   const [quantities, setQuantities] = useState({});
   const [favoriteProducts, setFavoriteProducts] = useState(new Set());
+  const [selectedVolume, setSelectedVolume] = useState({});
   const { brandName } = useParams();
 
   const dataProducts = useSelector(selectProducts);
@@ -36,9 +37,16 @@ const ProductsByBrand = () => {
         const data = await getBrands();
         setBrands(data);
         const initialQuantities = {};
+        const initialVolume = {};
         dataProducts.forEach((p) => {
           initialQuantities[p._id] = 1;
+          const defaultVolume = getDefaultVolume(p.volumes);
+          if (defaultVolume) {
+            initialVolume[p._id] = defaultVolume;
+          }
         });
+        setQuantities(initialQuantities);
+        setSelectedVolume(initialVolume);
       } catch (error) {
         console.log("Error fetching products:", error);
       }
@@ -47,6 +55,22 @@ const ProductsByBrand = () => {
     fetchProducts();
     fetchFavoriteProducts(setFavoriteProducts);
   }, [dataProducts]);
+
+  // const handleAddToBasket = async (productId, quantity, volume) => {
+  //   try {
+  //     const data = await addProductToBasket(productId, quantity, volume);
+  //     console.log("Product added to basket:", data);
+  //   } catch (error) {
+  //     console.log("Error adding product to basket:", error);
+  //   }
+  // };
+
+  const handleVolumeSelect = (productId, volume) => {
+    setSelectedVolume((prev) => ({
+      ...prev,
+      [productId]: volume,
+    }));
+  };
 
   const filteredProducts = dataProducts.filter((product) => {
     if (!brands) return false;
@@ -59,6 +83,21 @@ const ProductsByBrand = () => {
 
   const handleProductClick = (productId) => {
     navigate(`/product/${productId}`);
+  };
+
+  const getDefaultVolume = (volumes) => {
+    if (!volumes || volumes.length === 0) return 0;
+    return volumes.reduce(
+      (maxVol, vol) => (vol.volume > maxVol ? vol.volume : maxVol),
+      0
+    );
+  };
+  const getDefaultPrice = (product) => {
+    const defaultVolume = getDefaultVolume(product.volumes);
+    const volumeObj = product.volumes.find(
+      (vol) => vol.volume === defaultVolume
+    );
+    return volumeObj ? volumeObj.price : product.price;
   };
 
   return (
@@ -104,7 +143,14 @@ const ProductsByBrand = () => {
                 </div>
                 <div className={css.boxInfo}>
                   <p className={css.brandTitle}>{product.name}</p>
-                  <p className={css.brandPrice}>{product.price} грн</p>
+                  <p className={css.brandPrice}>
+                    {selectedVolume[product._id]
+                      ? product.volumes.find(
+                          (vol) => vol.volume === selectedVolume[product._id]
+                        )?.price
+                      : getDefaultPrice(product)}
+                    грн
+                  </p>
                 </div>
               </div>
               <div className={css.priceBox}>
@@ -144,11 +190,30 @@ const ProductsByBrand = () => {
                 <button
                   className={css.buyButton}
                   onClick={() =>
-                    handleAddToBasket(product._id, quantities[product._id])
+                    handleAddToBasket(
+                      product._id,
+                      quantities[product._id],
+                      selectedVolume[product._id]
+                    )
                   }
                 >
                   Купити
                 </button>
+              </div>
+              <div className={css.volumeOptions}>
+                {product.volumes.map((vol) => (
+                  <button
+                    key={vol._id}
+                    className={`${css.volumeOption} ${
+                      selectedVolume[product._id] === vol.volume
+                        ? css.selected
+                        : ""
+                    }`}
+                    onClick={() => handleVolumeSelect(product._id, vol.volume)}
+                  >
+                    {vol.volume} мл
+                  </button>
+                ))}
               </div>
             </div>
           </li>

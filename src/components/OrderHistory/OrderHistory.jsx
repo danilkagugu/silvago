@@ -5,6 +5,8 @@ import { getAreaByRef } from "../../services/NovaPoshtaApi";
 
 const OrderHistory = () => {
   const [history, setHistory] = useState([]);
+  // console.log("history: ", history);
+
   const [expandedRows, setExpandedRows] = useState({});
   const [areaNames, setAreaNames] = useState({});
 
@@ -71,75 +73,81 @@ const OrderHistory = () => {
         </thead>
         <tbody>
           {history &&
-            history.map((order, index) => (
-              <Fragment key={order._id}>
-                <tr>
-                  <td>{index + 1}</td>
-                  <td>{formatDate(order.createdAt)}</td>
-                  <td>{order.allQuantity}</td>
-                  <td>{order.totalAmount} грн</td>
-                  <td>{order.status}</td>
-                  <td>
-                    <button onClick={() => toggleOpenInfoProduct(order._id)}>
-                      {expandedRows[order._id] ? "-" : "+"}
-                    </button>
-                  </td>
-                </tr>
-                {expandedRows[order._id] && (
+            history.map((order, index) => {
+              console.log("order", order);
+              return (
+                <Fragment key={order._id}>
                   <tr>
-                    <td colSpan="6">
-                      <div className={css.orderTable}>
-                        <div className={css.tableWrap}>
-                          <table className={css.nestedTable}>
-                            <thead>
-                              <tr>
-                                <th colSpan={2}>Продукт</th>
-                                <th>Ціна</th>
-                                <th>Кількість</th>
-                              </tr>
-                            </thead>
-                            <tbody className={css.qqq}>
-                              {order.basket.map((product, idx) => (
-                                <tr key={product.product + idx}>
-                                  <td>
-                                    <img
-                                      src={product.image}
-                                      alt={product.productName}
-                                      className={css.productImage}
-                                    />
-                                  </td>
-                                  <td>{product.productName}</td>
-                                  <td>{product.productPrice} грн</td>
-                                  <td>{product.quantity}</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                        <div className={css.infoWrap}>
-                          <table>
-                            <tbody>
-                              <tr>
-                                <td>Доставка</td>
-                                <td>У відділення Нової Пошти</td>
-                              </tr>
-                              <tr>
-                                <td>Адреса</td>
-                                <td>
-                                  {areaNames[order.user.address.area]} область ,
-                                  {order.user.address.city},
-                                  {order.user.address.office}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                      </div>
+                    <td>{index + 1}</td>
+                    <td>{formatDate(order.createdAt)}</td>
+                    <td>{order.allQuantity}</td>
+                    <td>{order.totalAmount} грн</td>
+                    <td>{order.status}</td>
+                    <td>
+                      <button onClick={() => toggleOpenInfoProduct(order._id)}>
+                        {expandedRows[order._id] ? "-" : "+"}
+                      </button>
                     </td>
                   </tr>
-                )}
-              </Fragment>
-            ))}
+                  {expandedRows[order._id] && (
+                    <tr>
+                      <td colSpan="6">
+                        <div className={css.orderTable}>
+                          <div className={css.tableWrap}>
+                            <table className={css.nestedTable}>
+                              <thead>
+                                <tr>
+                                  <th>Продукт</th>
+                                  <th>Об’єм</th>
+                                  <th>Ціна</th>
+                                  <th>Кількість</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {order.basket.map((product, idx) => (
+                                  <tr key={product.product + idx}>
+                                    <td>
+                                      <img
+                                        src={product.image}
+                                        alt={product.productName}
+                                        className={css.productImage}
+                                      />
+                                      <p>{product.productName}</p>
+                                    </td>
+                                    {/* <td>{product.productName}</td> */}
+                                    <td>{product.volume}</td>
+                                    <td>{product.price} грн</td>
+                                    <td>{product.quantity}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                          <div className={css.infoWrap}>
+                            <table>
+                              <tbody>
+                                <tr>
+                                  <td>Доставка</td>
+                                  <td>У відділення Нової Пошти</td>
+                                </tr>
+                                <tr>
+                                  <td>Адреса</td>
+                                  <td>
+                                    {areaNames[order.user.address.area]} область
+                                    ,{order.user.address.city},
+                                    {order.user.address.office}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </Fragment>
+              );
+            })}
         </tbody>
       </table>
     </div>

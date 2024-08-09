@@ -6,7 +6,6 @@ const INITIAL_STATE = {
   productDetails: null,
   loading: false,
   error: null,
-  favoriteProducts: JSON.parse(localStorage.getItem("favorites")) || [],
 };
 
 const productSlice = createSlice({

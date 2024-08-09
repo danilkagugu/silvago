@@ -1,3 +1,23 @@
+// import { useParams } from "react-router-dom";
+// import CatalogList from "../../components/CatalogList/CatalogList";
+// import Layout from "../../components/Layout/Layout";
+
+// const Catalog = () => {
+//   const { categorySlug, subCategorySlug } = useParams();
+
+//   return (
+//     <Layout>
+//       <div>
+//         <h2>Category: {categorySlug}</h2>
+//         {subCategorySlug && <h3>Item: {subCategorySlug}</h3>}
+//         <CatalogList />
+//       </div>
+//     </Layout>
+//   );
+// };
+
+// export default Catalog;
+
 import { useParams } from "react-router-dom";
 import CatalogList from "../../components/CatalogList/CatalogList";
 import Layout from "../../components/Layout/Layout";

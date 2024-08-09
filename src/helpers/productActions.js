@@ -20,9 +20,9 @@ export const handleQuantityChange = (productId, amount, setQuantities) => {
   }));
 };
 
-export const handleAddToBasket = async (productId, quantity) => {
+export const handleAddToBasket = async (productId, quantity, volume) => {
   try {
-    const data = await addProductToBasket(productId, quantity);
+    const data = await addProductToBasket(productId, quantity, volume);
     console.log("Product added to basket:", data);
   } catch (error) {
     console.log("Error adding product to basket:", error);

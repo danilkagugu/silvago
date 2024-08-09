@@ -7,7 +7,11 @@ const CatalogItem = ({ productImg, productName, productPrice, id }) => {
     navigate(`/product/${productId}`);
   };
   return (
-    <div className={css.cardBox} onClick={() => handleProductClick(id)}>
+    <div
+      className={css.cardBox}
+      id={id}
+      onClick={() => handleProductClick(id)}
+    >
       <div className={css.imgBox}>
         <img
           className={css.imgBrand}
