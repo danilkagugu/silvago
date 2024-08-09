@@ -90,26 +90,38 @@
 .infoWrap {
   width: 35%;
 }
+/*  */
+.nestedTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
 
-/* const AddressInfo = ({ areaRef, city, office }) => {
-  const [areaName, setAreaName] = useState("");
+.nestedTable th,
+.nestedTable td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
 
-  useEffect(() => {
-    const fetchAreaName = async () => {
-      try {
-        const data = await getAreaByRef(areaRef);
-        console.log("data: ", data);
-        setAreaName(data[0].Description);
-      } catch (error) {
-        console.error("Помилка отримання даних про область:", error);
-      }
-    };
-    fetchAreaName();
-  }, [areaRef]);
-  console.log("areaName: ", areaName);
-  return (
-    <>
-      {areaName}, {city}, {office}
-    </>
-  );
-}; */
+.nestedTable th {
+  background-color: #e9ecef;
+  font-weight: bold;
+}
+
+.nestedTable td {
+  background-color: #ffffff;
+}
+
+.productImage {
+  width: 100px;
+  height: 100px;
+  margin-right: 10px;
+  vertical-align: middle;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.nestedTable tr:hover {
+  background-color: #f1f1f1;
+}

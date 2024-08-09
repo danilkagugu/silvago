@@ -36,20 +36,21 @@ h2 {
   margin-right: 15px;
 }
 
-.basketList li div {
-  flex: 1;
-}
-
 .quantityContainer {
   display: flex;
   align-items: center;
   margin-top: 10px;
+  /* border: 1px solid black; */
+  border-radius: 5px;
+  background-color: #f1f1f1;
+  padding: 7px;
 }
 
 .quantityButton {
-  background-color: #007bff;
+  background-color: transparent;
+  color: black;
   border: none;
-  color: white;
+  /* color: white; */
   padding: 5px 10px;
   font-size: 16px;
   cursor: pointer;
@@ -57,9 +58,9 @@ h2 {
   margin: 0 5px;
 }
 
-.quantityButton:hover {
+/* .quantityButton:hover {
   background-color: #0056b3;
-}
+} */
 
 .quantity {
   font-size: 16px;
@@ -78,7 +79,7 @@ h2 {
 }
 
 button {
-  background-color: #28a745;
+  /* background-color: #28a745; */
   border: none;
   color: white;
   padding: 10px 15px;
@@ -88,6 +89,52 @@ button {
   margin-top: 10px;
 }
 
-button:hover {
+/* button:hover {
   background-color: #218838;
+} */
+/* ---------------------------------------------- */
+
+/* BasketRigth.module.css */
+.container {
+  padding: 20px;
+}
+
+.basketTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.basketTable th,
+.basketTable td {
+  /* border: 1px solid #ddd; */
+  padding: 8px;
+}
+/* 
+.basketTable th {
+  background-color: #f2f2f2;
+} */
+
+.quantityContainer {
+  display: flex;
+  align-items: center;
+}
+
+.quantityButton {
+  margin: 0 5px;
+}
+
+/* Add any additional styles for table or item card as needed */
+.qqqq {
+  border: 1px solid gainsboro;
+}
+
+.www {
+  text-align: left;
+  color: #898989;
+  font-size: 14px;
+}
+
+.sumProduct {
+  font-weight: 700;
+  font-size: 14px;
 }

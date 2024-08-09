@@ -113,9 +113,6 @@ const BasketContactData = () => {
 
   const submitOrder = async (formData) => {
     try {
-      console.log("Form Data:", formData);
-      console.log("Basket Data:", basketData);
-
       const { name, serName, phone, email, area, city, office } = formData;
       const basket = basketData;
       const user = {

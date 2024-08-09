@@ -1,0 +1,101 @@
+/* .footer {
+  background: #e8edf3;
+}
+
+.footerContainer {
+  border-top: 4px solid;
+  padding: 30px 20px 20px;
+}
+
+.footerList {
+  display: flex;
+  justify-content: space-between;
+  
+}
+
+.footerMenu {
+  display: flex;
+  justify-content: space-between;
+  gap: 40px;
+} */
+
+.footer {
+  background: #e8edf3;
+  width: 100%;
+  border-top: 4px solid #d4d7db;
+}
+
+.footerContainer {
+  /* Додайте кольору для верхньої межі */
+  padding: 30px 20px 20px;
+  max-width: 1440px; /* Встановіть максимальну ширину, щоб футер не розтягувався надто широко */
+  /* margin: 0 auto; */
+}
+
+.footerList {
+  display: flex;
+  justify-content: space-between;
+}
+
+.footerMenu {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.footerMenu ul {
+  list-style-type: none; /* Видалити маркери списку */
+  padding: 0;
+  margin: 0;
+}
+
+.footerMenu li {
+  margin-bottom: 10px;
+}
+
+.footerMenu h4 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.catalogyList {
+  padding: 0;
+}
+
+.catologyItem {
+  margin-bottom: 10px;
+}
+
+.catologyBox {
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.catologyBox:hover {
+  background-color: #c4d1e0; /* Легке затемнення при наведенні */
+}
+
+.itemText {
+  font-size: 14px;
+  color: #626a79;
+}
+
+ul p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+}
+
+ul li {
+  margin-bottom: 10px;
+}
+
+.socialIcons {
+  display: flex;
+  gap: 10px;
+}
+
+.itemText {
+  color: #626a79;
+}

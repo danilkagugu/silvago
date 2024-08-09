@@ -6,9 +6,12 @@ import {
 import css from "./FavoriteList.module.css";
 import FavoriteItem from "../FavoriteItem/FavoriteItem";
 import { CiTrash } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 
 const FavoriteList = () => {
   const [productsFavorite, setProductsFavorite] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -37,7 +40,9 @@ const FavoriteList = () => {
       console.error("Error removing favorite product: ", error);
     }
   };
-
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
   return (
     <div className={css.container}>
       {productsFavorite.length > 0 &&
@@ -49,6 +54,7 @@ const FavoriteList = () => {
                 key={`${product._id}-${item.product}`}
                 className={css.listItem}
                 id={item.product}
+                onClick={() => handleProductClick(product._id)}
               >
                 <div className={css.cardContainer}>
                   <div className={css.cardBox}>

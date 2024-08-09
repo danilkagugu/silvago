@@ -48,6 +48,7 @@
     padding: 12px 16px;
     border-radius: 62px;
     background: rgb(240, 240, 240);
+    position: relative;
   }
   .iconMenu {
     display: none;
@@ -75,4 +76,56 @@
   .iconBox {
     gap: 20px;
   }
+}
+/*  */
+.searchResults {
+  position: absolute;
+  top: 100%; /* Відстань від верху input */
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Щоб результати були поверх інших елементів */
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-height: 300px; /* Максимальна висота списку */
+  overflow-y: auto; /* Прокрутка, якщо результатів багато */
+}
+
+.searchResults ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.searchResults li {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.searchResults li:hover {
+  background-color: #f0f0f0;
+}
+
+.searchResults .imgBox {
+  margin-right: 12px;
+}
+
+.searchResults img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+.filteredProductsBox {
+  position: absolute;
+  top: 11%; /* Встановлює відстань від верху input */
+  right: 20%;
+  z-index: 1000; /* Щоб результати були поверх інших елементів */
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-height: 300px; /* Максимальна висота списку */
+  max-width: 600px;
 }

@@ -43,11 +43,15 @@ export const getFavoriteProduct = async () => {
   return data;
 };
 
-export const addProductToBasket = async (productId, quantity) => {
+export const addProductToBasket = async (productId, quantity, volume) => {
   const instance = createAxiosInstance();
+  console.log(volume);
   const { data } = await instance.post(`/api/product/${productId}/basket`, {
+    productId,
     quantity,
+    volume,
   });
+  console.log(data);
   return data;
 };
 
@@ -57,11 +61,13 @@ export const getBasketProduct = async () => {
   return data;
 };
 
-export const updateProductQuantity = async (productId, quantity) => {
+export const updateProductQuantity = async (productId, volume, quantity) => {
   const instance = createAxiosInstance();
   const { data } = await instance.patch(`/api/product/basket/${productId}`, {
+    volume,
     quantity,
   });
+  console.log(data);
   return data;
 };
 
@@ -90,5 +96,12 @@ export const getCategories = async () => {
 export const getBrands = async () => {
   const instance = createAxiosInstance();
   const { data } = await instance.get("/api/admin/brands");
+  return data;
+};
+export const searchProducts = async (query) => {
+  const instance = createAxiosInstance();
+  const { data } = await instance.get(`/api/product/search`, {
+    params: { query },
+  });
   return data;
 };

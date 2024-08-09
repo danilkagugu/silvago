@@ -41,9 +41,10 @@ const App = () => {
           <Route path="history" element={<History />} />
         </Route>
         <Route
-          path="/catalog/:categorySlug/:subCategorySlug"
+          path="/catalog/:categorySlug/:subCategorySlug?"
           element={<Catalog />}
         />
+
         <Route path="/product/:productId" element={<ProductDetail />} />
         <Route path="/brand/:brandName" element={<BrandProducts />} />
         <Route path="*" element={<NotFound />} />
