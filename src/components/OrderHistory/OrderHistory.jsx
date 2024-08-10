@@ -74,7 +74,7 @@ const OrderHistory = () => {
         <tbody>
           {history &&
             history.map((order, index) => {
-              console.log("order", order);
+              // console.log("order", order);
               return (
                 <Fragment key={order._id}>
                   <tr>

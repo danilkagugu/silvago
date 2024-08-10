@@ -8,10 +8,11 @@ import { getProductById } from "../../redux/product/operations";
 const ProductInfo = () => {
   const dispatch = useDispatch();
   const [quantities, setQuantities] = useState({});
+  // console.log("quantities: ", quantities);
   const [selectedVolume, setSelectedVolume] = useState(null);
   const { productId } = useParams();
   const productDetails = useSelector(selectProductDetails);
-  console.log("productDetails: ", productDetails);
+  // console.log("productDetails: ", productDetails);
 
   useEffect(() => {
     dispatch(getProductById(productId));
@@ -33,19 +34,43 @@ const ProductInfo = () => {
   }, [productDetails]);
 
   const handleQuantityChange = (productId, amount) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: Math.max(1, (prevQuantities[productId] || 1) + amount),
-    }));
+    setQuantities((prevQuantities) => {
+      const currentQuantity = prevQuantities[productId] || 1;
+      const newQuantity = Math.min(
+        Math.max(1, currentQuantity + amount),
+        selectedVolume?.quantity || 1
+      );
+      return {
+        ...prevQuantities,
+        [productId]: newQuantity,
+      };
+    });
   };
 
+  // const handleQuantityChange = (productId, amount) => {
+  //   setQuantities((prevQuantities) => ({
+  //     ...prevQuantities,
+  //     [productId]: Math.max(1, (prevQuantities[productId] || 1) + amount),
+  //   }));
+  // };
+
   const handleQuantityInputChange = (productId, value) => {
-    const newValue = Math.max(1, parseInt(value, 10) || 1);
+    const numericValue = parseInt(value, 10);
+    const maxQuantity = selectedVolume?.quantity || 0;
+    const newValue = Math.min(Math.max(1, numericValue || 1), maxQuantity);
     setQuantities((prevQuantities) => ({
       ...prevQuantities,
       [productId]: newValue,
     }));
   };
+
+  // const handleQuantityInputChange = (productId, value) => {
+  //   const newValue = Math.max(1, parseInt(value, 10) || 1);
+  //   setQuantities((prevQuantities) => ({
+  //     ...prevQuantities,
+  //     [productId]: newValue,
+  //   }));
+  // };
   const handleAddToBasket = async (productId, quantity, volume) => {
     try {
       const data = await addProductToBasket(productId, quantity, volume);
@@ -57,6 +82,10 @@ const ProductInfo = () => {
 
   const handleVolumeChange = (volume) => {
     setSelectedVolume(volume);
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productDetails.id]: 1, // Скидаємо кількість на 1 при зміні об'єму
+    }));
   };
   return (
     <div className={css.productDetail}>
@@ -72,10 +101,15 @@ const ProductInfo = () => {
               <h1 className={css.productTitle}>{productDetails.name}</h1>
               <div className={css.infoProduct}>
                 <p>Артикул:{productDetails.article}</p>
-                {productDetails.quantity ? (
-                  <p>✔️ В наявності</p>
-                ) : (
-                  <p>Закінчилась</p>
+                {selectedVolume && (
+                  <p>
+                    {productDetails.volumes.some(
+                      (item) =>
+                        item._id === selectedVolume._id && item.quantity > 0
+                    )
+                      ? "✔️ В наявності"
+                      : "Закінчилась"}
+                  </p>
                 )}
                 <p className={css.info}>{productDetails.brand}</p>
                 <p className={css.info}>{productDetails.category}</p>
@@ -124,18 +158,6 @@ const ProductInfo = () => {
                   ))}
                 </div>
               )}
-              {/*  {productDetails.volumes && (
-                <div className={css.volumeSelector}>
-                  {productDetails.volumes.map((item) => (
-                    <button
-                      key={item._id}
-                      onClick={() => handleVolumeChange(item)}
-                    >
-                      {item.volume} ml - {item.price} грн
-                    </button>
-                  ))}
-                </div>
-              )} */}
 
               <div className={css.priceBox}>
                 <div className={css.quantityWrapper}>
@@ -145,6 +167,7 @@ const ProductInfo = () => {
                       onClick={() =>
                         handleQuantityChange(productDetails.id, -1)
                       }
+                      disabled={(quantities[productDetails.id] || 1) <= 1}
                     >
                       -
                     </button>
@@ -159,10 +182,15 @@ const ProductInfo = () => {
                         )
                       }
                       min="1"
+                      max={selectedVolume?.quantity || 1}
                     />
                     <button
                       className={css.btnChange}
                       onClick={() => handleQuantityChange(productDetails.id, 1)}
+                      disabled={
+                        (quantities[productDetails.id] || 1) >=
+                        (selectedVolume?.quantity || 1)
+                      }
                     >
                       +
                     </button>
