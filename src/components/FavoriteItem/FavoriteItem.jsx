@@ -1,8 +1,17 @@
 import css from "./FavoriteItem.module.css";
 
-const FavoriteItem = ({ productImg, productName, productPrice }) => {
+const FavoriteItem = ({
+  productImg,
+  productName,
+  productPrice,
+  handleProductClick,
+  item,
+}) => {
   return (
-    <div className={css.cardBox}>
+    <div
+      className={css.cardBox}
+      onClick={() => handleProductClick(item.product)}
+    >
       <div className={css.imgBox}>
         <img
           className={css.imgBrand}

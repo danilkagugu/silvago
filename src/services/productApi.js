@@ -105,3 +105,9 @@ export const searchProducts = async (query) => {
   });
   return data;
 };
+
+export const getTopSellingProduct = async () => {
+  const instance = createAxiosInstance();
+  const { data } = await instance.get("/api/product/top-selling-products");
+  return data;
+};

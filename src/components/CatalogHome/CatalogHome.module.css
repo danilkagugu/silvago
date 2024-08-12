@@ -1,0 +1,22 @@
+.btnBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40px;
+}
+
+.btnChoose {
+  padding: 10px 20px;
+  border: none;
+  background-color: transparent;
+  font-size: 20px;
+}
+
+.btnChoose:hover {
+  background-color: #e0e0e0;
+}
+
+.active {
+  background-color: #007bff;
+  color: white;
+}

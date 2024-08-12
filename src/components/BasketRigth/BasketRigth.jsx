@@ -67,8 +67,8 @@ const BasketRigth = () => {
   };
 
   return (
-    <div className={css.container}>
-      <h2>Кошик</h2>
+    <div className={css.containerBasket}>
+      <h2 className={css.titleBasket}>Кошик</h2>
       <table className={css.basketTable}>
         <thead>
           <tr>
@@ -139,7 +139,9 @@ const BasketRigth = () => {
         </tbody>
       </table>
       <div className={css.totalAmount}>
-        <h3>Загальна сума: {calculateTotalAmount()} грн</h3>
+        <h3 className={css.totalAmountTitle}>
+          Загальна сума: {calculateTotalAmount()} грн
+        </h3>
       </div>
     </div>
   );

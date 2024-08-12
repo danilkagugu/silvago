@@ -1,4 +1,4 @@
-.container {
+.containerBasket {
   width: 100%;
   padding: 20px;
   background-color: #f9f9f9;
@@ -6,13 +6,13 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-h2 {
+.titleBasket {
   font-size: 24px;
   margin-bottom: 20px;
   color: #333;
 }
 
-.basketList {
+/* .basketList {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -34,7 +34,7 @@ h2 {
   object-fit: cover;
   border-radius: 4px;
   margin-right: 15px;
-}
+} */
 
 .quantityContainer {
   display: flex;
@@ -50,16 +50,20 @@ h2 {
   background-color: transparent;
   color: black;
   border: none;
-  /* color: white; */
   padding: 5px 10px;
   font-size: 16px;
   cursor: pointer;
   border-radius: 4px;
   margin: 0 5px;
 }
-
-/* .quantityButton:hover {
-  background-color: #0056b3;
+/* button {
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px;
 } */
 
 .quantity {
@@ -73,20 +77,9 @@ h2 {
   border-top: 1px solid #ddd;
 }
 
-.totalAmount h3 {
+.totalAmountTitle {
   font-size: 20px;
   color: #333;
-}
-
-button {
-  /* background-color: #28a745; */
-  border: none;
-  color: white;
-  padding: 10px 15px;
-  font-size: 16px;
-  cursor: pointer;
-  border-radius: 4px;
-  margin-top: 10px;
 }
 
 /* button:hover {
@@ -95,9 +88,6 @@ button {
 /* ---------------------------------------------- */
 
 /* BasketRigth.module.css */
-.container {
-  padding: 20px;
-}
 
 .basketTable {
   width: 100%;
@@ -117,10 +107,6 @@ button {
 .quantityContainer {
   display: flex;
   align-items: center;
-}
-
-.quantityButton {
-  margin: 0 5px;
 }
 
 /* Add any additional styles for table or item card as needed */
