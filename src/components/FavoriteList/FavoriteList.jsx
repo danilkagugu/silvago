@@ -54,10 +54,12 @@ const FavoriteList = () => {
                 key={`${product._id}-${item.product}`}
                 className={css.listItem}
                 id={item.product}
-                onClick={() => handleProductClick(product._id)}
               >
                 <div className={css.cardContainer}>
-                  <div className={css.cardBox}>
+                  <div
+                    className={css.cardBox}
+                    // onClick={() => handleProductClick(item.product)}
+                  >
                     <CiTrash
                       className={css.iconTrash}
                       onClick={() => {
@@ -68,6 +70,8 @@ const FavoriteList = () => {
                       productImg={item.image}
                       productName={item.productName}
                       productPrice={item.productPrice}
+                      handleProductClick={handleProductClick}
+                      item={item}
                     />
                   </div>
                 </div>

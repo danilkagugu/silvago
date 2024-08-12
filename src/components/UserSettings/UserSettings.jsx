@@ -112,8 +112,8 @@ const UserSettings = () => {
       setValue("office", office || "");
     }
   }, [userData, name, serName, phone, email, area, city, office, setValue]);
-  console.log("city: ", city);
-  console.log("area: ", area);
+  // console.log("city: ", city);
+  // console.log("area: ", area);
 
   const handleAreaChange = async (e) => {
     const selectedAreaRef = e.target.value;

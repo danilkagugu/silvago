@@ -6,6 +6,7 @@ import { getBrands } from "../../services/productApi";
 import BrandItem from "../../components/BrandItem/BrandItem";
 import css from "./Home.module.css";
 import Footer from "../../components/Footer/Footer";
+import CatalogHome from "../../components/CatalogHome/CatalogHome";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -43,7 +44,8 @@ const Home = () => {
     <div>
       <Header />
       <Swiper />
-      <div>
+      <CatalogHome />
+      <div className={css.brandBox}>
         <ul className={css.list}>
           {brands.slice(0, visibleBrandsCount).map((item) => (
             <li
