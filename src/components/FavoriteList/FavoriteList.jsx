@@ -5,22 +5,59 @@ import {
 } from "../../services/productApi";
 import css from "./FavoriteList.module.css";
 import FavoriteItem from "../FavoriteItem/FavoriteItem";
-import { CiTrash } from "react-icons/ci";
-import { useNavigate } from "react-router-dom";
+import { handleAddToBasket } from "../../helpers/productActions";
 
 const FavoriteList = () => {
   const [productsFavorite, setProductsFavorite] = useState([]);
-
-  const navigate = useNavigate();
-
+  const [selectedVolume, setSelectedVolume] = useState({});
+  const [quantities, setQuantities] = useState({});
   useEffect(() => {
     const fetchProducts = async () => {
-      const product = await getFavoriteProduct();
-      setProductsFavorite(product);
+      try {
+        const response = await getFavoriteProduct();
+        // console.log("Fetched product data: ", response);
+
+        const products = response; // Тепер products є масивом об'єктів
+        setProductsFavorite(products);
+
+        const initialQuantities = {};
+        const initialVolume = {};
+
+        if (Array.isArray(products)) {
+          products.forEach((item) => {
+            if (Array.isArray(item.products)) {
+              item.products.forEach((product) => {
+                if (Array.isArray(product.volumes)) {
+                  const defaultVolume = getDefaultVolume(product.volumes); // Отримуємо один об'єм за замовчуванням
+
+                  initialQuantities[product._id] = 1;
+
+                  if (defaultVolume) {
+                    initialVolume[product._id] = defaultVolume; // Зберігаємо один об'єм за замовчуванням для продукту
+                  }
+                }
+              });
+            }
+          });
+        }
+
+        setQuantities(initialQuantities);
+        setSelectedVolume(initialVolume);
+      } catch (error) {
+        console.error("Error fetching products: ", error);
+      }
     };
+
     fetchProducts();
   }, []);
 
+  const getDefaultVolume = (volumes) => {
+    if (!volumes || volumes.length === 0) return 0;
+    return volumes.reduce(
+      (maxVol, vol) => (vol.volume > maxVol ? vol.volume : maxVol),
+      0
+    );
+  };
   // Функція для видалення продукту з обраних
   const handleRemoveFavorite = async (productId) => {
     try {
@@ -40,8 +77,24 @@ const FavoriteList = () => {
       console.error("Error removing favorite product: ", error);
     }
   };
-  const handleProductClick = (productId) => {
-    navigate(`/product/${productId}`);
+  const handleVolumeSelect = (productId, volume) => {
+    setSelectedVolume((prev) => ({
+      ...prev,
+      [productId]: volume,
+    }));
+  };
+  const handleQuantityChange = (productId, amount) => {
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: Math.max(1, (prevQuantities[productId] || 1) + amount),
+    }));
+  };
+  const handleQuantityInputChange = (productId, value) => {
+    const newValue = Math.max(1, parseInt(value, 10) || 1);
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: newValue,
+    }));
   };
   return (
     <div className={css.container}>
@@ -55,26 +108,16 @@ const FavoriteList = () => {
                 className={css.listItem}
                 id={item.product}
               >
-                <div className={css.cardContainer}>
-                  <div
-                    className={css.cardBox}
-                    // onClick={() => handleProductClick(item.product)}
-                  >
-                    <CiTrash
-                      className={css.iconTrash}
-                      onClick={() => {
-                        handleRemoveFavorite(item.product);
-                      }}
-                    />
-                    <FavoriteItem
-                      productImg={item.image}
-                      productName={item.productName}
-                      productPrice={item.productPrice}
-                      handleProductClick={handleProductClick}
-                      item={item}
-                    />
-                  </div>
-                </div>
+                <FavoriteItem
+                  product={item}
+                  selectedVolume={selectedVolume}
+                  handleRemoveFavorite={handleRemoveFavorite}
+                  handleVolumeSelect={handleVolumeSelect}
+                  handleQuantityChange={handleQuantityChange}
+                  quantities={quantities}
+                  handleQuantityInputChange={handleQuantityInputChange}
+                  handleAddToBasket={handleAddToBasket}
+                />
               </li>
             ))
           )}

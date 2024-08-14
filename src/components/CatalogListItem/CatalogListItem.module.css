@@ -43,10 +43,7 @@
   transition: transform 0.3s, box-shadow 0.3s;
   z-index: 1000;
 }
-/* .cardContainer:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-} */
+
 @media screen and (min-width: 1440px) {
   .container {
     margin-top: 50px;
@@ -61,11 +58,6 @@
     flex-basis: calc((100% - 20px) / 6);
     box-sizing: border-box;
   }
-
-  /* .cardContainer:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  } */
 }
 
 .imgBrand {
@@ -151,9 +143,6 @@
 }
 
 /*-------------------------------------------------*/
-/* .cardContainer {
-  position: relative; 
-} */
 
 .volumeOptions {
   display: none;
@@ -170,8 +159,6 @@
 }
 
 .cardContainer:hover .volumeOptions {
-  /* position: relative; */
-  /* z-index: 2; */
   display: flex;
   justify-content: center;
 }

@@ -47,6 +47,7 @@ const TopSellingProduct = () => {
     const fetchData = async () => {
       try {
         const result = await getTopSellingProduct();
+        console.log("result: ", result);
         setProducts(result);
         // Ініціалізація кількостей і вибраних обсягів
         const initialQuantities = {};

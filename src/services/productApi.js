@@ -27,7 +27,6 @@ export const productById = async (productId) => {
 export const addProductToFavorite = async (productId) => {
   const instance = createAxiosInstance();
   const { data } = await instance.post(`/api/product/${productId}/favorite`);
-
   return data;
 };
 export const deleteProductFromFavorite = async (productId) => {
@@ -45,7 +44,6 @@ export const getFavoriteProduct = async () => {
 
 export const addProductToBasket = async (productId, quantity, volume) => {
   const instance = createAxiosInstance();
-  console.log(volume);
   const { data } = await instance.post(`/api/product/${productId}/basket`, {
     productId,
     quantity,

@@ -17,15 +17,6 @@ const CatalogListItem = ({
 }) => {
   const navigate = useNavigate();
 
-  // Отримати ціну для обраного обсягу
-  // const getPrice = () => {
-  //   const volume = selectedVolume[product._id];
-  //   if (volume) {
-  //     const volumeDetail = product.volumes.find((vol) => vol.volume === volume);
-  //     return volumeDetail ? volumeDetail.price : product.volumes[0]?.price;
-  //   }
-  //   return product.volumes[0]?.price;
-  // };
   const getPrice = () => {
     const volume = selectedVolume[product._id];
     const volumeDetail = product.volumes.find((vol) => vol.volume === volume);
@@ -44,20 +35,6 @@ const CatalogListItem = ({
 
     return { newPrice, oldPrice };
   };
-  // const getPrice = () => {
-  //   const volume = selectedVolume[product._id];
-  //   if (volume) {
-  //     const volumeDetail = product.volumes.find((vol) => vol.volume === volume);
-  //     if (volumeDetail) {
-  //       // Обчислюємо ціну зі знижкою
-  //       return volumeDetail.price * (1 - volumeDetail.discount / 100);
-  //     }
-  //   }
-  //   const defaultVolume = product.volumes[0];
-  //   return defaultVolume
-  //     ? defaultVolume.price * (1 - defaultVolume.discount / 100)
-  //     : 0;
-  // };
 
   // Обробка кліку на товар
   const handleProductClick = () => {
@@ -100,10 +77,6 @@ const CatalogListItem = ({
             alt={product.name}
           />
         </div>
-        {/* <div className={css.boxInfo}>
-          <p className={css.brandTitle}>{product.name}</p>
-          <p className={css.brandPrice}>{getPrice()} грн</p>
-        </div> */}
 
         {/* Це якщо буде писатись з перечеркнутой ціною */}
         <div className={css.boxInfo}>
