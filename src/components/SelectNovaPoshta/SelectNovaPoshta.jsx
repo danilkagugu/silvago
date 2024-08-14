@@ -63,7 +63,7 @@ const SelectNovaPoshta = ({ options = [], onChange, placeholder, value }) => {
         className={css.searchInput}
         type="text"
         placeholder={placeholder}
-        value={value || ""}
+        value={search || value || ""}
         onClick={handleToggle}
         readOnly
       />
