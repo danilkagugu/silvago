@@ -29,7 +29,7 @@ const UserSettings = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const userData = useSelector(selectUserData);
+  const userData = useSelector(selectUserData) || {};
   const {
     name = "",
     serName = "",
