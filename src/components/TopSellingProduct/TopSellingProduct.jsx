@@ -48,7 +48,6 @@ const TopSellingProduct = () => {
       try {
         const result = await getTopSellingProduct();
         setProducts(result);
-
         // Ініціалізація кількостей і вибраних обсягів
         const initialQuantities = {};
         const initialVolume = {};

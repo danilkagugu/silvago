@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
-import Swiper from "../../components/Swiper/Swiper";
 import { useEffect, useState } from "react";
 import { getBrands } from "../../services/productApi";
 import BrandItem from "../../components/BrandItem/BrandItem";
 import css from "./Home.module.css";
 import Footer from "../../components/Footer/Footer";
 import CatalogHome from "../../components/CatalogHome/CatalogHome";
+import SwiperPhoto from "../../components/SwiperPhoto/SwiperPhoto";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const Home = () => {
   return (
     <div>
       <Header />
-      <Swiper />
+      <SwiperPhoto />
       <CatalogHome />
       <div className={css.brandBox}>
         <ul className={css.list}>

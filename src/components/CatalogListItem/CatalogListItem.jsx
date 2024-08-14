@@ -18,14 +18,46 @@ const CatalogListItem = ({
   const navigate = useNavigate();
 
   // Отримати ціну для обраного обсягу
+  // const getPrice = () => {
+  //   const volume = selectedVolume[product._id];
+  //   if (volume) {
+  //     const volumeDetail = product.volumes.find((vol) => vol.volume === volume);
+  //     return volumeDetail ? volumeDetail.price : product.volumes[0]?.price;
+  //   }
+  //   return product.volumes[0]?.price;
+  // };
   const getPrice = () => {
     const volume = selectedVolume[product._id];
-    if (volume) {
-      const volumeDetail = product.volumes.find((vol) => vol.volume === volume);
-      return volumeDetail ? volumeDetail.price : product.volumes[0]?.price;
-    }
-    return product.volumes[0]?.price;
+    const volumeDetail = product.volumes.find((vol) => vol.volume === volume);
+    const defaultVolume = product.volumes[0];
+
+    const newPrice = volumeDetail
+      ? volumeDetail.price * (1 - volumeDetail.discount / 100)
+      : defaultVolume
+      ? defaultVolume.price * (1 - defaultVolume.discount / 100)
+      : 0;
+    const oldPrice = volumeDetail
+      ? volumeDetail.price
+      : defaultVolume
+      ? defaultVolume.price
+      : 0;
+
+    return { newPrice, oldPrice };
   };
+  // const getPrice = () => {
+  //   const volume = selectedVolume[product._id];
+  //   if (volume) {
+  //     const volumeDetail = product.volumes.find((vol) => vol.volume === volume);
+  //     if (volumeDetail) {
+  //       // Обчислюємо ціну зі знижкою
+  //       return volumeDetail.price * (1 - volumeDetail.discount / 100);
+  //     }
+  //   }
+  //   const defaultVolume = product.volumes[0];
+  //   return defaultVolume
+  //     ? defaultVolume.price * (1 - defaultVolume.discount / 100)
+  //     : 0;
+  // };
 
   // Обробка кліку на товар
   const handleProductClick = () => {
@@ -68,9 +100,25 @@ const CatalogListItem = ({
             alt={product.name}
           />
         </div>
-        <div className={css.boxInfo}>
+        {/* <div className={css.boxInfo}>
           <p className={css.brandTitle}>{product.name}</p>
           <p className={css.brandPrice}>{getPrice()} грн</p>
+        </div> */}
+
+        {/* Це якщо буде писатись з перечеркнутой ціною */}
+        <div className={css.boxInfo}>
+          <p className={css.brandTitle}>{product.name}</p>
+          {product.volumes.some((vol) => vol.discount > 0) && (
+            <p className={css.brandPrice}>
+              <span className={css.oldPrice}>{getPrice().oldPrice} грн</span>
+              <span className={css.newPrice}>
+                {Math.ceil(getPrice().newPrice)} грн
+              </span>
+            </p>
+          )}
+          {!product.volumes.some((vol) => vol.discount > 0) && (
+            <p className={css.brandPrice}>{getPrice().oldPrice} грн</p>
+          )}
         </div>
       </div>
 

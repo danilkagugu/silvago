@@ -87,6 +87,17 @@ const ProductInfo = () => {
       [productDetails.id]: 1, // Скидаємо кількість на 1 при зміні об'єму
     }));
   };
+  const getPriceDetails = () => {
+    const volume = selectedVolume;
+    if (volume) {
+      const price = volume.price;
+      const discount = volume.discount || 0;
+      const discountedPrice = price * (1 - discount / 100);
+      return discountedPrice < price ? discountedPrice : price;
+    }
+    return 0;
+  };
+
   return (
     <div className={css.productDetail}>
       {productDetails && (
@@ -131,11 +142,16 @@ const ProductInfo = () => {
                     </li>
                   </ul>
                 ))} */}
-              {selectedVolume && (
+              {/* {selectedVolume && (
                 <div className={css.priceBox}>
                   <p className={css.productPrice}>
                     Ціна: {selectedVolume.price}
                   </p>
+                </div>
+              )} */}
+              {selectedVolume && (
+                <div className={css.priceBox}>
+                  <p className={css.productPrice}>{getPriceDetails()} грн</p>
                 </div>
               )}
 

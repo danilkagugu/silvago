@@ -8,7 +8,7 @@
 
 .iconFavorite {
   position: absolute;
-  right: 12%;
+  right: 22%;
   top: 4%;
   fill: red;
   cursor: pointer;
@@ -95,6 +95,10 @@
 }
 
 .brandPrice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
   text-align: center;
   font-size: 18px;
   font-weight: 400;
@@ -147,10 +151,9 @@
 }
 
 /*-------------------------------------------------*/
-.cardContainer {
-  /* position: relative; */
-  /* інші стилі */
-}
+/* .cardContainer {
+  position: relative; 
+} */
 
 .volumeOptions {
   display: none;
@@ -169,7 +172,8 @@
 .cardContainer:hover .volumeOptions {
   /* position: relative; */
   /* z-index: 2; */
-  display: block;
+  display: flex;
+  justify-content: center;
 }
 
 .volumeOption {
@@ -247,4 +251,8 @@
 /* Приховані кнопки для першої і останньої сторінок, якщо потрібно */
 .hidden {
   display: none;
+}
+
+.oldPrice {
+  text-decoration: line-through;
 }

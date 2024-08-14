@@ -111,3 +111,9 @@ export const getTopSellingProduct = async () => {
   const { data } = await instance.get("/api/product/top-selling-products");
   return data;
 };
+export const getDiscountProducts = async () => {
+  const instance = createAxiosInstance();
+  const { data } = await instance.get("/api/product/discount-products");
+  console.log("data: ", data);
+  return data;
+};
