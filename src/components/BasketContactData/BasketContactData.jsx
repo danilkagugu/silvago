@@ -103,10 +103,11 @@ const BasketContactData = () => {
     setValue("serName", serName);
     setValue("phone", phone);
     setValue("email", email);
-    // setValue("area", area);
-    // setValue("city", city);
-    // setValue("office", office);
+    setValue("area", area);
+    setValue("city", city);
+    setValue("office", office);
   }, [name, serName, phone, email, area, city, office, setValue]);
+
   const basketData = useSelector(selectBasket);
 
   const handleAreaChange = async (e) => {
@@ -148,6 +149,13 @@ const BasketContactData = () => {
   const submitOrder = async (formData) => {
     try {
       const { name, serName, phone, email, area, city, office } = formData;
+      console.log("office: ", office);
+      console.log("city: ", city);
+      console.log("area: ", area);
+      if (!area || !city || !office) {
+        console.error("Area, city, or office is missing.");
+        return;
+      }
       const basket = basketData;
       const user = {
         name,
@@ -265,7 +273,7 @@ const BasketContactData = () => {
               options={cities}
               value={city || ""}
               onChange={(selectedCity) => {
-                setValue("city", selectedCity);
+                setValue("city", selectedCity || "");
                 handleCityChange({ target: { value: selectedCity } });
               }}
               placeholder="Виберіть місто"
@@ -277,7 +285,7 @@ const BasketContactData = () => {
               options={offices}
               value={office || ""}
               onChange={(selectedOffice) => {
-                setValue("office", selectedOffice);
+                setValue("office", selectedOffice || "");
               }}
               placeholder="Виберіть віділення"
             />

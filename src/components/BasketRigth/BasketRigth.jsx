@@ -98,7 +98,7 @@ const BasketRigth = () => {
                     <CatalogItem
                       productImg={details.image}
                       productName={details.name}
-                      productPrice={discountedPrice}
+                      productPrice={Math.ceil(discountedPrice)}
                       id={item.product}
                     />
                   )}

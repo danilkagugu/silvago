@@ -115,13 +115,13 @@ const CatalogList = () => {
     }
   });
 
-  const getDefaultPrice = (product) => {
-    const defaultVolume = getDefaultVolume(product.volumes);
-    const volumeObj = product.volumes.find(
-      (vol) => vol.volume === defaultVolume
-    );
-    return volumeObj ? volumeObj.price : product.price;
-  };
+  // const getDefaultPrice = (product) => {
+  //   const defaultVolume = getDefaultVolume(product.volumes);
+  //   const volumeObj = product.volumes.find(
+  //     (vol) => vol.volume === defaultVolume
+  //   );
+  //   return volumeObj ? volumeObj.price : product.price;
+  // };
 
   // Пагінація
   const ITEMS_PER_PAGE = 15;
@@ -136,6 +136,25 @@ const CatalogList = () => {
     }
   };
   // console.log("filteredProducts", filteredProducts);
+  const getPrice = (product) => {
+    const volume = selectedVolume[product._id];
+    const volumeDetail = product.volumes.find((vol) => vol.volume === volume);
+    const defaultVolume = product.volumes[0];
+
+    const newPrice = volumeDetail
+      ? volumeDetail.price * (1 - volumeDetail.discount / 100)
+      : defaultVolume
+      ? defaultVolume.price * (1 - defaultVolume.discount / 100)
+      : 0;
+    const oldPrice = volumeDetail
+      ? volumeDetail.price
+      : defaultVolume
+      ? defaultVolume.price
+      : 0;
+
+    return { newPrice, oldPrice };
+  };
+
   return (
     <div>
       <ul className={css.list}>
@@ -181,12 +200,19 @@ const CatalogList = () => {
                 <div className={css.boxInfo}>
                   <p className={css.brandTitle}>{product.name}</p>
                   <p className={css.brandPrice}>
-                    {selectedVolume[product._id]
-                      ? product.volumes.find(
-                          (vol) => vol.volume === selectedVolume[product._id]
-                        )?.price
-                      : getDefaultPrice(product)}
-                    грн
+                    {product.volumes.some((vol) => vol.discount > 0) && (
+                      <>
+                        <span className={css.oldPrice}>
+                          {getPrice(product).oldPrice} грн
+                        </span>
+                        <span className={css.newPrice}>
+                          {Math.ceil(getPrice(product).newPrice)} грн
+                        </span>
+                      </>
+                    )}
+                    {!product.volumes.some((vol) => vol.discount > 0) && (
+                      <span>{getPrice(product).oldPrice} грн</span>
+                    )}
                   </p>
                 </div>
               </div>

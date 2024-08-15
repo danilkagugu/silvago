@@ -128,30 +128,12 @@ const ProductInfo = () => {
                   В наявності {productDetails.quantity} шт.
                 </p>
               </div>
-              {/* <p className={css.productDescription}>{productDetails.description}</p> */}
-              {/* {productDetails.volumes &&
-                productDetails.volumes.map((item) => (
-                  <ul key={item._id}>
-                    <li>
-                      <p className={css.productPrice}>Ціна: {item.price} грн</p>
-                    </li>
-                    <li>
-                      <p className={css.productPrice}>
-                        Об'єм: {item.volume} грн
-                      </p>
-                    </li>
-                  </ul>
-                ))} */}
-              {/* {selectedVolume && (
-                <div className={css.priceBox}>
-                  <p className={css.productPrice}>
-                    Ціна: {selectedVolume.price}
-                  </p>
-                </div>
-              )} */}
+
               {selectedVolume && (
                 <div className={css.priceBox}>
-                  <p className={css.productPrice}>{getPriceDetails()} грн</p>
+                  <p className={css.productPrice}>
+                    {Math.ceil(getPriceDetails())} грн
+                  </p>
                 </div>
               )}
 

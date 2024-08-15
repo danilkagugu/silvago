@@ -2,10 +2,11 @@ import { Fragment, useEffect, useState } from "react";
 import { getOrder } from "../../services/productApi";
 import css from "./OrderHistory.module.css";
 import { getAreaByRef } from "../../services/NovaPoshtaApi";
+import { useNavigate } from "react-router-dom";
 
 const OrderHistory = () => {
+  const navigate = useNavigate();
   const [history, setHistory] = useState([]);
-  // console.log("history: ", history);
 
   const [expandedRows, setExpandedRows] = useState({});
   const [areaNames, setAreaNames] = useState({});
@@ -58,7 +59,9 @@ const OrderHistory = () => {
     const year = date.getFullYear();
     return `${day}.${month}.${year}`;
   };
-
+  const handleProductClick = (product) => {
+    navigate(`/product/${product}`);
+  };
   return (
     <div>
       <table className={css.table}>
@@ -73,12 +76,12 @@ const OrderHistory = () => {
         </thead>
         <tbody>
           {history &&
-            history.map((order, index) => {
+            history.map((order) => {
               // console.log("order", order);
               return (
                 <Fragment key={order._id}>
                   <tr>
-                    <td>{index + 1}</td>
+                    <td>{order.orderNumber}</td>
                     <td>{formatDate(order.createdAt)}</td>
                     <td>{order.allQuantity}</td>
                     <td>{order.totalAmount} грн</td>
@@ -106,7 +109,11 @@ const OrderHistory = () => {
                               <tbody>
                                 {order.basket.map((product, idx) => (
                                   <tr key={product.product + idx}>
-                                    <td>
+                                    <td
+                                      onClick={() =>
+                                        handleProductClick(product.product)
+                                      }
+                                    >
                                       <img
                                         src={product.image}
                                         alt={product.productName}

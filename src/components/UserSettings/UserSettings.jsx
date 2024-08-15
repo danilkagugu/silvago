@@ -164,6 +164,7 @@ const UserSettings = () => {
 
   return (
     <div>
+      <h2>Особисті дані</h2>
       <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
         <div className={css.boxUserInfo}>
           <div className={css.inputBox}>
