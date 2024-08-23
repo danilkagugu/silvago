@@ -1,25 +1,18 @@
 .searchResults {
   background: white;
-  border: 1px solid #ddd;
   border-radius: 4px;
   max-height: 300px; /* Максимальна висота списку */
   overflow-y: auto; /* Прокрутка, якщо результатів багато */
 }
 
-.searchResults ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.searchResults li {
+.searchResultsList {
   display: flex;
   align-items: center;
   padding: 8px 16px;
   cursor: pointer;
 }
 
-.searchResults li:hover {
+.searchResultsList:hover {
   background-color: #f0f0f0;
 }
 
@@ -27,7 +20,7 @@
   margin-right: 12px;
 }
 
-.searchResults img {
+.imgBrand {
   width: 50px;
   height: 50px;
   object-fit: cover;

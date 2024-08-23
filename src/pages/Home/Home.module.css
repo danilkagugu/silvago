@@ -1,3 +1,17 @@
+.brandBox {
+  margin-top: 70px;
+  overflow: hidden;
+  height: 250px;
+  transition: height 0.5s ease;
+}
+.brandBox.collapsed {
+  height: 250px;
+}
+
+.brandBox.expanded {
+  height: 750px;
+}
+
 .list {
   display: flex;
   justify-content: center;
@@ -31,8 +45,4 @@
   padding: 10px;
   margin: 0 auto;
   display: block;
-}
-
-.brandBox {
-  margin-top: 70px;
 }

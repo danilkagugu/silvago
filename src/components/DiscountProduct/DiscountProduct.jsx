@@ -39,6 +39,7 @@ const CustomNextButton = ({ slideTo }) => {
 
 const DiscountProduct = () => {
   const [discountProducts, setDiscountProducts] = useState();
+  // console.log("discountProducts: ", discountProducts);
   const [favoriteProducts, setFavoriteProducts] = useState(new Set());
   const [quantities, setQuantities] = useState({});
   const [selectedVolume, setSelectedVolume] = useState({});
@@ -47,6 +48,7 @@ const DiscountProduct = () => {
     const fetchData = async () => {
       try {
         const data = await getDiscountProducts();
+        // console.log("data: ", data);
         setDiscountProducts(data);
         const initialQuantities = {};
         const initialVolume = {};

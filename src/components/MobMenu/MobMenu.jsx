@@ -54,12 +54,16 @@ const MobMenu = ({ closeMenu }) => {
           </li>
           <li>
             <p>
-              <Link className={css.link} to={"/delivery-and-payment"}>Доставка і оплата</Link>
+              <Link className={css.link} to={"/delivery-and-payment"}>
+                Доставка і оплата
+              </Link>
             </p>
           </li>
           <li>
             <p>
-              <Link className={css.link} to={"/about-us"}>Про нас</Link>
+              <Link className={css.link} to={"/about-us"}>
+                Про нас
+              </Link>
             </p>
           </li>
         </ul>

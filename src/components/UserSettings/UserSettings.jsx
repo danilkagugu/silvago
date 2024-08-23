@@ -48,7 +48,7 @@ const UserSettings = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors, touchedFields },
+    // formState: { errors, touchedFields }, !!!!!!!Тут треба доробити
     setValue,
   } = useForm({
     resolver: yupResolver(UserRegisterSchema),
@@ -164,11 +164,135 @@ const UserSettings = () => {
 
   return (
     <div>
-      <h2>Особисті дані</h2>
-      <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
-        <div className={css.boxUserInfo}>
+      {/* Тут починається новий дизайн профіля */}
+      <div className={css.profileContent}>
+        <h1>Особисті Дані</h1>
+        <div>
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <dl className={css.form}>
+              <dt className={css.formHead}>Ім&apos;я</dt>
+              <dd className={css.formItem}>
+                <input
+                  className={css.field}
+                  id="name"
+                  type="text"
+                  {...register("name")}
+                  placeholder="Ім'я"
+                />
+              </dd>
+              <dt className={css.formHead}>Прізвище</dt>
+              <dd className={css.formItem}>
+                <input
+                  className={css.field}
+                  id="surname"
+                  type="text"
+                  {...register("serName")}
+                  placeholder="Прізвище"
+                />
+              </dd>
+              <dt className={css.formHead}>Е-пошта</dt>
+              <dd className={css.formItem}>
+                <input
+                  className={css.field}
+                  id="email"
+                  type="email"
+                  {...register("email")}
+                  placeholder="Email"
+                />
+              </dd>
+              <dt className={css.formHead}>Телефон</dt>
+              <dd className={css.formItem}>
+                {/* <input className={css.field} type="text" /> */}
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({ field }) => (
+                    <CustomMaskedInput
+                      className={css.field}
+                      id="phone"
+                      {...field}
+                      placeholder="Мобільний телефон"
+                    />
+                  )}
+                />
+              </dd>
+              <dt className={css.formHead}>Область</dt>
+              <dd className={css.formItem}>
+                {/* <input className={css.field} type="text" /> */}
+                <SelectNovaPoshta
+                  options={areas.map((a) => a.Description)}
+                  value={areas.find((a) => a.Ref === area)?.Description || ""}
+                  onChange={(selectedArea) => {
+                    const selectedAreaRef = areas.find(
+                      (a) => a.Description === selectedArea
+                    )?.Ref;
+                    setValue("area", selectedAreaRef || "");
+                    handleAreaChange({
+                      target: { value: selectedAreaRef || "" },
+                    });
+                  }}
+                  placeholder="Виберіть область"
+                />
+              </dd>
+              <dt className={css.formHead}>Місто</dt>
+              <dd className={css.formItem}>
+                {/* <input className={css.field} type="text" /> */}
+                <SelectNovaPoshta
+                  options={cities}
+                  value={city || ""}
+                  onChange={(selectedCity) => {
+                    setValue("city", selectedCity);
+                    handleCityChange({ target: { value: selectedCity } });
+                  }}
+                  placeholder="Виберіть місто"
+                />
+              </dd>
+              <dt className={css.formHead}>Віділення</dt>
+              <dd className={css.formItem}>
+                {/* <input className={css.field} type="text" /> */}
+                <SelectNovaPoshta
+                  options={offices}
+                  value={office || ""}
+                  onChange={(selectedOffice) => {
+                    setValue("office", selectedOffice);
+                  }}
+                  placeholder="Виберіть віділення"
+                />
+              </dd>
+              <dt className={css.formHead}>Поточний пароль</dt>
+              <dd className={css.formItem}>
+                <input className={css.field} type="password" />
+              </dd>
+              <dt className={css.formHead}>Новий пароль</dt>
+              <dd className={css.formItem}>
+                <input className={css.field} type="password" />
+              </dd>
+              <dt className={css.formHead}>Пароль ще раз</dt>
+              <dd className={css.formItem}>
+                <input className={css.field} type="password" />
+              </dd>
+            </dl>
+            <button className={css.btnSave} type="submit">
+              Зберегти зміни
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UserSettings;
+
+// Стара форма
+
+{
+  /* <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
+        <div className={css.card}>
+          <div className={css.cardHeader}>Особисті дані</div>
+
           <div className={css.inputBox}>
-            <label className={css.visuallyHidden} htmlFor="name">
+            <label className={css.rrr} htmlFor="name">
               Імя
             </label>
             <input
@@ -180,7 +304,7 @@ const UserSettings = () => {
             />
           </div>
           <div className={css.inputBox}>
-            <label className={css.visuallyHidden} htmlFor="surname">
+            <label className={css.rrr} htmlFor="surname">
               Прізвище
             </label>
             <input
@@ -193,7 +317,7 @@ const UserSettings = () => {
           </div>
 
           <div className={css.inputBox}>
-            <label className={css.visuallyHidden} htmlFor="phone">
+            <label className={css.rrr} htmlFor="phone">
               Мобільний телефон
             </label>
             <Controller
@@ -211,7 +335,7 @@ const UserSettings = () => {
           </div>
 
           <div className={css.inputBox}>
-            <label className={css.visuallyHidden} htmlFor="email">
+            <label className={css.rrr} htmlFor="email">
               Email
             </label>
             <input
@@ -226,9 +350,9 @@ const UserSettings = () => {
             ) : null}
           </div>
         </div>
-        <div>
-          <h1>Адреса доставки</h1>
-          <div>
+        <div className={css.card}>
+          <div className={css.cardHeader}>Адреса доставки</div>
+          <div className={css.inputBox}>
             <label className={css.visuallyHidden} htmlFor="area">
               Область
             </label>
@@ -244,7 +368,8 @@ const UserSettings = () => {
               }}
               placeholder="Виберіть область"
             />
-
+          </div>
+          <div className={css.inputBox}>
             <label className={css.visuallyHidden} htmlFor="city">
               Місто
             </label>
@@ -257,7 +382,8 @@ const UserSettings = () => {
               }}
               placeholder="Виберіть місто"
             />
-
+          </div>
+          <div className={css.inputBox}>
             <label className={css.visuallyHidden} htmlFor="office">
               Віділення
             </label>
@@ -271,12 +397,8 @@ const UserSettings = () => {
             />
           </div>
         </div>
-        <button className={css.btnLogin} type="submit">
+        <button className={css.btnSave} type="submit">
           Зберегти зміни
         </button>
-      </form>
-    </div>
-  );
-};
-
-export default UserSettings;
+      </form> */
+}

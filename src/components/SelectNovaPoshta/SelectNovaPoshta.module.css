@@ -4,9 +4,15 @@
 }
 
 .searchInput {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
   width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
+  height: 50px;
+  padding: 13px;
+  border: 1px solid #e8e8e8;
+  background: #f9f9f9;
+  margin-bottom: 15px;
   border-radius: 4px;
   box-sizing: border-box;
 }

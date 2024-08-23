@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   addProductToFavorite,
   deleteProductFromFavorite,
+  getFavoriteProduct,
   getProducts,
   productById,
 } from "../../services/productApi";
@@ -29,6 +30,19 @@ export const getProductById = createAsyncThunk(
     }
   }
 );
+
+export const getFavoriteProducts = createAsyncThunk(
+  "favorite/get",
+  async (_, thunkAPI) => {
+    try {
+      const data = await getFavoriteProduct();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const addProductFavorite = createAsyncThunk(
   "products/addFavoriteProduct",
   async (productId, thunkAPI) => {
@@ -40,6 +54,7 @@ export const addProductFavorite = createAsyncThunk(
     }
   }
 );
+
 export const removeProductFavorite = createAsyncThunk(
   "products/removeFavoriteProduct",
   async (productId, thunkAPI) => {

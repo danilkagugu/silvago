@@ -45,7 +45,9 @@ const Home = () => {
       <Header />
       <SwiperPhoto />
       <CatalogHome />
-      <div className={css.brandBox}>
+      <div
+        className={`${css.brandBox} ${openList ? css.expanded : css.collapsed}`}
+      >
         <ul className={css.list}>
           {brands.slice(0, visibleBrandsCount).map((item) => (
             <li

@@ -127,6 +127,7 @@ const TopSellingProduct = () => {
               handleAddToBasket={handleAddToBasket}
               handleToggleFavorite={handleToggleFavorite}
               setFavoriteProducts={setFavoriteProducts}
+              topProducts={products}
             />
           </SwiperSlide>
         ))}

@@ -1,5 +1,7 @@
 .qwert {
-  margin-top: 50px;
+  /* margin-top: 50px; */
+  padding: 30px;
+  background-color: #f5f5f5;
 }
 
 .btnBox {
@@ -14,6 +16,8 @@
   border: none;
   background-color: transparent;
   font-size: 20px;
+  color: #b9a2f2;
+  font-weight: 700;
 }
 
 .btnChoose:hover {
@@ -21,6 +25,6 @@
 }
 
 .active {
-  background-color: #007bff;
-  color: white;
+  /* background-color: #007bff; */
+  color: black;
 }

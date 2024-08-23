@@ -7,6 +7,7 @@ const SearchProduct = ({ searchQuery }) => {
   const navigate = useNavigate();
 
   const [filteredProducts, setFilteredProducts] = useState([]);
+  console.log("filteredProducts: ", filteredProducts);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -30,7 +31,11 @@ const SearchProduct = ({ searchQuery }) => {
     <ul className={css.searchResults}>
       {filteredProducts &&
         filteredProducts.map((item) => (
-          <li key={item._id} onClick={() => handleProductClick(item._id)}>
+          <li
+            className={css.searchResultsList}
+            key={item._id}
+            onClick={() => handleProductClick(item._id)}
+          >
             <div className={css.imgBox}>
               <img
                 className={css.imgBrand}

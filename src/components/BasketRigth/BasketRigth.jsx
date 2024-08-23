@@ -82,7 +82,9 @@ const BasketRigth = () => {
         </thead>
         <tbody>
           {basket.map((item) => {
+            console.log("item: ", item);
             const details = productDetails[item.product];
+            // console.log("details: ", details);
 
             const uniqueKey = `${item.product}-${item.volume}`; // Унікальний ключ
             const volumeDetail = details?.volumes.find(

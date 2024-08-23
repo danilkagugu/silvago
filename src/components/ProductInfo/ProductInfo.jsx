@@ -132,7 +132,7 @@ const ProductInfo = () => {
               {selectedVolume && (
                 <div className={css.priceBox}>
                   <p className={css.productPrice}>
-                    {Math.ceil(getPriceDetails())} грн
+                    {Math.ceil(getPriceDetails())} ₴
                   </p>
                 </div>
               )}
@@ -140,7 +140,7 @@ const ProductInfo = () => {
               {/* Об'ємні варіанти */}
               {productDetails.volumes && (
                 <div className={css.volumeSelector}>
-                  <p>Обєм</p>
+                  <p>Об&apos;єм</p>
                   {productDetails.volumes.map((item) => (
                     <button
                       key={item._id}

@@ -8,28 +8,31 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 const SwiperPhoto = () => {
   return (
-    <Swiper
-      spaceBetween={0}
-      slidesPerView={1}
-      autoplay={{
-        delay: 3000, // Затримка між слайдами в мілісекундах
-        disableOnInteraction: false, // Автопрокрутка не зупиняється при взаємодії
-      }}
-      modules={[Autoplay]} // Вказати, що використовуєте Autoplay модуль
-    >
-      <SwiperSlide>
-        <img className={css.photo} src={p1} alt="q" />
-      </SwiperSlide>
-      <SwiperSlide>
-        <img className={css.photo} src={p2} alt="q" />
-      </SwiperSlide>
-      <SwiperSlide>
-        <img className={css.photo} src={p3} alt="q" />
-      </SwiperSlide>
-      <SwiperSlide>
-        <img className={css.photo} src={p4} alt="q" />
-      </SwiperSlide>
-    </Swiper>
+    <div className={css.swiperBox}>
+      <Swiper
+        className={css.swiper}
+        spaceBetween={0}
+        slidesPerView={1}
+        autoplay={{
+          delay: 3000, // Затримка між слайдами в мілісекундах
+          disableOnInteraction: false, // Автопрокрутка не зупиняється при взаємодії
+        }}
+        modules={[Autoplay]} // Вказати, що використовуєте Autoplay модуль
+      >
+        <SwiperSlide>
+          <img className={css.photo} src={p1} alt="q" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img className={css.photo} src={p2} alt="q" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img className={css.photo} src={p3} alt="q" />
+        </SwiperSlide>
+        <SwiperSlide>
+          <img className={css.photo} src={p4} alt="q" />
+        </SwiperSlide>
+      </Swiper>
+    </div>
   );
 };
 

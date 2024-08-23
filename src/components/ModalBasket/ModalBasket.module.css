@@ -1,0 +1,309 @@
+.modalOverley {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.7);
+  overflow: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+}
+
+.popup {
+  position: relative;
+  margin: 0 auto;
+  padding: 30px;
+  width: 950px;
+}
+.popupBlock {
+  position: relative;
+  padding: 30px;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 5px 35px rgba(0, 0, 0, 0.75);
+}
+
+.iconClose {
+  position: absolute;
+  right: 5px;
+  top: 8px;
+  width: 30px;
+  height: 30px;
+  fill: #b2b2b2;
+  z-index: 100;
+  cursor: pointer;
+}
+
+.iconClose:hover {
+  fill: #000;
+}
+
+.popupTitle {
+  font-size: 32px;
+  font-weight: normal;
+}
+
+.cartBasket {
+}
+
+.cartItems {
+  width: 100%;
+  /* border-collapse: separate; */
+  border-collapse: collapse;
+}
+
+.cartItems tr:last-child td:first-child {
+  border-bottom-left-radius: 4px;
+}
+
+.cartHeaderDiv {
+}
+
+.cartHeader {
+  padding-bottom: 8px;
+  color: #898989;
+  font-size: 11px;
+}
+.cartHeaderCost {
+  padding-right: 18px;
+  text-align: right;
+}
+
+.cartBody {
+  background-color: #fff;
+}
+
+.cartBody::after {
+  content: "";
+  height: 5px;
+  display: block;
+}
+
+.cartProduct {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  vertical-align: middle;
+}
+
+.cartSell {
+  position: relative;
+  padding: 15px 0;
+}
+
+.imgBox {
+  text-align: center;
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+  height: 80px;
+}
+
+.productImg {
+  max-height: 80px;
+  max-width: 80px;
+  width: auto;
+  height: auto;
+}
+
+.productTitle {
+  width: 480px;
+  margin-bottom: 5px;
+}
+
+.productTitle:hover {
+  color: #545454;
+}
+
+.counter {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  vertical-align: middle;
+}
+
+.counterConteiner {
+  width: 92px;
+  height: 38px;
+  display: flex;
+  border-radius: 4px;
+  border: 1px solid #acacac;
+  position: relative;
+  background: #fff;
+  width: 100px;
+  height: 38px;
+  box-sizing: border-box;
+}
+
+.counterBtn {
+  flex: 1 0 auto;
+  height: 100%;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  cursor: pointer;
+  color: #000;
+  border: 0;
+  padding: 0;
+  background: none;
+}
+
+.icon {
+  display: inline-block;
+  font-size: 32px;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+
+.iconMinus {
+  position: absolute;
+  font-size: 10px;
+  left: 50%;
+  top: 50%;
+  margin-top: -5px;
+  margin-left: -5px;
+  fill: currentColor;
+}
+
+.iconPlus {
+  position: absolute;
+  font-size: 10px;
+  left: 50%;
+  top: 50%;
+  margin-top: -5px;
+  margin-left: -5px;
+  fill: currentColor;
+}
+
+.counterInput {
+  flex: 0 0 34px;
+  line-height: 1;
+}
+
+.counterField {
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  text-align: center;
+  background-color: none;
+  border-radius: 0;
+  border: none;
+}
+
+.cost {
+  text-align: right;
+  width: 130px;
+  vertical-align: middle;
+  padding-right: 10px;
+}
+
+.cartFooter {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-top-style: dotted;
+  padding: 14px 0 20px;
+  text-align: right;
+}
+
+.cartText {
+  display: inline-block;
+  font-size: 12px;
+  margin-right: 11px;
+}
+
+.cartCost {
+  display: inline-block;
+  padding-right: 18px;
+  white-space: nowrap;
+  font-weight: bold;
+  font-size: 18px;
+  text-align: right;
+}
+
+.cartBtn {
+  margin-top: 15px;
+  padding: 0 17px;
+}
+
+.cartBtnBack {
+  float: left;
+  margin-top: 6px;
+  font-size: 18px;
+}
+
+.arrowLeft {
+  width: 25px;
+  height: 25px;
+}
+
+.btn {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-block;
+  line-height: 1;
+  padding: 0;
+  outline: 0;
+  border: none;
+  background: rgba(0, 0, 0, 0);
+  text-align: center;
+  text-decoration: none !important;
+  vertical-align: middle;
+  cursor: pointer;
+  white-space: nowrap;
+  border-radius: 4px;
+  color: #666;
+  border: 1px solid #d8d8d8;
+  background: #fff;
+  box-shadow: none;
+  height: 38px;
+  line-height: 38px;
+  font-size: 18px;
+  transition: all 0.15s;
+}
+
+.clear {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  color: #000;
+  text-shadow: none;
+  border-radius: 0;
+}
+
+.cartBtnOrder {
+  cursor: pointer;
+  float: right;
+}
+
+.cartBtnText {
+  border-radius: 11px;
+  color: #fff;
+  border: 0;
+  background: #ec9fa8;
+  box-shadow: none;
+  padding: 16px;
+}
+
+.trashBox {
+  position: absolute;
+  left: -20px;
+  bottom: 50%;
+  opacity: 0;
+  cursor: pointer;
+  width: 20px;
+}
+
+.iconTrash {
+  fill: #b2b2b2;
+}
+.iconTrash:hover {
+  fill: #545454;
+}
+
+.cartProduct:hover .trashBox {
+  opacity: 1;
+}

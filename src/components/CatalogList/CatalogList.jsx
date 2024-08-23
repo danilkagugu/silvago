@@ -1,21 +1,17 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getCategories } from "../../services/productApi";
-import { CiHeart } from "react-icons/ci";
-import { FaHeart } from "react-icons/fa";
+// import { CiHeart } from "react-icons/ci";
+// import { FaHeart } from "react-icons/fa";
 import css from "./CatalogList.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { selectProducts } from "../../redux/product/selectors";
 import { getAllProduct } from "../../redux/product/operations";
-import {
-  fetchFavoriteProducts,
-  handleAddToBasket,
-  handleToggleFavorite,
-} from "../../helpers/productActions";
+import { fetchFavoriteProducts } from "../../helpers/productActions";
+import CatalogListItem from "../CatalogListItem/CatalogListItem";
 
 const CatalogList = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [favoriteProducts, setFavoriteProducts] = useState(new Set());
   const [quantities, setQuantities] = useState({});
@@ -60,25 +56,6 @@ const CatalogList = () => {
     fetchFavoriteProducts(setFavoriteProducts);
   }, [dataProducts]);
 
-  const handleQuantityChange = (productId, amount) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: Math.max(1, (prevQuantities[productId] || 1) + amount),
-    }));
-  };
-
-  const handleProductClick = (productId) => {
-    navigate(`/product/${productId}`);
-  };
-
-  const handleQuantityInputChange = (productId, value) => {
-    const newValue = Math.max(1, parseInt(value, 10) || 1);
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: newValue,
-    }));
-  };
-
   const handleVolumeSelect = (productId, volume) => {
     setSelectedVolume((prev) => ({
       ...prev,
@@ -115,14 +92,6 @@ const CatalogList = () => {
     }
   });
 
-  // const getDefaultPrice = (product) => {
-  //   const defaultVolume = getDefaultVolume(product.volumes);
-  //   const volumeObj = product.volumes.find(
-  //     (vol) => vol.volume === defaultVolume
-  //   );
-  //   return volumeObj ? volumeObj.price : product.price;
-  // };
-
   // Пагінація
   const ITEMS_PER_PAGE = 15;
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
@@ -135,142 +104,19 @@ const CatalogList = () => {
       setCurrentPage(newPage);
     }
   };
-  // console.log("filteredProducts", filteredProducts);
-  const getPrice = (product) => {
-    const volume = selectedVolume[product._id];
-    const volumeDetail = product.volumes.find((vol) => vol.volume === volume);
-    const defaultVolume = product.volumes[0];
-
-    const newPrice = volumeDetail
-      ? volumeDetail.price * (1 - volumeDetail.discount / 100)
-      : defaultVolume
-      ? defaultVolume.price * (1 - defaultVolume.discount / 100)
-      : 0;
-    const oldPrice = volumeDetail
-      ? volumeDetail.price
-      : defaultVolume
-      ? defaultVolume.price
-      : 0;
-
-    return { newPrice, oldPrice };
-  };
 
   return (
     <div>
       <ul className={css.list}>
         {productsToDisplay.map((product) => (
           <li key={product._id} className={css.listItem} id={product._id}>
-            <div className={css.cardContainer}>
-              {favoriteProducts.has(product._id) ? (
-                <FaHeart
-                  className={css.iconFavorite}
-                  onClick={() =>
-                    handleToggleFavorite(
-                      product._id,
-                      favoriteProducts,
-                      setFavoriteProducts
-                    )
-                  }
-                />
-              ) : (
-                <CiHeart
-                  className={css.iconFavorite}
-                  onClick={() =>
-                    handleToggleFavorite(
-                      product._id,
-
-                      favoriteProducts,
-                      setFavoriteProducts
-                    )
-                  }
-                />
-              )}
-
-              <div
-                className={css.cardBox}
-                onClick={() => handleProductClick(product._id)}
-              >
-                <div className={css.imgBox}>
-                  <img
-                    className={css.imgBrand}
-                    src={product.image}
-                    alt={product.name}
-                  />
-                </div>
-                <div className={css.boxInfo}>
-                  <p className={css.brandTitle}>{product.name}</p>
-                  <p className={css.brandPrice}>
-                    {product.volumes.some((vol) => vol.discount > 0) && (
-                      <>
-                        <span className={css.oldPrice}>
-                          {getPrice(product).oldPrice} грн
-                        </span>
-                        <span className={css.newPrice}>
-                          {Math.ceil(getPrice(product).newPrice)} грн
-                        </span>
-                      </>
-                    )}
-                    {!product.volumes.some((vol) => vol.discount > 0) && (
-                      <span>{getPrice(product).oldPrice} грн</span>
-                    )}
-                  </p>
-                </div>
-              </div>
-              <div className={css.priceBox}>
-                <div className={css.quantityBox}>
-                  <div className={css.quantityInputWrapper}>
-                    <button
-                      className={css.quantityButton}
-                      onClick={() => handleQuantityChange(product._id, -1)}
-                    >
-                      -
-                    </button>
-                    <input
-                      type="text"
-                      className={css.quantityInput}
-                      value={quantities[product._id] || 1}
-                      onChange={(e) =>
-                        handleQuantityInputChange(product._id, e.target.value)
-                      }
-                      min="1"
-                    />
-                    <button
-                      className={css.quantityButton}
-                      onClick={() => handleQuantityChange(product._id, 1)}
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-                <button
-                  className={css.buyButton}
-                  onClick={() =>
-                    handleAddToBasket(
-                      product._id,
-                      quantities[product._id],
-                      selectedVolume[product._id]
-                    )
-                  }
-                >
-                  Купити
-                </button>
-              </div>
-              <div className={css.volumeOptions}>
-                {product.volumes.map((vol) => (
-                  <button
-                    key={vol._id}
-                    className={`${css.volumeOption} ${
-                      selectedVolume[product._id] === vol.volume
-                        ? css.selected
-                        : ""
-                    }`}
-                    onClick={() => handleVolumeSelect(product._id, vol.volume)}
-                  >
-                    {vol.volume} мл
-                  </button>
-                ))}
-              </div>
-            </div>
+            <CatalogListItem
+              favoriteProducts={favoriteProducts}
+              handleVolumeSelect={handleVolumeSelect}
+              product={product}
+              quantities={quantities}
+              selectedVolume={selectedVolume}
+            />
           </li>
         ))}
       </ul>

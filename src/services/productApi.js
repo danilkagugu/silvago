@@ -19,22 +19,26 @@ export const getProducts = async () => {
   const { data } = await instance.get("/api/product");
   return data;
 };
+
 export const productById = async (productId) => {
   const instance = createAxiosInstance();
   const { data } = await instance.get(`/api/product/product/${productId}`);
   return data;
 };
+
 export const addProductToFavorite = async (productId) => {
   const instance = createAxiosInstance();
-  const { data } = await instance.post(`/api/product/${productId}/favorite`);
+  const { data } = await instance.post(`/api/product/favorite/${productId}`);
   return data;
 };
+
 export const deleteProductFromFavorite = async (productId) => {
   const instance = createAxiosInstance();
   const { data } = await instance.delete(`/api/product/favorite/${productId}`);
 
   return data;
 };
+
 export const getFavoriteProduct = async () => {
   const instance = createAxiosInstance();
   const { data } = await instance.get(`/api/product/favorite`);
@@ -42,20 +46,38 @@ export const getFavoriteProduct = async () => {
   return data;
 };
 
-export const addProductToBasket = async (productId, quantity, volume) => {
+export const addProductToBasket = async (
+  productId,
+  quantity,
+  volume,
+  price
+) => {
   const instance = createAxiosInstance();
   const { data } = await instance.post(`/api/product/${productId}/basket`, {
     productId,
     quantity,
     volume,
+    price,
   });
   console.log(data);
+  return data;
+};
+export const deleteProductFromBasket = async (productId) => {
+  const instance = createAxiosInstance();
+  const { data } = await instance.delete(
+    `/api/product/basket/delete/${productId}`,
+    {
+      productId,
+    }
+  );
+  // console.log(data);
   return data;
 };
 
 export const getBasketProduct = async () => {
   const instance = createAxiosInstance();
   const { data } = await instance.get("/api/product/basket");
+  // console.log("data: ", data);
   return data;
 };
 
@@ -96,6 +118,7 @@ export const getBrands = async () => {
   const { data } = await instance.get("/api/admin/brands");
   return data;
 };
+
 export const searchProducts = async (query) => {
   const instance = createAxiosInstance();
   const { data } = await instance.get(`/api/product/search`, {
@@ -109,9 +132,10 @@ export const getTopSellingProduct = async () => {
   const { data } = await instance.get("/api/product/top-selling-products");
   return data;
 };
+
 export const getDiscountProducts = async () => {
   const instance = createAxiosInstance();
   const { data } = await instance.get("/api/product/discount-products");
-  console.log("data: ", data);
+  // console.log("data: ", data);
   return data;
 };

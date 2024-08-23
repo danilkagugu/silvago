@@ -3,7 +3,7 @@ import css from "./BasketContactData.module.css";
 import CustomMaskedInput from "../RegisterForm/CustomMaskedInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUserData } from "../../redux/auth/selectors";
 import { useEffect, useState } from "react";
 import {
@@ -14,6 +14,7 @@ import {
 import { sendOrder } from "../../services/productApi";
 import { selectBasket } from "../../redux/basket/selectors";
 import SelectNovaPoshta from "../SelectNovaPoshta/SelectNovaPoshta";
+import { createOrder } from "../../redux/basket/operations";
 
 const UserRegisterSchema = Yup.object().shape({
   name: Yup.string(),
@@ -27,6 +28,7 @@ const UserRegisterSchema = Yup.object().shape({
 
 const BasketContactData = () => {
   const userData = useSelector(selectUserData) || {};
+  const dispatch = useDispatch();
   const {
     name = "",
     serName = "",
@@ -109,6 +111,7 @@ const BasketContactData = () => {
   }, [name, serName, phone, email, area, city, office, setValue]);
 
   const basketData = useSelector(selectBasket);
+  // console.log("basketData: ", basketData);
 
   const handleAreaChange = async (e) => {
     const selectedAreaRef = e.target.value;
@@ -157,6 +160,7 @@ const BasketContactData = () => {
         return;
       }
       const basket = basketData;
+      // console.log("basket: ", basket);
       const user = {
         name,
         serName,
@@ -169,7 +173,7 @@ const BasketContactData = () => {
         },
       };
 
-      const response = await sendOrder({ user, basket });
+      const response = await dispatch(createOrder({ user, basket })).unwrap();
       console.log("Response:", response);
 
       if (response && response.message === "Order created successfully") {

@@ -31,7 +31,7 @@ const Footer = () => {
               <Logo />
             </li>
             <li>
-              <h4>Каталог</h4>
+              <h4 className={css.footerTitles}>Каталог</h4>
               <ul className={css.catalogyList}>
                 {categories &&
                   categories.map((category) => (
@@ -47,38 +47,38 @@ const Footer = () => {
               </ul>
             </li>
             <li>
-              <h4>Клієнтам</h4>
+              <h4 className={css.footerTitles}>Клієнтам</h4>
               <ul>
-                <li>
+                <li className={css.catologyBox}>
                   <p className={css.itemText}>Оплата і доставка</p>
                 </li>
-                <li>
+                <li className={css.catologyBox}>
                   <p className={css.itemText}>Контакти</p>
                 </li>
-                <li>
+                <li className={css.catologyBox}>
                   <p className={css.itemText}>Обмін та повернення</p>
                 </li>
-                <li>
+                <li className={css.catologyBox}>
                   <p className={css.itemText}>Публічна оферта</p>
                 </li>
               </ul>
             </li>
             <li>
-              <h4>Контактна інформація</h4>
+              <h4 className={css.footerTitles}>Контактна інформація</h4>
               <ul>
-                <li>
+                <li className={css.catologyBox}>
                   <p className={css.itemText}>Мобільний номер</p>
                 </li>
-                <li>
+                <li className={css.catologyBox}>
                   <p className={css.itemText}>Мобільний номер</p>
                 </li>
-                <li>
+                <li className={css.catologyBox}>
                   <p className={css.itemText}>Мобільний номер</p>
                 </li>
-                <li>
+                <li className={css.catologyBox}>
                   <p className={css.itemText}>Почта</p>
                 </li>
-                <li>
+                <li className={css.catologyBox}>
                   <p className={css.itemText}>Соц мережі іконки</p>
                 </li>
               </ul>
