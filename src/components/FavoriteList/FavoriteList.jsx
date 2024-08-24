@@ -6,18 +6,20 @@ import {
 import css from "./FavoriteList.module.css";
 import FavoriteItem from "../FavoriteItem/FavoriteItem";
 import { handleAddToBasket } from "../../helpers/productActions";
+// import { useSelector } from "react-redux";
+// import { selectFavoritesProducts } from "../../redux/product/selectors";
 
 const FavoriteList = () => {
   const [productsFavorite, setProductsFavorite] = useState([]);
   const [selectedVolume, setSelectedVolume] = useState({});
   const [quantities, setQuantities] = useState({});
+  // const favotireProducts = useSelector(selectFavoritesProducts);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await getFavoriteProduct();
-        // console.log("Fetched product data: ", response);
 
-        const products = response; // Тепер products є масивом об'єктів
+        const products = response;
         setProductsFavorite(products);
 
         const initialQuantities = {};
@@ -28,12 +30,12 @@ const FavoriteList = () => {
             if (Array.isArray(item.products)) {
               item.products.forEach((product) => {
                 if (Array.isArray(product.volumes)) {
-                  const defaultVolume = getDefaultVolume(product.volumes); // Отримуємо один об'єм за замовчуванням
+                  const defaultVolume = getDefaultVolume(product.volumes);
 
                   initialQuantities[product._id] = 1;
 
                   if (defaultVolume) {
-                    initialVolume[product._id] = defaultVolume; // Зберігаємо один об'єм за замовчуванням для продукту
+                    initialVolume[product._id] = defaultVolume;
                   }
                 }
               });
@@ -96,6 +98,7 @@ const FavoriteList = () => {
       [productId]: newValue,
     }));
   };
+  console.log("productsFavorite", productsFavorite);
   return (
     <div className={css.container}>
       {productsFavorite.length > 0 &&

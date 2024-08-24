@@ -2,7 +2,6 @@ import { IoMdClose } from "react-icons/io";
 import css from "./ModalBasket.module.css";
 import { useEffect, useState } from "react";
 import {
-  deleteProductFromBasket,
   getBasketProduct,
   productById,
   updateProductQuantity,
@@ -11,6 +10,8 @@ import { GoPlus } from "react-icons/go";
 import { HiArrowNarrowLeft, HiOutlineMinus } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { CiTrash } from "react-icons/ci";
+import { deleteProduct } from "../../redux/basket/operations";
+import { useDispatch } from "react-redux";
 
 const ModalBasket = ({ closeModal }) => {
   const [basket, setBasket] = useState([]);
@@ -75,11 +76,10 @@ const ModalBasket = ({ closeModal }) => {
       return total;
     }, 0);
   };
-
-  const handleRemoveProduct = async (productId, volume) => {
+  const dispatch = useDispatch();
+  const handleRemoveProduct = async ({ productId, volume }) => {
     try {
-      // Викликаємо API для видалення товару з корзини
-      await deleteProductFromBasket(productId);
+      dispatch(deleteProduct({ productId, volume }));
       // Оновлюємо стан корзини
       setBasket((prevBasket) =>
         prevBasket.filter(
@@ -118,9 +118,9 @@ const ModalBasket = ({ closeModal }) => {
               <tbody className={css.cartBody}>
                 {basket &&
                   basket.map((item) => {
-                    console.log("item", item);
+                    // console.log("item", item);
                     const details = productDetails[item.product];
-                    console.log("details", details);
+                    // console.log("details", details);
 
                     const uniqueKey = `${item.product}-${item.volume}`;
                     const volumeDetail = details?.volumes.find(
@@ -138,12 +138,12 @@ const ModalBasket = ({ closeModal }) => {
                             <div className={css.iconRemove}>
                               <span
                                 className={css.trashBox}
-                                onClick={() => {
-                                  handleRemoveProduct(
-                                    item.product,
-                                    item.volume
-                                  );
-                                }}
+                                onClick={() =>
+                                  handleRemoveProduct({
+                                    productId: item.product,
+                                    volume: item.volume,
+                                  })
+                                }
                               >
                                 <CiTrash className={css.iconTrash} />
                               </span>

@@ -39,49 +39,25 @@ const productSlice = createSlice({
       })
 
       .addCase(removeProductFavorite.fulfilled, (state, action) => {
-        // console.log("удалив");
-        // console.log("removedProductId: ", removedProductId);
-        // console.log("state.favorites: ", state.favorites);
         const removedProductId = action.meta.arg;
         state.favorites = action.payload.products;
-        // const productsToRemove = action.payload.products.map(
-        //   (product) => product._id
-        // );
         state.favorites = state.favorites.filter(
           (favorite) => favorite.product !== removedProductId
         );
         state.favoritesQuantity = state.favorites.length;
       })
-      // .addCase(removeProductFavorite.fulfilled, (state, action) => {
-      //   console.log("удалив");
-      //   const removedProductId = action.meta.arg;
-      //   console.log("removedProductId: ", removedProductId);
-      //   state.favorites = action.payload.products;
-      //   console.log("state.favorites: ", state.favorites);
-      //   const productsToRemove = action.payload.products.map(
-      //     (product) => product._id
-      //   );
-      //   state.favorites = state.favorites.filter(
-      //     (favorite) => !productsToRemove.includes(favorite._id)
-      //   );
-      //   state.favoritesQuantity = state.favorites.length;
-      // })
 
       .addCase(getFavoriteProducts.fulfilled, (state, action) => {
-        // Перевірте, що action.payload є масивом
+        state.favoritesQuantity = state.favorites.length;
         if (!Array.isArray(action.payload)) {
           console.error("action.payload не є масивом");
           state.loading = false;
           return;
         }
-        // console.log("action.payload", action.payload);
-        // console.log("action.payload", typeof action.payload);
 
-        // Об'єднуємо всі продукти з улюблених у один масив
         const allFavoriteProducts = action.payload.flatMap(
           (item) => item.products
         );
-        // console.log("allFavoriteProducts: ", allFavoriteProducts);
 
         state.favorites = allFavoriteProducts;
         state.loading = false;

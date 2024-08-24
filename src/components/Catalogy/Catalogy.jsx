@@ -13,11 +13,7 @@ import LoginForm from "../LoginForm/LoginForm";
 import RegisterForm from "../RegisterForm/RegisterForm";
 import { PiUserFill } from "react-icons/pi";
 import { apiLogoutUser } from "../../redux/auth/operations";
-import {
-  selectFavoritesProducts,
-  selectFavoritesQuantity,
-} from "../../redux/product/selectors";
-// import { getFavoriteProducts } from "../../redux/product/operations";
+import { selectFavoritesQuantity } from "../../redux/product/selectors";
 
 const Catalogy = () => {
   const navigate = useNavigate();
@@ -27,44 +23,16 @@ const Catalogy = () => {
   const [openRegisterForm, setOpenRegisterForm] = useState(false);
   const login = useSelector(selectIsLoggedIn);
   const user = useSelector(selectUserData);
-  const qwerty = useSelector(selectFavoritesQuantity);
-  const qqww = useSelector(selectFavoritesProducts);
-  // console.log("qqww: ", qqww);
-  // console.log("qwerty: ", qwerty);
+  const favoriteProductsLength = useSelector(selectFavoritesQuantity);
+
   const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(selectFavoritesProducts());
-  // }, [dispatch]);
-  // const qqq = useSelector(selectFavoritesProducts);
 
-  // useEffect(() => {
-  //   dispatch(getFavoriteProducts());
-  // }, [dispatch]);
-  // console.log("user: ", user);?
-  // const [favoriteProducts, setFavoriteProducts] = useState();
-  // console.log("favoriteProducts: ", favoriteProducts);
-  // console.log("favoriteProducts: ", favoriteProducts);
-  // console.log("favoriteProducts: ", favoriteProducts);
-  // useEffect(() => {
-  //   dispatch(getFavoriteProducts());
-  // }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (qqq) {
-  //     const lengthFavoriteProducts = qqq.reduce(
-  //       (total, item) => total + item.products.length,
-  //       0
-  //     );
-  //     setFavoriteProducts(lengthFavoriteProducts);
-  //   }
-  // }, [qqq]);
   useEffect(() => {
     const fetchCategories = async () => {
       try {
         const data = await getCategories();
 
         setCategories(data);
-        // dispatch(getFavoriteProducts());
       } catch (error) {
         console.log(error);
       }
@@ -151,7 +119,9 @@ const Catalogy = () => {
               navigate("/user-cabinet/favorite");
             }}
           />
-          <span className={css.amountProductsFavorites}>{qwerty}</span>
+          <span className={css.amountProductsFavorites}>
+            {favoriteProductsLength}
+          </span>
         </div>
         <div className={css.userCabinet}>
           <div className={css.userFIOWrapper}>

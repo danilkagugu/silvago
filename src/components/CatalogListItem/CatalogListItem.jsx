@@ -12,23 +12,17 @@ import {
 } from "../../redux/product/operations";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../../redux/basket/operations";
-import {
-  selectFavoritesProducts,
-  // selectFavoriteStatus,
-} from "../../redux/product/selectors";
+import { selectFavoritesProducts } from "../../redux/product/selectors";
 
 const CatalogListItem = ({
   product,
-  // favoriteProducts,
   quantities,
   selectedVolume,
   handleVolumeSelect,
 }) => {
-  // console.log("product", product);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const favorites = useSelector(selectFavoritesProducts);
-  // console.log("favorites:", favorites);
   const [topProducts, setTopProducts] = useState([]);
   const [localFavorites, setLocalFavorites] = useState([]);
 
@@ -63,7 +57,7 @@ const CatalogListItem = ({
     } else {
       dispatch(addProductFavorite(product._id));
     }
-    await dispatch(getFavoriteProducts());
+    dispatch(getFavoriteProducts());
   };
 
   useEffect(() => {

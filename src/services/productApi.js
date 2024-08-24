@@ -62,15 +62,12 @@ export const addProductToBasket = async (
   console.log(data);
   return data;
 };
-export const deleteProductFromBasket = async (productId) => {
+export const deleteProductFromBasket = async ({ productId, volume }) => {
   const instance = createAxiosInstance();
-  const { data } = await instance.delete(
-    `/api/product/basket/delete/${productId}`,
-    {
-      productId,
-    }
-  );
-  // console.log(data);
+  const { data } = await instance.delete(`/api/product/basket/delete`, {
+    data: { productId: productId, volume: volume },
+  });
+  // console.log("data", data);
   return data;
 };
 

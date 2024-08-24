@@ -28,17 +28,6 @@ export const addProduct = createAsyncThunk(
     }
   }
 );
-// export const deleteProduct = createAsyncThunk(
-//   "basket/deleteItem",
-//   async (productId, thunkAPI) => {
-//     try {
-//       const data = await deleteProductFromBasket(productId);
-//       return data;
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error.message);
-//     }
-//   }
-// );
 
 export const createOrder = createAsyncThunk(
   "order/create",
@@ -56,11 +45,11 @@ export const createOrder = createAsyncThunk(
 );
 
 export const deleteProduct = createAsyncThunk(
-  "basket/deleteProduct",
-  async (productId, { rejectWithValue }) => {
+  "basketQ/deleteProduct",
+  async ({ productId, volume }, { rejectWithValue }) => {
     try {
-      const response = await deleteProductFromBasket(productId);
-      return response.data; // Передайте дані, які ви хочете використовувати для оновлення стейту
+      const response = await deleteProductFromBasket({ productId, volume });
+      return response; // Передаємо id і volume товару
     } catch (error) {
       return rejectWithValue(error.response.data);
     }

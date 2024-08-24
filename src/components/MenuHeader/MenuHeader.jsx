@@ -15,7 +15,7 @@ import { getBasketProduct } from "../../services/productApi";
 
 const MenuHeader = () => {
   const [open, setOpen] = useState(false);
-  const [basketUpdated, setBasketUpdated] = useState(false);
+  // const [basketUpdated, setBasketUpdated] = useState(false);
   const totalPrice = useSelector(selectTotalPrice);
   const allQuantity = useSelector(selectAllQuantity);
   // const dispatch = useDispatch();
@@ -24,14 +24,14 @@ const MenuHeader = () => {
     const fetchBasketData = async () => {
       try {
         await getBasketProduct(); // Fetch and update basket data
-        setBasketUpdated(true); // Set flag when basket data is updated
+        // setBasketUpdated(true);
       } catch (error) {
         console.error("Failed to fetch basket data:", error);
       }
     };
 
     fetchBasketData();
-  }, [basketUpdated]);
+  }, []);
 
   const openModal = () => {
     setOpen(true);
