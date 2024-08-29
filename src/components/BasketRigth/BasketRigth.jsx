@@ -59,13 +59,16 @@ const BasketRigth = () => {
         const volumeDetail = details.volumes.find(
           (vol) => vol.volume === item.volume
         );
-        const price = volumeDetail ? volumeDetail.price : details.price;
-        return total + item.quantity * price;
+        if (volumeDetail) {
+          const price = volumeDetail.price;
+          const discount = volumeDetail.discount || 0;
+          const discountedPrice = price * (1 - discount / 100);
+          return total + item.quantity * discountedPrice;
+        }
       }
       return total;
     }, 0);
   };
-
   return (
     <div className={css.containerBasket}>
       <h2 className={css.titleBasket}>Кошик</h2>
@@ -80,7 +83,15 @@ const BasketRigth = () => {
         <tbody>
           {basket.map((item) => {
             const details = productDetails[item.product];
+            // console.log("details: ", details);
+
             const uniqueKey = `${item.product}-${item.volume}`; // Унікальний ключ
+            const volumeDetail = details?.volumes.find(
+              (vol) => vol.volume === item.volume
+            );
+            const price = volumeDetail ? volumeDetail.price : 0;
+            const discount = volumeDetail ? volumeDetail.discount || 0 : 0;
+            const discountedPrice = price * (1 - discount / 100);
             return (
               <tr className={css.qqqq} key={uniqueKey}>
                 <td>
@@ -88,11 +99,7 @@ const BasketRigth = () => {
                     <CatalogItem
                       productImg={details.image}
                       productName={details.name}
-                      productPrice={
-                        details.volumes.find(
-                          (vol) => vol.volume === item.volume
-                        )?.price || details.price
-                      }
+                      productPrice={Math.ceil(discountedPrice)}
                       id={item.product}
                     />
                   )}
@@ -128,10 +135,7 @@ const BasketRigth = () => {
                   </div>
                 </td>
                 <td className={css.sumProduct}>
-                  {details &&
-                    item.quantity *
-                      (details.volumes.find((vol) => vol.volume === item.volume)
-                        ?.price || details.price)}
+                  {details && item.quantity * discountedPrice}
                 </td>
               </tr>
             );

@@ -9,24 +9,24 @@
 }
 
 @font-face {
-  font-family: "Satoshi";
-  src: url("./fonts/Satoshi-Regular.ttf") format("truetype");
+  font-family: "OpenSans";
+  src: url("./fonts/OpenSans-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Satoshi";
-  src: url("./fonts/Satoshi-Bold.ttf") format("truetype");
+  font-family: "OpenSans";
+  src: url("./fonts/OpenSans-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "Satoshi";
-  src: url("./fonts/Satoshi-Medium.ttf") format("truetype");
+  font-family: "OpenSans";
+  src: url("./fonts/OpenSans-Semibold.ttf") format("truetype");
   font-weight: 500;
   font-style: italic;
   font-display: swap;
@@ -38,7 +38,10 @@ a {
 }
 
 body {
-  font-family: "Satoshi", sans-serif;
+  font-family: "OpenSans", sans-serif;
+  font-size: 16px; /* Спробуйте різні значення */
+  letter-spacing: normal; /* Або відрегулюйте */
+  line-height: 1.5; /* Відрегулюйте для зменшення висоти рядка */
   padding: 0;
   margin: 0;
 }
@@ -85,7 +88,3 @@ li {
   padding: 0;
   list-style: none;
 }
-
-/* .noScroll {
-  overflow: hidden;
-} */

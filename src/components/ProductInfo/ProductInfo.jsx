@@ -87,6 +87,17 @@ const ProductInfo = () => {
       [productDetails.id]: 1, // Скидаємо кількість на 1 при зміні об'єму
     }));
   };
+  const getPriceDetails = () => {
+    const volume = selectedVolume;
+    if (volume) {
+      const price = volume.price;
+      const discount = volume.discount || 0;
+      const discountedPrice = price * (1 - discount / 100);
+      return discountedPrice < price ? discountedPrice : price;
+    }
+    return 0;
+  };
+
   return (
     <div className={css.productDetail}>
       {productDetails && (
@@ -117,24 +128,11 @@ const ProductInfo = () => {
                   В наявності {productDetails.quantity} шт.
                 </p>
               </div>
-              {/* <p className={css.productDescription}>{productDetails.description}</p> */}
-              {/* {productDetails.volumes &&
-                productDetails.volumes.map((item) => (
-                  <ul key={item._id}>
-                    <li>
-                      <p className={css.productPrice}>Ціна: {item.price} грн</p>
-                    </li>
-                    <li>
-                      <p className={css.productPrice}>
-                        Об'єм: {item.volume} грн
-                      </p>
-                    </li>
-                  </ul>
-                ))} */}
+
               {selectedVolume && (
                 <div className={css.priceBox}>
                   <p className={css.productPrice}>
-                    Ціна: {selectedVolume.price}
+                    {Math.ceil(getPriceDetails())} ₴
                   </p>
                 </div>
               )}
@@ -142,7 +140,7 @@ const ProductInfo = () => {
               {/* Об'ємні варіанти */}
               {productDetails.volumes && (
                 <div className={css.volumeSelector}>
-                  <p>Обєм</p>
+                  <p>Об&apos;єм</p>
                   {productDetails.volumes.map((item) => (
                     <button
                       key={item._id}

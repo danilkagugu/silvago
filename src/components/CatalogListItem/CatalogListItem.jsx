@@ -1,63 +1,116 @@
 import { useNavigate } from "react-router-dom";
-import { CiHeart } from "react-icons/ci";
-import { FaHeart } from "react-icons/fa";
+
 import css from "./CatalogListItem.module.css";
+import { useEffect, useState } from "react";
+import { getTopSellingProduct } from "../../services/productApi";
+
+import { LuHeart } from "react-icons/lu";
+import {
+  addProductFavorite,
+  getFavoriteProducts,
+  removeProductFavorite,
+} from "../../redux/product/operations";
+import { useDispatch, useSelector } from "react-redux";
+import { addProduct } from "../../redux/basket/operations";
+import { selectFavoritesProducts } from "../../redux/product/selectors";
 
 const CatalogListItem = ({
   product,
-  favoriteProducts,
-  setFavoriteProducts,
   quantities,
   selectedVolume,
-  handleQuantityChange,
-  handleQuantityInputChange,
   handleVolumeSelect,
-  handleAddToBasket,
-  handleToggleFavorite,
 }) => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const favorites = useSelector(selectFavoritesProducts);
+  const [topProducts, setTopProducts] = useState([]);
+  const [localFavorites, setLocalFavorites] = useState([]);
 
-  // Отримати ціну для обраного обсягу
-  const getPrice = () => {
-    const volume = selectedVolume[product._id];
-    if (volume) {
-      const volumeDetail = product.volumes.find((vol) => vol.volume === volume);
-      return volumeDetail ? volumeDetail.price : product.volumes[0]?.price;
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      try {
+        const data = await dispatch(getFavoriteProducts()).unwrap();
+        setLocalFavorites(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchFavorites();
+  }, [dispatch]);
+
+  useEffect(() => {
+    setLocalFavorites(favorites);
+  }, [favorites]);
+
+  const handleToggleFavorite = async (product) => {
+    if (!product || !product._id) {
+      console.warn("Product is invalid.");
+      return;
     }
-    return product.volumes[0]?.price;
+
+    const isFavorite = localFavorites.some((item) => item._id === product._id);
+    console.log("product._id: ", product._id);
+
+    if (isFavorite) {
+      dispatch(removeProductFavorite(product._id));
+    } else {
+      dispatch(addProductFavorite(product._id));
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await getTopSellingProduct();
+        setTopProducts(result);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const isTopProduct = topProducts.some(
+    (topProduct) => topProduct._id === product._id
+  );
+
+  const getPrice = () => {
+    const volumeDetail =
+      product.volumes.find(
+        (vol) => vol.volume === selectedVolume[product._id]
+      ) || product.volumes[0];
+    const discount = volumeDetail.discount || 0;
+    const oldPrice = volumeDetail.price;
+    const newPrice = oldPrice * (1 - discount / 100);
+    return { newPrice, oldPrice };
   };
 
   // Обробка кліку на товар
   const handleProductClick = () => {
     navigate(`/product/${product._id}`);
   };
-
+  const volumeDetail = product.volumes.find(
+    (vol) => vol.volume === selectedVolume[product._id]
+  );
+  const handleAddToBasket = () => {
+    dispatch(
+      addProduct({
+        productId: product._id,
+        quantity: quantities[product._id],
+        volume: selectedVolume[product._id],
+        price: volumeDetail.price,
+      })
+    );
+  };
+  const isFavorite = localFavorites.some((item) => item._id === product._id);
   return (
-    <div className={css.cardContainer}>
-      {/* Кнопка обраного товару */}
-      {favoriteProducts.has(product._id) ? (
-        <FaHeart
-          className={css.iconFavorite}
-          onClick={() =>
-            handleToggleFavorite(
-              product._id,
-              favoriteProducts,
-              setFavoriteProducts
-            )
-          }
-        />
-      ) : (
-        <CiHeart
-          className={css.iconFavorite}
-          onClick={() =>
-            handleToggleFavorite(
-              product._id,
-              favoriteProducts,
-              setFavoriteProducts
-            )
-          }
-        />
-      )}
+    <div className={css.cardContainer} id={product._id}>
+      <LuHeart
+        className={isFavorite ? css.isFavoriteProduct : css.iconFavorite}
+        onClick={() => handleToggleFavorite(product)}
+      />
 
       {/* Інформація про товар */}
       <div className={css.cardBox} onClick={handleProductClick}>
@@ -68,49 +121,33 @@ const CatalogListItem = ({
             alt={product.name}
           />
         </div>
+
+        {/* Це якщо буде писатись з перечеркнутой ціною */}
         <div className={css.boxInfo}>
           <p className={css.brandTitle}>{product.name}</p>
-          <p className={css.brandPrice}>{getPrice()} грн</p>
+          {product.volumes.some((vol) => vol.discount > 0) && (
+            <p className={css.brandPrice}>
+              <span className={css.oldPrice}>{getPrice().oldPrice} ₴</span>
+              <span className={css.newPrice}>
+                {Math.ceil(getPrice().newPrice)} ₴
+              </span>
+            </p>
+          )}
+          {!product.volumes.some((vol) => vol.discount > 0) && (
+            <p className={css.brandPrice}>{getPrice().oldPrice} ₴</p>
+          )}
+          <div className={css.productAction}>
+            {product.volumes.some((vol) => vol.discount > 0) && (
+              <div className={`${css.sell} `}>Sell</div>
+            )}
+            {isTopProduct && <div className={css.top}>Top</div>}
+          </div>
         </div>
       </div>
 
       {/* Контейнери для кількості і кнопки */}
       <div className={css.priceBox}>
-        <div className={css.quantityBox}>
-          <div className={css.quantityInputWrapper}>
-            <button
-              className={css.quantityButton}
-              onClick={() => handleQuantityChange(product._id, -1)}
-            >
-              -
-            </button>
-            <input
-              type="text"
-              className={css.quantityInput}
-              value={quantities[product._id] || 1}
-              onChange={(e) =>
-                handleQuantityInputChange(product._id, e.target.value)
-              }
-              min="1"
-            />
-            <button
-              className={css.quantityButton}
-              onClick={() => handleQuantityChange(product._id, 1)}
-            >
-              +
-            </button>
-          </div>
-        </div>
-        <button
-          className={css.buyButton}
-          onClick={() =>
-            handleAddToBasket(
-              product._id,
-              quantities[product._id],
-              selectedVolume[product._id]
-            )
-          }
-        >
+        <button className={css.buyButton} onClick={handleAddToBasket}>
           Купити
         </button>
       </div>

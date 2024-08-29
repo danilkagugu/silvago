@@ -1,15 +1,22 @@
+.qwert {
+  padding: 30px 0;
+  background-color: #f5f5f5;
+}
+
 .btnBox {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 40px;
+  gap: 20px;
 }
 
 .btnChoose {
-  padding: 10px 20px;
+  /* padding: 10px 20px; */
   border: none;
   background-color: transparent;
-  font-size: 20px;
+  font-size: 18px;
+  color: #b9a2f2;
+  font-weight: 700;
 }
 
 .btnChoose:hover {
@@ -17,6 +24,42 @@
 }
 
 .active {
-  background-color: #007bff;
-  color: white;
+  color: black;
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media screen and (min-width: 1158px) {
+  .qwert {
+    padding: 30px;
+    background-color: #f5f5f5;
+  }
+
+  .btnBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+  }
+
+  .btnChoose {
+    padding: 10px 20px;
+    border: none;
+    background-color: transparent;
+    font-size: 20px;
+    color: #b9a2f2;
+    font-weight: 700;
+  }
+
+  .btnChoose:hover {
+    background-color: #e0e0e0;
+  }
+
+  .active {
+    color: black;
+  }
 }

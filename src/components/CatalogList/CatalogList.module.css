@@ -94,6 +94,10 @@
 }
 
 .brandPrice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
   text-align: center;
   font-size: 18px;
   font-weight: 400;
@@ -243,4 +247,8 @@
 /* Приховані кнопки для першої і останньої сторінок, якщо потрібно */
 .hidden {
   display: none;
+}
+
+.oldPrice {
+  text-decoration: line-through;
 }

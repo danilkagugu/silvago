@@ -3,7 +3,7 @@ import css from "./BasketContactData.module.css";
 import CustomMaskedInput from "../RegisterForm/CustomMaskedInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUserData } from "../../redux/auth/selectors";
 import { useEffect, useState } from "react";
 import {
@@ -13,6 +13,8 @@ import {
 } from "../../services/NovaPoshtaApi";
 import { sendOrder } from "../../services/productApi";
 import { selectBasket } from "../../redux/basket/selectors";
+import SelectNovaPoshta from "../SelectNovaPoshta/SelectNovaPoshta";
+import { createOrder } from "../../redux/basket/operations";
 
 const UserRegisterSchema = Yup.object().shape({
   name: Yup.string(),
@@ -26,60 +28,20 @@ const UserRegisterSchema = Yup.object().shape({
 
 const BasketContactData = () => {
   const userData = useSelector(selectUserData) || {};
-  const { name, serName, phone, email, area, city, office } = userData;
+  const dispatch = useDispatch();
+  const {
+    name = "",
+    serName = "",
+    phone = "",
+    email = "",
+    area = "",
+    city = "",
+    office = "",
+  } = userData;
 
   const [areas, setAreas] = useState([]);
   const [cities, setCities] = useState([]);
   const [offices, setOffices] = useState([]);
-
-  useEffect(() => {
-    const fetchAreas = async () => {
-      try {
-        const areasData = await getArea();
-        setAreas(areasData);
-      } catch (error) {
-        console.error("Error fetching areas:", error);
-      }
-    };
-
-    fetchAreas();
-  }, []);
-
-  const handleAreaChange = async (e) => {
-    const selectedAreaRef = e.target.value;
-    const selectedArea = areas.find((area) => area.Ref === selectedAreaRef);
-
-    if (selectedArea && selectedArea.Ref) {
-      try {
-        const citiesData = await getCities(selectedArea);
-        setCities(citiesData);
-        setOffices([]);
-      } catch (error) {
-        console.error("Error fetching cities:", error);
-        setCities([]);
-        setOffices([]);
-      }
-    } else {
-      setCities([]);
-      setOffices([]);
-    }
-  };
-
-  const handleCityChange = async (e) => {
-    const selectCity = e.target.value;
-    const selectedCity = cities.find((city) => city === selectCity);
-    if (selectedCity) {
-      try {
-        const officeData = await getPostOffice(selectedCity);
-        setOffices(officeData);
-      } catch (error) {
-        console.error("Error fetching post offices:", error);
-        setOffices([]);
-      }
-    } else {
-      setOffices([]);
-    }
-  };
 
   const {
     register,
@@ -101,20 +63,104 @@ const BasketContactData = () => {
   });
 
   useEffect(() => {
+    const fetchAreas = async () => {
+      try {
+        const areasData = await getArea();
+        setAreas(areasData);
+
+        // Set initial area
+        if (area) {
+          const selectedArea = areasData.find((a) => a.Ref === area);
+          if (selectedArea) {
+            setValue("area", area);
+            const citiesData = await getCities(selectedArea);
+            setCities(citiesData);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching areas:", error);
+      }
+    };
+
+    fetchAreas();
+  }, [area, setValue]);
+
+  useEffect(() => {
+    const fetchOffices = async () => {
+      if (city) {
+        try {
+          const officeData = await getPostOffice(city);
+          setOffices(officeData);
+        } catch (error) {
+          console.error("Error fetching post offices:", error);
+        }
+      }
+    };
+
+    fetchOffices();
+  }, [city]);
+
+  useEffect(() => {
     setValue("name", name);
     setValue("serName", serName);
     setValue("phone", phone);
     setValue("email", email);
-    // setValue("area", area);
-    // setValue("city", city);
-    // setValue("office", office);
+    setValue("area", area);
+    setValue("city", city);
+    setValue("office", office);
   }, [name, serName, phone, email, area, city, office, setValue]);
+
   const basketData = useSelector(selectBasket);
+  // console.log("basketData: ", basketData);
+
+  const handleAreaChange = async (e) => {
+    const selectedAreaRef = e.target.value;
+    const selectedArea = areas.find((a) => a.Ref === selectedAreaRef);
+
+    if (selectedArea) {
+      try {
+        const citiesData = await getCities(selectedArea);
+        setCities(citiesData);
+        setOffices([]);
+        setValue("city", ""); // Clear city and office if area changes
+        setValue("office", "");
+      } catch (error) {
+        console.error("Error fetching cities:", error);
+        setCities([]);
+        setOffices([]);
+      }
+    } else {
+      setCities([]);
+      setOffices([]);
+    }
+  };
+
+  const handleCityChange = async (e) => {
+    const selectedCity = e.target.value;
+    setValue("city", selectedCity);
+
+    try {
+      const officeData = await getPostOffice(selectedCity);
+      setOffices(officeData);
+      setValue("office", ""); // Clear office if city changes
+    } catch (error) {
+      console.error("Error fetching post offices:", error);
+      setOffices([]);
+    }
+  };
 
   const submitOrder = async (formData) => {
     try {
       const { name, serName, phone, email, area, city, office } = formData;
+      console.log("office: ", office);
+      console.log("city: ", city);
+      console.log("area: ", area);
+      if (!area || !city || !office) {
+        console.error("Area, city, or office is missing.");
+        return;
+      }
       const basket = basketData;
+      // console.log("basket: ", basket);
       const user = {
         name,
         serName,
@@ -127,7 +173,7 @@ const BasketContactData = () => {
         },
       };
 
-      const response = await sendOrder({ user, basket });
+      const response = await dispatch(createOrder({ user, basket })).unwrap();
       console.log("Response:", response);
 
       if (response && response.message === "Order created successfully") {
@@ -210,56 +256,43 @@ const BasketContactData = () => {
               Область
             </label>
 
-            <select
-              className={css.inputForm}
-              id="area"
-              type="text"
-              {...register("area")}
-              onChange={handleAreaChange}
-            >
-              <option value="">Виберіть область</option>
-              {areas &&
-                areas.map((area) => (
-                  <option key={area.Ref} value={area.Ref}>
-                    {area.Description}
-                  </option>
-                ))}
-            </select>
+            <SelectNovaPoshta
+              options={areas.map((a) => a.Description)}
+              value={areas.find((a) => a.Ref === area)?.Description || ""}
+              onChange={(selectedArea) => {
+                const selectedAreaRef = areas.find(
+                  (a) => a.Description === selectedArea
+                )?.Ref;
+                setValue("area", selectedAreaRef || "");
+                handleAreaChange({ target: { value: selectedAreaRef || "" } });
+              }}
+              placeholder="Виберіть область"
+            />
 
             <label className={css.visuallyHidden} htmlFor="city">
               Місто
             </label>
 
-            <select
-              className={css.inputForm}
-              id="city"
-              {...register("city")}
-              onChange={handleCityChange}
-            >
-              <option value="">Виберіть місто</option>
-              {cities &&
-                cities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-            </select>
+            <SelectNovaPoshta
+              options={cities}
+              value={city || ""}
+              onChange={(selectedCity) => {
+                setValue("city", selectedCity || "");
+                handleCityChange({ target: { value: selectedCity } });
+              }}
+              placeholder="Виберіть місто"
+            />
             <label className={css.visuallyHidden} htmlFor="office">
               Віділення
             </label>
-            <select
-              className={css.inputForm}
-              id="office"
-              {...register("office")}
-            >
-              <option value="">Виберіть віділення</option>
-              {offices &&
-                offices.map((offic) => (
-                  <option key={offic} value={offic}>
-                    {offic}
-                  </option>
-                ))}
-            </select>
+            <SelectNovaPoshta
+              options={offices}
+              value={office || ""}
+              onChange={(selectedOffice) => {
+                setValue("office", selectedOffice || "");
+              }}
+              placeholder="Виберіть віділення"
+            />
           </div>
         </div>
         <button className={css.btnLogin} type="submit">

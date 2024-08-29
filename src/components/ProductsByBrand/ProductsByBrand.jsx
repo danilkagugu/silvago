@@ -3,7 +3,7 @@ import { selectProducts } from "../../redux/product/selectors";
 import { useEffect, useState } from "react";
 import { getAllProduct } from "../../redux/product/operations";
 import { getBrands } from "../../services/productApi";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import css from "./ProductsByBrand.module.css";
 import {
   fetchFavoriteProducts,
@@ -12,11 +12,12 @@ import {
   handleQuantityInputChange,
   handleToggleFavorite,
 } from "../../helpers/productActions";
-import { FaHeart } from "react-icons/fa";
-import { CiHeart } from "react-icons/ci";
+// import { FaHeart } from "react-icons/fa";
+// import { CiHeart } from "react-icons/ci";
+import CatalogListItem from "../CatalogListItem/CatalogListItem";
 
 const ProductsByBrand = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [brands, setBrands] = useState();
@@ -81,9 +82,9 @@ const ProductsByBrand = () => {
     return product.brand === brand.name;
   });
 
-  const handleProductClick = (productId) => {
-    navigate(`/product/${productId}`);
-  };
+  // const handleProductClick = (productId) => {
+  //   navigate(`/product/${productId}`);
+  // };
 
   const getDefaultVolume = (volumes) => {
     if (!volumes || volumes.length === 0) return 0;
@@ -92,20 +93,20 @@ const ProductsByBrand = () => {
       0
     );
   };
-  const getDefaultPrice = (product) => {
-    const defaultVolume = getDefaultVolume(product.volumes);
-    const volumeObj = product.volumes.find(
-      (vol) => vol.volume === defaultVolume
-    );
-    return volumeObj ? volumeObj.price : product.price;
-  };
+  // const getDefaultPrice = (product) => {
+  //   const defaultVolume = getDefaultVolume(product.volumes);
+  //   const volumeObj = product.volumes.find(
+  //     (vol) => vol.volume === defaultVolume
+  //   );
+  //   return volumeObj ? volumeObj.price : product.price;
+  // };
 
   return (
     <div>
       <ul className={css.list}>
         {filteredProducts.map((product) => (
           <li key={product._id} className={css.listItem} id={product._id}>
-            <div className={css.cardContainer}>
+            {/* <div className={css.cardContainer}>
               {favoriteProducts.has(product._id) ? (
                 <FaHeart
                   className={css.iconFavorite}
@@ -215,7 +216,19 @@ const ProductsByBrand = () => {
                   </button>
                 ))}
               </div>
-            </div>
+            </div> */}
+            <CatalogListItem
+              favoriteProducts={favoriteProducts}
+              handleAddToBasket={handleAddToBasket}
+              handleQuantityChange={handleQuantityChange}
+              handleQuantityInputChange={handleQuantityInputChange}
+              handleToggleFavorite={handleToggleFavorite}
+              handleVolumeSelect={handleVolumeSelect}
+              product={product}
+              quantities={quantities}
+              selectedVolume={selectedVolume}
+              setFavoriteProducts={setFavoriteProducts}
+            />
           </li>
         ))}
       </ul>

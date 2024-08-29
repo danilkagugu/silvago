@@ -89,7 +89,7 @@
   min-height: 50px;
   padding: 10px 25px;
   border: none;
-  background-color: #0f2d52;
+  background-color: #4b4b4b;
   text-align: center;
   color: #ffffff;
   cursor: pointer;
@@ -97,9 +97,9 @@
 
 .btnRegister:hover {
   transition-duration: 300ms;
-  color: #0f2d52;
+  color: black;
+  background-color: #fff;
   border: 1px solid #0f2d52;
-  background-color: transparent;
 }
 
 .formLoginInfo {

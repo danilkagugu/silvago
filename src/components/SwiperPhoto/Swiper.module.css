@@ -1,0 +1,53 @@
+/* .swiperBox {
+  width: 100%;
+  height: 500px;
+  background-color: aqua;
+  text-align: center;
+} */
+.photo {
+  width: 100%;
+  height: 500px;
+  object-fit: cover;
+  display: block;
+}
+
+.swiper {
+  /* border-radius: 50px; */
+}
+
+.swiperBox {
+  margin-top: 40px;
+  background-color: #fff;
+  /* padding: 10px; */
+}
+
+@media (max-width: 480px) {
+  .photo {
+    height: 200px;
+  }
+
+  .swiper {
+    /* border-radius: 10px;   */
+  }
+
+  .swiperBox {
+    margin-top: 15px;
+    /* padding: 5px;   */
+  }
+}
+
+@media (max-width: 768px) {
+  .photo {
+    /* height: 300px; */
+    object-fit: cover;
+  }
+
+  .swiper {
+    /* border-radius: 20px;  */
+  }
+
+  .swiperBox {
+    margin-top: 20px;
+    /* padding: 5px;   */
+  }
+}

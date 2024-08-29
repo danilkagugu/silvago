@@ -1,33 +1,5 @@
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  padding: 20px;
-}
-
-.iconFavorite {
-  position: absolute;
-  right: 12%;
-  top: 4%;
-  fill: red;
-  cursor: pointer;
-}
-
-.list {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.listItem {
-  position: relative;
-  width: 200px;
-}
-
 .cardContainer {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,30 +14,24 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s, box-shadow 0.3s;
   z-index: 1000;
+  cursor: pointer;
 }
-/* .cardContainer:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-} */
-@media screen and (min-width: 1440px) {
-  .container {
-    margin-top: 50px;
-    padding: 50px;
-  }
 
-  .list {
-    gap: 20px;
-  }
-  .listItem {
-    width: 16%;
-    flex-basis: calc((100% - 20px) / 6);
-    box-sizing: border-box;
-  }
-
-  /* .cardContainer:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  } */
+.iconFavorite {
+  position: absolute;
+  right: 6%;
+  top: 4%;
+  cursor: pointer;
+  font-size: 20px;
+}
+.isFavoriteProduct {
+  position: absolute;
+  right: 6%;
+  top: 4%;
+  font-size: 20px;
+  fill: #ffd700;
+  color: #ffd700;
+  cursor: pointer;
 }
 
 .imgBrand {
@@ -88,16 +54,59 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: text-shadow 0.3s ease;
 }
 
-.brandTitle:hover {
-  color: #b9a2f2;
+.cardContainer:hover .brandTitle {
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+  font-weight: 600;
 }
 
 .brandPrice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
   text-align: center;
   font-size: 18px;
   font-weight: 400;
+}
+.oldPrice {
+  text-decoration: line-through;
+}
+
+.productAction {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: 2px;
+  flex-direction: column;
+}
+
+.sell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background-color: #f45b69;
+  color: white;
+  text-align: center;
+  margin: 5px 0 0 5px;
+  border-radius: 50px;
+}
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background-color: #5badf4;
+  color: white;
+  text-align: center;
+  border-radius: 50px;
+  margin: 5px 0 0 5px;
 }
 
 .priceBox {
@@ -107,50 +116,23 @@
   gap: 10px;
 }
 
-.quantityBox {
-  width: 100px;
-}
-
-.quantityInputWrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  gap: 10px;
-  /* border: 1px solid gray; */
-  background-color: #f1f1f1;
-}
-
-.quantityButton {
-  background-color: transparent;
-}
-
-.quantityInput {
-  text-align: center;
-  border: none;
-  background-color: transparent;
-  width: 30px;
-}
-
 .buyButton {
-  width: 100px;
-  background-color: rgb(112, 174, 249);
-  color: rgb(0, 0, 0);
+  padding: 10px 20px;
+  width: 200px;
+  background-color: #4b4b4b;
+  color: #fff;
   font-weight: 600;
   border-radius: 70px;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .buyButton:hover {
-  color: #fff;
-  background-color: rgba(1, 58, 129, 0.87);
+  color: black;
+  background-color: #fff;
+  border: 1px solid black;
 }
 
 /*-------------------------------------------------*/
-.cardContainer {
-  /* position: relative; */
-  /* інші стилі */
-}
 
 .volumeOptions {
   display: none;
@@ -167,84 +149,137 @@
 }
 
 .cardContainer:hover .volumeOptions {
-  /* position: relative; */
-  /* z-index: 2; */
-  display: block;
+  display: flex;
+  justify-content: center;
 }
 
 .volumeOption {
+  /* font-size: 13px; */
   color: #000;
   border-radius: 20px;
-  border: 1px solid #000;
+  /* border: 1px solid #000; */
   box-shadow: none;
   background-color: transparent;
-  padding: 5px;
+  padding: 8px;
   cursor: pointer;
   margin: 2px 8px;
   /* інші стилі */
 }
+.volumeOption:hover {
+  background-color: #c0eefe;
+}
 
 .selected {
-  background-color: #ffefb4;
+  background-color: #79e2ff;
 }
 
-/* Контейнер пагінації */
-.pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+/* Стилі для екранів шириною до 768px (планшети та мобільні пристрої) */
+@media (max-width: 768px) {
+  .list {
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 10px;
+  }
+
+  .listItem {
+    width: 45%; /* Ширина елемента списку на маленьких екранах */
+    flex-basis: calc(50% - 10px); /* Для двох колонок на маленьких екранах */
+  }
+
+  .cardContainer {
+    width: 180px;
+    height: 360px;
+    padding: 8px;
+  }
+
+  .brandTitle {
+    font-size: 14px;
+  }
+
+  .brandPrice {
+    font-size: 16px;
+  }
+
+  .priceBox {
+    bottom: 40px;
+  }
+
+  .buyButton {
+    width: 160px;
+    padding: 8px 16px;
+  }
+
+  .volumeOptions {
+    width: 180px;
+    bottom: -40px;
+    padding: 8px;
+  }
+
+  .volumeOption {
+    padding: 6px;
+  }
+
+  .sell,
+  .top {
+    width: 48px;
+    height: 48px;
+    margin: 4px 0 0 4px;
+  }
 }
 
-/* Кнопки сторінок */
-.pageButton {
-  background-color: #f0f0f0;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px 15px;
-  margin: 0 5px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #333;
-  transition: background-color 0.3s, color 0.3s;
-}
+/* Стилі для екранів шириною до 480px (мобільні пристрої) */
+@media (max-width: 480px) {
+  .iconFavorite {
+    position: absolute;
+    right: 6%;
+    top: 4%;
+    cursor: pointer;
+    font-size: 20px;
+  }
+  .listItem {
+    width: 90%; /* Ширина елемента списку на дуже маленьких екранах */
+    flex-basis: calc(
+      100% - 10px
+    ); /* Для однієї колонки на дуже маленьких екранах */
+  }
 
-.pageButton:disabled {
-  cursor: default;
-  color: red;
-}
+  .cardContainer {
+    width: 160px;
+    height: 290px;
+    padding: 6px;
+  }
 
-/* Активна кнопка */
-.activePage {
-  background-color: #007bff;
-  color: #fff;
-  border-color: #007bff;
-}
+  .brandTitle {
+    font-size: 12px;
+  }
 
-/* Стан при наведенні */
-.pageButton:hover:not(:disabled) {
-  background-color: #e0e0e0;
-}
+  .brandPrice {
+    font-size: 14px;
+  }
 
-/* Кнопка "Попередня" */
-.prevButton,
-.nextButton {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 15px;
-  margin: 0 5px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s;
-}
+  .priceBox {
+    bottom: 30px;
+  }
 
-.prevButton:hover,
-.nextButton:hover {
-  background-color: #0056b3;
-}
+  .buyButton {
+    width: 140px;
+    padding: 6px 12px;
+  }
 
-/* Приховані кнопки для першої і останньої сторінок, якщо потрібно */
-.hidden {
-  display: none;
+  .volumeOptions {
+    width: 160px;
+    bottom: -30px;
+    padding: 6px;
+  }
+
+  .volumeOption {
+    padding: 4px;
+  }
+
+  .sell,
+  .top {
+    width: 40px;
+    height: 40px;
+    margin: 3px 0 0 3px;
+  }
 }

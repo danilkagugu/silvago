@@ -1,4 +1,29 @@
 .container {
+  width: 100%;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ddd;
+}
+
+.listItem:hover {
+  background-color: #e0e0e0;
+}
+
+.menuBox {
+  font-size: 17px;
+}
+/* .container {
   width: 50%;
 }
 
@@ -13,10 +38,4 @@
   align-items: center;
   gap: 7px;
   cursor: pointer;
-}
-
-/* .icon {
-}
-
-.text {
 } */

@@ -7,11 +7,7 @@ const CatalogItem = ({ productImg, productName, productPrice, id }) => {
     navigate(`/product/${productId}`);
   };
   return (
-    <div
-      className={css.cardBox}
-      id={id}
-      onClick={() => handleProductClick(id)}
-    >
+    <div className={css.cardBox} id={id} onClick={() => handleProductClick(id)}>
       <div className={css.imgBox}>
         <img
           className={css.imgBrand}
@@ -23,7 +19,7 @@ const CatalogItem = ({ productImg, productName, productPrice, id }) => {
       </div>
       <div className={css.boxInfo}>
         <p className={css.brandInfo}>{productName}</p>
-        <p className={css.brandInfo}>{productPrice} грн</p>
+        <p className={css.brandInfo}>{productPrice} ₴</p>
       </div>
     </div>
   );

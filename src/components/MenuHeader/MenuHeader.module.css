@@ -6,7 +6,110 @@
   display: none;
 }
 
+.headerCont {
+  display: flex;
+  align-items: center;
+
+  gap: 20px;
+}
+
+.basketBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.basketBox:hover .iconBasket {
+  fill: gray;
+}
+.basketBox:hover .basketTitle {
+  color: gray;
+}
+
+.allQuantity {
+  transform: translateX(-50%);
+  position: absolute;
+  top: 7px;
+  left: 3px;
+  min-width: 7px;
+  padding: 0 4px;
+  height: 15px;
+  line-height: 15px;
+  border-radius: 15px;
+  background: #dd6c7a;
+  color: #fff;
+  font-size: 10px;
+  text-align: center;
+}
+
+.searchBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* padding: 8px 30px; */
+  background: transparent;
+  position: relative;
+  /* width: 500px; */
+  transition: background-color 0.3s ease;
+}
+
+.inputSearch {
+  border: none;
+  background-color: transparent;
+  width: 100%;
+  line-height: 1;
+}
+.inputSearch::placeholder {
+  color: #fff;
+}
+
+.basketTitle {
+  font-size: 17px;
+}
+
+.basketInfoPriceBox {
+  display: none;
+}
+.menuContainer {
+  display: flex;
+  margin-left: auto;
+}
+
+.icon {
+  width: 24px;
+  height: 24px;
+}
+.iconBasket {
+  fill: #000;
+}
+
+.telephoneBox {
+  display: none;
+}
+
+.telSpan {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: gray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.iconTelephone {
+  fill: #fff;
+}
 @media screen and (min-width: 1440px) {
+  .menuContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
   .MenuHeader {
     display: flex;
     align-items: center;
@@ -18,10 +121,15 @@
     font-weight: 400;
     line-height: 22px;
     position: relative;
+    color: #000;
   }
 
   .link {
-    color: black;
+    padding: 8px 8px;
+    color: #000;
+  }
+  .link:hover {
+    background-color: #f5f5f5;
   }
 
   .menuChevron {
@@ -30,6 +138,12 @@
     gap: 7px;
     position: relative;
     cursor: pointer;
+  }
+
+  .basketInfoPriceBox {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
   }
 
   .catalogyBox {
@@ -53,5 +167,9 @@
   }
   .menuList:hover .catalogyBox {
     display: block;
+  }
+  .telephoneBox {
+    display: flex;
+    align-items: center;
   }
 }

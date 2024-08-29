@@ -1,0 +1,232 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  padding: 20px;
+}
+
+.iconFavorite {
+  position: absolute;
+  right: 6%;
+  top: 6%;
+  fill: red;
+  cursor: pointer;
+}
+
+.list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.listItem {
+  position: relative;
+  width: 200px;
+}
+
+.cardContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  height: 420px;
+  width: 240px;
+  padding: 10px;
+  border: 1px solid #f1f1f1;
+  border-radius: 7px;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+/* .cardContainer:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+} */
+@media screen and (min-width: 1440px) {
+  .container {
+    margin-top: 50px;
+    padding: 50px;
+  }
+
+  .list {
+    gap: 20px;
+  }
+  .listItem {
+    width: 16%;
+    flex-basis: calc((100% - 20px) / 6);
+    box-sizing: border-box;
+  }
+
+  /* .cardContainer:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  } */
+}
+
+.imgBrand {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+}
+
+.brandTitle {
+  color: #38363a;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 15px;
+  line-height: 1.2;
+  font-weight: 400;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brandTitle:hover {
+  color: #b9a2f2;
+}
+
+.brandPrice {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.priceBox {
+  position: absolute;
+  bottom: 50px;
+  display: flex;
+  gap: 10px;
+}
+
+.quantityBox {
+  width: 100px;
+}
+
+.quantityInputWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  /* border: 1px solid gray; */
+  background-color: #f1f1f1;
+}
+
+.quantityButton {
+  background-color: transparent;
+}
+
+.quantityInput {
+  text-align: center;
+  border: none;
+  background-color: transparent;
+  width: 30px;
+}
+
+.buyButton {
+  width: 100px;
+  background-color: rgb(112, 174, 249);
+  color: rgb(0, 0, 0);
+  font-weight: 600;
+  border-radius: 70px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.buyButton:hover {
+  color: #fff;
+  background-color: rgba(1, 58, 129, 0.87);
+}
+
+/*-------------------------------------------------*/
+/* .cardContainer {
+  position: relative;
+ 
+} */
+
+.volumeOptions {
+  display: none;
+  width: 240px;
+  position: absolute;
+  bottom: -50px;
+  left: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  padding: 10px;
+  z-index: 10;
+  /* інші стилі */
+}
+
+.cardContainer:hover .volumeOptions {
+  display: block;
+}
+
+/* .volumeOption {
+  color: #000;
+  border-radius: 20px;
+  border: 1px solid #000;
+  box-shadow: none;
+  background-color: transparent;
+  padding: 5px;
+  cursor: pointer;
+  margin: 2px 8px;
+} */
+
+/* .selected {
+  background-color: #ffefb4;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+} */
+
+/* Кнопки сторінок */
+
+/* CustomNavigation.css */
+.swiperButtonPrev,
+.swiperButtonNext {
+  position: absolute;
+  top: 45%;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.swiperButtonPrev {
+  left: 10px;
+}
+
+.swiperButtonNext {
+  right: 10px;
+}
+
+.chevrone {
+  fill: #3f4f68;
+  font-size: 40px;
+}
+
+.swiperContainer {
+  margin-top: 50px;
+  height: 470px;
+  overflow: hidden;
+}
+.swiper {
+  overflow: visible;
+  padding-left: 30px;
+  padding-right: 15px;
+}

@@ -10,7 +10,7 @@ const CatalogHome = () => {
     setActiveTab(tab);
   };
   return (
-    <div>
+    <div className={css.qwert}>
       <div className={css.btnBox}>
         <button
           className={`${css.btnChoose} ${
@@ -20,7 +20,7 @@ const CatalogHome = () => {
             handleTabChange("topSelling");
           }}
         >
-          Хіти продажів
+          Хіти
         </button>
         <button
           className={`${css.btnChoose} ${
