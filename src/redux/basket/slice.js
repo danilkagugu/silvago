@@ -4,6 +4,7 @@ import {
   createOrder,
   deleteProduct,
   getBasketInfo,
+  updateProductQuantityBasket,
 } from "./operations";
 
 const INITIAL_STATE = {
@@ -43,7 +44,6 @@ const basketSlice = createSlice({
       })
       .addCase(deleteProduct.fulfilled, (state, { payload }) => {
         state.items = payload.products;
-        // console.log("state.items: ", state.items);
         state.allQuantity = state.items.reduce((total, item) => {
           return total + item.quantity;
         }, 0);
@@ -64,7 +64,6 @@ const basketSlice = createSlice({
             )
         );
 
-        console.log("state.totalPrice", state.totalPrice);
         state.loading = false;
         state.error = null;
       })
@@ -76,7 +75,17 @@ const basketSlice = createSlice({
         state.loading = false;
         state.error = null;
       })
-
+      .addCase(updateProductQuantityBasket.fulfilled, (state, { payload }) => {
+        state.items = payload.products;
+        state.allQuantity = state.items.reduce((total, item) => {
+          return total + item.quantity;
+        }, 0);
+        state.totalPrice = state.items.reduce((total, item) => {
+          return total + item.price * item.quantity;
+        }, 0);
+        state.loading = false;
+        state.error = null;
+      })
       .addMatcher(
         isAnyOf(
           getBasketInfo.pending,

@@ -1,7 +1,17 @@
 .container {
-  max-width: 1440px;
+  /* max-width: 340px; */
+  max-width: 100%;
   width: 100%;
   margin: 0 auto;
-  padding: 64px 100;
-  margin-bottom: 20px;
+  /* padding: 0 15px; */
+}
+
+@media screen and (min-width: 1440px) {
+  .container {
+    max-width: 1440px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 64px 100;
+    margin-bottom: 20px;
+  }
 }

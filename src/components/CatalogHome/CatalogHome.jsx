@@ -20,7 +20,7 @@ const CatalogHome = () => {
             handleTabChange("topSelling");
           }}
         >
-          Хіти продажів
+          Хіти
         </button>
         <button
           className={`${css.btnChoose} ${

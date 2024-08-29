@@ -27,7 +27,7 @@ const Footer = () => {
       <div className={css.footerContainer}>
         <div className={css.footerList}>
           <ul className={css.footerMenu}>
-            <li>
+            <li className={css.footerMenuItem}>
               <Logo />
             </li>
             <li>
@@ -84,6 +84,20 @@ const Footer = () => {
               </ul>
             </li>
           </ul>
+        </div>{" "}
+        <div className={css.mobFooterMenu}>
+          <div className={css.phonesBlock}>
+            <a className={css.telNumber} href="tel:+380682825562">
+              +380682825562
+            </a>
+            <p className={css.contacts}>Контакти</p>
+          </div>
+          <div className={css.copyrightBlock}>
+            <p className={css.copyrightText}>© 2017—2024</p>
+            <p className={css.copyrightText}>
+              Silvago - онлайн магазин професійної косметики
+            </p>
+          </div>
         </div>
       </div>
     </div>

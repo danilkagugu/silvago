@@ -1,16 +1,15 @@
 import { IoMdClose } from "react-icons/io";
 import css from "./ModalBasket.module.css";
 import { useEffect, useState } from "react";
-import {
-  getBasketProduct,
-  productById,
-  updateProductQuantity,
-} from "../../services/productApi";
+import { getBasketProduct, productById } from "../../services/productApi";
 import { GoPlus } from "react-icons/go";
 import { HiArrowNarrowLeft, HiOutlineMinus } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
 import { CiTrash } from "react-icons/ci";
-import { deleteProduct } from "../../redux/basket/operations";
+import {
+  deleteProduct,
+  updateProductQuantityBasket,
+} from "../../redux/basket/operations";
 import { useDispatch } from "react-redux";
 
 const ModalBasket = ({ closeModal }) => {
@@ -43,14 +42,20 @@ const ModalBasket = ({ closeModal }) => {
     fetchProducts();
   }, []);
 
-  const handleQuantityChange = async (productId, volume, newQuantity) => {
+  const handleQuantityChange = async (productId, volume, quantity) => {
     try {
-      if (newQuantity < 1) return;
-      await updateProductQuantity(productId, volume, newQuantity);
+      if (quantity < 1) return;
+      await dispatch(
+        updateProductQuantityBasket({
+          productId,
+          volume,
+          quantity,
+        })
+      );
       setBasket((prevBasket) =>
         prevBasket.map((item) =>
           item.product === productId && item.volume === volume
-            ? { ...item, quantity: newQuantity }
+            ? { ...item, quantity }
             : item
         )
       );
@@ -76,6 +81,7 @@ const ModalBasket = ({ closeModal }) => {
       return total;
     }, 0);
   };
+  console.log("basket", basket);
   const dispatch = useDispatch();
   const handleRemoveProduct = async ({ productId, volume }) => {
     try {
@@ -86,6 +92,9 @@ const ModalBasket = ({ closeModal }) => {
           (item) => !(item.product === productId && item.volume === volume)
         )
       );
+      if (basket.length === 1) {
+        closeModal(); // Закрити модальне вікно, якщо це останній товар
+      }
     } catch (error) {
       console.error("Помилка видалення товару:", error);
     }
@@ -118,9 +127,7 @@ const ModalBasket = ({ closeModal }) => {
               <tbody className={css.cartBody}>
                 {basket &&
                   basket.map((item) => {
-                    // console.log("item", item);
                     const details = productDetails[item.product];
-                    // console.log("details", details);
 
                     const uniqueKey = `${item.product}-${item.volume}`;
                     const volumeDetail = details?.volumes.find(

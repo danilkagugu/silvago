@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
-import {
-  deleteProductFromFavorite,
-  getFavoriteProduct,
-} from "../../services/productApi";
+import { getFavoriteProduct } from "../../services/productApi";
 import css from "./FavoriteList.module.css";
 import FavoriteItem from "../FavoriteItem/FavoriteItem";
 import { handleAddToBasket } from "../../helpers/productActions";
-// import { useSelector } from "react-redux";
-// import { selectFavoritesProducts } from "../../redux/product/selectors";
+import { removeProductFavorite } from "../../redux/product/operations";
+import { useDispatch } from "react-redux";
 
 const FavoriteList = () => {
   const [productsFavorite, setProductsFavorite] = useState([]);
   const [selectedVolume, setSelectedVolume] = useState({});
   const [quantities, setQuantities] = useState({});
-  // const favotireProducts = useSelector(selectFavoritesProducts);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -60,13 +58,11 @@ const FavoriteList = () => {
       0
     );
   };
-  // Функція для видалення продукту з обраних
+
   const handleRemoveFavorite = async (productId) => {
     try {
-      // Видаляємо продукт із обраних через API
-      await deleteProductFromFavorite(productId);
+      dispatch(removeProductFavorite(productId));
 
-      // Оновлюємо стан, видаляючи продукт з масиву
       setProductsFavorite((prevFavorites) =>
         prevFavorites.map((product) => ({
           ...product,
@@ -79,18 +75,21 @@ const FavoriteList = () => {
       console.error("Error removing favorite product: ", error);
     }
   };
+
   const handleVolumeSelect = (productId, volume) => {
     setSelectedVolume((prev) => ({
       ...prev,
       [productId]: volume,
     }));
   };
+
   const handleQuantityChange = (productId, amount) => {
     setQuantities((prevQuantities) => ({
       ...prevQuantities,
       [productId]: Math.max(1, (prevQuantities[productId] || 1) + amount),
     }));
   };
+
   const handleQuantityInputChange = (productId, value) => {
     const newValue = Math.max(1, parseInt(value, 10) || 1);
     setQuantities((prevQuantities) => ({
@@ -98,7 +97,7 @@ const FavoriteList = () => {
       [productId]: newValue,
     }));
   };
-  console.log("productsFavorite", productsFavorite);
+
   return (
     <div className={css.container}>
       {productsFavorite.length > 0 &&

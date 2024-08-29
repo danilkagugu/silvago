@@ -6,61 +6,6 @@
   display: none;
 }
 
-@media screen and (min-width: 1440px) {
-  .MenuHeader {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 24px;
-  }
-  .menuList {
-    font-size: 16px;
-    font-weight: 400;
-    line-height: 22px;
-    position: relative;
-    color: #000;
-  }
-
-  .link {
-    padding: 8px 8px;
-    color: #000;
-  }
-  .link:hover {
-    background-color: #f5f5f5;
-  }
-
-  .menuChevron {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    position: relative;
-    cursor: pointer;
-  }
-
-  .catalogyBox {
-    position: absolute;
-    display: none;
-    left: 0;
-    top: 100%;
-    width: 400px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    list-style: none;
-    padding: 20px;
-    margin: 0;
-    z-index: 1000;
-    box-shadow: 0px 465px 186px rgba(153, 153, 153, 0.01),
-      0px 261px 157px rgba(153, 153, 153, 0.05),
-      0px 116px 116px rgba(153, 153, 153, 0.09),
-      0px 29px 64px rgba(153, 153, 153, 0.1),
-      0px 0px 0px rgba(153, 153, 153, 0.1);
-    border-radius: 30px;
-  }
-  .menuList:hover .catalogyBox {
-    display: block;
-  }
-}
-
 .headerCont {
   display: flex;
   align-items: center;
@@ -99,34 +44,50 @@
   text-align: center;
 }
 
+.searchBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* padding: 8px 30px; */
+  background: transparent;
+  position: relative;
+  /* width: 500px; */
+  transition: background-color 0.3s ease;
+}
+
+.inputSearch {
+  border: none;
+  background-color: transparent;
+  width: 100%;
+  line-height: 1;
+}
+.inputSearch::placeholder {
+  color: #fff;
+}
+
 .basketTitle {
   font-size: 17px;
 }
 
 .basketInfoPriceBox {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
+  display: none;
 }
 .menuContainer {
   display: flex;
-  justify-content: space-between;
-  width: 100%;
+  margin-left: auto;
 }
 
 .icon {
-  width: 20px;
-  height: 20px;
-  fill: #000;
+  width: 24px;
+  height: 24px;
 }
 .iconBasket {
-  width: 34px;
-  height: 34px;
+  fill: #000;
 }
 
 .telephoneBox {
-  display: flex;
-  align-items: center;
+  display: none;
 }
 
 .telSpan {
@@ -141,4 +102,74 @@
 
 .iconTelephone {
   fill: #fff;
+}
+@media screen and (min-width: 1440px) {
+  .menuContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .MenuHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+  }
+  .menuList {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 22px;
+    position: relative;
+    color: #000;
+  }
+
+  .link {
+    padding: 8px 8px;
+    color: #000;
+  }
+  .link:hover {
+    background-color: #f5f5f5;
+  }
+
+  .menuChevron {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .basketInfoPriceBox {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .catalogyBox {
+    position: absolute;
+    display: none;
+    left: 0;
+    top: 100%;
+    width: 400px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+    z-index: 1000;
+    box-shadow: 0px 465px 186px rgba(153, 153, 153, 0.01),
+      0px 261px 157px rgba(153, 153, 153, 0.05),
+      0px 116px 116px rgba(153, 153, 153, 0.09),
+      0px 29px 64px rgba(153, 153, 153, 0.1),
+      0px 0px 0px rgba(153, 153, 153, 0.1);
+    border-radius: 30px;
+  }
+  .menuList:hover .catalogyBox {
+    display: block;
+  }
+  .telephoneBox {
+    display: flex;
+    align-items: center;
+  }
 }

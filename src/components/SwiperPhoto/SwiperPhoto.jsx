@@ -14,10 +14,10 @@ const SwiperPhoto = () => {
         spaceBetween={0}
         slidesPerView={1}
         autoplay={{
-          delay: 3000, // Затримка між слайдами в мілісекундах
-          disableOnInteraction: false, // Автопрокрутка не зупиняється при взаємодії
+          delay: 3000,
+          disableOnInteraction: false,
         }}
-        modules={[Autoplay]} // Вказати, що використовуєте Autoplay модуль
+        modules={[Autoplay]}
       >
         <SwiperSlide>
           <img className={css.photo} src={p1} alt="q" />

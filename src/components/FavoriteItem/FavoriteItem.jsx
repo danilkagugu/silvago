@@ -7,9 +7,9 @@ const FavoriteItem = ({
   selectedVolume,
   handleRemoveFavorite,
   handleVolumeSelect,
-  handleQuantityChange,
+  // handleQuantityChange,
   quantities,
-  handleQuantityInputChange,
+  // handleQuantityInputChange,
   handleAddToBasket,
 }) => {
   const navigate = useNavigate();
@@ -52,7 +52,7 @@ const FavoriteItem = ({
           />
         </div>
         <div className={css.boxInfo}>
-          <p className={css.brandInfo}>{product.productName}</p>
+          <p className={css.brandTitle}>{product.productName}</p>
 
           {product.volumes.some((vol) => vol.discount > 0) && (
             <p className={css.brandPrice}>
@@ -68,31 +68,6 @@ const FavoriteItem = ({
         </div>
       </div>
       <div className={css.priceBox}>
-        <div className={css.quantityBox}>
-          <div className={css.quantityInputWrapper}>
-            <button
-              className={css.quantityButton}
-              onClick={() => handleQuantityChange(product._id, -1)}
-            >
-              -
-            </button>
-            <input
-              type="text"
-              className={css.quantityInput}
-              value={quantities[product._id] || 1}
-              onChange={(e) =>
-                handleQuantityInputChange(product._id, e.target.value)
-              }
-              min="1"
-            />
-            <button
-              className={css.quantityButton}
-              onClick={() => handleQuantityChange(product._id, 1)}
-            >
-              +
-            </button>
-          </div>
-        </div>
         <button
           className={css.buyButton}
           onClick={() =>

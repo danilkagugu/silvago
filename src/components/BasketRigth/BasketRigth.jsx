@@ -82,7 +82,6 @@ const BasketRigth = () => {
         </thead>
         <tbody>
           {basket.map((item) => {
-            console.log("item: ", item);
             const details = productDetails[item.product];
             // console.log("details: ", details);
 

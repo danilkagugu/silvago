@@ -59,9 +59,9 @@ export const addProductToBasket = async (
     volume,
     price,
   });
-  console.log(data);
   return data;
 };
+
 export const deleteProductFromBasket = async ({ productId, volume }) => {
   const instance = createAxiosInstance();
   const { data } = await instance.delete(`/api/product/basket/delete`, {
@@ -78,13 +78,16 @@ export const getBasketProduct = async () => {
   return data;
 };
 
-export const updateProductQuantity = async (productId, volume, quantity) => {
+export const updateProductQuantity = async ({
+  productId,
+  volume,
+  quantity,
+}) => {
   const instance = createAxiosInstance();
   const { data } = await instance.patch(`/api/product/basket/${productId}`, {
     volume,
     quantity,
   });
-  console.log(data);
   return data;
 };
 
@@ -133,6 +136,5 @@ export const getTopSellingProduct = async () => {
 export const getDiscountProducts = async () => {
   const instance = createAxiosInstance();
   const { data } = await instance.get("/api/product/discount-products");
-  // console.log("data: ", data);
   return data;
 };

@@ -32,7 +32,6 @@ const productSlice = createSlice({
       })
 
       .addCase(addProductFavorite.fulfilled, (state, action) => {
-        console.log("додав");
         const newFavorites = action.payload.products || [];
         state.favorites = newFavorites;
         state.favoritesQuantity = newFavorites.length;

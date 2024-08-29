@@ -57,7 +57,6 @@ const CatalogListItem = ({
     } else {
       dispatch(addProductFavorite(product._id));
     }
-    dispatch(getFavoriteProducts());
   };
 
   useEffect(() => {
@@ -76,22 +75,15 @@ const CatalogListItem = ({
   const isTopProduct = topProducts.some(
     (topProduct) => topProduct._id === product._id
   );
+
   const getPrice = () => {
-    const volume = selectedVolume[product._id];
-    const volumeDetail = product.volumes.find((vol) => vol.volume === volume);
-    const defaultVolume = product.volumes[0];
-
-    const newPrice = volumeDetail
-      ? volumeDetail.price * (1 - volumeDetail.discount / 100)
-      : defaultVolume
-      ? defaultVolume.price * (1 - defaultVolume.discount / 100)
-      : 0;
-    const oldPrice = volumeDetail
-      ? volumeDetail.price
-      : defaultVolume
-      ? defaultVolume.price
-      : 0;
-
+    const volumeDetail =
+      product.volumes.find(
+        (vol) => vol.volume === selectedVolume[product._id]
+      ) || product.volumes[0];
+    const discount = volumeDetail.discount || 0;
+    const oldPrice = volumeDetail.price;
+    const newPrice = oldPrice * (1 - discount / 100);
     return { newPrice, oldPrice };
   };
 
@@ -116,7 +108,6 @@ const CatalogListItem = ({
   return (
     <div className={css.cardContainer} id={product._id}>
       <LuHeart
-        // className={css.iconFavorite}
         className={isFavorite ? css.isFavoriteProduct : css.iconFavorite}
         onClick={() => handleToggleFavorite(product)}
       />

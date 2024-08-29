@@ -113,9 +113,36 @@ const TopSellingProduct = () => {
         freeMode={true}
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
+        breakpoints={{
+          // для екранів від 0px до 480px
+          0: {
+            slidesPerView: "auto",
+            spaceBetween: 10,
+          },
+          // для екранів від 481px до 768px
+          481: {
+            slidesPerView: "auto",
+            spaceBetween: 20,
+          },
+          // для екранів від 769px до 1024px
+          769: {
+            slidesPerView: "auto",
+            spaceBetween: 30,
+          },
+          // для екранів від 1025px до 1440px
+          1025: {
+            slidesPerView: "auto",
+            spaceBetween: 40,
+          },
+          // для екранів від 1441px і більше
+          1441: {
+            slidesPerView: 5,
+            spaceBetween: 50,
+          },
+        }}
       >
         {products.map((item) => (
-          <SwiperSlide key={item._id}>
+          <SwiperSlide key={item._id} className={css.swiperSlide}>
             <CatalogListItem
               product={item}
               favoriteProducts={favoriteProducts}

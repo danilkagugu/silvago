@@ -1,238 +1,245 @@
-.catalogyList {
-  position: relative;
-  display: flex;
-  gap: 20px;
-  cursor: pointer;
-}
-.dropDownMenu {
-  display: none;
-}
-
-.downMenuItem {
-  padding: 10px;
-  background-color: #f8f8f8;
-  border-radius: 8px;
-  text-align: center;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.downMenuItem:hover {
-  background-color: #e0e0e0;
-  transform: scale(1.05);
-}
-
-.downMenuText:hover {
-  color: #7c7c7c;
-}
-
-.catologyItem {
-  padding-top: 15px;
-  padding-bottom: 15px;
-}
-.catologyItem:hover {
-  background-color: #828282;
-}
-
-.catologyItem:hover .dropDownMenu {
-  position: absolute;
-  top: 50px;
-  width: 500px;
-  margin: 0;
-  z-index: 9999;
-  padding: 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 10px;
-  padding: 20px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  box-shadow: 0px 465px 186px rgba(153, 153, 153, 0.01),
-    0px 261px 157px rgba(153, 153, 153, 0.05),
-    0px 116px 116px rgba(153, 153, 153, 0.09),
-    0px 29px 64px rgba(153, 153, 153, 0.1), 0px 0px 0px rgba(153, 153, 153, 0.1);
-  border-radius: 10px;
-}
-
-.searchBox {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 30px;
-  background: transparent;
-  position: relative;
-  width: 500px;
-  transition: background-color 0.3s ease;
-}
-
-.inputSearch {
-  border: none;
-  background-color: transparent;
-  width: 100%;
-  line-height: 1;
-}
-.inputSearch::placeholder {
-  color: #fff;
-}
-
-.searchBox:hover {
-  background-color: #828282;
-}
-
-.searchBox:focus-within {
-  background-color: #fff;
-}
-
-.iconSearch {
-  position: absolute;
-  left: 1%;
-  fill: #fff;
-  transition: fill 0.3s ease, left 0.3s ease;
-}
-.searchBox:focus-within .iconSearch {
-  fill: #000;
-  left: 100%;
-  margin-left: -30px;
-}
-.icon {
-  width: 20px;
-  height: 20px;
-  fill: #fff;
-}
-
 .catalogyMenu {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  background-color: #363636;
-  padding: 0 70px;
-}
-
-.itemText {
-  font-size: 15px;
-  color: #fff;
-}
-
-.iconBox {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  margin-left: auto;
-}
-
-.userCabinet {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.enterText {
-  display: inline-block;
-  max-width: 110px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: #fff;
-}
-.favoriteBox {
-  position: relative;
-}
-
-.favoriteIcon {
-}
-
-.amountProductsFavorites {
-  transform: translateX(-50%);
-  position: absolute;
-  top: 11px;
-  left: 4px;
-  min-width: 7px;
-  padding: 0 4px;
-  height: 15px;
-  line-height: 15px;
-  border-radius: 15px;
-  background: #dd6c7a;
-  color: #fff;
-  font-size: 10px;
-  text-align: center;
-}
-
-.iconUser {
-  height: 25px;
-  width: 25px;
-  fill: white;
-  color: white;
-}
-
-.userFIO {
-  display: inline-block;
-  max-width: 110px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  color: #fff;
-}
-.filteredProductsBox {
-  position: absolute;
-  top: 100%; /* Встановлює відстань від верху input */
-  z-index: 1000; /* Щоб результати були поверх інших елементів */
-  background: white;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  max-height: 300px; /* Максимальна висота списку */
-  max-width: 600px;
-}
-
-.resultbox {
-  position: relative;
-}
-.searchBoxBG {
-  background-color: #fff;
-}
-.userFIOWrapper {
-  position: relative;
-  display: inline-block;
-}
-.userSeetings {
-  width: 200px;
   display: none;
-  position: absolute;
-  top: 100%;
-  left: 20%;
-  transform: translateX(-50%);
-  background-color: #fff;
-  border: 1px solid #ddd;
-  /* border-radius: 8px; */
-  padding: 10px 0;
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-  z-index: 9999;
 }
 
-.userFIOWrapper:hover .userSeetings {
-  display: block;
-}
+@media screen and (min-width: 1440px) {
+  .catalogyList {
+    position: relative;
+    display: flex;
+    gap: 20px;
+    cursor: pointer;
+  }
+  .dropDownMenu {
+    display: none;
+  }
 
-.userBarLink {
-  display: block;
-  font-size: 16px;
-  padding: 5px 20px 5px 38px;
-  color: #000;
-}
+  .downMenuItem {
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-radius: 8px;
+    text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
 
-.userBarLink:hover {
-  background-color: #dddddd;
-}
+  .downMenuItem:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.05);
+  }
 
-.userBarItemLogOut {
-  margin-top: 1px;
-}
-.userBarItemLogOut:before {
-  content: "";
-  display: block;
-  height: 1px;
-  background: rgba(0, 0, 0, 0.15);
-  margin: 6px 0;
+  .downMenuText:hover {
+    color: #7c7c7c;
+  }
+
+  .catologyItem {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+  .catologyItem:hover {
+    background-color: #828282;
+  }
+
+  .catologyItem:hover .dropDownMenu {
+    position: absolute;
+    top: 50px;
+    width: 500px;
+    margin: 0;
+    z-index: 9999;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-shadow: 0px 465px 186px rgba(153, 153, 153, 0.01),
+      0px 261px 157px rgba(153, 153, 153, 0.05),
+      0px 116px 116px rgba(153, 153, 153, 0.09),
+      0px 29px 64px rgba(153, 153, 153, 0.1),
+      0px 0px 0px rgba(153, 153, 153, 0.1);
+    border-radius: 10px;
+  }
+
+  .searchBox {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 30px;
+    background: transparent;
+    position: relative;
+    width: 500px;
+    transition: background-color 0.3s ease;
+  }
+
+  .searchBox:hover {
+    background-color: #828282;
+  }
+
+  .searchBox:focus-within {
+    background-color: #fff;
+  }
+
+  .inputSearch {
+    border: none;
+    background-color: transparent;
+    width: 100%;
+    line-height: 1;
+  }
+  .inputSearch::placeholder {
+    color: #fff;
+  }
+
+  .iconSearch {
+    position: absolute;
+    left: 1%;
+    fill: #fff;
+    transition: fill 0.3s ease, left 0.3s ease;
+  }
+  .searchBox:focus-within .iconSearch {
+    fill: #000;
+    left: 100%;
+    margin-left: -30px;
+  }
+  .icon {
+    width: 20px;
+    height: 20px;
+    fill: #fff;
+  }
+
+  .catalogyMenu {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background-color: #363636;
+    padding: 0 70px;
+  }
+
+  .itemText {
+    font-size: 15px;
+    color: #fff;
+  }
+
+  .iconBox {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+  }
+
+  .userCabinet {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .enterText {
+    display: inline-block;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #fff;
+  }
+  .favoriteBox {
+    position: relative;
+  }
+
+  .favoriteIcon {
+  }
+
+  .amountProductsFavorites {
+    transform: translateX(-50%);
+    position: absolute;
+    top: 11px;
+    left: 4px;
+    min-width: 7px;
+    padding: 0 4px;
+    height: 15px;
+    line-height: 15px;
+    border-radius: 15px;
+    background: #dd6c7a;
+    color: #fff;
+    font-size: 10px;
+    text-align: center;
+  }
+
+  .iconUser {
+    height: 25px;
+    width: 25px;
+    fill: white;
+    color: white;
+  }
+
+  .userFIO {
+    display: inline-block;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #fff;
+  }
+  .filteredProductsBox {
+    position: absolute;
+    top: 100%; /* Встановлює відстань від верху input */
+    z-index: 1000; /* Щоб результати були поверх інших елементів */
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 300px; /* Максимальна висота списку */
+    max-width: 600px;
+  }
+
+  .resultbox {
+    position: relative;
+  }
+  .searchBoxBG {
+    background-color: #fff;
+  }
+  .userFIOWrapper {
+    position: relative;
+    display: inline-block;
+  }
+  .userSeetings {
+    width: 200px;
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 20%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    border: 1px solid #ddd;
+    /* border-radius: 8px; */
+    padding: 10px 0;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+  }
+
+  .userFIOWrapper:hover .userSeetings {
+    display: block;
+  }
+
+  .userBarLink {
+    display: block;
+    font-size: 16px;
+    padding: 5px 20px 5px 38px;
+    color: #000;
+  }
+
+  .userBarLink:hover {
+    background-color: #dddddd;
+  }
+
+  .userBarItemLogOut {
+    margin-top: 1px;
+  }
+  .userBarItemLogOut:before {
+    content: "";
+    display: block;
+    height: 1px;
+    background: rgba(0, 0, 0, 0.15);
+    margin: 6px 0;
+  }
 }

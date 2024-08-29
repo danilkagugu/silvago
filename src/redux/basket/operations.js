@@ -4,6 +4,7 @@ import {
   deleteProductFromBasket,
   getBasketProduct,
   sendOrder,
+  updateProductQuantity,
 } from "../../services/productApi";
 export const getBasketInfo = createAsyncThunk(
   "basket/info",
@@ -45,11 +46,27 @@ export const createOrder = createAsyncThunk(
 );
 
 export const deleteProduct = createAsyncThunk(
-  "basketQ/deleteProduct",
+  "basket/deleteProduct",
   async ({ productId, volume }, { rejectWithValue }) => {
     try {
       const response = await deleteProductFromBasket({ productId, volume });
       return response; // Передаємо id і volume товару
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateProductQuantityBasket = createAsyncThunk(
+  "basket/updateProductQuantity",
+  async ({ productId, volume, quantity }, { rejectWithValue }) => {
+    try {
+      const response = await updateProductQuantity({
+        productId,
+        volume,
+        quantity,
+      });
+      return response;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }

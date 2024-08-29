@@ -5,10 +5,14 @@
 }
 
 .footerContainer {
-  /* Додайте кольору для верхньої межі */
-  padding: 30px 20px 20px;
-  max-width: 1440px; /* Встановіть максимальну ширину, щоб футер не розтягувався надто широко */
-  /* margin: 0 auto; */
+  padding: 20px 8px 28px;
+}
+
+@media (min-width: 1440px) {
+  .footerContainer {
+    padding: 30px 20px 20px;
+    max-width: 1440px;
+  }
 }
 
 .footerList {
@@ -17,29 +21,25 @@
 }
 
 .footerMenu {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
+  display: none;
+}
+@media (min-width: 1440px) {
+  .footerMenu {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
 }
 
-.footerMenu ul {
-  list-style-type: none; /* Видалити маркери списку */
-  padding: 0;
-  margin: 0;
-}
-
-.footerMenu li {
+.footerMenuItem {
   margin-bottom: 10px;
 }
 
-.footerMenu h4 {
+.footerTitles {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 15px;
-}
-
-.catalogyList {
-  padding: 0;
+  color: #fff;
 }
 
 .catologyItem {
@@ -52,7 +52,7 @@
 }
 
 .catologyBox:hover {
-  background-color: #c4d1e0; /* Легке затемнення при наведенні */
+  background-color: #c4d1e0;
 }
 
 .itemText {
@@ -66,17 +66,37 @@
   background-color: #4d4d4d;
 }
 
-ul p {
-  margin: 0;
-  font-size: 14px;
-  color: #555;
-}
-
-.socialIcons {
+.mobFooterMenu {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 14px;
+  color: #fff;
 }
 
-.footerTitles {
+@media (min-width: 1440px) {
+  .mobFooterMenu {
+    display: none;
+  }
+}
+
+.phonesBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.telNumber {
   color: #fff;
+}
+
+.contacts {
+}
+
+.copyrightBlock {
+}
+
+.copyrightText {
+  text-align: center;
 }
