@@ -26,6 +26,10 @@
     transform: scale(1.05);
   }
 
+  .downMenuText {
+    color: #000;
+  }
+
   .downMenuText:hover {
     color: #7c7c7c;
   }
