@@ -1,26 +1,95 @@
-.modalOverley {
-  position: fixed;
-  background-color: rgba(0, 0, 0, 0.7);
-  overflow: auto;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 9999;
+@media (min-width: 1440px) {
+  .modalOverley {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    overflow: auto;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 9999;
+  }
+  .modalOverleyOpen {
+    visibility: visible;
+    opacity: 1;
+  }
+  .popup {
+    position: relative;
+    margin: 0 auto;
+    padding: 30px;
+    width: 950px;
+  }
+  .popupBlock {
+    position: relative;
+    padding: 30px;
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 5px 35px rgba(0, 0, 0, 0.75);
+  }
+
+  .iconCloseChevron {
+    display: none;
+  }
+  .popupTitle {
+    font-size: 32px;
+    font-weight: normal;
+  }
+  .cartItemsMobile {
+    display: none;
+  }
 }
 
-.popup {
-  position: relative;
-  margin: 0 auto;
-  padding: 30px;
-  width: 950px;
-}
-.popupBlock {
-  position: relative;
-  padding: 30px;
-  border-radius: 4px;
-  background: #fff;
-  box-shadow: 0 5px 35px rgba(0, 0, 0, 0.75);
+@media (max-width: 1439px) {
+  .modalOverley {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(50, 50, 54, 0.3);
+    visibility: hidden;
+    opacity: 0;
+    /* transition: opacity 0.3s ease; */
+    z-index: 1000;
+    overflow-y: auto;
+  }
+  .modalOverleyOpen {
+    visibility: visible;
+    opacity: 1;
+  }
+  .popup {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 90%;
+    max-width: 400px;
+    height: 100%;
+    background-color: #fff;
+    box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+    transition: right 0.5s ease-in-out;
+    overflow: hidden;
+    overflow-y: auto;
+    z-index: 1001;
+  }
+
+  .popupShow {
+    right: 0;
+    transition: right 0.5s ease-in-out;
+  }
+
+  .iconClose {
+    display: none;
+  }
+
+  .popupTitle {
+    text-align: center;
+    font-size: 18px;
+    font-weight: normal;
+    padding: 10px;
+  }
 }
 
 .iconClose {
@@ -33,26 +102,36 @@
   z-index: 100;
   cursor: pointer;
 }
+.iconCloseChevron {
+  position: absolute;
+  left: 5px;
+  top: 1.5%;
+  width: 25px;
+  height: 25px;
+  fill: #b2b2b2;
+  z-index: 100;
+  cursor: pointer;
+}
 
 .iconClose:hover {
   fill: #000;
 }
 
-.popupTitle {
-  font-size: 32px;
-  font-weight: normal;
-}
-
 .cartBasket {
 }
 
-.cartItems {
+@media (max-width: 1439.9px) {
+  .cartBasket {
+    display: none;
+  }
+}
+
+.cartItemsDesctop {
   width: 100%;
-  /* border-collapse: separate; */
   border-collapse: collapse;
 }
 
-.cartItems tr:last-child td:first-child {
+.cartItemsDesctop tr:last-child td:first-child {
   border-bottom-left-radius: 4px;
 }
 
@@ -306,4 +385,176 @@
 
 .cartProduct:hover .trashBox {
   opacity: 1;
+}
+
+/* Стилі для мобільної корзини */
+
+.mobileWrapper {
+  padding: 16px;
+  line-height: 18px;
+}
+
+.basketMobileContent {
+}
+
+.cartProductMobile {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid #e6e6e6;
+  padding: 16px 0;
+}
+
+.imgBoxMobile {
+  width: 64px;
+  margin-right: 16px;
+  flex-shrink: 0;
+}
+
+.imgMobile {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+}
+
+.productContentMobile {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.productTitleMobileBox {
+  margin-bottom: 5px;
+}
+
+.productTitleMobileBox {
+}
+
+.productTitleMobile {
+}
+
+.priceInfoMobileBox {
+  display: flex;
+  gap: 8px;
+}
+
+.priceInfoMobile {
+}
+
+.cartItemButtons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.counterBtnMobileBox {
+  position: relative;
+  display: flex;
+  align-items: center;
+  /* border: 1px solid #e6e6e6; */
+  /* padding: 5px; */
+}
+
+.counterBtnMobile {
+  background-color: transparent;
+  height: 100%;
+}
+
+.counterBtnMinus {
+  position: absolute;
+  left: 0;
+  width: 32px;
+}
+
+.counterBtnPlus {
+  position: absolute;
+  right: 0;
+  width: 32px;
+}
+
+.iconMobile {
+  font-size: 16px;
+}
+
+.iconMinusMobile {
+}
+
+.iconPlusMobile {
+}
+
+.counterInputMobile {
+}
+
+.counterFieldMobile {
+  background: #fff;
+  box-shadow: inset 0 0 0 1px #ccc;
+  border-radius: 8px;
+  height: 40px;
+  padding: 0 32px;
+  width: 100px;
+  text-align: center;
+  border: none;
+}
+
+.buttonTrash {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+}
+
+.iconTrashMobile {
+  width: 16px;
+  height: 16px;
+}
+
+.cartItemsFooterMobile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.cartSummaryMobile {
+}
+
+.cartOrderMobile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.orderBtnMobile {
+  /* background-color: transparent; */
+  border-radius: 11px;
+  color: #fff;
+  border: 0;
+  background: #ec9fa8;
+  box-shadow: none;
+  padding: 16px;
+  width: 100%;
+}
+
+.cartcontiniusShoping {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 100%;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+}
+
+.continiusBtnMobile {
+  background-color: transparent;
+  border-radius: 11px;
+  color: #666;
+  padding: 16px;
 }

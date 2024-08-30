@@ -73,6 +73,7 @@
   flex-direction: column;
   font-size: 14px;
   color: #fff;
+  gap: 10px;
 }
 
 @media (min-width: 1440px) {
@@ -85,6 +86,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 5px;
 }
 
 .telNumber {
@@ -95,6 +97,10 @@
 }
 
 .copyrightBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
 }
 
 .copyrightText {

@@ -31,9 +31,7 @@ const Header = () => {
           <MenuHeader />
 
           <div className={css.leftHeaderMenu}>
-            {openMobMenu && (
-              <MobMenu closeMenu={setOpenMobMenu} openMobMenu={openMobMenu} />
-            )}
+            <MobMenu closeMenu={setOpenMobMenu} openMobMenu={openMobMenu} />
           </div>
         </div>
       </div>

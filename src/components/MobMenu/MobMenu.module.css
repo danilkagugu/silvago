@@ -1,9 +1,6 @@
-/* Загальні стилі для обгортки меню */
-/* Застосуйте цей стиль до body або html під час відкриття меню */
-
 .noScroll {
   height: 100%;
-  overflow: hidden; /* Забороняє скролінг на фоні */
+  overflow: hidden;
 }
 
 .mobWrapper {
@@ -17,17 +14,8 @@
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 1000;
+  overflow-y: auto;
 }
-/* .mobWrapper {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;  
-  overflow-y: auto;  
-  z-index: 9999;
-  background-color: rgba(0, 0, 0, 0.5);  
-} */
 
 .mobWrapperOpen {
   visibility: visible;
@@ -128,10 +116,10 @@
 
 .imgLogo {
   width: 100%;
-  height: auto; /* Це зберігає пропорції зображення */
-  max-width: 150px; /* Максимальна ширина, щоб обмежити розмір логотипу */
-  display: block; /* Забезпечує правильне відображення в центрі контейнера */
-  margin: 0 auto; /* Центрування логотипу */
+  height: auto;
+  max-width: 57px;
+  display: block;
+  margin-left: 30px;
   background-size: auto;
 }
 

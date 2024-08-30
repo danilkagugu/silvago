@@ -111,7 +111,7 @@ const MenuHeader = () => {
           </div>
         </div>
       </div>
-      {open && <ModalBasket closeModal={closeModal} />}
+      <ModalBasket closeModal={closeModal} open={open} />
     </div>
   );
 };
