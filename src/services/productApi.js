@@ -1,9 +1,9 @@
 import axios from "axios";
 import { store } from "../redux/store";
 
-// export const BASE_URL = "http://localhost:3030/";
-export const BASE_URL =
-  "https://virtserver.swaggerhub.com/danilyanishevski2001/SilvagoShop/1.0.0";
+export const BASE_URL = "http://localhost:3030/";
+// export const BASE_URL =
+//   "https://virtserver.swaggerhub.com/danilyanishevski2001/SilvagoShop/1.0.0";
 
 const createAxiosInstance = () => {
   return axios.create({
