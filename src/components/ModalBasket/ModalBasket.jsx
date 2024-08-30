@@ -11,8 +11,9 @@ import {
   updateProductQuantityBasket,
 } from "../../redux/basket/operations";
 import { useDispatch } from "react-redux";
+import { IoChevronBackOutline } from "react-icons/io5";
 
-const ModalBasket = ({ closeModal }) => {
+const ModalBasket = ({ closeModal, open }) => {
   const [basket, setBasket] = useState([]);
   const [productDetails, setProductDetails] = useState({});
 
@@ -81,7 +82,7 @@ const ModalBasket = ({ closeModal }) => {
       return total;
     }, 0);
   };
-  console.log("basket", basket);
+  // console.log("basket", basket);
   const dispatch = useDispatch();
   const handleRemoveProduct = async ({ productId, volume }) => {
     try {
@@ -93,7 +94,7 @@ const ModalBasket = ({ closeModal }) => {
         )
       );
       if (basket.length === 1) {
-        closeModal(); // Закрити модальне вікно, якщо це останній товар
+        closeModal();
       }
     } catch (error) {
       console.error("Помилка видалення товару:", error);
@@ -101,13 +102,18 @@ const ModalBasket = ({ closeModal }) => {
   };
 
   return (
-    <div className={css.modalOverley}>
-      <div className={css.popup}>
+    <div className={`${css.modalOverley} ${open ? css.modalOverleyOpen : ""}`}>
+      <div className={`${css.popup} ${open ? css.popupShow : ""}`}>
         <div className={css.popupBlock}>
           <IoMdClose className={css.iconClose} onClick={closeModal} />
+          <IoChevronBackOutline
+            className={css.iconCloseChevron}
+            onClick={closeModal}
+          />
+
           <h2 className={css.popupTitle}>Кошик</h2>
           <div className={css.cartBasket}>
-            <table className={css.cartItems}>
+            <table className={css.cartItemsDesctop}>
               <thead>
                 <tr>
                   <td></td>
@@ -266,6 +272,142 @@ const ModalBasket = ({ closeModal }) => {
                 </tr>
               </tfoot>
             </table>
+          </div>
+          <div className={css.cartItemsMobile}>
+            <div className={css.mobileWrapper}>
+              <div className={css.basketMobileContent}>
+                <div>
+                  {basket &&
+                    basket.map((item) => {
+                      const details = productDetails[item.product];
+
+                      const uniqueKey = `${item.product}-${item.volume}`;
+                      const volumeDetail = details?.volumes.find(
+                        (vol) => vol.volume === item.volume
+                      );
+                      const price = volumeDetail ? volumeDetail.price : 0;
+                      const discount = volumeDetail
+                        ? volumeDetail.discount || 0
+                        : 0;
+                      const discountedPrice = price * (1 - discount / 100);
+                      // console.log("details: ", details);
+                      return (
+                        details && (
+                          <div
+                            className={css.cartProductMobile}
+                            key={uniqueKey}
+                          >
+                            <div className={css.imgBoxMobile}>
+                              <img
+                                className={css.imgMobile}
+                                src={details.image}
+                                alt={details.name}
+                              />
+                            </div>
+                            <div className={css.productContentMobile}>
+                              <div className={css.productTitleMobileBox}>
+                                <p className={css.productTitleMobile}>
+                                  {details.name}
+                                </p>
+                              </div>
+
+                              <div className={css.priceInfoMobileBox}>
+                                <p className={css.priceInfoMobile}>
+                                  {Math.ceil(discountedPrice)} грн
+                                </p>
+                              </div>
+                              <div className={css.cartItemButtons}>
+                                <div className={css.counterBtnMobileBox}>
+                                  <button
+                                    className={`${css.counterBtnMobile} ${css.counterBtnMinus}`}
+                                    onClick={() =>
+                                      handleQuantityChange(
+                                        item.product,
+                                        item.volume,
+                                        item.quantity - 1
+                                      )
+                                    }
+                                  >
+                                    <HiOutlineMinus
+                                      className={`${css.iconMobile} ${css.iconMinusMobile}`}
+                                    />
+                                  </button>
+                                  <div className={css.counterInputMobile}>
+                                    <input
+                                      className={css.counterFieldMobile}
+                                      type="text"
+                                      value={item.quantity}
+                                      onChange={(e) =>
+                                        handleQuantityChange(
+                                          item.product,
+                                          item.volume,
+                                          Number(e.target.value)
+                                        )
+                                      }
+                                    />
+                                  </div>
+                                  <button
+                                    className={`${css.counterBtnMobile} ${css.counterBtnPlus}`}
+                                    onClick={() =>
+                                      handleQuantityChange(
+                                        item.product,
+                                        item.volume,
+                                        item.quantity + 1
+                                      )
+                                    }
+                                  >
+                                    <GoPlus
+                                      className={`${css.iconMobile} ${css.iconPlusMobile}`}
+                                    />
+                                  </button>
+                                </div>
+                                <button
+                                  className={css.buttonTrash}
+                                  onClick={() =>
+                                    handleRemoveProduct({
+                                      productId: item.product,
+                                      volume: item.volume,
+                                    })
+                                  }
+                                >
+                                  <CiTrash className={css.iconTrashMobile} />
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        )
+                      );
+                    })}
+                  <div className={css.cartItemsFooterMobile}>
+                    <div className={css.cartSummaryMobile}>
+                      <p className={css.cartCost}>
+                        {calculateTotalAmount()} грн
+                      </p>
+                    </div>
+                    <div
+                      className={css.cartOrderMobile}
+                      onClick={() => {
+                        navigate("/basket");
+                      }}
+                    >
+                      <button className={css.orderBtnMobile}>
+                        Оформити замовлення
+                      </button>
+                    </div>
+
+                    <div
+                      className={css.cartcontiniusShoping}
+                      onClick={closeModal}
+                    >
+                      <IoChevronBackOutline />
+                      <button className={css.continiusBtnMobile}>
+                        Продовжити покупки
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoCloseSharp } from "react-icons/io5";
 import { FaArrowRight, FaLongArrowAltLeft } from "react-icons/fa";
 import css from "./MobMenu.module.css";
-import logo from "../../assets/img/logoSilvago.png";
+import logo from "../../assets/img/3wr.png";
 import { getCategories } from "../../services/productApi";
 import { apiLogoutUser } from "../../redux/auth/operations";
 import { useDispatch, useSelector } from "react-redux";
