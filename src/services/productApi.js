@@ -1,9 +1,8 @@
 import axios from "axios";
 import { store } from "../redux/store";
 
-export const BASE_URL = "http://localhost:3030/";
-// export const BASE_URL =
-//   "https://virtserver.swaggerhub.com/danilyanishevski2001/SilvagoShop/1.0.0";
+// export const BASE_URL = "http://localhost:3030/";
+export const BASE_URL = "https://the-silvago-cosmetics.onrender.com/";
 
 const createAxiosInstance = () => {
   return axios.create({
@@ -55,7 +54,7 @@ export const addProductToBasket = async (
   price
 ) => {
   const instance = createAxiosInstance();
-  const { data } = await instance.post(`/api/product/${productId}/basket`, {
+  const { data } = await instance.post(`/api/product/basket/${productId}`, {
     productId,
     quantity,
     volume,
