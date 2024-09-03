@@ -230,3 +230,30 @@
   padding-left: 30px;
   padding-right: 15px;
 }
+
+@media (max-width: 480px) {
+  .swiperContainer {
+    margin-top: 20px;
+    height: auto;
+  }
+
+  .swiper {
+    padding-left: 10px;
+    padding-right: 5px;
+  }
+
+  .swiperButtonPrev,
+  .swiperButtonNext {
+    width: 30px;
+    height: 30px;
+    top: 35%;
+  }
+
+  .swiper-slide {
+    width: 100%;
+    margin: 0 auto;
+  }
+  .swiperSlide {
+    width: 180px;
+  }
+}

@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
-import {
-  getBasketProduct,
-  productById,
-  updateProductQuantity,
-} from "../../services/productApi";
+import { getBasketProduct, productById } from "../../services/productApi";
 import css from "./BasketRigth.module.css";
 
 import CatalogItem from "../CatalogItem/CatalogItem";
+import { updateProductQuantityBasket } from "../../redux/basket/operations";
+import { useDispatch } from "react-redux";
 
 const BasketRigth = () => {
   const [basket, setBasket] = useState([]);
   const [productDetails, setProductDetails] = useState({});
-
+  const dispatch = useDispatch();
   useEffect(() => {
     const fetchProducts = async () => {
+      // const authDataString = JSON.parse(localStorage.getItem("persist:auth"));
+      // const token = JSON.parse(authDataString.token);
+      // console.log("token: ", token);
+      // if (!token) {
+      //   console.log(
+      //     "Користувач не залогінений. Запит на отримання корзини не буде виконано."
+      //   );
+      //   return;
+      // }
       try {
         const basketData = await getBasketProduct();
 
@@ -36,14 +43,19 @@ const BasketRigth = () => {
     fetchProducts();
   }, []);
 
-  const handleQuantityChange = async (productId, volume, newQuantity) => {
+  const handleQuantityChange = async (productId, volume, quantity) => {
     try {
-      if (newQuantity < 1) return;
-      await updateProductQuantity(productId, volume, newQuantity);
+      await dispatch(
+        updateProductQuantityBasket({
+          productId,
+          volume,
+          quantity,
+        })
+      );
       setBasket((prevBasket) =>
         prevBasket.map((item) =>
           item.product === productId && item.volume === volume
-            ? { ...item, quantity: newQuantity }
+            ? { ...item, quantity: quantity }
             : item
         )
       );
