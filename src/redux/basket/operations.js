@@ -34,8 +34,6 @@ export const createOrder = createAsyncThunk(
   "order/create",
   async ({ user, basket }, thunkAPI) => {
     try {
-      console.log("basket", basket);
-      console.log("user", user);
       const data = await sendOrder({ user, basket });
       console.log("data: ", data);
       return data;
@@ -61,6 +59,7 @@ export const updateProductQuantityBasket = createAsyncThunk(
   "basket/updateProductQuantity",
   async ({ productId, volume, quantity }, { rejectWithValue }) => {
     try {
+      console.log("productId", productId);
       const response = await updateProductQuantity({
         productId,
         volume,

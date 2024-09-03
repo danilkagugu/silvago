@@ -37,6 +37,7 @@
 }
 
 .mobileMenuBoxShow {
+  overflow-y: auto;
   left: 0;
 }
 

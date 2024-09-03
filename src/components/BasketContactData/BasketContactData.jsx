@@ -11,7 +11,7 @@ import {
   getPostOffice,
   getCities,
 } from "../../services/NovaPoshtaApi";
-import { sendOrder } from "../../services/productApi";
+// import { sendOrder } from "../../services/productApi";
 import { selectBasket } from "../../redux/basket/selectors";
 import SelectNovaPoshta from "../SelectNovaPoshta/SelectNovaPoshta";
 import { createOrder } from "../../redux/basket/operations";
@@ -152,9 +152,7 @@ const BasketContactData = () => {
   const submitOrder = async (formData) => {
     try {
       const { name, serName, phone, email, area, city, office } = formData;
-      console.log("office: ", office);
-      console.log("city: ", city);
-      console.log("area: ", area);
+
       if (!area || !city || !office) {
         console.error("Area, city, or office is missing.");
         return;
