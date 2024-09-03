@@ -186,7 +186,7 @@
   color: #333;
   text-align: left;
   cursor: pointer;
-  padding: 8px 20px 8px 50px;
+  padding: 8px 20px 8px 33px;
 }
 
 .phoneBox {
@@ -194,4 +194,112 @@
   align-items: center;
   gap: 7px;
   padding: 8px 20px;
+}
+
+.loginBlock {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(50, 50, 54, 0.3);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.loginBlockOpen {
+  visibility: visible;
+  opacity: 1;
+}
+
+.loginWrapper {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 65%;
+  max-width: 320px;
+  height: 100%;
+  background-color: #fff;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease;
+  overflow: hidden;
+  z-index: 1010;
+}
+
+.loginWrapperOpen {
+  overflow-y: auto;
+  left: 0;
+}
+
+.loginHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-bottom: 1px solid #d7d7d7;
+}
+
+.iconBack {
+  position: absolute;
+  left: 8px;
+}
+
+.tabsForLogin {
+  display: flex;
+}
+
+.itemTabs {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  height: 100%;
+  padding: 0 8px 5px;
+  color: #848483;
+  font-size: 18px;
+  font-weight: bold;
+  border: 0;
+}
+
+.active {
+  border-bottom: 1px solid rgb(0, 0, 0);
+}
+
+/* СТилі для форми */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  margin-top: 15px;
+  padding: 10px;
+}
+
+.inputForm {
+  height: 48px;
+  padding: 0 8px;
+  background: #fff;
+  border: 1px solid #d1d1d1;
+  font-size: 18px;
+  transition: border 0.15s;
+  border-radius: 8px;
+}
+
+.btnLogin {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: rgb(149, 238, 252);
+  font-size: 18px;
+}
+
+.btnRegister {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: rgb(149, 238, 252);
+  font-size: 18px;
 }

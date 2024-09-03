@@ -1,8 +1,8 @@
 import axios from "axios";
 import { store } from "../redux/store";
 
-export const BASE_URL = "http://localhost:3030/";
-// export const BASE_URL = "https://silvago-backend.onrender.com/";
+// export const BASE_URL = "http://localhost:3030/";
+export const BASE_URL = "https://silvago-backend.onrender.com/";
 
 const createAxiosInstance = () => {
   return axios.create({
@@ -75,7 +75,6 @@ export const deleteProductFromBasket = async ({ productId, volume }) => {
 export const getBasketProduct = async () => {
   const instance = createAxiosInstance();
   const { data } = await instance.get("/api/product/basket");
-  // console.log("data: ", data);
   return data;
 };
 

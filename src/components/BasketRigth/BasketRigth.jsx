@@ -12,6 +12,15 @@ const BasketRigth = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchProducts = async () => {
+      // const authDataString = JSON.parse(localStorage.getItem("persist:auth"));
+      // const token = JSON.parse(authDataString.token);
+      // console.log("token: ", token);
+      // if (!token) {
+      //   console.log(
+      //     "Користувач не залогінений. Запит на отримання корзини не буде виконано."
+      //   );
+      //   return;
+      // }
       try {
         const basketData = await getBasketProduct();
 
