@@ -172,4 +172,11 @@
     display: flex;
     align-items: center;
   }
+
+  .iconSearch {
+    display: none;
+  }
+  .favoriteIcon {
+    display: none;
+  }
 }

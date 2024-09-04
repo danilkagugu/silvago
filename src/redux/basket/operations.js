@@ -6,6 +6,7 @@ import {
   sendOrder,
   updateProductQuantity,
 } from "../../services/productApi";
+
 export const getBasketInfo = createAsyncThunk(
   "basket/info",
   async (_, thunkAPI) => {

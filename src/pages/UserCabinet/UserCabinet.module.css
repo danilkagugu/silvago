@@ -1,6 +1,13 @@
 /* UserCabinet.module.css */
 .container {
   display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1440px) {
+  .container {
+    flex-direction: row;
+  }
 }
 
 .sidebar {

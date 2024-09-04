@@ -19,6 +19,9 @@ const ProductDetail = lazy(() =>
 const Favorite = lazy(() => import("../../pages/Favorite/Favorite"));
 const History = lazy(() => import("../../pages/History/History"));
 const Settings = lazy(() => import("../../pages/Settings/Settings"));
+const SearchProducts = lazy(() =>
+  import("../../pages/SearchProducts/SearchProducts")
+);
 
 const NotFound = lazy(() => import("../../pages/NotFound/NotFound"));
 const App = () => {
@@ -47,6 +50,7 @@ const App = () => {
 
         <Route path="/product/:productId" element={<ProductDetail />} />
         <Route path="/brand/:brandName" element={<BrandProducts />} />
+        <Route path="/search/" element={<SearchProducts />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

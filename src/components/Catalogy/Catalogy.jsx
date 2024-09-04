@@ -56,6 +56,12 @@ const Catalogy = () => {
     const query = e.target.value;
     setSearchQuery(query);
   };
+  const handleSearchKeyDown = (e) => {
+    if (e.key === "Enter") {
+      // e.preventDefault();
+      navigate(`/search?query=${searchQuery}`);
+    }
+  };
 
   // Логіка виходу з профіля
   const onLogout = () => {
@@ -99,6 +105,7 @@ const Catalogy = () => {
             type="text"
             placeholder="Пошук"
             onChange={handleSearchChange}
+            onKeyDown={handleSearchKeyDown}
           />
         </div>
         {searchQuery && (

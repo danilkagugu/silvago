@@ -14,12 +14,14 @@ import ModalBasket from "../ModalBasket/ModalBasket";
 import { getBasketProduct } from "../../services/productApi";
 import { LuHeart } from "react-icons/lu";
 import { IoSearch } from "react-icons/io5";
+import { selectIsLoggedIn } from "../../redux/auth/selectors";
 
 const MenuHeader = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const totalPrice = useSelector(selectTotalPrice);
   const allQuantity = useSelector(selectAllQuantity);
+  const login = useSelector(selectIsLoggedIn);
 
   useEffect(() => {
     const fetchBasketData = async () => {
@@ -104,10 +106,10 @@ const MenuHeader = () => {
           }}
         >
           <BsBasket className={`${css.iconBasket} ${css.icon}`} />
-          <span className={css.allQuantity}>{allQuantity}</span>
+          <span className={css.allQuantity}>{login ? allQuantity : 0}</span>
           <div className={css.basketInfoPriceBox}>
             <p className={css.basketTitle}>Мій кошик</p>
-            {totalPrice > 0 && <p>{totalPrice}</p>}
+            {totalPrice > 0 && login && <p>{totalPrice}</p>}
           </div>
         </div>
       </div>

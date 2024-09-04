@@ -11,7 +11,7 @@ import { getFavoriteProduct } from "../../services/productApi";
 
 const UserMenu = () => {
   const [favoriteProducts, setFavoriteProducts] = useState([]);
-  // console.log("favoriteProducts: ", favoriteProducts);
+  console.log("favoriteProducts: ", favoriteProducts);
   const navigate = useNavigate();
   useEffect(() => {
     const fetchFavoriteProducts = async () => {
@@ -28,13 +28,23 @@ const UserMenu = () => {
     <div className={css.container}>
       <ul className={css.list}>
         <li
-          className={css.listItem}
+          className={`${css.listItem} ${css.textDesctop}`}
           onClick={() => {
             navigate("/user-cabinet/settings");
           }}
         >
           <div className={css.menuBox}>
             <p className={css.text}>Особисті дані</p>
+          </div>
+        </li>
+        <li
+          className={`${css.listItem} ${css.textMobile}`}
+          onClick={() => {
+            navigate("/user-cabinet/settings");
+          }}
+        >
+          <div className={css.menuBox}>
+            <p className={css.text}>Профіль</p>
           </div>
         </li>
         <li
