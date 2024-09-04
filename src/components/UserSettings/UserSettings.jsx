@@ -155,7 +155,7 @@ const UserSettings = () => {
     try {
       const response = await dispatch(apiUpdateUser(data));
       if (response) {
-        navigate("/user-cabinet");
+        navigate("/user-cabinet/settings");
       }
     } catch (error) {
       console.error("Error updating user: ", error);
@@ -166,9 +166,9 @@ const UserSettings = () => {
     <div>
       {/* Тут починається новий дизайн профіля */}
       <div className={css.profileContent}>
-        <h1>Особисті Дані</h1>
+        <h1 className={css.titleProfile}>Особисті Дані</h1>
         <div>
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form className={css.formDesctop} onSubmit={handleSubmit(onSubmit)}>
             <dl className={css.form}>
               <dt className={css.formHead}>Ім&apos;я</dt>
               <dd className={css.formItem}>
@@ -273,6 +273,137 @@ const UserSettings = () => {
               </dd>
             </dl>
             <button className={css.btnSave} type="submit">
+              Зберегти зміни
+            </button>
+          </form>
+          <form className={css.formMobile} onSubmit={handleSubmit(onSubmit)}>
+            <div className={css.fromItem}>
+              <div className={css.formItemTitle}>Ім&apos;я</div>
+              <div className={css.formItemContent}>
+                <input
+                  className={css.input}
+                  type="text"
+                  {...register("name")}
+                  placeholder="Ім'я"
+                />
+              </div>
+            </div>
+            <div className={css.fromItem}>
+              <div className={css.formItemTitle}>Прізвище</div>
+              <div className={css.formItemContent}>
+                <input
+                  className={css.input}
+                  type="text"
+                  {...register("serName")}
+                  placeholder="Прізвище"
+                />
+              </div>
+            </div>
+            <div className={css.fromItem}>
+              <div className={css.formItemTitle}>Е-пошта</div>
+              <div className={css.formItemContent}>
+                <input
+                  className={css.input}
+                  type="email"
+                  {...register("email")}
+                  placeholder="Email"
+                />
+              </div>
+            </div>
+            <div className={css.fromItem}>
+              <div className={css.formItemTitle}>Телефон</div>
+              <div className={css.formItemContent}>
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({ field }) => (
+                    <CustomMaskedInput
+                      className={css.input}
+                      id="phone"
+                      {...field}
+                      placeholder="Мобільний телефон"
+                    />
+                  )}
+                />
+              </div>
+            </div>
+            <div className={css.fromItem}>
+              <div className={css.formItemTitle}>Область</div>
+              <div className={css.formItemContent}>
+                <SelectNovaPoshta
+                  options={areas.map((a) => a.Description)}
+                  value={areas.find((a) => a.Ref === area)?.Description || ""}
+                  onChange={(selectedArea) => {
+                    const selectedAreaRef = areas.find(
+                      (a) => a.Description === selectedArea
+                    )?.Ref;
+                    setValue("area", selectedAreaRef || "");
+                    handleAreaChange({
+                      target: { value: selectedAreaRef || "" },
+                    });
+                  }}
+                  placeholder="Виберіть область"
+                />
+              </div>
+            </div>
+            <div className={css.fromItem}>
+              <div className={css.formItemTitle}>Місто</div>
+              <div className={css.formItemContent}>
+                <SelectNovaPoshta
+                  options={cities}
+                  value={city || ""}
+                  onChange={(selectedCity) => {
+                    setValue("city", selectedCity);
+                    handleCityChange({ target: { value: selectedCity } });
+                  }}
+                  placeholder="Виберіть місто"
+                />
+              </div>
+            </div>
+            <div className={css.fromItem}>
+              <div className={css.formItemTitle}>Віділення</div>
+              <div className={css.formItemContent}>
+                <SelectNovaPoshta
+                  options={offices}
+                  value={office || ""}
+                  onChange={(selectedOffice) => {
+                    setValue("office", selectedOffice);
+                  }}
+                  placeholder="Виберіть віділення"
+                />
+              </div>
+            </div>
+            <div className={css.fromItem}>
+              <div className={css.formItemTitle}>Поточний пароль</div>
+              <div className={css.formItemContent}>
+                <input
+                  className={css.input}
+                  type="password"
+                  placeholder="Пароль"
+                />
+              </div>
+            </div>
+            <div className={css.fromItem}>
+              <div className={css.formItemTitle}>Новий пароль</div>
+              <div className={css.formItemContent}>
+                <input
+                  className={css.input}
+                  type="password"
+                  placeholder="Новий пароль"
+                />
+              </div>
+            </div>
+            <div className={css.fromItem}>
+              <div className={css.formItemTitle}>Пароль ще раз</div>
+              <div className={css.formItemContent}>
+                <input
+                  className={css.input}
+                  type="password"
+                  placeholder="Пароль ще раз"
+                />
+              </div>
+            </div>
+            <button className={css.btnSaveMob} type="submit">
               Зберегти зміни
             </button>
           </form>
