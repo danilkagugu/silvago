@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { apiRefreshUser } from "../../redux/auth/operations";
 import BrandProducts from "../../pages/BrandProducts/BrandProducts";
+// import OrderDetails from "../OrderDetails/OrderDetails";
 const Home = lazy(() => import("../../pages/Home/Home"));
 const AboutUs = lazy(() => import("../../pages/AboutUs/AboutUs"));
 const Basket = lazy(() => import("../../pages/Basket/Basket"));
@@ -18,6 +19,7 @@ const ProductDetail = lazy(() =>
 );
 const Favorite = lazy(() => import("../../pages/Favorite/Favorite"));
 const History = lazy(() => import("../../pages/History/History"));
+const OrderDetails = lazy(() => import("../OrderDetails/OrderDetails"));
 const Settings = lazy(() => import("../../pages/Settings/Settings"));
 const SearchProducts = lazy(() =>
   import("../../pages/SearchProducts/SearchProducts")
@@ -42,6 +44,7 @@ const App = () => {
           <Route path="favorite" element={<Favorite />} />
           <Route path="settings" element={<Settings />} />
           <Route path="history" element={<History />} />
+          <Route path="history/:orderId" element={<OrderDetails />} />
         </Route>
         <Route
           path="/catalog/:categorySlug/:subCategorySlug?"

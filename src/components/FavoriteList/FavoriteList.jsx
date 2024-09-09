@@ -97,17 +97,18 @@ const FavoriteList = () => {
       [productId]: newValue,
     }));
   };
+  const isMobile = window.innerWidth <= 1440;
 
   return (
     <div className={css.container}>
       {productsFavorite.length > 0 &&
       productsFavorite.some((fav) => fav.products.length > 0) ? (
-        <ul className={css.list}>
+        <ul className={isMobile ? `${css.goods} ${css.goodsGrid}` : css.list}>
           {productsFavorite.map((product) =>
             product.products.map((item) => (
               <li
                 key={`${product._id}-${item.product}`}
-                className={css.listItem}
+                className={isMobile ? css.goodsItem : css.listItem}
                 id={item.product}
               >
                 <FavoriteItem
@@ -127,6 +128,28 @@ const FavoriteList = () => {
       ) : (
         <p>товару ще немає</p>
       )}
+      {/* <ul className={`${css.goods} ${css.goodsGrid}`}>
+        {productsFavorite.map((product) =>
+          product.products.map((item) => (
+            <li
+              key={`${product._id}-${item.product}`}
+              className={css.goodsItem}
+              id={item.product}
+            >
+              <FavoriteItem
+                product={item}
+                selectedVolume={selectedVolume}
+                handleRemoveFavorite={handleRemoveFavorite}
+                handleVolumeSelect={handleVolumeSelect}
+                handleQuantityChange={handleQuantityChange}
+                quantities={quantities}
+                handleQuantityInputChange={handleQuantityInputChange}
+                handleAddToBasket={handleAddToBasket}
+              />
+            </li>
+          ))
+        )}
+      </ul> */}
     </div>
   );
 };

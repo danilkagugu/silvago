@@ -23,11 +23,11 @@ const basketSlice = createSlice({
     builder
       .addCase(getBasketInfo.fulfilled, (state, action) => {
         state.items = action.payload.products;
+        console.log("state.items: ", state.items);
 
         state.totalPrice = state.items.reduce((total, item) => {
           return total + item.price * item.quantity;
         }, 0);
-
         state.loading = false;
         state.error = null;
       })

@@ -4,7 +4,9 @@
 
 .list {
   display: flex;
+  justify-content: center;
   flex-direction: row;
+  border-bottom: 1px solid #ddd;
 }
 
 @media (min-width: 1440px) {

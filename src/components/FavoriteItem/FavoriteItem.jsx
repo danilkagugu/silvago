@@ -1,12 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import css from "./FavoriteItem.module.css";
+// import { CiTrash } from "react-icons/ci";
+import { IoCloseSharp } from "react-icons/io5";
 import { CiTrash } from "react-icons/ci";
 
 const FavoriteItem = ({
   product,
   selectedVolume,
   handleRemoveFavorite,
-  handleVolumeSelect,
+  // handleVolumeSelect,
   // handleQuantityChange,
   quantities,
   // handleQuantityInputChange,
@@ -36,65 +38,133 @@ const FavoriteItem = ({
   };
 
   return (
-    <div className={css.cardContainer}>
-      <CiTrash
-        className={css.iconTrash}
-        onClick={() => {
-          handleRemoveFavorite(product.product);
-        }}
-      />
-      <div className={css.cardBox} onClick={handleProductClick}>
-        <div className={css.imgBox}>
-          <img
-            className={css.imgBrand}
-            src={product.image}
-            alt={product.productName}
+    <>
+      <div className={css.cardContainer}>
+        <div className={css.cardContainerBox}>
+          <IoCloseSharp
+            className={css.iconDelete}
+            onClick={() => {
+              handleRemoveFavorite(product.product);
+            }}
           />
-        </div>
-        <div className={css.boxInfo}>
-          <p className={css.brandTitle}>{product.productName}</p>
 
-          {product.volumes.some((vol) => vol.discount > 0) && (
-            <p className={css.brandPrice}>
-              <span className={css.oldPrice}>{getPrice().oldPrice} грн</span>
-              <span className={css.newPrice}>
-                {Math.ceil(getPrice().newPrice)} грн
-              </span>
-            </p>
-          )}
-          {!product.volumes.some((vol) => vol.discount > 0) && (
-            <p className={css.brandPrice}>{getPrice().oldPrice} грн</p>
-          )}
+          <div className={css.cardBox}>
+            <div className={css.catalogCardHeader} onClick={handleProductClick}>
+              <div className={css.catalogCardTop}>
+                <div className={css.catalogCardImage}>
+                  <div className={css.imgBox}>
+                    <img
+                      className={css.catalogCardImgProduct}
+                      src={product.image}
+                      alt={product.productName}
+                    />
+                  </div>
+                </div>
+                <div className={css.catalogCardInfo}>
+                  <div className={css.catalogCardTitle}>
+                    <p>{product.productName}</p>
+                  </div>
+                  <div className={css.catalogCardPriceBox}>
+                    {product.volumes.some((vol) => vol.discount > 0) && (
+                      <>
+                        <div className={css.catalogCardPriceOld}>
+                          {getPrice().oldPrice} грн
+                        </div>
+                        <div className={css.catalogCardPrice}>
+                          {Math.ceil(getPrice().newPrice)} грн
+                        </div>
+                      </>
+                    )}
+                    {!product.volumes.some((vol) => vol.discount > 0) && (
+                      <div className={css.catalogCardPrice}>
+                        {getPrice().oldPrice} грн
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className={css.catalogCardFooter}>
+              <div className={css.catalogCardFooterBtn}>
+                <button
+                  className={css.buyButton}
+                  onClick={() =>
+                    handleAddToBasket(
+                      product.product,
+                      quantities[product._id],
+                      selectedVolume[product._id]
+                    )
+                  }
+                >
+                  Купити
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div className={css.priceBox}>
-        <button
-          className={css.buyButton}
-          onClick={() =>
-            handleAddToBasket(
-              product.product,
-              quantities[product._id],
-              selectedVolume[product._id]
-            )
-          }
-        >
-          Купити
-        </button>
+      <div className={css.catalogCardMob}>
+        <div className={css.catalogCardHeaderMob}>
+          <div className={css.boxImageMob}>
+            <div className={css.imageMob}>
+              <img
+                className={css.image}
+                src={product.image}
+                alt={product.productName}
+              />
+            </div>
+          </div>
+          <div className={css.catalogCardBtnMob}>
+            <div
+              className={css.BtnDelMob}
+              onClick={() => {
+                handleRemoveFavorite(product.product);
+              }}
+            >
+              <button className={css.btnDelete}>
+                <CiTrash className={css.iconDelMob} />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className={css.catalogCardFooterMob}>
+          <div className={css.catalogCardTitleMob}>
+            <p>{product.productName}</p>
+          </div>
+          <div className={css.catalogPriceBoxMob}>
+            {product.volumes.some((vol) => vol.discount > 0) && (
+              <>
+                <div className={css.catalogCardPriceOldMob}>
+                  {getPrice().oldPrice} грн
+                </div>
+                <div className={css.catalogCardPriceMob}>
+                  {Math.ceil(getPrice().newPrice)} грн
+                </div>
+              </>
+            )}
+            {!product.volumes.some((vol) => vol.discount > 0) && (
+              <div className={css.catalogCardPrice}>
+                {getPrice().oldPrice} грн
+              </div>
+            )}
+          </div>
+          <div className={css.catalogCardFooterBtnMob}>
+            <button
+              className={css.buyButtonMob}
+              onClick={() =>
+                handleAddToBasket(
+                  product.product,
+                  quantities[product._id],
+                  selectedVolume[product._id]
+                )
+              }
+            >
+              Купити
+            </button>
+          </div>
+        </div>
       </div>
-      <div className={css.volumeOptions}>
-        {product.volumes.map((vol) => (
-          <button
-            key={vol._id}
-            className={`${css.volumeOption} ${
-              selectedVolume[product._id] === vol.volume ? css.selected : ""
-            }`}
-            onClick={() => handleVolumeSelect(product._id, vol.volume)}
-          >
-            {vol.volume} мл
-          </button>
-        ))}
-      </div>
-    </div>
+    </>
   );
 };
 

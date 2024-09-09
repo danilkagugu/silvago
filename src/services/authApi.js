@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// export const BASE_URL = "http://localhost:3030/";
-export const BASE_URL = "https://silvago-backend.onrender.com/";
+export const BASE_URL = "http://localhost:3030/";
+// export const BASE_URL = "https://silvago-backend.onrender.com/";
 
 export const instance = axios.create({
   baseURL: BASE_URL,
@@ -38,7 +38,6 @@ export const requestLogout = async () => {
 export const requestGetCurrentUser = async () => {
   const { data } = await instance.get("/api/auth/current");
   // console.log("data: ", data);
-
   return data;
 };
 
