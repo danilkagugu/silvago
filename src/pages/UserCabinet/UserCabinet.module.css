@@ -11,9 +11,9 @@
 }
 
 .sidebar {
-  width: 250px; /* Ширина sidebar, яку можна налаштувати відповідно до дизайну */
+  /* width: 250px;   */
   /* background: #f4f4f4; */
-  padding: 20px;
+  padding: 20px 0;
   /* border-right: 1px solid #ddd; */
 }
 

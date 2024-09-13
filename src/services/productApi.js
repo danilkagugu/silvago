@@ -1,8 +1,8 @@
 import axios from "axios";
 import { store } from "../redux/store";
 
-// export const BASE_URL = "http://localhost:3030/";
-export const BASE_URL = "https://silvago-backend.onrender.com/";
+export const BASE_URL = "http://localhost:3030/";
+// export const BASE_URL = "https://silvago-backend.onrender.com/";
 
 const createAxiosInstance = () => {
   return axios.create({
@@ -21,9 +21,9 @@ export const getProducts = async () => {
   return data;
 };
 
-export const productById = async (productId) => {
+export const productById = async (slug) => {
   const instance = createAxiosInstance();
-  const { data } = await instance.get(`/api/product/product/${productId}`);
+  const { data } = await instance.get(`/api/product/product/${slug}`);
   return data;
 };
 
@@ -47,15 +47,11 @@ export const getFavoriteProduct = async () => {
   return data;
 };
 
-export const addProductToBasket = async (
-  productId,
-  quantity,
-  volume,
-  price
-) => {
+export const addProductToBasket = async (slug, quantity, volume, price) => {
+  console.log("slug: ", slug);
   const instance = createAxiosInstance();
-  const { data } = await instance.post(`/api/product/${productId}/basket/`, {
-    productId,
+  const { data } = await instance.post(`/api/product/${slug}/basket/`, {
+    slug,
     quantity,
     volume,
     price,
@@ -106,6 +102,11 @@ export const sendOrder = async ({ user, basket }) => {
 export const getOrder = async () => {
   const instance = createAxiosInstance();
   const { data } = await instance.get("/api/product/order");
+  return data;
+};
+export const getOrderById = async (orderId) => {
+  const instance = createAxiosInstance();
+  const { data } = await instance.get(`/api/product/order/${orderId}`);
   return data;
 };
 

@@ -3,7 +3,6 @@ import { getTopSellingProduct } from "../../services/productApi";
 import CatalogListItem from "../CatalogListItem/CatalogListItem";
 import {
   fetchFavoriteProducts,
-  handleAddToBasket,
   handleToggleFavorite,
 } from "../../helpers/productActions";
 
@@ -151,7 +150,6 @@ const TopSellingProduct = () => {
               handleQuantityChange={handleQuantityChange}
               handleQuantityInputChange={handleQuantityInputChange}
               handleVolumeSelect={handleVolumeSelect}
-              handleAddToBasket={handleAddToBasket}
               handleToggleFavorite={handleToggleFavorite}
               setFavoriteProducts={setFavoriteProducts}
               topProducts={products}

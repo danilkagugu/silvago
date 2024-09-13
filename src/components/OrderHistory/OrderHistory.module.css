@@ -1,7 +1,7 @@
 /* OrderHistory.module.css */
 
 /* Загальний стиль для таблиці */
-.table {
+/* .table {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
@@ -40,7 +40,7 @@
 }
 
 .nestedTable {
-  width: 100%; /* Переконайтеся, що вкладена таблиця займає всю ширину */
+  width: 100%; /* 
   margin-top: 10px;
   border-collapse: collapse;
 }
@@ -90,7 +90,7 @@
 .infoWrap {
   width: 35%;
 }
-/*  */
+/*  
 .nestedTable {
   width: 100%;
   border-collapse: collapse;
@@ -124,4 +124,167 @@
 
 .nestedTable tr:hover {
   background-color: #f1f1f1;
+} */
+/* --------------------DESCTOP */
+
+.title {
+  font-size: 32px;
+  margin: 0 0 18px;
+  line-height: 1.1;
+  font-weight: normal;
+  color: #000;
+}
+
+.orders {
+}
+
+.ordersItemDesc {
+  display: flex;
+  background: #fff;
+  border-radius: 5px;
+  border: 1px solid #e5e5e5;
+  margin-bottom: 11px;
+}
+
+.ordersData {
+  box-sizing: border-box;
+  padding: 14px 18px 18px;
+  float: left;
+}
+
+.ordersData.info {
+  width: 30%;
+  padding-right: 0;
+  padding-top: 13px;
+}
+
+.ordersNum {
+}
+
+.orderDate {
+  margin-top: 6px;
+  color: #acacac;
+  font-size: 12px;
+}
+
+@media (max-width: 1439.9px) {
+  .ordersDesc {
+    display: none;
+  }
+
+  .title {
+    display: none;
+  }
+}
+
+.ordersData.content {
+  width: 70%;
+  padding-right: 150px;
+}
+
+.orderHead {
+  font-weight: bold;
+  font-size: 14px;
+  margin: 0 0 6px;
+}
+
+.orderTitle {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+}
+
+.ordersData.cost {
+  float: right;
+  width: 150px;
+  /* margin-left: -100%; */
+}
+
+.ordersCost {
+  text-align: right;
+  font-weight: bold;
+}
+/* ---------------MOBILE----------- */
+@media (min-width: 1440px) {
+  .ordersMob {
+    display: none;
+  }
+}
+
+.ordersItemMob {
+  margin-top: 10px;
+}
+
+.orderMob {
+  border: 1px solid #d7d7d7;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.orderLink {
+  padding: 8px;
+}
+
+.orderHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.orderNumber {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-right: 5px;
+  color: #000;
+}
+
+.orderDateMob {
+  font-size: 13px;
+  color: #666;
+}
+
+.orderStatus {
+  margin-left: auto;
+  margin-right: 8px;
+  font-size: 11px;
+  background: #1e7ccc;
+  border-radius: 8px;
+  padding: 2px 5px;
+  color: #fff;
+}
+
+.orderArrow {
+  line-height: 1;
+}
+
+.iconArrow {
+  display: inline-block;
+  font-size: 16px;
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+
+.orderBody {
+  padding: 8px 8px;
+  border-top: 0.5px solid #d7d7d7;
+  color: #000;
+}
+
+.orderContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.orderAmount {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+}
+
+.orderCost {
+  font-size: 13px;
+  font-weight: 700;
 }

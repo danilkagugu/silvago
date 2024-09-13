@@ -21,9 +21,10 @@ export const getBasketInfo = createAsyncThunk(
 
 export const addProduct = createAsyncThunk(
   "basket/addItem",
-  async ({ productId, quantity, volume, price }, thunkAPI) => {
+  async ({ slug, quantity, volume, price }, thunkAPI) => {
+    // console.log("slug: ", slug);
     try {
-      const data = await addProductToBasket(productId, quantity, volume, price);
+      const data = await addProductToBasket(slug, quantity, volume, price);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

@@ -132,6 +132,12 @@
   }
 }
 
+@media (min-width: 1440px) {
+  .formMobile {
+    display: none;
+  }
+}
+
 .fromItem {
   margin-bottom: 16px;
 }

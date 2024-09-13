@@ -1,5 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import { selectProducts } from "../../redux/product/selectors";
+import {
+  // selectProductDetails,
+  selectProducts,
+} from "../../redux/product/selectors";
 import { useEffect, useState } from "react";
 import { getAllProduct } from "../../redux/product/operations";
 import { getBrands } from "../../services/productApi";
@@ -7,14 +10,12 @@ import { useParams } from "react-router-dom";
 import css from "./ProductsByBrand.module.css";
 import {
   fetchFavoriteProducts,
-  handleAddToBasket,
   handleQuantityChange,
   handleQuantityInputChange,
   handleToggleFavorite,
 } from "../../helpers/productActions";
-// import { FaHeart } from "react-icons/fa";
-// import { CiHeart } from "react-icons/ci";
 import CatalogListItem from "../CatalogListItem/CatalogListItem";
+// import { addProduct } from "../../redux/basket/operations";
 
 const ProductsByBrand = () => {
   // const navigate = useNavigate();
@@ -57,15 +58,6 @@ const ProductsByBrand = () => {
     fetchFavoriteProducts(setFavoriteProducts);
   }, [dataProducts]);
 
-  // const handleAddToBasket = async (productId, quantity, volume) => {
-  //   try {
-  //     const data = await addProductToBasket(productId, quantity, volume);
-  //     console.log("Product added to basket:", data);
-  //   } catch (error) {
-  //     console.log("Error adding product to basket:", error);
-  //   }
-  // };
-
   const handleVolumeSelect = (productId, volume) => {
     setSelectedVolume((prev) => ({
       ...prev,
@@ -106,120 +98,8 @@ const ProductsByBrand = () => {
       <ul className={css.list}>
         {filteredProducts.map((product) => (
           <li key={product._id} className={css.listItem} id={product._id}>
-            {/* <div className={css.cardContainer}>
-              {favoriteProducts.has(product._id) ? (
-                <FaHeart
-                  className={css.iconFavorite}
-                  onClick={() =>
-                    handleToggleFavorite(
-                      product._id,
-                      favoriteProducts,
-                      setFavoriteProducts
-                    )
-                  }
-                />
-              ) : (
-                <CiHeart
-                  className={css.iconFavorite}
-                  onClick={() =>
-                    handleToggleFavorite(
-                      product._id,
-                      favoriteProducts,
-                      setFavoriteProducts
-                    )
-                  }
-                />
-              )}
-
-              <div
-                className={css.cardBox}
-                onClick={() => handleProductClick(product._id)}
-              >
-                <div className={css.imgBox}>
-                  <img
-                    className={css.imgBrand}
-                    src={product.image}
-                    alt={product.name}
-                  />
-                </div>
-                <div className={css.boxInfo}>
-                  <p className={css.brandTitle}>{product.name}</p>
-                  <p className={css.brandPrice}>
-                    {selectedVolume[product._id]
-                      ? product.volumes.find(
-                          (vol) => vol.volume === selectedVolume[product._id]
-                        )?.price
-                      : getDefaultPrice(product)}
-                    грн
-                  </p>
-                </div>
-              </div>
-              <div className={css.priceBox}>
-                <div className={css.quantityContainer}>
-                  <div className={css.quantityInputWrapper}>
-                    <button
-                      className={css.quantityButton}
-                      onClick={() =>
-                        handleQuantityChange(product._id, -1, setQuantities)
-                      }
-                    >
-                      -
-                    </button>
-                    <input
-                      type="text"
-                      className={css.quantityInput}
-                      value={quantities[product._id] || 1}
-                      onChange={(e) =>
-                        handleQuantityInputChange(
-                          product._id,
-                          e.target.value,
-                          setQuantities
-                        )
-                      }
-                      min="1"
-                    />
-                    <button
-                      className={css.quantityButton}
-                      onClick={() =>
-                        handleQuantityChange(product._id, 1, setQuantities)
-                      }
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-                <button
-                  className={css.buyButton}
-                  onClick={() =>
-                    handleAddToBasket(
-                      product._id,
-                      quantities[product._id],
-                      selectedVolume[product._id]
-                    )
-                  }
-                >
-                  Купити
-                </button>
-              </div>
-              <div className={css.volumeOptions}>
-                {product.volumes.map((vol) => (
-                  <button
-                    key={vol._id}
-                    className={`${css.volumeOption} ${
-                      selectedVolume[product._id] === vol.volume
-                        ? css.selected
-                        : ""
-                    }`}
-                    onClick={() => handleVolumeSelect(product._id, vol.volume)}
-                  >
-                    {vol.volume} мл
-                  </button>
-                ))}
-              </div>
-            </div> */}
             <CatalogListItem
               favoriteProducts={favoriteProducts}
-              handleAddToBasket={handleAddToBasket}
               handleQuantityChange={handleQuantityChange}
               handleQuantityInputChange={handleQuantityInputChange}
               handleToggleFavorite={handleToggleFavorite}

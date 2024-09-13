@@ -21,9 +21,10 @@ export const getAllProduct = createAsyncThunk(
 
 export const getProductById = createAsyncThunk(
   "product/getById",
-  async (productId, thunkAPI) => {
+  async (slug, thunkAPI) => {
     try {
-      const data = await productById(productId);
+      const data = await productById(slug);
+      // console.log("slug: ", slug);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

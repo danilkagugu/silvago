@@ -1,5 +1,4 @@
 import {
-  addProductToBasket,
   addProductToFavorite,
   deleteProductFromFavorite,
   getFavoriteProduct,
@@ -18,15 +17,6 @@ export const handleQuantityChange = (productId, amount, setQuantities) => {
     ...prevQuantities,
     [productId]: Math.max(1, (prevQuantities[productId] || 1) + amount),
   }));
-};
-
-export const handleAddToBasket = async (productId, quantity, volume) => {
-  try {
-    const data = await addProductToBasket(productId, quantity, volume);
-    console.log("Product added to basket:", data);
-  } catch (error) {
-    console.log("Error adding product to basket:", error);
-  }
 };
 
 export const handleToggleFavorite = async (
@@ -70,4 +60,28 @@ export const fetchFavoriteProducts = async (setFavoriteProducts) => {
   } catch (error) {
     console.log("Error fetching favorite products:", error);
   }
+};
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const day = date.getDate(); // Без нуля перед числом
+  const year = date.getFullYear();
+
+  // Об'єкт місяців у родовому відмінку
+  const months = [
+    "січня",
+    "лютого",
+    "березня",
+    "квітня",
+    "травня",
+    "червня",
+    "липня",
+    "серпня",
+    "вересня",
+    "жовтня",
+    "листопада",
+    "грудня",
+  ];
+
+  const monthName = months[date.getMonth()]; // Отримуємо назву місяця у родовому відмінку
+  return `${day} ${monthName} ${year}`;
 };
