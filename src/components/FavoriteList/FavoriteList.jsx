@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { getFavoriteProduct } from "../../services/productApi";
 import css from "./FavoriteList.module.css";
 import FavoriteItem from "../FavoriteItem/FavoriteItem";
-import { handleAddToBasket } from "../../helpers/productActions";
 import { removeProductFavorite } from "../../redux/product/operations";
 import { useDispatch } from "react-redux";
 
@@ -119,7 +118,6 @@ const FavoriteList = () => {
                   handleQuantityChange={handleQuantityChange}
                   quantities={quantities}
                   handleQuantityInputChange={handleQuantityInputChange}
-                  handleAddToBasket={handleAddToBasket}
                 />
               </li>
             ))
@@ -128,28 +126,6 @@ const FavoriteList = () => {
       ) : (
         <p>товару ще немає</p>
       )}
-      {/* <ul className={`${css.goods} ${css.goodsGrid}`}>
-        {productsFavorite.map((product) =>
-          product.products.map((item) => (
-            <li
-              key={`${product._id}-${item.product}`}
-              className={css.goodsItem}
-              id={item.product}
-            >
-              <FavoriteItem
-                product={item}
-                selectedVolume={selectedVolume}
-                handleRemoveFavorite={handleRemoveFavorite}
-                handleVolumeSelect={handleVolumeSelect}
-                handleQuantityChange={handleQuantityChange}
-                quantities={quantities}
-                handleQuantityInputChange={handleQuantityInputChange}
-                handleAddToBasket={handleAddToBasket}
-              />
-            </li>
-          ))
-        )}
-      </ul> */}
     </div>
   );
 };

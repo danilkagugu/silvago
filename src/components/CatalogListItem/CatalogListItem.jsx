@@ -25,7 +25,7 @@ const CatalogListItem = ({
   const favorites = useSelector(selectFavoritesProducts);
   const [topProducts, setTopProducts] = useState([]);
   const [localFavorites, setLocalFavorites] = useState([]);
-
+  // console.log("productq", selectedVolume);
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
@@ -89,15 +89,23 @@ const CatalogListItem = ({
 
   // Обробка кліку на товар
   const handleProductClick = () => {
-    navigate(`/product/${product._id}`);
+    const volumeDetail = product.volumes.find(
+      (vol) => vol.volume === selectedVolume[product._id]
+    );
+
+    if (volumeDetail) {
+      navigate(`/product/${volumeDetail.slug}`);
+    }
   };
+
   const volumeDetail = product.volumes.find(
     (vol) => vol.volume === selectedVolume[product._id]
   );
+
   const handleAddToBasket = () => {
     dispatch(
       addProduct({
-        productId: product._id,
+        slug: volumeDetail.slug,
         quantity: quantities[product._id],
         volume: selectedVolume[product._id],
         price: volumeDetail.price,

@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getCategories } from "../../services/productApi";
-// import { CiHeart } from "react-icons/ci";
-// import { FaHeart } from "react-icons/fa";
 import css from "./CatalogList.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { selectProducts } from "../../redux/product/selectors";
@@ -18,7 +16,6 @@ const CatalogList = () => {
   const [categories, setCategories] = useState();
   const [selectedVolume, setSelectedVolume] = useState({});
   const [currentPage, setCurrentPage] = useState(1);
-
   const dataProducts = useSelector(selectProducts);
 
   const { categorySlug, subCategorySlug } = useParams();

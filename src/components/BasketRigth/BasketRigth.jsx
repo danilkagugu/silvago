@@ -12,25 +12,20 @@ const BasketRigth = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchProducts = async () => {
-      // const authDataString = JSON.parse(localStorage.getItem("persist:auth"));
-      // const token = JSON.parse(authDataString.token);
-      // console.log("token: ", token);
-      // if (!token) {
-      //   console.log(
-      //     "Користувач не залогінений. Запит на отримання корзини не буде виконано."
-      //   );
-      //   return;
-      // }
       try {
         const basketData = await getBasketProduct();
+        // console.log("basketData: ", basketData);
 
         if (basketData && Array.isArray(basketData.products)) {
           setBasket(basketData.products);
 
           const details = {};
           for (const basketItem of basketData.products) {
-            const response = await productById(basketItem.product);
-            details[basketItem.product] = response;
+            // console.log("basketItem: ", basketItem);
+            const response = await productById(basketItem.slug);
+            details[basketItem.slug] = response;
+            // console.log("details: ", details);
+            // console.log("basketItem: ", basketItem);
           }
           setProductDetails(details);
         } else {
@@ -66,9 +61,9 @@ const BasketRigth = () => {
 
   const calculateTotalAmount = () => {
     return basket.reduce((total, item) => {
-      const details = productDetails[item.product];
+      const details = productDetails[item.slug];
       if (details) {
-        const volumeDetail = details.volumes.find(
+        const volumeDetail = details?.product?.volumes?.find(
           (vol) => vol.volume === item.volume
         );
         if (volumeDetail) {
@@ -94,11 +89,12 @@ const BasketRigth = () => {
         </thead>
         <tbody>
           {basket.map((item) => {
-            const details = productDetails[item.product];
+            // console.log("item: ", item);
+            const details = productDetails[item.slug];
             // console.log("details: ", details);
 
             const uniqueKey = `${item.product}-${item.volume}`; // Унікальний ключ
-            const volumeDetail = details?.volumes.find(
+            const volumeDetail = details?.product?.volumes?.find(
               (vol) => vol.volume === item.volume
             );
             const price = volumeDetail ? volumeDetail.price : 0;
@@ -109,10 +105,11 @@ const BasketRigth = () => {
                 <td>
                   {details && (
                     <CatalogItem
-                      productImg={details.image}
-                      productName={details.name}
+                      productImg={details.product.image}
+                      productName={details.product.name}
                       productPrice={Math.ceil(discountedPrice)}
                       id={item.product}
+                      slug={details.volume.slug}
                     />
                   )}
                 </td>

@@ -1,23 +1,22 @@
 import { useNavigate } from "react-router-dom";
 import css from "./FavoriteItem.module.css";
-// import { CiTrash } from "react-icons/ci";
 import { IoCloseSharp } from "react-icons/io5";
 import { CiTrash } from "react-icons/ci";
+import { addProduct } from "../../redux/basket/operations";
+import { useDispatch } from "react-redux";
 
 const FavoriteItem = ({
   product,
   selectedVolume,
   handleRemoveFavorite,
-  // handleVolumeSelect,
-  // handleQuantityChange,
   quantities,
-  // handleQuantityInputChange,
-  handleAddToBasket,
 }) => {
   const navigate = useNavigate();
-  const handleProductClick = () => {
-    navigate(`/product/${product.product}`);
-  };
+  const dispatch = useDispatch();
+
+  const volumeDetail = product.volumes.find(
+    (vol) => vol.volume === selectedVolume[product._id]
+  );
   const getPrice = () => {
     const volume = selectedVolume[product._id];
     const volumeDetail = product.volumes.find((vol) => vol.volume === volume);
@@ -37,6 +36,20 @@ const FavoriteItem = ({
     return { newPrice, oldPrice };
   };
 
+  const handleAddToBasket = () => {
+    dispatch(
+      addProduct({
+        slug: volumeDetail.slug,
+        quantity: quantities[product._id],
+        volume: selectedVolume[product._id],
+        price: volumeDetail.price,
+      })
+    );
+  };
+
+  const handleProductClick = () => {
+    navigate(`/product/${volumeDetail.slug}`);
+  };
   return (
     <>
       <div className={css.cardContainer}>
@@ -86,16 +99,7 @@ const FavoriteItem = ({
             </div>
             <div className={css.catalogCardFooter}>
               <div className={css.catalogCardFooterBtn}>
-                <button
-                  className={css.buyButton}
-                  onClick={() =>
-                    handleAddToBasket(
-                      product.product,
-                      quantities[product._id],
-                      selectedVolume[product._id]
-                    )
-                  }
-                >
+                <button className={css.buyButton} onClick={handleAddToBasket}>
                   Купити
                 </button>
               </div>
@@ -149,16 +153,7 @@ const FavoriteItem = ({
             )}
           </div>
           <div className={css.catalogCardFooterBtnMob}>
-            <button
-              className={css.buyButtonMob}
-              onClick={() =>
-                handleAddToBasket(
-                  product.product,
-                  quantities[product._id],
-                  selectedVolume[product._id]
-                )
-              }
-            >
+            <button className={css.buyButtonMob} onClick={handleAddToBasket}>
               Купити
             </button>
           </div>

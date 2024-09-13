@@ -1,5 +1,4 @@
 import {
-  addProductToBasket,
   addProductToFavorite,
   deleteProductFromFavorite,
   getFavoriteProduct,
@@ -18,15 +17,6 @@ export const handleQuantityChange = (productId, amount, setQuantities) => {
     ...prevQuantities,
     [productId]: Math.max(1, (prevQuantities[productId] || 1) + amount),
   }));
-};
-
-export const handleAddToBasket = async (productId, quantity, volume) => {
-  try {
-    const data = await addProductToBasket(productId, quantity, volume);
-    console.log("Product added to basket:", data);
-  } catch (error) {
-    console.log("Error adding product to basket:", error);
-  }
 };
 
 export const handleToggleFavorite = async (

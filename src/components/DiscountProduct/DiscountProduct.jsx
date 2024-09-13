@@ -7,7 +7,6 @@ import CatalogListItem from "../CatalogListItem/CatalogListItem";
 import { Navigation } from "swiper/modules";
 import {
   fetchFavoriteProducts,
-  handleAddToBasket,
   handleToggleFavorite,
 } from "../../helpers/productActions";
 import "swiper/css";
@@ -153,7 +152,6 @@ const DiscountProduct = () => {
                 handleQuantityChange={handleQuantityChange}
                 handleQuantityInputChange={handleQuantityInputChange}
                 handleVolumeSelect={handleVolumeSelect}
-                handleAddToBasket={handleAddToBasket}
                 handleToggleFavorite={handleToggleFavorite}
                 setFavoriteProducts={setFavoriteProducts}
               />

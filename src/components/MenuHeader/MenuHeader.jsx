@@ -20,7 +20,6 @@ const MenuHeader = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const totalPrice = useSelector(selectTotalPrice);
-  console.log("totalPrice: ", totalPrice);
   const allQuantity = useSelector(selectAllQuantity);
   const login = useSelector(selectIsLoggedIn);
 

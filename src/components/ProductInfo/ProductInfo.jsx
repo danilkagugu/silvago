@@ -1,37 +1,54 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { addProductToBasket } from "../../services/productApi";
+import { useNavigate, useParams } from "react-router-dom";
 import css from "./ProductInfo.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { selectProductDetails } from "../../redux/product/selectors";
 import { getProductById } from "../../redux/product/operations";
+import { addProduct } from "../../redux/basket/operations";
+
 const ProductInfo = () => {
   const dispatch = useDispatch();
   const [quantities, setQuantities] = useState({});
-  // console.log("quantities: ", quantities);
   const [selectedVolume, setSelectedVolume] = useState(null);
-  const { productId } = useParams();
+  const { slug } = useParams();
   const productDetails = useSelector(selectProductDetails);
-  // console.log("productDetails: ", productDetails);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getProductById(productId));
-  }, [dispatch, productId]);
+    dispatch(getProductById(slug));
+  }, [dispatch, slug]);
+
+  // Функція для отримання об'єму з slug
+  const getVolumeFromSlug = (slug) => {
+    const volumeMatch = slug.match(/-(\d+)ml$/); // Парсимо об'єм з кінця slug
+    return volumeMatch ? parseInt(volumeMatch[1], 10) : null;
+  };
 
   useEffect(() => {
-    if (productDetails) {
+    if (productDetails?.product) {
+      // Оновлення кількості продукту в кошику
       setQuantities((prevQuantities) => ({
         ...prevQuantities,
-        [productDetails.id]: 1,
+        [productDetails.product._id]:
+          prevQuantities[productDetails.product._id] || 1,
       }));
-      if (productDetails.volumes.length > 0) {
-        const defaultVolume = productDetails.volumes.reduce((prev, curr) =>
-          prev.volume > curr.volume ? prev : curr
-        );
-        setSelectedVolume(defaultVolume);
-      }
+
+      // Отримуємо об'єм з URL
+      const volumeFromSlug = getVolumeFromSlug(slug);
+
+      // Вибираємо об'єм з продукту на основі об'єму з slug або встановлюємо найбільший
+      const defaultVolume = volumeFromSlug
+        ? productDetails.product.volumes.find(
+            (volume) => volume.volume === volumeFromSlug
+          )
+        : productDetails.product.volumes.reduce((prev, curr) =>
+            prev.volume > curr.volume ? prev : curr
+          );
+
+      setSelectedVolume(defaultVolume);
     }
-  }, [productDetails]);
+  }, [productDetails, slug]);
 
   const handleQuantityChange = (productId, amount) => {
     setQuantities((prevQuantities) => {
@@ -47,13 +64,6 @@ const ProductInfo = () => {
     });
   };
 
-  // const handleQuantityChange = (productId, amount) => {
-  //   setQuantities((prevQuantities) => ({
-  //     ...prevQuantities,
-  //     [productId]: Math.max(1, (prevQuantities[productId] || 1) + amount),
-  //   }));
-  // };
-
   const handleQuantityInputChange = (productId, value) => {
     const numericValue = parseInt(value, 10);
     const maxQuantity = selectedVolume?.quantity || 0;
@@ -63,30 +73,32 @@ const ProductInfo = () => {
       [productId]: newValue,
     }));
   };
-
-  // const handleQuantityInputChange = (productId, value) => {
-  //   const newValue = Math.max(1, parseInt(value, 10) || 1);
-  //   setQuantities((prevQuantities) => ({
-  //     ...prevQuantities,
-  //     [productId]: newValue,
-  //   }));
-  // };
-  const handleAddToBasket = async (productId, quantity, volume) => {
-    try {
-      const data = await addProductToBasket(productId, quantity, volume);
-      console.log("Product added to basket:", data);
-    } catch (error) {
-      console.log("Error adding product to basket:", error);
-    }
+  const handleAddToBasket = () => {
+    dispatch(
+      addProduct({
+        slug: selectedVolume.slug,
+        quantity: quantities[productDetails.product._id],
+        volume: selectedVolume.volume,
+        price: selectedVolume.price,
+      })
+    );
   };
 
   const handleVolumeChange = (volume) => {
     setSelectedVolume(volume);
     setQuantities((prevQuantities) => ({
       ...prevQuantities,
-      [productDetails.id]: 1, // Скидаємо кількість на 1 при зміні об'єму
+      [productDetails.product._id]: 1, // Скидаємо кількість на 1 при зміні об'єму
     }));
+    const newSlug = slug.replace(/-\d+ml$/, "");
+
+    // Додаємо новий об'єм до slug
+    const updatedSlug = `${newSlug}-${volume.volume}ml`;
+
+    // Оновлюємо URL
+    navigate(`/product/${updatedSlug}`);
   };
+
   const getPriceDetails = () => {
     const volume = selectedVolume;
     if (volume) {
@@ -100,21 +112,23 @@ const ProductInfo = () => {
 
   return (
     <div className={css.productDetail}>
-      {productDetails && (
+      {productDetails?.product && (
         <div className={css.productContainer}>
           <div className={css.productWrapper}>
             <img
-              src={productDetails.image}
-              alt={productDetails.name}
+              src={productDetails.product.image}
+              alt={productDetails.product.name}
               className={css.productImage}
             />
             <div className={css.productDetailBox}>
-              <h1 className={css.productTitle}>{productDetails.name}</h1>
+              <h1 className={css.productTitle}>
+                {productDetails.product.name}
+              </h1>
               <div className={css.infoProduct}>
-                <p>Артикул:{productDetails.article}</p>
+                <p>Артикул: {productDetails.product.article}</p>
                 {selectedVolume && (
                   <p>
-                    {productDetails.volumes.some(
+                    {productDetails.product.volumes.some(
                       (item) =>
                         item._id === selectedVolume._id && item.quantity > 0
                     )
@@ -122,10 +136,10 @@ const ProductInfo = () => {
                       : "Закінчилась"}
                   </p>
                 )}
-                <p className={css.info}>{productDetails.brand}</p>
-                <p className={css.info}>{productDetails.category}</p>
+                <p className={css.info}>{productDetails.product.brand}</p>
+                <p className={css.info}>{productDetails.product.category}</p>
                 <p className={css.info}>
-                  В наявності {productDetails.quantity} шт.
+                  В наявності {productDetails.product.quantity} шт.
                 </p>
               </div>
 
@@ -138,10 +152,10 @@ const ProductInfo = () => {
               )}
 
               {/* Об'ємні варіанти */}
-              {productDetails.volumes && (
+              {productDetails.product.volumes && (
                 <div className={css.volumeSelector}>
                   <p>Об&apos;єм</p>
-                  {productDetails.volumes.map((item) => (
+                  {productDetails.product.volumes.map((item) => (
                     <button
                       key={item._id}
                       className={`${css.volumeButton} ${
@@ -163,19 +177,21 @@ const ProductInfo = () => {
                     <button
                       className={css.btnChange}
                       onClick={() =>
-                        handleQuantityChange(productDetails.id, -1)
+                        handleQuantityChange(productDetails.product._id, -1)
                       }
-                      disabled={(quantities[productDetails.id] || 1) <= 1}
+                      disabled={
+                        (quantities[productDetails.product._id] || 1) <= 1
+                      }
                     >
                       -
                     </button>
                     <input
                       type="text"
                       className={css.inputQuantity}
-                      value={quantities[productDetails.id] || 1}
+                      value={quantities[productDetails.product._id] || 1}
                       onChange={(e) =>
                         handleQuantityInputChange(
-                          productDetails.id,
+                          productDetails.product._id,
                           e.target.value
                         )
                       }
@@ -184,9 +200,11 @@ const ProductInfo = () => {
                     />
                     <button
                       className={css.btnChange}
-                      onClick={() => handleQuantityChange(productDetails.id, 1)}
+                      onClick={() =>
+                        handleQuantityChange(productDetails.product._id, 1)
+                      }
                       disabled={
-                        (quantities[productDetails.id] || 1) >=
+                        (quantities[productDetails.product._id] || 1) >=
                         (selectedVolume?.quantity || 1)
                       }
                     >
@@ -197,10 +215,9 @@ const ProductInfo = () => {
                 <button
                   className={css.btnBuy}
                   onClick={() => {
-                    console.log("selectedVolume", selectedVolume.volume);
                     handleAddToBasket(
-                      productDetails.id,
-                      quantities[productDetails.id],
+                      slug,
+                      quantities[productDetails.product._id],
                       selectedVolume.volume
                     );
                   }}
@@ -217,38 +234,21 @@ const ProductInfo = () => {
                   <h3 className={css.characteristicTitle}>Опис</h3>
 
                   <p className={css.characteristicInfo}>
-                    {productDetails.description}
+                    {productDetails.product.description}
                   </p>
                 </li>
                 <li
                   className={`${css.characteristicItem} ${css.characteristicDescription}`}
                 >
                   <h3 className={css.characteristicTitle}>Характеристика</h3>
-                  {productDetails.characteristics &&
-                    productDetails.characteristics.map((item) => (
-                      <ul key={item._id}>
-                        <li>Країна виробництва {item.country}</li>
-                        <li>Клас товару:{item.productClass}</li>
-                        <li>Призначення:{item.appointment}</li>
-                        <li>Тип шкіри:{item.skinType}</li>
-                        <li>Серія:{item.series}</li>
-                        <li>Вид товару:{item.productType}</li>
-                        <li>Вік:{item.age}</li>
-                      </ul>
-                    ))}
-                  {/* <h3 className={css.characteristicTitle}>Характеристика</h3>
-                  <p className={css.characteristicDescriptionItem}>
-                    <span className={css.characteristicDescriptionSpan}>
-                      Країна виробник:
-                    </span>
-                    <span>{productDetails.country}</span>
-                  </p>
-                  <p className={css.characteristicDescriptionItem}>
-                    <span className={css.characteristicDescriptionSpan}>
-                      Бренд:
-                    </span>
-                    <span>{productDetails.brand}</span>
-                  </p> */}
+                  {productDetails.product.characteristics &&
+                    productDetails.product.characteristics.map(
+                      (char, index) => (
+                        <p className={css.characteristicInfo} key={index}>
+                          {char.name}: {char.value}
+                        </p>
+                      )
+                    )}
                 </li>
               </ul>
             </div>

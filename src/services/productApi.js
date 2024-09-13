@@ -21,9 +21,9 @@ export const getProducts = async () => {
   return data;
 };
 
-export const productById = async (productId) => {
+export const productById = async (slug) => {
   const instance = createAxiosInstance();
-  const { data } = await instance.get(`/api/product/product/${productId}`);
+  const { data } = await instance.get(`/api/product/product/${slug}`);
   return data;
 };
 
@@ -47,15 +47,11 @@ export const getFavoriteProduct = async () => {
   return data;
 };
 
-export const addProductToBasket = async (
-  productId,
-  quantity,
-  volume,
-  price
-) => {
+export const addProductToBasket = async (slug, quantity, volume, price) => {
+  console.log("slug: ", slug);
   const instance = createAxiosInstance();
-  const { data } = await instance.post(`/api/product/${productId}/basket/`, {
-    productId,
+  const { data } = await instance.post(`/api/product/${slug}/basket/`, {
+    slug,
     quantity,
     volume,
     price,

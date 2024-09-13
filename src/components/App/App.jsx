@@ -51,7 +51,7 @@ const App = () => {
           element={<Catalog />}
         />
 
-        <Route path="/product/:productId" element={<ProductDetail />} />
+        <Route path="/product/:slug" element={<ProductDetail />} />
         <Route path="/brand/:brandName" element={<BrandProducts />} />
         <Route path="/search/" element={<SearchProducts />} />
         <Route path="*" element={<NotFound />} />

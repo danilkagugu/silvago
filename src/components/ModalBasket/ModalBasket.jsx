@@ -10,15 +10,16 @@ import {
   deleteProduct,
   updateProductQuantityBasket,
 } from "../../redux/basket/operations";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IoChevronBackOutline } from "react-icons/io5";
+import { selectBasket } from "../../redux/basket/selectors";
 
 const ModalBasket = ({ closeModal, open }) => {
   const [basket, setBasket] = useState([]);
   const [productDetails, setProductDetails] = useState({});
-
+  // console.log("productDetails: ", productDetails);
   const navigate = useNavigate();
-
+  const qwerty = useSelector(selectBasket);
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -29,8 +30,9 @@ const ModalBasket = ({ closeModal, open }) => {
 
           const details = {};
           for (const basketItem of basketData.products) {
-            const response = await productById(basketItem.product);
-            details[basketItem.product] = response;
+            // console.log("basketItem: ", basketItem);
+            const response = await productById(basketItem.slug);
+            details[basketItem.slug] = response;
           }
           setProductDetails(details);
         } else {
@@ -40,25 +42,19 @@ const ModalBasket = ({ closeModal, open }) => {
         console.error("Помилка отримання продуктів у кошику:", error);
       }
     };
+
     fetchProducts();
-  }, []);
+  }, [qwerty]);
 
   const handleQuantityChange = async (productId, volume, quantity) => {
     try {
       if (quantity < 1) return;
-      await dispatch(
+      dispatch(
         updateProductQuantityBasket({
           productId,
           volume,
           quantity,
         })
-      );
-      setBasket((prevBasket) =>
-        prevBasket.map((item) =>
-          item.product === productId && item.volume === volume
-            ? { ...item, quantity }
-            : item
-        )
       );
     } catch (error) {
       console.error("Помилка оновлення кількості товару:", error);
@@ -67,9 +63,9 @@ const ModalBasket = ({ closeModal, open }) => {
 
   const calculateTotalAmount = () => {
     return basket.reduce((total, item) => {
-      const details = productDetails[item.product];
+      const details = productDetails[item.slug]; // Assuming slug is used as the key
       if (details) {
-        const volumeDetail = details.volumes.find(
+        const volumeDetail = details?.product?.volumes?.find(
           (vol) => vol.volume === item.volume
         );
         if (volumeDetail) {
@@ -82,8 +78,25 @@ const ModalBasket = ({ closeModal, open }) => {
       return total;
     }, 0);
   };
-  // console.log("basket", basket);
+
   const dispatch = useDispatch();
+
+  // const handleRemoveProduct = async ({ productId, volume }) => {
+  //   console.log("volume: ", volume);
+  //   console.log("productId: ", productId);
+  //   try {
+  //     // Викликаємо дію для видалення продукту
+  //     await dispatch(deleteProduct({ productId, volume }));
+
+  //     // Перевіряємо чи корзина порожня і закриваємо модальне вікно, якщо так
+  //     if (basket.length === 1) {
+  //       closeModal();
+  //     }
+  //   } catch (error) {
+  //     console.error("Помилка видалення товару:", error);
+  //   }
+  // };
+
   const handleRemoveProduct = async ({ productId, volume }) => {
     try {
       dispatch(deleteProduct({ productId, volume }));
@@ -133,12 +146,15 @@ const ModalBasket = ({ closeModal, open }) => {
               <tbody className={css.cartBody}>
                 {basket &&
                   basket.map((item) => {
-                    const details = productDetails[item.product];
+                    // console.log("item: ", item);
+                    const details = productDetails[item.slug];
+                    // console.log("details: ", details);
 
                     const uniqueKey = `${item.product}-${item.volume}`;
-                    const volumeDetail = details?.volumes.find(
+                    const volumeDetail = details?.product?.volumes?.find(
                       (vol) => vol.volume === item.volume
                     );
+                    // console.log("volumeDetail: ", volumeDetail);
                     const price = volumeDetail ? volumeDetail.price : 0;
                     const discount = volumeDetail
                       ? volumeDetail.discount || 0
@@ -164,14 +180,14 @@ const ModalBasket = ({ closeModal, open }) => {
                             <div className={css.imgBox}>
                               <img
                                 className={css.productImg}
-                                src={details.image}
-                                alt={details.name}
+                                src={details.product.image}
+                                alt={details.product.name}
                               />
                             </div>
                           </td>
                           <td className={`${css.cartSell}`}>
                             <div className={css.productTitle}>
-                              <p>{details.name}</p>
+                              <p>{details.product.name}</p>
                             </div>
                             <div className={css.productPrice}>
                               <p className={css.priceInfo}>
