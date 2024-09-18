@@ -7,6 +7,7 @@ const BrandsList = () => {
   const navigate = useNavigate();
 
   const [brands, setBrands] = useState([]);
+  console.log("brands: ", brands);
 
   useEffect(() => {
     const fetchProducts = async () => {

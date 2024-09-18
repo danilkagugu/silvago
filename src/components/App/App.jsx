@@ -13,6 +13,9 @@ const UserCabinet = lazy(() => import("../../pages/UserCabinet/UserCabinet"));
 const DeliveryAndPayment = lazy(() =>
   import("../../pages/DeliveryAndPayment/DeliveryAndPayment")
 );
+const ProductListPage = lazy(() =>
+  import("../../pages/ProductListPage/ProductListPage")
+);
 const Catalog = lazy(() => import("../../pages/Catalog/Catalog"));
 const ProductDetail = lazy(() =>
   import("../../pages/ProductDetail/ProductDetail")
@@ -48,8 +51,9 @@ const App = () => {
         </Route>
         <Route
           path="/catalog/:categorySlug/:subCategorySlug?"
-          element={<Catalog />}
+          element={<ProductListPage />}
         />
+        <Route path="/catalog" element={<Catalog />} />
 
         <Route path="/product/:slug" element={<ProductDetail />} />
         <Route path="/brand/:brandName" element={<BrandProducts />} />
