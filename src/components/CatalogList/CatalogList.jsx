@@ -18,13 +18,13 @@ const CatalogList = () => {
   //   console.log("selectedVolume: ", selectedVolume);
   const [sortType, setSortType] = useState("popularity");
   const [selectedBrand, setSelectedBrand] = useState([]);
-  console.log("selectedBrand: ", selectedBrand);
   const [selectedSection, setSelectedSection] = useState([]);
   const [categories, setCategories] = useState();
+  const [minPrice, setMinPrice] = useState(null);
+  const [maxPrice, setMaxPrice] = useState(null);
   //   console.log("categories: ", categories);
 
   const dataProducts = useSelector(selectProducts);
-  //   console.log("dataProducts: ", dataProducts);
 
   const [brands, setBrands] = useState([]);
   //   console.log("brands: ", brands);
@@ -36,6 +36,16 @@ const CatalogList = () => {
     return dataProducts.filter((item) => item.subcategory === subcategory)
       .length;
   };
+
+  useEffect(() => {
+    const priceMin = getMinPrice(dataProducts);
+    setMinPrice(priceMin);
+  }, [dataProducts]);
+
+  useEffect(() => {
+    const priceMax = getMaxPrice(dataProducts);
+    setMaxPrice(priceMax);
+  }, [dataProducts]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -151,6 +161,11 @@ const CatalogList = () => {
         selectedSection.length > 0
           ? selectedSection.includes(item.subcategory)
           : true;
+      //   const matchesPrice =
+      //     (minPrice === null ||
+      //       item.volumes.some((volume) => volume.price >= minPrice)) &&
+      //     (maxPrice === null ||
+      //       item.volumes.some((volume) => volume.price <= maxPrice));
       return matchesBrand && matchesSection;
     });
   };
@@ -208,6 +223,53 @@ const CatalogList = () => {
       selectedSection
     )
   );
+  // Мінімальна ціна
+  const getMinPrice = (products) => {
+    if (products.length === 0) return null;
+
+    let minPrice = Infinity;
+
+    products.forEach((product) => {
+      // Знаходимо найменшу ціну серед всіх об'ємів продукту
+      const productMinPrice = Math.min(
+        ...product.volumes.map((volume) => parseFloat(volume.price) || Infinity)
+      );
+      if (productMinPrice < minPrice) {
+        minPrice = productMinPrice;
+      }
+    });
+
+    return minPrice === Infinity ? null : minPrice;
+  };
+
+  const getMaxPrice = (products) => {
+    if (products.length === 0) return null;
+
+    let maxPrice = -Infinity;
+
+    products.forEach((product) => {
+      // Знаходимо найбільшу ціну серед всіх об'ємів продукту
+      const productMaxPrice = Math.max(
+        ...product.volumes.map(
+          (volume) => parseFloat(volume.price) || -Infinity
+        )
+      );
+      if (productMaxPrice > maxPrice) {
+        maxPrice = productMaxPrice;
+      }
+    });
+
+    return maxPrice === -Infinity ? null : maxPrice;
+  };
+
+  const handlePriceFilter = (e) => {
+    e.preventDefault(); // щоб запобігти перезавантаженню сторінки при сабміті форми
+    const min = parseFloat(minPrice) || 0; // конвертуйте у число
+    const max = parseFloat(maxPrice) || Infinity; // конвертуйте у число
+
+    setMinPrice(min);
+    setMaxPrice(max);
+  };
 
   return (
     <div>
@@ -428,8 +490,29 @@ const CatalogList = () => {
                   </div>
                 </div>
                 <div className={css.filterSection}>
-                  <form>
+                  <form onSubmit={handlePriceFilter}>
                     <div className={css.filterSectionTitle}>Ціна, грн</div>
+                    <div className={css.filterPrice}>
+                      <div className={css.filterPriceInputs}>
+                        <input
+                          className={`${css.field} ${css.filterPriceField}`}
+                          type="number"
+                          value={minPrice !== null ? minPrice : ""}
+                          onChange={(e) => setMinPrice(e.target.value)}
+                        />
+                        <i className={css.filterPriceSep} />
+                        <input
+                          className={`${css.field} ${css.filterPriceField}`}
+                          type="number"
+                          value={maxPrice !== null ? maxPrice : ""}
+                          onChange={(e) => setMaxPrice(e.target.value)}
+                        />
+                        <button className={css.filterPriceBtn}>
+                          <span className={css.btnContent}>ОК</span>
+                        </button>
+                      </div>
+                      <div className={css.priceSlider}></div>
+                    </div>
                   </form>
                 </div>
               </div>
