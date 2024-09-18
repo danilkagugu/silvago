@@ -17,13 +17,14 @@ const CatalogList = () => {
   const [selectedVolume, setSelectedVolume] = useState({});
   //   console.log("selectedVolume: ", selectedVolume);
   const [sortType, setSortType] = useState("popularity");
-  const [selectedBrand, setSelectedBrand] = useState(null);
-  const [selectedSection, setSelectedSection] = useState(null);
+  const [selectedBrand, setSelectedBrand] = useState([]);
+  console.log("selectedBrand: ", selectedBrand);
+  const [selectedSection, setSelectedSection] = useState([]);
   const [categories, setCategories] = useState();
   //   console.log("categories: ", categories);
 
   const dataProducts = useSelector(selectProducts);
-  console.log("dataProducts: ", dataProducts);
+  //   console.log("dataProducts: ", dataProducts);
 
   const [brands, setBrands] = useState([]);
   //   console.log("brands: ", brands);
@@ -138,12 +139,18 @@ const CatalogList = () => {
   //   const sortedProducts = sortProducts(dataProducts);
 
   // Фільтр в aside
-  const filterProductsByBrands = (products, brand, selectedSection) => {
+  const filterProductsByBrandsAndSections = (
+    products,
+    selectedBrands,
+    selectedSection
+  ) => {
     return products.filter((item) => {
-      const matchesBrand = brand ? item.brand === brand : true;
-      const matchesSection = selectedSection
-        ? item.subcategory === selectedSection
-        : true;
+      const matchesBrand =
+        selectedBrands.length > 0 ? selectedBrands.includes(item.brand) : true;
+      const matchesSection =
+        selectedSection.length > 0
+          ? selectedSection.includes(item.subcategory)
+          : true;
       return matchesBrand && matchesSection;
     });
   };
@@ -152,7 +159,8 @@ const CatalogList = () => {
     return !dataProducts.some(
       (item) =>
         item.brand === brandName &&
-        (!selectedSection || item.subcategory === selectedSection)
+        (selectedSection.length === 0 ||
+          selectedSection.includes(item.subcategory))
     );
   };
 
@@ -160,22 +168,46 @@ const CatalogList = () => {
     return !dataProducts.some(
       (item) =>
         item.subcategory === sectionName &&
-        (!selectedBrand || item.brand === selectedBrand)
+        (selectedBrand.length === 0 || selectedBrand.includes(item.brand))
     );
   };
-  //   const filterProductsByBrands = (products, brand,) => {
-  //     if (!brand) return products;
-  //     return products.filter((item) => item.brand === brand);
-  //   };
 
-  const sortedFilteredProducts = sortProducts(
-    filterProductsByBrands(dataProducts, selectedBrand, selectedSection)
-  );
+  const handleBrandSelect = (brand) => {
+    setSelectedBrand((prevSelectedBrands) => {
+      if (prevSelectedBrands.includes(brand)) {
+        // Видаляємо бренд з масиву, якщо він вже вибраний
+        return prevSelectedBrands.filter((b) => b !== brand);
+      } else {
+        // Додаємо бренд до масиву, якщо він ще не вибраний
+        return [...prevSelectedBrands, brand];
+      }
+    });
+  };
+
+  const handleSectionSelect = (sectionName) => {
+    setSelectedSection((prevSelectedSections) => {
+      if (prevSelectedSections.includes(sectionName)) {
+        // Видаляємо розділ з масиву, якщо він вже вибраний
+        return prevSelectedSections.filter((s) => s !== sectionName);
+      } else {
+        // Додаємо розділ до масиву, якщо він ще не вибраний
+        return [...prevSelectedSections, sectionName];
+      }
+    });
+  };
 
   const clearFilter = () => {
-    setSelectedBrand(null);
-    setSelectedSection(null);
+    setSelectedBrand([]);
+    setSelectedSection([]);
   };
+
+  const sortedFilteredProducts = sortProducts(
+    filterProductsByBrandsAndSections(
+      dataProducts,
+      selectedBrand,
+      selectedSection
+    )
+  );
 
   return (
     <div>
@@ -191,8 +223,10 @@ const CatalogList = () => {
       <div className={css.catalogTopRows}>
         <div className={css.catalogTopTitle}>
           <h1 className={css.titleText}>
-            Головна Каталог {selectedBrand && `Бренд: ${selectedBrand}`}
-            {selectedSection && `, Розділ: ${selectedSection}`}
+            Головна Каталог{" "}
+            {selectedBrand.length > 0 && `Бренд: ${selectedBrand.join(", ")}`}
+            {selectedSection.length > 0 &&
+              `, Розділ: ${selectedSection.join(", ")}`}
           </h1>
         </div>
         <div className={css.catalogTopRight}>
@@ -276,24 +310,24 @@ const CatalogList = () => {
           <aside className={css.catalogSideBar}>
             <div className={css.catalogGroup}>
               <div className={css.filterContainer}>
-                {(selectedBrand || selectedSection) && (
+                {(selectedBrand.length > 0 || selectedSection.length > 0) && (
                   <div className={css.filterSection}>
                     <div className={css.filterCurrent}>
-                      {selectedBrand && (
+                      {selectedBrand.length > 0 && (
                         <div className={css.filterCurrentGroup}>
                           <span className={css.filterCurrentTitle}>Бренд:</span>
                           <span className={css.filterCurrentBrand}>
-                            {selectedBrand}
+                            {selectedBrand.join(", ")}
                           </span>
                         </div>
                       )}
-                      {selectedSection && (
+                      {selectedSection.length > 0 && (
                         <div className={css.filterCurrentGroup}>
                           <span className={css.filterCurrentTitle}>
                             Розділ:
                           </span>
                           <span className={css.filterCurrentBrand}>
-                            {selectedSection}
+                            {selectedSection.join(", ")}
                           </span>
                         </div>
                       )}
@@ -316,18 +350,19 @@ const CatalogList = () => {
                                 : ""
                             }`}
                             key={item._id}
-                            onClick={() => setSelectedBrand(item.name)}
+                            onClick={() => handleBrandSelect(item.name)}
+                            // onChange={() => handleBrandSelect(item.name)}
                           >
                             <div className={css.filterCheck}>
                               <span className={css.label}>
                                 <span
                                   className={`${css.checkbox} ${
-                                    selectedBrand === item.name
+                                    selectedBrand.includes(item.name)
                                       ? css.activeCheck
                                       : ""
                                   }`}
                                 >
-                                  {selectedBrand === item.name && (
+                                  {selectedBrand.includes(item.name) && (
                                     <IoMdCheckmark className={css.iconChek} />
                                   )}
                                 </span>
@@ -360,18 +395,18 @@ const CatalogList = () => {
                                     : ""
                                 }`}
                                 key={item._id}
-                                onClick={() => setSelectedSection(item.name)}
+                                onClick={() => handleSectionSelect(item.name)}
                               >
                                 <div className={css.filterCheck}>
                                   <span className={css.label}>
                                     <span
                                       className={`${css.checkbox} ${
-                                        selectedSection === item.name
+                                        selectedSection.includes(item.name)
                                           ? css.activeCheck
                                           : ""
                                       }`}
                                     >
-                                      {selectedSection === item.name && (
+                                      {selectedSection.includes(item.name) && (
                                         <IoMdCheckmark
                                           className={css.iconChek}
                                         />
@@ -392,7 +427,11 @@ const CatalogList = () => {
                     </ul>
                   </div>
                 </div>
-                <div className={css.filterSection}></div>
+                <div className={css.filterSection}>
+                  <form>
+                    <div className={css.filterSectionTitle}>Ціна, грн</div>
+                  </form>
+                </div>
               </div>
             </div>
           </aside>
