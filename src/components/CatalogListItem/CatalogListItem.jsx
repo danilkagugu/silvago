@@ -14,18 +14,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../../redux/basket/operations";
 import { selectFavoritesProducts } from "../../redux/product/selectors";
 
-const CatalogListItem = ({
-  product,
-  quantities,
-  selectedVolume,
-  handleVolumeSelect,
-}) => {
+const CatalogListItem = ({ product, quantities, selectedVolume }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const favorites = useSelector(selectFavoritesProducts);
   const [topProducts, setTopProducts] = useState([]);
   const [localFavorites, setLocalFavorites] = useState([]);
-  // console.log("productq", selectedVolume);
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
@@ -161,7 +155,7 @@ const CatalogListItem = ({
       </div>
 
       {/* Обсяги товару */}
-      <div className={css.volumeOptions}>
+      {/* <div className={css.volumeOptions}>
         {product.volumes.map((vol) => (
           <button
             key={vol._id}
@@ -173,7 +167,7 @@ const CatalogListItem = ({
             {vol.volume} мл
           </button>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
