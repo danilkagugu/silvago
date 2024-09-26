@@ -19,6 +19,7 @@ const CatalogList = () => {
   const [sortType, setSortType] = useState("popularity");
   const [selectedBrand, setSelectedBrand] = useState([]);
   const [selectedSection, setSelectedSection] = useState([]);
+  console.log("selectedSection: ", selectedSection);
   const [categories, setCategories] = useState();
   const [minPrice, setMinPrice] = useState(null);
   const [maxPrice, setMaxPrice] = useState(null);

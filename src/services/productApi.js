@@ -141,3 +141,9 @@ export const getDiscountProducts = async () => {
   const { data } = await instance.get("/api/product/discount-products");
   return data;
 };
+
+export const getSkins = async () => {
+  const instance = createAxiosInstance();
+  const { data } = await instance.get("/api/admin/skin");
+  return data;
+};

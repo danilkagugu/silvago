@@ -44,7 +44,6 @@ const CatalogListItem = ({ product, quantities, selectedVolume }) => {
     }
 
     const isFavorite = localFavorites.some((item) => item._id === product._id);
-    console.log("product._id: ", product._id);
 
     if (isFavorite) {
       dispatch(removeProductFavorite(product._id));
@@ -95,7 +94,7 @@ const CatalogListItem = ({ product, quantities, selectedVolume }) => {
   const volumeDetail = product.volumes.find(
     (vol) => vol.volume === selectedVolume[product._id]
   );
-
+  // console.log("volumeDetail", volumeDetail);
   const handleAddToBasket = () => {
     dispatch(
       addProduct({
@@ -117,11 +116,13 @@ const CatalogListItem = ({ product, quantities, selectedVolume }) => {
       {/* Інформація про товар */}
       <div className={css.cardBox} onClick={handleProductClick}>
         <div className={css.imgBox}>
-          <img
-            className={css.imgBrand}
-            src={product.image}
-            alt={product.name}
-          />
+          {volumeDetail && (
+            <img
+              className={css.imgBrand}
+              src={volumeDetail.image}
+              alt={product.name}
+            />
+          )}
         </div>
 
         {/* Це якщо буде писатись з перечеркнутой ціною */}

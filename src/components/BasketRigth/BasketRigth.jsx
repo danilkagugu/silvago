@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 const BasketRigth = () => {
   const [basket, setBasket] = useState([]);
   const [productDetails, setProductDetails] = useState({});
+
   const dispatch = useDispatch();
   useEffect(() => {
     const fetchProducts = async () => {
@@ -91,7 +92,7 @@ const BasketRigth = () => {
           {basket.map((item) => {
             // console.log("item: ", item);
             const details = productDetails[item.slug];
-            // console.log("details: ", details);
+            console.log("details: ", details);
 
             const uniqueKey = `${item.product}-${item.volume}`; // Унікальний ключ
             const volumeDetail = details?.product?.volumes?.find(
@@ -105,7 +106,7 @@ const BasketRigth = () => {
                 <td>
                   {details && (
                     <CatalogItem
-                      productImg={details.product.image}
+                      productImg={details.volume.image}
                       productName={details.product.name}
                       productPrice={Math.ceil(discountedPrice)}
                       id={item.product}

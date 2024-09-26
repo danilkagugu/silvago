@@ -276,8 +276,6 @@ const ProductInfo = () => {
         (item) => item.name === productDetails?.product.subcategory
       )
     : null;
-  // console.log("currentSubCategory", currentSubCategory);
-  // console.log("getSubCategoryName", getSubCategoryName());
   return (
     <>
       <div className={css.desctop}>
@@ -291,13 +289,15 @@ const ProductInfo = () => {
                     <div className={css.titlePhoto}>
                       <div className={css.titlePhotoContainer}>
                         <ul className={css.galerryList}>
-                          <li className={css.galerryListItem}>
-                            <img
-                              className={css.galerryProductImg}
-                              src={productDetails.product.image}
-                              alt={productDetails.product.name}
-                            />
-                          </li>
+                          {selectedVolume && (
+                            <li className={css.galerryListItem}>
+                              <img
+                                className={css.galerryProductImg}
+                                src={selectedVolume.image}
+                                alt={productDetails.product.name}
+                              />
+                            </li>
+                          )}
                         </ul>
                       </div>
                       {brand && brand.length > 0 && (
@@ -784,7 +784,7 @@ const ProductInfo = () => {
                           <div className={css.galerryItem}>
                             <img
                               className={css.galerryImg}
-                              src={productDetails.product.image}
+                              src={selectedVolume && selectedVolume.image}
                               alt={productDetails.product.name}
                             />
                           </div>
