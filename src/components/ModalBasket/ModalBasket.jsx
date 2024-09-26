@@ -180,7 +180,7 @@ const ModalBasket = ({ closeModal, open }) => {
                             <div className={css.imgBox}>
                               <img
                                 className={css.productImg}
-                                src={details.product.image}
+                                src={details.volume.image}
                                 alt={details.product.name}
                               />
                             </div>
@@ -295,10 +295,10 @@ const ModalBasket = ({ closeModal, open }) => {
                 <div>
                   {basket &&
                     basket.map((item) => {
-                      const details = productDetails[item.product];
+                      const details = productDetails[item.slug];
 
                       const uniqueKey = `${item.product}-${item.volume}`;
-                      const volumeDetail = details?.volumes.find(
+                      const volumeDetail = details?.product?.volumes?.find(
                         (vol) => vol.volume === item.volume
                       );
                       const price = volumeDetail ? volumeDetail.price : 0;
@@ -316,14 +316,14 @@ const ModalBasket = ({ closeModal, open }) => {
                             <div className={css.imgBoxMobile}>
                               <img
                                 className={css.imgMobile}
-                                src={details.image}
-                                alt={details.name}
+                                src={details.volume.image}
+                                alt={details.product.name}
                               />
                             </div>
                             <div className={css.productContentMobile}>
                               <div className={css.productTitleMobileBox}>
                                 <p className={css.productTitleMobile}>
-                                  {details.name}
+                                  {details.product.name}
                                 </p>
                               </div>
 

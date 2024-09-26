@@ -33,9 +33,9 @@ const OrderDetails = () => {
     // allQuantity,
     basket = [],
   } = order;
-  console.log("order: ", order);
+  // console.log("order: ", order);
   // const city = user?.address?.city || "Немає інформації";
-  console.log("basket: ", basket);
+  // console.log("basket: ", basket);
 
   const navigateProductClick = (id) => {
     navigate(`/product/${id}`);
@@ -80,7 +80,7 @@ const OrderDetails = () => {
               {basket &&
                 basket.map((item) => {
                   return (
-                    <li className={css.orderItem} key={item.product}>
+                    <li className={css.orderItem} key={item._id}>
                       <div className={css.itemImg}>
                         <img
                           className={css.img}
@@ -172,8 +172,9 @@ const OrderDetails = () => {
             <ul className={css.orderDetailsList}>
               {basket &&
                 basket.map((item) => {
+                  // console.log("item: ", item);
                   return (
-                    <li className={css.orderDetailsItem} key={item.product}>
+                    <li className={css.orderDetailsItem} key={item._id}>
                       <div className={css.cartItem}>
                         <div className={css.cartItemImage}>
                           <div className={css.imageMob}>
