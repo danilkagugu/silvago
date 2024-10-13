@@ -57,9 +57,9 @@
   transition: text-shadow 0.3s ease;
 }
 
-.cardContainer:hover .brandTitle {
+.cardContainer:hover {
   text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-  font-weight: 600;
+  /* font-weight: 600; */
 }
 
 .brandPrice {
@@ -146,11 +146,6 @@
   padding: 10px;
   z-index: 2000;
   /* інші стилі */
-}
-
-.cardContainer:hover .volumeOptions {
-  display: flex;
-  justify-content: center;
 }
 
 .volumeOption {

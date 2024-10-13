@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useParams } from "react-router-dom";
 import { getBrands, getCategories, getSkins } from "../../services/productApi";
 import css from "./ProductList.module.css";
@@ -19,6 +19,8 @@ import { TbArrowsSort } from "react-icons/tb";
 
 const ProductList = () => {
   const dispatch = useDispatch();
+  const sortingModalRef = useRef(null);
+  const filterModalRef = useRef(null);
 
   const [favoriteProducts, setFavoriteProducts] = useState(new Set());
   const [quantities, setQuantities] = useState({});
@@ -29,7 +31,7 @@ const ProductList = () => {
 
   const [selectedBrand, setSelectedBrand] = useState([]);
   const [selectedSection, setSelectedSection] = useState([]);
-  console.log("selectedSection: ", selectedSection);
+  // console.log("selectedSection: ", selectedSection);
   const [skin, setSkin] = useState([]);
   const [selectedSkin, setSelectedSkin] = useState([]);
   const [filterOpen, setFilterOpen] = useState(false);
@@ -49,6 +51,7 @@ const ProductList = () => {
   const toggleFilterContent = () => {
     setFilterContentOpen((prevState) => !prevState); // Перемикання стану
   };
+  console.log("sortType: ", sortType);
   const toggleSortingContent = () => {
     setSortingOpen((prevState) => !prevState); // Перемикання стану
     if (!sortingOpen) {
@@ -62,12 +65,49 @@ const ProductList = () => {
   const toggleSkinContent = () => {
     setSkinContentOpen((prevState) => !prevState); // Перемикання стану
   };
+
   const toggleFilter = () => {
     setFilterOpen((prevState) => !prevState); // Перемикання стану
+    if (!filterOpen) {
+      // Блокуємо скрол на сторінці при відкритті модалки
+      document.body.classList.add(css.modalOpen);
+    } else {
+      // Вмикаємо скрол при закритті модалки
+      document.body.classList.remove(css.modalOpen);
+    }
   };
+
   const toggleCategory = () => {
     setCategoryContentOpen((prevState) => !prevState); // Перемикання стану
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      // Закриваємо модалку сортування
+      if (
+        sortingModalRef.current &&
+        !sortingModalRef.current.contains(event.target) &&
+        sortingOpen
+      ) {
+        toggleSortingContent();
+      }
+      if (
+        filterModalRef.current &&
+        !filterModalRef.current.contains(event.target) &&
+        filterOpen
+      ) {
+        toggleFilter();
+      }
+    };
+
+    // Додаємо обробник події
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // Очищаємо обробник події при демонтажі компонента
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [sortingOpen, filterOpen]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -243,7 +283,7 @@ const ProductList = () => {
     );
   };
 
-  console.log("dataProducts", dataProducts);
+  // console.log("dataProducts", dataProducts);
   const isSkinDisabled = (skin) => {
     return !dataProducts.some((item) =>
       item.filters.some((filter) => filter.label === skin)
@@ -750,7 +790,11 @@ const ProductList = () => {
               <div
                 className={`${css.catalogControlsItemMob} ${css.catalogControlsItemFilter}`}
               >
-                <button className={css.btnFilter} onClick={toggleFilter}>
+                <button
+                  className={css.btnFilter}
+                  // ref={filterModalRef}
+                  onClick={toggleFilter}
+                >
                   <span className={css.btnIcon}>
                     <CiFilter className={css.iconFilter} />
                   </span>
@@ -765,12 +809,19 @@ const ProductList = () => {
               <div className={`${css.catalogControlsItemMob}`}>
                 <button
                   className={css.btnFilter}
+                  // ref={sortingModalRef}
                   onClick={toggleSortingContent}
                 >
                   <span className={css.btnIconSort}>
                     <TbArrowsSort className={css.iconFilter} />
                   </span>
-                  <span className={css.btnText}>За популярністю</span>
+                  <span className={css.btnText}>
+                    {sortType === "popularity"
+                      ? "За популярністю"
+                      : sortType === "priceAsc"
+                      ? "Спочатку дешевше"
+                      : "За назвою"}
+                  </span>
                 </button>
               </div>
             </div>
@@ -847,11 +898,6 @@ const ProductList = () => {
                     ))}
                 </div>
               )}
-              {/* <div className={css.resetBtn}>
-                <button className={css.btnClear} onClick={clearFilter}>
-                  Очистити всі фільтри
-                </button>
-              </div> */}
             </div>
           )}
           <ul className={css.goods}>
@@ -879,7 +925,11 @@ const ProductList = () => {
             >
               <div className={css.filterPanelContainer}>
                 <div className={css.filterPanelHeader}>
-                  <button className={css.btnBack} onClick={toggleFilter}>
+                  <button
+                    className={css.btnBack}
+                    // ref={filterModalRef}
+                    onClick={toggleFilter}
+                  >
                     <IoChevronBackSharp />
                   </button>
                   <div className={css.titleFilter}>Фільтр</div>
