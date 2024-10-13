@@ -1,56 +1,66 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useMemo } from "react";
 import css from "./SelectNovaPoshta.module.css";
 
-const SelectNovaPoshta = ({ options = [], onChange, placeholder, value }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [search, setSearch] = useState("");
-  const [filteredOptions, setFilteredOptions] = useState([]);
+const SelectNovaPoshta = ({
+  options = [],
+  onChange,
+  value,
+  isOpen,
+  onToggle,
+  search,
+  setSearch,
+}) => {
   const optionsContainerRef = useRef(null);
-
-  const handleToggle = () => {
-    setIsOpen(!isOpen);
-    setSearch(""); // Скидаємо пошуковий рядок при відкритті списку
-    setFilteredOptions(options); // Показуємо всі опції при відкритті списку
-  };
 
   const handleOptionClick = (option) => {
     onChange(option);
-    setSearch(option);
-    setIsOpen(false);
+    setSearch(option.Description);
+    onToggle();
   };
 
   const handleSearchChange = (e) => {
-    const searchValue = e.target.value;
-    setSearch(searchValue);
+    setSearch(e.target.value);
   };
 
-  useEffect(() => {
-    if (Array.isArray(options)) {
-      setFilteredOptions(
-        options.filter(
-          (option) =>
-            option && option.toLowerCase().includes(search.toLowerCase())
-        )
-      );
-    } else {
+  const filteredOptions = useMemo(() => {
+    if (!Array.isArray(options)) {
       console.error(
         "Options is not an array or contains undefined values:",
         options
       );
+      return [];
     }
+
+    const lowerCaseSearch = search.toLowerCase();
+
+    const exactMatches = options.filter(
+      (option) =>
+        option.Description &&
+        option.Description.toLowerCase().startsWith(lowerCaseSearch)
+    );
+
+    const partialMatches = options.filter(
+      (option) =>
+        option.Description &&
+        !option.Description.toLowerCase().startsWith(lowerCaseSearch) &&
+        option.Description.toLowerCase().includes(lowerCaseSearch)
+    );
+
+    // Об'єднуємо результати: точні збіги йдуть першими
+    return [...exactMatches, ...partialMatches];
   }, [options, search]);
 
   useEffect(() => {
-    setSearch(value || ""); // Оновлюємо пошук при зміні значення
+    setSearch(value || "");
   }, [value]);
 
   useEffect(() => {
     if (isOpen && value) {
       const selectedOptionIndex = filteredOptions.findIndex(
-        (option) => option === value
+        (option) => option.Description === value
       );
       if (selectedOptionIndex !== -1 && optionsContainerRef.current) {
-        const optionHeight = 40; // Приблизна висота одного елемента опції
+        const optionHeight = 40;
         optionsContainerRef.current.scrollTop =
           selectedOptionIndex * optionHeight;
       }
@@ -58,42 +68,56 @@ const SelectNovaPoshta = ({ options = [], onChange, placeholder, value }) => {
   }, [isOpen, value, filteredOptions]);
 
   return (
-    <div className={css.selectContainer}>
-      <input
-        className={css.searchInput}
-        type="text"
-        placeholder={placeholder}
-        value={search || value || ""}
-        onClick={handleToggle}
-        readOnly
-      />
-      {isOpen && (
-        <div className={css.optionsContainer} ref={optionsContainerRef}>
-          <input
-            className={css.dropdownSearchInput}
-            type="text"
-            placeholder="Пошук..."
-            value={search}
-            onChange={handleSearchChange}
-          />
-          {filteredOptions.length > 0 ? (
-            filteredOptions.map((option, index) =>
-              option ? (
-                <div
-                  key={index}
-                  className={css.option}
+    <>
+      <span
+        className={css.selectboxitContainer}
+        ref={optionsContainerRef}
+        aria-expanded={isOpen}
+        role="combobox"
+        onClick={onToggle}
+      >
+        <span className={css.selectboxit}>
+          <span className={css.selectboxitOptionIconContainer}>
+            <i className={css.selectboxitContainer}></i>
+          </span>
+          <span className={css.selectboxitText}>{value}</span>
+          <span className={css.selectboxitArrowContainer}>
+            <i className={css.selectboxitDefaultArrow}></i>
+          </span>
+        </span>
+        <div
+          className={css.selectboxitDropdown}
+          role="listbox"
+          style={{ display: isOpen ? "block" : "none" }}
+        >
+          <div className={css.selectboxitSearchContainer}>
+            <input
+              className={css.selectboxitSearchField}
+              type="text"
+              placeholder="Пошук..."
+              value={search}
+              onChange={handleSearchChange}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+          <ul className={css.selectboxitOptions}>
+            {filteredOptions.length > 0 &&
+              filteredOptions.map((option) => (
+                <li
+                  key={option.Ref}
+                  className={css.selectboxitFocus}
                   onClick={() => handleOptionClick(option)}
+                  value={option.Ref}
                 >
-                  {option}
-                </div>
-              ) : null
-            )
-          ) : (
-            <div className={css.option}>Нічого не знайдено</div>
-          )}
+                  <p className={css.selectboxitOptionAnchor}>
+                    {option.Description}
+                  </p>
+                </li>
+              ))}
+          </ul>
         </div>
-      )}
-    </div>
+      </span>
+    </>
   );
 };
 

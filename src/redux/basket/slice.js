@@ -31,7 +31,8 @@ const basketSlice = createSlice({
         state.error = null;
       })
       .addCase(addProduct.fulfilled, (state, action) => {
-        state.items = action.payload;
+        state.items = action.payload.products;
+        console.log("action.payload: ", action.payload);
         state.allQuantity = action.payload.products.reduce((total, item) => {
           return total + item.quantity;
         }, 0);
@@ -42,6 +43,7 @@ const basketSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteProduct.fulfilled, (state, { payload }) => {
+        console.log("payload: ", payload);
         state.items = payload.products;
         state.allQuantity = state.items.reduce((total, item) => {
           return total + item.quantity;
@@ -49,19 +51,6 @@ const basketSlice = createSlice({
         state.totalPrice = state.items.reduce((total, item) => {
           return total + item.price * item.quantity;
         }, 0);
-        // const itemsToRemove = state.items.map((item) => ({
-        //   product: item.product,
-        //   volume: item.volume,
-        // }));
-
-        // state.items = state.items.filter(
-        //   (item) =>
-        //     !itemsToRemove.some(
-        //       (toRemove) =>
-        //         item.product === toRemove.product &&
-        //         item.volume === toRemove.volume
-        //     )
-        // );
 
         state.loading = false;
         state.error = null;

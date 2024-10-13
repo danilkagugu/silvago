@@ -26,6 +26,7 @@ const CatalogList = () => {
   const [selectedVolume, setSelectedVolume] = useState({});
   //   console.log("selectedVolume: ", selectedVolume);
   const [sortType, setSortType] = useState("popularity");
+
   const [selectedBrand, setSelectedBrand] = useState([]);
   const [selectedSection, setSelectedSection] = useState([]);
   const [categories, setCategories] = useState();
@@ -36,12 +37,10 @@ const CatalogList = () => {
   const [sortingOpen, setSortingOpen] = useState(false);
   const [filterContentOpen, setFilterContentOpen] = useState(false);
   const [categoryContentOpen, setCategoryContentOpen] = useState(false);
-  //   console.log("categories: ", categories);
 
   const dataProducts = useSelector(selectProducts);
 
   const [brands, setBrands] = useState([]);
-  //   console.log("brands: ", brands);
   const isMobile = window.innerWidth <= 1440;
 
   const toggleFilter = () => {
@@ -434,7 +433,7 @@ const CatalogList = () => {
           </div>
           <div className={css.catalogContentMain}>
             <div
-              className={`${css.catalogContentMainRight} ${css.CatalogListProduct}`}
+              className={`${css.catalogContentMainRight} ${css.catalogListProduct}`}
             >
               <div className={css.catalogContent}>
                 <ul className={css.list}>
@@ -688,7 +687,7 @@ const CatalogList = () => {
               </div>
               <div className={`${css.catalogControlsItemMob}`}>
                 <button
-                  ref={sortingModalRef}
+                  // ref={sortingModalRef}
                   className={css.btnFilter}
                   onClick={toggleSortingContent}
                 >

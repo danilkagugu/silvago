@@ -51,7 +51,7 @@ const ProductList = () => {
   const toggleFilterContent = () => {
     setFilterContentOpen((prevState) => !prevState); // Перемикання стану
   };
-
+  console.log("sortType: ", sortType);
   const toggleSortingContent = () => {
     setSortingOpen((prevState) => !prevState); // Перемикання стану
     if (!sortingOpen) {
@@ -809,7 +809,7 @@ const ProductList = () => {
               <div className={`${css.catalogControlsItemMob}`}>
                 <button
                   className={css.btnFilter}
-                  ref={sortingModalRef}
+                  // ref={sortingModalRef}
                   onClick={toggleSortingContent}
                 >
                   <span className={css.btnIconSort}>

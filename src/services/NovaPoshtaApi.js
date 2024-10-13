@@ -15,7 +15,7 @@ export const getArea = async () => {
       calledMethod: "getAreas",
       methodProperties: {},
     });
-    return data.data;
+    return data;
   } catch (error) {
     console.error("Error fetching areas:", error);
     throw error;
@@ -29,7 +29,8 @@ export const getAreaByRef = async (ref) => {
       calledMethod: "getAreas",
       methodProperties: { Ref: ref },
     });
-    return data.data;
+    // console.log("data!!!: ", data);
+    return data;
   } catch (error) {
     console.error("Error fetching areas:", error);
     throw error;
@@ -44,8 +45,24 @@ export const getCities = async (selectedArea) => {
       calledMethod: "getCities",
       methodProperties: { AreaRef: selectedArea.Ref },
     });
-    const cities = data.data.map((city) => city.Description);
-    return cities;
+    // const cities = data.data.map((city) => city.Description);
+    return data;
+  } catch (error) {
+    console.error("Error fetching cities:", error);
+    throw error;
+  }
+};
+export const getAllCities = async () => {
+  try {
+    const { data } = await instance.post("", {
+      apiKey: "c0c77fd4e35911237acd01d7278060a0",
+      modelName: "AddressGeneral",
+      calledMethod: "getCities",
+      methodProperties: {},
+    });
+    // console.log("data: ", typeof data.data);
+    // const cities = data.data.map((city) => city.Description);
+    return data;
   } catch (error) {
     console.error("Error fetching cities:", error);
     throw error;
@@ -61,8 +78,9 @@ export const getPostOffice = async (selectedCity) => {
         CityName: selectedCity,
       },
     });
-    const offices = data.data.map((office) => office.Description);
-    return offices;
+    // console.log("data: ", data);
+    // const offices = data.data.map((office) => office.Description);
+    return data;
   } catch (error) {
     console.error("Error fetching cities:", error);
     throw error;
