@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { getOrder } from "../../services/productApi";
 import css from "./OrderHistory.module.css";
-// import { getAreaByRef } from "../../services/NovaPoshtaApi";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
 import { formatDate } from "../../helpers/productActions";
@@ -9,52 +8,19 @@ import { formatDate } from "../../helpers/productActions";
 const OrderHistory = () => {
   const navigate = useNavigate();
   const [history, setHistory] = useState([]);
-  console.log("history: ", history);
-
-  // const [expandedRows, setExpandedRows] = useState({});
-  // const [areaNames, setAreaNames] = useState({});
-  // console.log("areaNames: ", areaNames);
+  // console.log("history: ", history);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const orderData = await getOrder();
         setHistory(orderData);
-
-        // const uniqueRefs = new Set(
-        //   orderData.map((order) => order.user.address.area)
-        // );
-
-        // const areaPromises = Array.from(uniqueRefs).map(async (ref) => {
-        //   try {
-        //     const data = await getAreaByRef(ref);
-        //     return { ref, name: data[0].Description };
-        //   } catch (error) {
-        //     console.error(`Error fetching area for ref ${ref}:`, error);
-        //     return { ref, name: ref };
-        //   }
-        // });
-
-        // const areas = await Promise.all(areaPromises);
-        // setAreaNames(
-        //   areas.reduce((acc, { ref, name }) => {
-        //     acc[ref] = name;
-        //     return acc;
-        //   }, {})
-        // );
       } catch (error) {
         console.error("Помилка отримання продуктів:", error);
       }
     };
     fetchProducts();
   }, []);
-
-  // const toggleOpenInfoProduct = (orderId) => {
-  //   setExpandedRows((prevExpandedRows) => ({
-  //     ...prevExpandedRows,
-  //     [orderId]: !prevExpandedRows[orderId],
-  //   }));
-  // };
 
   const handleOrderClick = (orderId) => {
     navigate(`/user-cabinet/history/${orderId}`);
@@ -76,13 +42,13 @@ const OrderHistory = () => {
       return "товарів";
     }
   };
-
+  const sortedHistory = history.sort((a, b) => b.orderNumber - a.orderNumber);
   return (
     <div>
       <h1 className={css.title}>Замовлення</h1>
       <ul className={css.ordersDesc}>
-        {history &&
-          history.map((order) => {
+        {sortedHistory &&
+          sortedHistory.map((order) => {
             return (
               <li className={css.ordersItemDesc} key={order._id}>
                 <div className={`${css.ordersData} ${css.info}`}>
@@ -116,8 +82,8 @@ const OrderHistory = () => {
           })}
       </ul>
       <div className={css.ordersMob}>
-        {history &&
-          history.map((order) => {
+        {sortedHistory &&
+          sortedHistory.map((order) => {
             return (
               <div className={css.ordersItemMob} key={order._id}>
                 <div className={css.orderMob}>
@@ -158,98 +124,3 @@ const OrderHistory = () => {
 };
 
 export default OrderHistory;
-{
-  /* <div>
-  <table className={css.table}>
-    <thead>
-      <tr>
-        <th>№ замовлення</th>
-        <th>Дата</th>
-        <th>Кількість</th>
-        <th>Сума</th>
-        <th>Статус</th>
-      </tr>
-    </thead>
-    <tbody>
-      {history &&
-        history.map((order) => {
-          return (
-            <Fragment key={order._id}>
-              <tr>
-                <td>{order.orderNumber}</td>
-                <td>{formatDate(order.createdAt)}</td>
-                <td>{order.allQuantity}</td>
-                <td>{order.totalAmount} грн</td>
-                <td>{order.status}</td>
-                <td>
-                  <button onClick={() => toggleOpenInfoProduct(order._id)}>
-                    {expandedRows[order._id] ? "-" : "+"}
-                  </button>
-                </td>
-              </tr>
-              {expandedRows[order._id] && (
-                <tr>
-                  <td colSpan="6">
-                    <div className={css.orderTable}>
-                      <div className={css.tableWrap}>
-                        <table className={css.nestedTable}>
-                          <thead>
-                            <tr>
-                              <th>Продукт</th>
-                              <th>Об’єм</th>
-                              <th>Ціна</th>
-                              <th>Кількість</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            {order.basket.map((product, idx) => (
-                              <tr key={product.product + idx}>
-                                <td
-                                  onClick={() =>
-                                    handleProductClick(product.product)
-                                  }
-                                >
-                                  <img
-                                    src={product.image}
-                                    alt={product.productName}
-                                    className={css.productImage}
-                                  />
-                                  <p>{product.productName}</p>
-                                </td>
-                                <td>{product.volume}</td>
-                                <td>{product.price} грн</td>
-                                <td>{product.quantity}</td>
-                              </tr>
-                            ))}
-                          </tbody>
-                        </table>
-                      </div>
-                      <div className={css.infoWrap}>
-                        <table>
-                          <tbody>
-                            <tr>
-                              <td>Доставка</td>
-                              <td>У відділення Нової Пошти</td>
-                            </tr>
-                            <tr>
-                              <td>Адреса</td>
-                              <td>
-                                {areaNames[order.user.address.area]} область ,
-                                {order.user.address.city},
-                                {order.user.address.office}
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              )}
-            </Fragment>
-          );
-        })}
-    </tbody>
-  </table>
-</div>; */
-}

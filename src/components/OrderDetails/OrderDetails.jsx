@@ -28,14 +28,9 @@ const OrderDetails = () => {
   const {
     user,
     status,
-    // orderNumber,
-    // totalAmount,
-    // allQuantity,
+
     basket = [],
   } = order;
-  // console.log("order: ", order);
-  // const city = user?.address?.city || "Немає інформації";
-  // console.log("basket: ", basket);
 
   const navigateProductClick = (id) => {
     navigate(`/product/${id}`);
