@@ -23,7 +23,7 @@ export const requestSignUp = async (formData) => {
 
 export const requestSignIn = async (formData) => {
   const { data } = await instance.post("/api/auth/login", formData);
-  console.log("data: ", data.token);
+  // console.log("data: ", data.token);
   setToken(data.token);
 
   return data;

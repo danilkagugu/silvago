@@ -81,33 +81,25 @@ const ModalBasket = ({ closeModal, open }) => {
 
   const dispatch = useDispatch();
 
-  // const handleRemoveProduct = async ({ productId, volume }) => {
-  //   console.log("volume: ", volume);
-  //   console.log("productId: ", productId);
-  //   try {
-  //     // Викликаємо дію для видалення продукту
-  //     await dispatch(deleteProduct({ productId, volume }));
-
-  //     // Перевіряємо чи корзина порожня і закриваємо модальне вікно, якщо так
-  //     if (basket.length === 1) {
-  //       closeModal();
-  //     }
-  //   } catch (error) {
-  //     console.error("Помилка видалення товару:", error);
-  //   }
-  // };
-
   const handleRemoveProduct = async ({ productId, volume }) => {
     try {
-      dispatch(deleteProduct({ productId, volume }));
-      // Оновлюємо стан корзини
-      setBasket((prevBasket) =>
-        prevBasket.filter(
-          (item) => !(item.product === productId && item.volume === volume)
-        )
+      const isConfirmed = window.confirm(
+        "Ви впевнені, що хочете видалити цей продукт?"
       );
-      if (basket.length === 1) {
-        closeModal();
+
+      if (isConfirmed) {
+        await dispatch(deleteProduct({ productId, volume }));
+
+        setBasket((prevBasket) =>
+          prevBasket.filter(
+            (item) => !(item.product === productId && item.volume === volume)
+          )
+        );
+
+        // Закриваємо модальне вікно, якщо в кошику залишився лише один товар
+        if (basket.length === 1) {
+          closeModal();
+        }
       }
     } catch (error) {
       console.error("Помилка видалення товару:", error);
@@ -336,13 +328,22 @@ const ModalBasket = ({ closeModal, open }) => {
                                 <div className={css.counterBtnMobileBox}>
                                   <button
                                     className={`${css.counterBtnMobile} ${css.counterBtnMinus}`}
-                                    onClick={() =>
-                                      handleQuantityChange(
-                                        item.product,
-                                        item.volume,
-                                        item.quantity - 1
-                                      )
-                                    }
+                                    onClick={() => {
+                                      if (item.quantity === 1) {
+                                        // Викликаємо функцію видалення товару
+                                        handleRemoveProduct({
+                                          productId: item.product,
+                                          volume: item.volume,
+                                        });
+                                      } else {
+                                        // Зменшуємо кількість
+                                        handleQuantityChange(
+                                          item.product,
+                                          item.volume,
+                                          item.quantity - 1
+                                        );
+                                      }
+                                    }}
                                   >
                                     <HiOutlineMinus
                                       className={`${css.iconMobile} ${css.iconMinusMobile}`}

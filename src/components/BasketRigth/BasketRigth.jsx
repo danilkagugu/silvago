@@ -10,15 +10,8 @@ import { useDispatch } from "react-redux";
 import CustomMaskedInput from "../RegisterForm/CustomMaskedInput";
 import { useSelector } from "react-redux";
 import { selectUserData } from "../../redux/auth/selectors";
-import {
-  getArea,
-  getPostOffice,
-  getCities,
-  getAreaByRef,
-  getAllCities,
-} from "../../services/NovaPoshtaApi";
+import { getPostOffice, getAllCities } from "../../services/NovaPoshtaApi";
 import { selectBasket } from "../../redux/basket/selectors";
-import SelectNovaPoshta from "../SelectNovaPoshta/SelectNovaPoshta";
 import { createOrder } from "../../redux/basket/operations";
 import { CiSearch } from "react-icons/ci";
 import { IoIosClose } from "react-icons/io";
@@ -29,33 +22,32 @@ const BasketRigth = () => {
   // console.log("tt: ", tt);
   const [basket, setBasket] = useState([]);
   const [productDetails, setProductDetails] = useState({});
-  const [areas, setAreas] = useState([]);
-  const [cities, setCities] = useState([]);
-  const [offices, setOffices] = useState([]);
+  // const [offices, setOffices] = useState([]);
   const [officesMob, setOfficesMob] = useState([]);
   // console.log("officesMob: ", officesMob);
   const [selectedCityq, setSelectedCityq] = useState("");
+  // console.log("selectedCityq: ", selectedCityq);
   const [selectedOfficeq, setSelectedOfficeq] = useState("");
-  console.log("selectedOfficeq: ", selectedOfficeq);
   // console.log("offices: ", offices);
   const [openDropdown, setOpenDropdown] = useState(null);
-  const [search, setSearch] = useState("");
+  // const [search, setSearch] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     serName: "",
     phone: "",
     email: "",
-    area: "",
     city: "",
     office: "",
   });
 
   const [openComentar, setOpenComentar] = useState(false);
   const [openOffice, setOpenOffice] = useState(false);
-  // console.log("formData", formData);
+
   const dispatch = useDispatch();
   const [cit, setCit] = useState();
   const [open, setOpen] = useState(false);
+  const [searchOffice, setSearchOffice] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   useEffect(() => {
     const fetch = async () => {
       try {
@@ -68,7 +60,7 @@ const BasketRigth = () => {
     };
     fetch();
   }, []);
-  // console.log("cit: ", cit);
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -95,6 +87,22 @@ const BasketRigth = () => {
     };
     fetchProducts();
   }, []);
+
+  useEffect(() => {
+    if (open || openOffice) {
+      document.body.classList.add(css.noScroll);
+      // document.documentElement.classList.add(css.noScroll);
+    } else {
+      document.body.classList.remove(css.noScroll);
+      // document.documentElement.classList.remove(css.noScroll);
+    }
+
+    // Очищення при демонтажі компонента
+    return () => {
+      document.body.classList.remove(css.noScroll);
+      // document.documentElement.classList.remove(css.noScroll);
+    };
+  }, [open, openOffice]);
 
   const handleQuantityChange = async (productId, volume, quantity) => {
     try {
@@ -143,61 +151,22 @@ const BasketRigth = () => {
   useEffect(() => {
     if (userData) {
       const fetchArea = async () => {
-        const area = await getAreaByRef(userData?.area); // Resolve the promise
-        const currentArea = area.data[0].Description;
         setFormData((prevData) => ({
           ...prevData,
           name: userData?.name || "",
           serName: userData?.serName || "",
           phone: userData?.phone || "",
           email: userData?.email || "",
-          area: currentArea || "", // Only set the resolved value
           city: userData?.city || "",
-          office: userData?.office || "",
         }));
+        setSelectedCityq(userData?.city);
       };
 
       fetchArea(); // Invoke the async function
     }
   }, [userData]);
 
-  useEffect(() => {
-    const fetchAreas = async () => {
-      try {
-        const areasData = await getArea();
-        // console.log("areasData: ", areasData);
-        setAreas(areasData);
-        if (userData?.area) {
-          const selectedArea = areasData.data.find(
-            (a) => a.Ref === userData.area
-          );
-          if (selectedArea) {
-            const citiesData = await getCities(selectedArea);
-            setCities(citiesData);
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching areas:", error);
-      }
-    };
-
-    fetchAreas();
-  }, [userData?.area]);
-
-  useEffect(() => {
-    const fetchOffices = async () => {
-      if (formData.city) {
-        try {
-          const officeData = await getPostOffice(formData.city);
-          setOffices(officeData);
-        } catch (error) {
-          console.error("Error fetching post offices:", error);
-        }
-      }
-    };
-
-    fetchOffices();
-  }, [formData.city]);
+  // console.log("userData", userData);
 
   useEffect(() => {
     const fetchOffices = async () => {
@@ -214,61 +183,16 @@ const BasketRigth = () => {
     fetchOffices();
   }, [selectedCityq]);
 
+  //
+
+  //
   const basketData = useSelector(selectBasket);
-
-  const handleAreaChange = async (e) => {
-    // const selectedAreaRef = e.target.value;
-    // console.log("selectedAreaRef: ", e.Ref);
-    const selectedArea = areas.data.find((a) => {
-      // console.log("a: ", a);
-      return a.Ref === e.Ref;
-    });
-    console.log("selectedArea: ", selectedArea);
-
-    if (selectedArea) {
-      try {
-        const citiesData = await getCities(selectedArea);
-        setCities(citiesData);
-        setOffices([]);
-        setFormData((prevData) => ({ ...prevData, city: "", office: "" }));
-      } catch (error) {
-        console.error("Error fetching cities:", error);
-        setCities([]);
-        setOffices([]);
-      }
-    } else {
-      setCities([]);
-      setOffices([]);
-    }
-  };
-
-  const handleCityChange = async (selectedCity) => {
-    // console.log("selectedCity: ", selectedCity);
-    // const offices = await getPostOffice(selectedCity.Description);
-    // console.log("offices: ", offices);
-    if (!selectedCity) return;
-    setFormData((prevData) => ({
-      ...prevData,
-      city: selectedCity.Description || "",
-    }));
-
-    try {
-      const officeData = await getPostOffice(selectedCity.Description);
-      console.log("officeData: ", officeData);
-      setOffices(officeData);
-      setFormData((prevData) => ({ ...prevData, office: "" }));
-    } catch (error) {
-      console.error("Error fetching post offices:", error);
-      setOffices([]);
-    }
-  };
 
   const submitOrder = async (e) => {
     e.preventDefault();
-    const { area, city, office } = formData;
-    console.log("area: ", area);
+    const { city, office } = formData;
 
-    if (!area || !city || !office) {
+    if (!city || !office) {
       console.error("Area, city, or office is missing.");
       return;
     }
@@ -279,7 +203,6 @@ const BasketRigth = () => {
       phone: formData.phone,
       email: formData.email,
       address: {
-        area,
         city,
         office,
       },
@@ -300,16 +223,16 @@ const BasketRigth = () => {
   const handleDropdownToggle = (dropdownName) => {
     if (openDropdown === dropdownName) {
       setOpenDropdown(null); // Закрити, якщо такий самий відкритий
-      setSearch("");
+      // setSearch("");
     } else {
       setOpenDropdown(dropdownName); // Відкрити новий і закрити попередній
-      setSearch("");
+      // setSearch("");
     }
   };
-  // console.log(formData);
 
-  const [searchValue, setSearchValue] = useState("");
-  const popularCities = ["Київ", "Харків", "Одеса", "Дніпро", "Львів"]; // Список популярних міст
+  // console.log("searchValue: ", searchValue);
+
+  const popularCities = ["Київ", "Харків", "Одеса", "Дніпро", "Львів"];
 
   const filteredCities = useMemo(() => {
     if (!cit) return;
@@ -376,21 +299,44 @@ const BasketRigth = () => {
       )
     );
   };
+  const firstOffice =
+    selectedCityq && officesMob.data && officesMob.data.length > 0
+      ? officesMob.data[0]
+      : null;
 
-  // console.log("selectedCityq: ", selectedCityq);
   const selectCity = (city) => {
     setSelectedCityq(city.Description);
     setOpen(false);
     setSearchValue("");
   };
+
+  // console.log("selectedOfficeq", selectedOfficeq);
+  const selectCityDesc = (city) => {
+    setSelectedCityq(city.Description);
+    setSearchValue(city.Description);
+    setOpen(false);
+    setSelectedOfficeq("");
+    setFormData({
+      ...formData,
+      city: city.Description,
+      office: "",
+    });
+  };
+
   const selectOffice = (office) => {
     setSelectedOfficeq(office);
     setOpenOffice(false);
+    setFormData({ ...formData, office: office.Description });
   };
-  const firstOffice =
-    selectedCityq && officesMob.data && officesMob.data.length > 0
-      ? officesMob.data[0]
-      : null;
+
+  useEffect(() => {
+    if (firstOffice) {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        office: firstOffice.Description,
+      }));
+    }
+  }, [firstOffice]);
 
   // console.log(firstOffice);
   // Функція для фільтрації офісів
@@ -401,21 +347,7 @@ const BasketRigth = () => {
       item.Description.toLowerCase().includes(searchValue.toLowerCase())
     );
   };
-  useEffect(() => {
-    if (open || openOffice) {
-      document.body.classList.add(css.noScroll);
-      // document.documentElement.classList.add(css.noScroll);
-    } else {
-      document.body.classList.remove(css.noScroll);
-      // document.documentElement.classList.remove(css.noScroll);
-    }
 
-    // Очищення при демонтажі компонента
-    return () => {
-      document.body.classList.remove(css.noScroll);
-      // document.documentElement.classList.remove(css.noScroll);
-    };
-  }, [open, openOffice]);
   return (
     <>
       {!isMobile ? (
@@ -435,7 +367,7 @@ const BasketRigth = () => {
                         className={css.field}
                         id="name"
                         type="text"
-                        value={formData.name}
+                        value={formData.name + " " + formData.serName}
                         onChange={(e) =>
                           setFormData({ ...formData, name: e.target.value })
                         }
@@ -455,55 +387,50 @@ const BasketRigth = () => {
                       />
                     </dd>
 
-                    <dt className={css.formHead}>Область</dt>
-                    <dd className={css.formItem}>
-                      <SelectNovaPoshta
-                        options={areas.data}
-                        value={formData.area}
-                        onChange={(selectedArea) => {
-                          console.log("formData.area", formData);
-                          const selectedAreaRef = areas.data.find(
-                            (a) => a.Ref === selectedArea.Ref
-                          );
-
-                          // Перевірка наявності selectedAreaRef
-                          if (selectedAreaRef) {
-                            // console.log("selectedAreaRef: ", selectedAreaRef);
-                            setFormData((prevData) => ({
-                              ...prevData,
-                              area: selectedAreaRef.Description || "",
-                            }));
-                            handleAreaChange(selectedAreaRef); // передача selectedAreaRef в handleAreaChange
-                          } else {
-                            console.error("Selected area not found");
-                          }
-                        }}
-                        isOpen={openDropdown === "oblast"} // Відкритий тільки, якщо це активний випадаючий список
-                        onToggle={() => handleDropdownToggle("oblast")}
-                        search={search} // Передаємо значення пошуку
-                        setSearch={setSearch} // Передаємо функцію для очищення пошуку
-                        placeholder="Виберіть область"
-                      />
-                    </dd>
-
                     <dt className={css.formHead}>Місто</dt>
+
                     <dd className={css.formItem}>
-                      <SelectNovaPoshta
-                        options={cities.data}
-                        value={formData.city}
-                        onChange={(selectedCity) => {
-                          setFormData({
-                            ...formData,
-                            city: selectedCity.Description || "",
-                          });
-                          handleCityChange(selectedCity);
+                      <input
+                        className={css.fieldDesc}
+                        type="text"
+                        placeholder="назва міста"
+                        onChange={(e) => {
+                          setSearchValue(e.target.value);
+                          // Оновлюємо formData тільки якщо вище не було налаштовано значення
+                          setFormData((prevData) => ({
+                            ...prevData,
+                            city: e.target.value,
+                          }));
                         }}
-                        isOpen={openDropdown === "city"} // Відкритий тільки, якщо це активний випадаючий список
-                        onToggle={() => handleDropdownToggle("city")}
-                        search={search} // Передаємо значення пошуку
-                        setSearch={setSearch} // Передаємо функцію для очищення пошуку
-                        placeholder="Виберіть місто"
+                        onClick={() => setOpen(true)}
+                        value={searchValue || formData.city || ""}
                       />
+                      <ul
+                        className={css.cityList}
+                        style={{ display: open ? "block" : "none" }}
+                      >
+                        {cit && cit.data && filteredCities.length > 0 ? (
+                          filteredCities.map((item) => (
+                            <li
+                              className={css.optionsListItem}
+                              key={item.Ref}
+                              id={item.Ref}
+                              onClick={() => selectCityDesc(item)}
+                            >
+                              <div className={css.optionItem}>
+                                <div className={css.optionItemTitle}>
+                                  {/* {highlightText(item.Description, searchValue)} */}
+                                  {item.Description}
+                                </div>
+                              </div>
+                            </li>
+                          ))
+                        ) : (
+                          <li className={css.optionsListItem}>
+                            Місто не знайдене
+                          </li>
+                        )}
+                      </ul>
                     </dd>
                     <p>коментар</p>
                   </dl>
@@ -517,22 +444,67 @@ const BasketRigth = () => {
                     <div className={css.deliveryMethod}>
                       <dt className={css.formHead}>Віділення</dt>
                       <dd className={`${css.formItem} ${css.important}`}>
-                        {/* <select className={css.select} id=""></select> */}
-                        <SelectNovaPoshta
-                          options={offices.data}
-                          value={formData.office}
-                          onChange={(selectedOffice) => {
-                            setFormData({
-                              ...formData,
-                              office: selectedOffice.Description || "",
-                            });
-                          }}
-                          isOpen={openDropdown === "office"}
-                          onToggle={() => handleDropdownToggle("office")}
-                          search={search}
-                          setSearch={setSearch}
-                          placeholder="Виберіть віділення"
-                        />
+                        <span
+                          className={css.selectboxitContainer}
+                          aria-expanded={openDropdown === "office"}
+                          role="combobox"
+                          onClick={() => handleDropdownToggle("office")}
+                        >
+                          <span className={css.selectboxit}>
+                            <span className={css.selectboxitText}>
+                              {selectedCityq
+                                ? selectedOfficeq
+                                  ? selectedOfficeq.Description
+                                  : firstOffice?.Description
+                                : ""}
+                            </span>
+                          </span>
+                          <div
+                            className={css.selectboxitDropdown}
+                            style={{
+                              display:
+                                openDropdown === "office" ? "block" : "none",
+                            }}
+                          >
+                            <div className={css.selectboxitSearchContainer}>
+                              <input
+                                className={css.selectboxitSearchField}
+                                type="text"
+                                placeholder="Пошук..."
+                                value={searchOffice}
+                                onChange={(e) =>
+                                  setSearchOffice(e.target.value)
+                                }
+                                onClick={(e) => e.stopPropagation()}
+                              />
+                            </div>
+                            <ul className={css.selectboxitOptions}>
+                              {filterOffices(officesMob, searchOffice).length >
+                              0 ? (
+                                filterOffices(officesMob, searchOffice).map(
+                                  (item) => (
+                                    <li
+                                      key={item.Ref}
+                                      className={css.selectboxitFocus}
+                                      onClick={() => selectOffice(item)}
+                                      value={item.Ref}
+                                    >
+                                      <p
+                                        className={css.selectboxitOptionAnchor}
+                                      >
+                                        {item.Description}
+                                      </p>
+                                    </li>
+                                  )
+                                )
+                              ) : (
+                                <li className={css.optionsListItem}>
+                                  Віділення не знайдене
+                                </li>
+                              )}
+                            </ul>
+                          </div>
+                        </span>
                       </dd>
                     </div>
                   </dl>
@@ -553,6 +525,7 @@ const BasketRigth = () => {
                 {tt.map((item) => {
                   // console.log("tt: ", tt);
                   const details = productDetails[item.slug];
+                  // console.log("productDetails: ", productDetails);
                   // console.log("details: ", details);
                   const uniqueKey = `${item.product}-${item.volume}`;
                   const volumeDetail = details?.product?.volumes?.find(
@@ -598,7 +571,7 @@ const BasketRigth = () => {
         <>
           <div className={css.checkout}>
             <div className={css.content}>
-              <form style={{ padding: "10px" }}>
+              <form style={{ padding: "10px" }} onSubmit={submitOrder}>
                 <div className={css.formSection}>
                   <h3 className={css.heading}>Одержувач замовлення</h3>
                   <div className={css.formList}>
@@ -854,6 +827,7 @@ const BasketRigth = () => {
                 {tt.map((item) => {
                   // console.log("tt: ", tt);
                   const details = productDetails[item.slug];
+                  // console.log("productDetails: ", productDetails);
                   // console.log("details: ", details);
                   const uniqueKey = `${item.product}-${item.volume}`;
                   const volumeDetail = details?.product?.volumes?.find(
@@ -864,9 +838,38 @@ const BasketRigth = () => {
                     ? volumeDetail.discount || 0
                     : 0;
                   const discountedPrice = price * (1 - discount / 100);
-                  return <li key={uniqueKey}></li>;
+                  return (
+                    <li className={css.orderDetailsBlock} key={uniqueKey}>
+                      <div className={css.cartItem}>
+                        {details && (
+                          <CatalogItem
+                            productImg={details.volume.image}
+                            productName={details.product.name}
+                            productPrice={Math.ceil(discountedPrice)}
+                            id={item.product}
+                            slug={details.volume.slug}
+                            item={item}
+                            handleQuantityChange={handleQuantityChange}
+                            details={details}
+                            discountedPrice={discountedPrice}
+                          />
+                        )}
+                      </div>
+                    </li>
+                  );
                 })}
               </ul>
+              <div className={css.orderDetailsCost}>
+                <div className={css.orderDetailsCostItem}>
+                  <div>Доставка</div>
+                  <div className={css.orderDetailsCostValue}>
+                    За тарифами перевізника
+                  </div>
+                </div>
+              </div>
+              <div className={css.orderDetailsTotal}>
+                {calculateTotalAmount()} грн
+              </div>
             </div>
           </div>
         </>
