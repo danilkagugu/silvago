@@ -1,0 +1,30 @@
+.mainSwiper img {
+  width: 100%;
+  height: auto;
+}
+
+.thumbsSwiper img {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  object-fit: cover;
+}
+
+.thumbsSwiper .swiper-slide-active {
+  border: 2px solid #000;
+}
+
+.swipe {
+  width: 105px !important; /* Зміна ширини */
+  border: 1px solid #ddd; /* Додайте рамку */
+  transition: transform 0.3s ease; /* Додайте анімацію */
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0);
+  background: #fff;
+  margin-right: 5px;
+}
+
+.activeThumbnail {
+  border-color: #000; /* Інший колір рамки для активного слайду */
+}

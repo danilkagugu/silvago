@@ -11,6 +11,7 @@ import { CiSearch } from "react-icons/ci";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import PhoneInput from "react-phone-input-2";
 
 const UserSettings = () => {
   const isMobile = window.innerWidth <= 1440;
@@ -19,14 +20,20 @@ const UserSettings = () => {
 
   const userData = useSelector(selectUserData);
   // console.log("userData: ", userData);
+  const normalizePhoneNumber = (phone) => {
+    return phone.replace(/\D/g, ""); // Видаляє всі символи, які не є цифрами
+  };
 
   const [searchValue, setSearchValue] = useState("");
   const [formData, setFormData] = useState({
-    name: "",
-    serName: "",
+    firstName: "",
+    lastName: "",
+    middleName: "",
     phone: "",
     email: "",
     city: "",
+    cardNumber: "",
+    bonuses: "",
   });
   const [open, setOpen] = useState(false);
   const [cit, setCit] = useState();
@@ -40,11 +47,14 @@ const UserSettings = () => {
       const fetchArea = async () => {
         setFormData((prevData) => ({
           ...prevData,
-          name: userData?.name || "",
-          serName: userData?.serName || "",
-          phone: userData?.phone || "",
+          firstName: userData?.firstName || "",
+          lastName: userData?.lastName || "",
+          middleName: userData?.middleName || "",
+          phone: normalizePhoneNumber(userData?.phone) || "",
           email: userData?.email || "",
           city: userData?.city || "",
+          cardNumber: userData?.cardNumber || "",
+          bonuses: userData?.bonuses,
         }));
         setSelectedCityq(userData?.city);
       };
@@ -126,19 +136,7 @@ const UserSettings = () => {
       city: city.Description,
     });
   };
-
-  // const onSubmit = async (event) => {
-  //   event.preventDefault();
-  //   try {
-  //     const response = await dispatch(apiUpdateUser(formData));
-  //     console.log("response: ", response);
-  //     // if (response) {
-  //     //   navigate("/user-cabinet/settings");
-  //     // }
-  //   } catch (error) {
-  //     console.error("Error updating user: ", error);
-  //   }
-  // };
+  // console.log("formData", formData);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -170,131 +168,167 @@ const UserSettings = () => {
     setOpen(false);
     setSearchValue("");
   };
+  function pluralizeBonus(count) {
+    const pluralRules = new Intl.PluralRules("uk");
+    const forms = {
+      one: "бонус", // для 1
+      few: "бонуси", // для 2, 3, 4
+      many: "бонусів", // для 5 і більше
+      other: "бонусів",
+    };
 
+    return `${count} ${forms[pluralRules.select(count)]}`;
+  }
   return (
     <div>
       <div className={css.profileContent}>
         <h1 className={css.titleProfile}>Особисті Дані</h1>
         <div>
           {!isMobile ? (
-            <form className={css.formDesctop} onSubmit={onSubmit}>
-              <dl className={css.form}>
-                <dt className={css.formHead}>Ім&apos;я</dt>
-                <dd className={css.formItem}>
-                  <input
-                    className={css.field}
-                    id="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) =>
-                      setFormData({ ...formData, name: e.target.value })
-                    }
-                    placeholder="Ім'я"
-                  />
-                </dd>
-                <dt className={css.formHead}>Прізвище</dt>
-                <dd className={css.formItem}>
-                  <input
-                    className={css.field}
-                    id="surname"
-                    type="text"
-                    value={formData.serName}
-                    onChange={(e) =>
-                      setFormData({ ...formData, serName: e.target.value })
-                    }
-                    placeholder="Прізвище"
-                  />
-                </dd>
-                <dt className={css.formHead}>Е-пошта</dt>
-                <dd className={css.formItem}>
-                  <input
-                    className={css.field}
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    placeholder="Email"
-                  />
-                </dd>
-                <dt className={css.formHead}>Телефон</dt>
-                <dd className={css.formItem}>
-                  {/* <input className={css.field} type="text" /> */}
+            <>
+              <form className={css.formDesctop} onSubmit={onSubmit}>
+                <dl className={css.form}>
+                  <dt className={css.formHead}>Ім&apos;я</dt>
+                  <dd className={css.formItem}>
+                    <input
+                      className={css.field}
+                      id="name"
+                      type="text"
+                      value={formData.firstName}
+                      onChange={(e) =>
+                        setFormData({ ...formData, firstName: e.target.value })
+                      }
+                      placeholder="Ім'я"
+                    />
+                  </dd>
+                  <dt className={css.formHead}>Прізвище</dt>
+                  <dd className={css.formItem}>
+                    <input
+                      className={css.field}
+                      id="surname"
+                      type="text"
+                      value={formData.lastName}
+                      onChange={(e) =>
+                        setFormData({ ...formData, lastName: e.target.value })
+                      }
+                      placeholder="Прізвище"
+                    />
+                  </dd>
+                  <dt className={css.formHead}>По батькові</dt>
+                  <dd className={css.formItem}>
+                    <input
+                      className={css.field}
+                      id="middlename"
+                      type="text"
+                      value={formData.middleName}
+                      onChange={(e) =>
+                        setFormData({ ...formData, middleName: e.target.value })
+                      }
+                      placeholder="По батькові"
+                    />
+                  </dd>
+                  <dt className={css.formHead}>Е-пошта</dt>
+                  <dd className={css.formItem}>
+                    <input
+                      className={css.field}
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                      placeholder="Email"
+                    />
+                  </dd>
+                  <dt className={css.formHead}>Телефон</dt>
+                  <dd className={css.formItem}>
+                    <PhoneInput
+                      country={"ua"}
+                      value={formData.phone}
+                      onChange={(phone) =>
+                        setFormData({
+                          ...formData,
+                          phone: phone.replace(/\D/g, ""),
+                        })
+                      }
+                      placeholder="Мобільний телефон"
+                      inputClass={css.field}
+                      specialLabel=""
+                    />
+                  </dd>
 
-                  <CustomMaskedInput
-                    className={css.field}
-                    id="phone"
-                    value={formData.phone}
-                    onChange={(e) =>
-                      setFormData({ ...formData, phone: e.target.value })
-                    }
-                    placeholder="Мобільний телефон"
-                  />
-                </dd>
+                  <dt className={css.formHead}>Місто</dt>
 
-                <dt className={css.formHead}>Місто</dt>
-
-                <dd className={css.formItem}>
-                  <input
-                    className={css.fieldDesc}
-                    type="text"
-                    placeholder="назва міста"
-                    onChange={(e) => {
-                      setSearchValue(e.target.value);
-                      // Оновлюємо formData тільки якщо вище не було налаштовано значення
-                      setFormData((prevData) => ({
-                        ...prevData,
-                        city: e.target.value,
-                      }));
-                    }}
-                    onClick={() => setOpen(true)}
-                    value={searchValue || formData.city || ""}
-                  />
-                  <ul
-                    className={css.cityList}
-                    style={{ display: open ? "block" : "none" }}
-                  >
-                    {cit && cit.data && filteredCities.length > 0 ? (
-                      filteredCities.map((item) => (
-                        <li
-                          className={css.optionsListItem}
-                          key={item.Ref}
-                          id={item.Ref}
-                          onClick={() => selectCityDesc(item)}
-                        >
-                          <div className={css.optionItem}>
-                            <div className={css.optionItemTitle}>
-                              {/* {highlightText(item.Description, searchValue)} */}
-                              {item.Description}
+                  <dd className={css.formItem}>
+                    <input
+                      className={css.fieldDesc}
+                      type="text"
+                      placeholder="назва міста"
+                      onChange={(e) => {
+                        setSearchValue(e.target.value);
+                        // Оновлюємо formData тільки якщо вище не було налаштовано значення
+                        setFormData((prevData) => ({
+                          ...prevData,
+                          city: e.target.value,
+                        }));
+                      }}
+                      onClick={() => setOpen(true)}
+                      value={searchValue || formData.city || ""}
+                    />
+                    <ul
+                      className={css.cityList}
+                      style={{ display: open ? "block" : "none" }}
+                    >
+                      {cit && cit.data && filteredCities.length > 0 ? (
+                        filteredCities.map((item) => (
+                          <li
+                            className={css.optionsListItem}
+                            key={item.Ref}
+                            id={item.Ref}
+                            onClick={() => selectCityDesc(item)}
+                          >
+                            <div className={css.optionItem}>
+                              <div className={css.optionItemTitle}>
+                                {/* {highlightText(item.Description, searchValue)} */}
+                                {item.Description}
+                              </div>
                             </div>
-                          </div>
+                          </li>
+                        ))
+                      ) : (
+                        <li className={css.optionsListItem}>
+                          Місто не знайдене
                         </li>
-                      ))
-                    ) : (
-                      <li className={css.optionsListItem}>Місто не знайдене</li>
-                    )}
-                  </ul>
-                </dd>
+                      )}
+                    </ul>
+                  </dd>
 
-                <dt className={css.formHead}>Поточний пароль</dt>
-                <dd className={css.formItem}>
-                  <input className={css.field} type="password" />
-                </dd>
-                <dt className={css.formHead}>Новий пароль</dt>
-                <dd className={css.formItem}>
-                  <input className={css.field} type="password" />
-                </dd>
-                <dt className={css.formHead}>Пароль ще раз</dt>
-                <dd className={css.formItem}>
-                  <input className={css.field} type="password" />
-                </dd>
-              </dl>
-              <button className={css.btnSave} type="submit">
-                Зберегти зміни
-              </button>
-              <ToastContainer />
-            </form>
+                  <dt className={css.formHead}>Поточний пароль</dt>
+                  <dd className={css.formItem}>
+                    <input className={css.field} type="password" />
+                  </dd>
+                  <dt className={css.formHead}>Новий пароль</dt>
+                  <dd className={css.formItem}>
+                    <input className={css.field} type="password" />
+                  </dd>
+                  <dt className={css.formHead}>Пароль ще раз</dt>
+                  <dd className={css.formItem}>
+                    <input className={css.field} type="password" />
+                  </dd>
+                </dl>
+                <div className={css.bonusSection}>
+                  <h3 className={css.bonusTitle}>Ваші бонуси</h3>
+                  <div className={css.bonusValue}>
+                    {/* {formData.bonuses || "0"} бонусів */}
+                    {pluralizeBonus(formData.bonuses)}
+                  </div>
+                </div>
+                <button className={css.btnSave} type="submit">
+                  Зберегти зміни
+                </button>
+                <ToastContainer />
+              </form>
+            </>
           ) : (
             <>
               <form className={css.formMobile} onSubmit={onSubmit}>
@@ -304,9 +338,9 @@ const UserSettings = () => {
                     <input
                       className={css.input}
                       type="text"
-                      value={formData.name}
+                      value={formData.firstName}
                       onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
+                        setFormData({ ...formData, firstName: e.target.value })
                       }
                       placeholder="Ім'я"
                     />
@@ -318,11 +352,25 @@ const UserSettings = () => {
                     <input
                       className={css.input}
                       type="text"
-                      value={formData.serName}
+                      value={formData.lastName}
                       onChange={(e) =>
-                        setFormData({ ...formData, serName: e.target.value })
+                        setFormData({ ...formData, lastName: e.target.value })
                       }
                       placeholder="Прізвище"
+                    />
+                  </div>
+                </div>
+                <div className={css.fromItem}>
+                  <div className={css.formItemTitle}>По батькові</div>
+                  <div className={css.formItemContent}>
+                    <input
+                      className={css.input}
+                      type="text"
+                      value={formData.middleName}
+                      onChange={(e) =>
+                        setFormData({ ...formData, middleName: e.target.value })
+                      }
+                      placeholder="По батькові"
                     />
                   </div>
                 </div>

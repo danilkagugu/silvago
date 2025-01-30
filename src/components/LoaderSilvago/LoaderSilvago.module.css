@@ -1,0 +1,22 @@
+.skeletonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f7f7f7;
+}
+
+.logo {
+  width: 40%; /* Розмір логотипа */
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

@@ -1,0 +1,41 @@
+.paginationContainer {
+}
+
+.pageList {
+  margin-top: 35px;
+  text-align: center;
+}
+
+.pageContainer {
+  display: inline-flex;
+}
+
+.pageItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  position: relative;
+  margin-left: -1px;
+  vertical-align: top;
+  border: none;
+  border: 1px solid #e5e5e5 !important;
+  background: #fff;
+  height: 28px;
+  line-height: 28px;
+  padding: 0 10px;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  color: #000;
+  cursor: pointer;
+}
+
+.pageItem:disabled {
+  cursor: default;
+  color: red;
+}
+
+.pageItem:hover:not(:disabled) {
+  background-color: #e0e0e0;
+}

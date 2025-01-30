@@ -1,0 +1,48 @@
+.catalogTopRight {
+  flex: 0 1 auto;
+  align-items: flex-end;
+  margin: 0 10px;
+}
+
+.catalogControls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.catalogControlsItem {
+  margin-right: 20px;
+}
+.catalogControlsItem:last-of-type {
+  margin-right: 0;
+}
+
+.catalogSorting {
+  display: flex;
+  align-items: center;
+}
+
+.catalogSortingTitle {
+  margin-right: 8px;
+  color: #000;
+}
+
+.catalogSortingList {
+  display: flex;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+}
+
+.catalogSortingItem {
+  font-size: 13px;
+  color: #000;
+  border: none;
+  padding: 6px 10px 7px;
+  border-right: 1px solid #e5e5e5;
+  cursor: pointer;
+}
+.catalogSortingItem:hover {
+  color: #545454;
+}

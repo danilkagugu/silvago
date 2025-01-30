@@ -1,0 +1,116 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Напівпрозоре затемнення */
+  z-index: 9999; /* Повинен бути нижче модалки, але вище контенту */
+  transition: opacity 0.3s ease;
+  opacity: 0;
+  pointer-events: none; /* Вимикаємо взаємодію з затемненням */
+}
+
+.backdrop.open {
+  opacity: 1;
+  pointer-events: auto; /* Вмикаємо взаємодію після відкриття */
+}
+
+.modalSortingBox {
+  /* height: auto; */
+  height: auto; /* Автоматична висота залежно від контенту */
+  max-height: 80vh;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  /* max-height: 80vh; */
+  z-index: 100000;
+  border-radius: 16px 16px 0 0;
+  overflow-y: auto;
+  transform: translate3d(0, 100%, 0);
+  transition: transform 0.3s ease;
+}
+
+.modalSortingBox.open {
+  transform: translate3d(0, 0, 0);
+}
+
+.sortingWrapper {
+  background: #fff;
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.sortingHeader {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  grid-template-areas: "left center right";
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  margin: 0;
+  z-index: 2000;
+  height: 48px;
+  line-height: 20px;
+  border-bottom: 1px solid #d7d7d7;
+  color: #000;
+  background: #fff;
+}
+
+.sortingTitle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  grid-area: center;
+  padding: 0 16px;
+  font-size: 18px;
+  color: #000;
+  border: 0;
+}
+
+.sortingList {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.sortingListItem {
+  display: block;
+  color: #000;
+  position: relative;
+  font-size: 16px;
+  border-bottom: 0.5px solid #d7d7d7;
+}
+
+.sortingActive {
+  color: #72a805;
+}
+
+.sortingActive {
+  color: #72a805;
+}
+
+.sortingActive:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #72a805;
+  border-radius: 0 8px 8px 0;
+}
+
+.optionItem {
+  display: flex;
+  align-items: center;
+  padding: 9px 16px;
+  min-height: 48px;
+}
+
+.optionItemTitle {
+  flex-grow: 1;
+  font-size: 16px;
+  word-break: break-word;
+}

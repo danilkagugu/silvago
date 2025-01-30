@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import BrandItem from "../BrandItem/BrandItem";
 import css from "./BrandsList.module.css";
-import { getBrands } from "../../services/productApi";
 import { useNavigate } from "react-router-dom";
+
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllBrands } from "../../redux/inventoryStore/operations";
+import { selectAllBrands } from "../../redux/inventoryStore/selectors";
+
 const BrandsList = () => {
   const navigate = useNavigate();
 
-  const [brands, setBrands] = useState([]);
-  console.log("brands: ", brands);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const brands = await getBrands();
-        setBrands(brands);
-      } catch (error) {
-        console.log("Error fetching brands:", error);
-      }
-    };
-    fetchProducts();
-  }, []);
+    dispatch(fetchAllBrands());
+  }, [dispatch]);
+
+  const brands = useSelector(selectAllBrands);
 
   const handleBrandClick = (brandId) => {
     navigate(`/brand/${brandId}`);

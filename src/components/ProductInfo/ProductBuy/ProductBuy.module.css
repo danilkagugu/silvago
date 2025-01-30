@@ -1,0 +1,54 @@
+.productSectionBuy {
+  margin-bottom: 40px;
+}
+
+.productOrder {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.productBuyBtn {
+  position: relative;
+  box-sizing: border-box;
+  display: flex;
+  line-height: 1;
+  padding: 0;
+  outline: 0;
+  border: none;
+  background: rgba(0, 0, 0, 0);
+  text-align: center;
+  text-decoration: none !important;
+  vertical-align: middle;
+  cursor: pointer;
+  white-space: nowrap;
+  border-radius: 4px;
+  color: #666;
+  border: 1px solid #d8d8d8;
+  background: #fff;
+  box-shadow: none;
+  height: 38px;
+  line-height: 38px;
+  font-size: 18px;
+  transition: all 0.15s;
+  color: #fff;
+  border: 0;
+  background: #ec9fa8;
+  box-shadow: none;
+  padding: 5px 10px;
+  align-items: center;
+}
+
+.productBuyBtn:hover {
+  background: #feb1ba;
+  border-color: #fff;
+  color: #fff;
+}
+
+.productMiss {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #000;
+}

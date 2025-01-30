@@ -1,0 +1,19 @@
+.breadcrumbs {
+  display: flex;
+  margin: 0 0 10px;
+  font-size: 11px;
+  color: #acacac;
+  line-height: 1.6;
+}
+
+.productGroupMenuItem {
+  display: flex;
+  align-items: center;
+}
+.productGroupMenuItem a {
+  color: #acacac;
+  border: 0;
+}
+.productGroupMenuItem a:hover {
+  color: #000;
+}

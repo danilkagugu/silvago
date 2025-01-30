@@ -1,0 +1,53 @@
+.filterCurrent {
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+.filterCurrentGroup {
+  margin-bottom: 7px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 15px;
+}
+
+.filterCurrentTitle {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  line-height: 1;
+  margin: 0 0 1px 0;
+  padding: 4px 6px 3px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  color: #000;
+  transition: all 0.15s;
+  word-break: break-word;
+}
+
+.filterCurrentBrand {
+  position: relative;
+  display: inline-block;
+  margin: 0 0 1px 1px;
+  vertical-align: top;
+  line-height: 1;
+  border: 0;
+  padding: 5px 20px 4px 6px;
+  background-color: #ddbfbf;
+  border-radius: 3px;
+  color: #fff;
+  transition: all 0.15s;
+  word-break: break-word;
+}
+
+.filterClear {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  line-height: 1;
+  margin: 0 0 1px 0;
+  padding: 4px 6px 3px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 3px;
+  transition: all 0.15s;
+  cursor: pointer;
+}

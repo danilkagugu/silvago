@@ -1,0 +1,48 @@
+.productGallery {
+  margin-bottom: 40px;
+}
+
+.galerry {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.titlePhoto {
+  border-radius: 4px;
+  position: relative;
+  background: #fff;
+}
+
+.titlePhoto::before {
+  display: block;
+  content: "";
+  padding-bottom: 75%;
+}
+
+.titlePhotoContainer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.logoBrand {
+  position: absolute;
+  z-index: 50;
+  border: 0;
+  top: 15px;
+  right: 15px;
+  padding: 5px;
+  border-radius: 4px;
+  background-color: #fff;
+  display: flex;
+  cursor: pointer;
+}
+
+.photoCarusel {
+  position: relative;
+  margin-top: 10px;
+  text-align: center;
+}

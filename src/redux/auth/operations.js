@@ -57,6 +57,7 @@ export const apiRefreshUser = createAsyncThunk(
     setToken(token);
     try {
       const data = await requestGetCurrentUser();
+      // console.log("data: ", data);
       return data;
     } catch (err) {
       return thunkAPI.rejectWithValue(err.message);
@@ -68,7 +69,7 @@ export const getUserInfo = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const response = await requestGetCurrentUser();
-      console.log("response: ", response);
+      // console.log("response: ", response);
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -81,6 +82,7 @@ export const apiUpdateUser = createAsyncThunk(
   async (body, thunkAPI) => {
     try {
       const response = await requestUpdate(body);
+      // console.log("response: ", response);
       return response.data.user;
     } catch (e) {
       return thunkAPI.rejectWithValue(e.message);

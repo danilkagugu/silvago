@@ -1,6 +1,6 @@
 // redux/search/searchSlice.js
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { searchProducts as searchProductsApi } from "../../services/productApi";
+import { createSlice, isAnyOf } from "@reduxjs/toolkit";
+import { searchProducts } from "./operations";
 
 const INITIAL_STATE = {
   searchResults: [],
@@ -8,39 +8,24 @@ const INITIAL_STATE = {
   error: null,
 };
 
-export const searchProducts = createAsyncThunk(
-  "search/searchProducts",
-  async (query, thunkAPI) => {
-    try {
-      const data = await searchProductsApi(query);
-      return data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error.message);
-    }
-  }
-);
-
 const searchSlice = createSlice({
   name: "search",
   initialState: INITIAL_STATE,
   extraReducers: (builder) =>
     builder
-      .addCase(searchProducts.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
       .addCase(searchProducts.fulfilled, (state, action) => {
         state.searchResults = action.payload;
         state.loading = false;
       })
-      .addCase(searchProducts.rejected, (state, action) => {
-        state.error = action.payload;
+
+      .addMatcher(isAnyOf(searchProducts.pending), (state) => {
+        state.loading = true;
+        state.error = false;
+      })
+      .addMatcher(isAnyOf(searchProducts.rejected), (state) => {
         state.loading = false;
+        state.error = true;
       }),
 });
-
-export const selectSearchResults = (state) => state.search.searchResults;
-export const selectSearchLoading = (state) => state.search.loading;
-export const selectSearchError = (state) => state.search.error;
 
 export const searchReducer = searchSlice.reducer;

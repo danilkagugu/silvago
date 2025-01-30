@@ -83,6 +83,7 @@
   color: white;
   cursor: pointer;
   transition: transform 0.3s ease; /* Плавний перехід */
+  margin-top: 15px;
 }
 
 .btnSave:hover {
@@ -440,4 +441,26 @@
   height: 100%;
   background: rgba(0, 0, 0, 0.5); /* Напівпрозорий чорний фон */
   z-index: 7000; /* Можливо, вам потрібно відрегулювати значення, щоб з'явився під вашим основним вмістом */
+}
+
+.bonusSection {
+  flex: 1; /* Задає ширину для блоку з бонусами */
+  padding: 20px;
+  margin-left: 20px; /* Відступ зліва */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9; /* Світло-сірий фон */
+  text-align: center;
+}
+
+.bonusTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.bonusValue {
+  font-size: 24px;
+  font-weight: bold;
+  color: #28a745; /* Зелений колір */
 }

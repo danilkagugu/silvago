@@ -7,27 +7,36 @@ import * as Yup from "yup";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
+// ✅ Валідаційна схема Yup
 const UserRegisterSchema = Yup.object().shape({
-  name: Yup.string(),
-  serName: Yup.string(),
-  phone: Yup.string(),
+  firstName: Yup.string()
+    .required("Поле 'Ім'я' є обов'язковим")
+    .min(2, "Занадто коротке ім'я"),
+  lastName: Yup.string()
+    .required("Поле 'Прізвище' є обов'язковим")
+    .min(2, "Занадто коротке прізвище"),
+  middleName: Yup.string().optional().max(20, "Занадто довге по батькові"),
+  phone: Yup.string()
+    // .matches(/^\+?[0-9]{7,15}$/, "Введіть коректний телефонний номер")
+    .required("Поле 'Телефон' є обов'язковим"),
   email: Yup.string()
     .email("Уведіть валідний email")
-    .required("Поле Email є обов'язковим"),
+    .required("Поле 'Email' є обов'язковим"),
   password: Yup.string()
-    .min(6, "Короткий")
-    .max(50, "Довгий")
+    .min(6, "Короткий пароль (мінімум 6 символів)")
+    .max(50, "Довгий пароль")
     .required("Поле 'Пароль' є обов'язковим"),
   repeatPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Паролі різні")
-    .required("Поле 'Пароль' є обов'язковим"),
+    .required("Поле 'Підтвердити пароль' є обов'язковим"),
 });
 
 const INITIAL_FORM_DATA = {
-  name: "Danulo",
-  serName: "Yanishevskiy",
-  phone: "+380506863801",
-  email: "danil@gmail.com",
+  firstName: "Данило",
+  lastName: "Янішевський",
+  middleName: "",
+  phone: "380506863801",
+  email: "danulo1@gmail.com",
   password: "123456789",
   repeatPassword: "123456789",
 };
@@ -38,19 +47,29 @@ const RegisterForm = ({ openLogin, closeLogin, loginFormOn }) => {
     register,
     handleSubmit,
     control,
-    formState: { errors, touchedFields },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(UserRegisterSchema),
     defaultValues: INITIAL_FORM_DATA,
   });
+
+  const normalizePhoneNumber = (phone) => {
+    return phone.replace(/\D/g, ""); // Видаляє всі символи, які не є цифрами
+  };
+
   const onSubmit = async (data) => {
     try {
-      const response = await requestSignUp(data);
+      const cleanedPhone = normalizePhoneNumber(data.phone);
+      const { repeatPassword, ...formData } = data; // Видаляємо підтвердження пароля
+      const response = await requestSignUp({
+        ...formData,
+        phone: cleanedPhone,
+      });
       if (response) {
         navigate("/");
       }
     } catch (error) {
-      console.log(error);
+      console.log("Помилка реєстрації клієнта:", error);
     }
     closeLogin(false);
   };
@@ -62,35 +81,52 @@ const RegisterForm = ({ openLogin, closeLogin, loginFormOn }) => {
           <h2 className={css.titleRegister}>Зареєструватись</h2>
           <IoCloseSharp
             className={css.close}
-            onClick={() => {
-              closeLogin(false);
-            }}
+            onClick={() => closeLogin(false)}
           />
         </div>
         <form className={css.form} onSubmit={handleSubmit(onSubmit)}>
-          <label className={css.visuallyHidden} htmlFor="name">
-            Імя
+          <label className={css.visuallyHidden} htmlFor="firstName">
+            Ім&apos;я
           </label>
           <input
             className={css.inputForm}
-            id="name"
+            id="firstName"
             type="text"
-            {...register("name")}
+            {...register("firstName")}
             placeholder="Ім'я"
           />
-          <label className={css.visuallyHidden} htmlFor="surname">
+          {errors.firstName && (
+            <div className={css.error}>{errors.firstName.message}</div>
+          )}
+
+          <label className={css.visuallyHidden} htmlFor="lastName">
             Прізвище
           </label>
           <input
             className={css.inputForm}
-            id="surname"
+            id="lastName"
             type="text"
-            {...register("serName")}
+            {...register("lastName")}
             placeholder="Прізвище"
           />
-          <label className={css.visuallyHidden} htmlFor="phone">
-            Мобільний телефон
+          {errors.lastName && (
+            <div className={css.error}>{errors.lastName.message}</div>
+          )}
+
+          <label className={css.visuallyHidden} htmlFor="middleName">
+            По батькові
           </label>
+          <input
+            className={css.inputForm}
+            id="middleName"
+            type="text"
+            {...register("middleName")}
+            placeholder="По батькові (необов'язково)"
+          />
+          {errors.middleName && (
+            <div className={css.error}>{errors.middleName.message}</div>
+          )}
+
           <Controller
             name="phone"
             control={control}
@@ -103,45 +139,43 @@ const RegisterForm = ({ openLogin, closeLogin, loginFormOn }) => {
               />
             )}
           />
-          <label className={css.visuallyHidden} htmlFor="email">
-            Email
-          </label>
+          {errors.phone && (
+            <div className={css.error}>{errors.phone.message}</div>
+          )}
+
           <input
-            className={`${css.inputForm}`}
+            className={css.inputForm}
             id="email"
             type="email"
             {...register("email")}
             placeholder="Email"
           />
-          {errors.email && touchedFields.email ? (
+          {errors.email && (
             <div className={css.error}>{errors.email.message}</div>
-          ) : null}
-          <label className={css.visuallyHidden} htmlFor="password">
-            Пароль
-          </label>
+          )}
+
           <input
-            className={`${css.inputForm}`}
+            className={css.inputForm}
             id="password"
             type="password"
             {...register("password")}
             placeholder="Пароль"
           />
-          {errors.password && touchedFields.password ? (
+          {errors.password && (
             <div className={css.error}>{errors.password.message}</div>
-          ) : null}
-          <label className={css.visuallyHidden} htmlFor="repeat-password">
-            Підтвердити пароль
-          </label>
+          )}
+
           <input
-            className={`${css.inputForm} `}
+            className={css.inputForm}
             id="repeat-password"
             type="password"
             {...register("repeatPassword")}
             placeholder="Підтвердити пароль"
           />
-          {errors.repeatPassword && touchedFields.repeatPassword ? (
+          {errors.repeatPassword && (
             <div className={css.error}>{errors.repeatPassword.message}</div>
-          ) : null}
+          )}
+
           <button className={css.btnRegister} type="submit">
             Реєстрація
           </button>

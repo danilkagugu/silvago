@@ -1,0 +1,43 @@
+.favoriteBtn {
+  display: block;
+  white-space: nowrap;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.favoriteIconBox {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+  width: 35px;
+  height: 35px;
+  line-height: 35px;
+  border: 1px solid #acacac;
+  border-radius: 100%;
+}
+
+.icon {
+  display: inline-block;
+  font-size: 32px;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+
+.iconFavorite {
+  fill: #acacac;
+  font-size: 19px;
+}
+
+.isFavorite {
+  fill: red;
+}
+
+.favoriteText {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+  font-size: 12px;
+}

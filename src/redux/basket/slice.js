@@ -3,6 +3,7 @@ import {
   addProduct,
   createOrder,
   deleteProduct,
+  fetchProductDetails,
   getBasketInfo,
   updateProductQuantityBasket,
 } from "./operations";
@@ -10,6 +11,7 @@ import {
 const INITIAL_STATE = {
   order: null,
   items: [],
+  productDetails: {},
   allQuantity: 0,
   totalPrice: 0,
   loading: false,
@@ -22,17 +24,25 @@ const basketSlice = createSlice({
   extraReducers: (builder) =>
     builder
       .addCase(getBasketInfo.fulfilled, (state, action) => {
-        state.items = action.payload.products;
+        state.items = action.payload.products || [];
 
         state.totalPrice = state.items.reduce((total, item) => {
           return total + item.price * item.quantity;
         }, 0);
+
         state.loading = false;
         state.error = null;
       })
+      .addCase(fetchProductDetails.fulfilled, (state, action) => {
+        const { slug, details } = action.payload;
+        // console.log("action.payload: ", action.payload);
+        state.productDetails[slug] = details;
+        state.loading = false;
+      })
+
       .addCase(addProduct.fulfilled, (state, action) => {
         state.items = action.payload.products;
-        console.log("action.payload: ", action.payload);
+
         state.allQuantity = action.payload.products.reduce((total, item) => {
           return total + item.quantity;
         }, 0);
@@ -43,7 +53,7 @@ const basketSlice = createSlice({
         state.error = null;
       })
       .addCase(deleteProduct.fulfilled, (state, { payload }) => {
-        console.log("payload: ", payload);
+        // console.log("payload: ", payload);
         state.items = payload.products;
         state.allQuantity = state.items.reduce((total, item) => {
           return total + item.quantity;
@@ -79,7 +89,9 @@ const basketSlice = createSlice({
           getBasketInfo.pending,
           addProduct.pending,
           createOrder.pending,
-          deleteProduct.pending
+          deleteProduct.pending,
+          updateProductQuantityBasket.pending,
+          fetchProductDetails.pending
         ),
         (state) => {
           state.loading = true;
@@ -91,7 +103,9 @@ const basketSlice = createSlice({
           getBasketInfo.rejected,
           addProduct.rejected,
           createOrder.rejected,
-          deleteProduct.rejected
+          deleteProduct.rejected,
+          updateProductQuantityBasket.rejected,
+          fetchProductDetails.rejected
         ),
         (state) => {
           state.loading = false;

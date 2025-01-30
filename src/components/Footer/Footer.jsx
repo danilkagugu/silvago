@@ -1,23 +1,23 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+
 import Logo from "../Logo/Logo";
 import css from "./Footer.module.css";
-import { useEffect, useState } from "react";
-import { getCategories } from "../../services/productApi";
+
+import { selectAllCategories } from "../../redux/inventoryStore/selectors";
+import { fetchAllCategories } from "../../redux/inventoryStore/operations";
+
 const Footer = () => {
   const navigate = useNavigate();
-  const [categories, setCategories] = useState();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await getCategories();
-        setCategories(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchCategories();
-  }, []);
+    dispatch(fetchAllCategories());
+  }, [dispatch]);
+
+  const categories = useSelector(selectAllCategories);
 
   const handleCategoryClick = (slug) => {
     navigate(`/catalog/${slug}`);
@@ -28,7 +28,7 @@ const Footer = () => {
         <div className={css.footerList}>
           <ul className={css.footerMenu}>
             <li className={css.footerMenuItem}>
-              <Logo />
+              <Logo width={220} color={"invert(1)"} />
             </li>
             <li>
               <h4 className={css.footerTitles}>Каталог</h4>

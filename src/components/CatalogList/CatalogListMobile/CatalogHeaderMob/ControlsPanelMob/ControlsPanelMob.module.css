@@ -1,0 +1,15 @@
+.controlsPanel {
+  position: sticky;
+  transition: box-shadow 0.15s;
+  padding: 0 8px;
+  margin: 0 0 16px;
+  top: 48px;
+  z-index: 12;
+  border-radius: 0 0 8px 8px;
+}
+
+.catalogControls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}

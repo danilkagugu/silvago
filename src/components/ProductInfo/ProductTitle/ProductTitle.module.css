@@ -1,0 +1,43 @@
+.productHeaderTitle {
+  display: flex;
+  align-items: flex-start;
+}
+
+.productHeaderTitleBlock {
+  margin-right: 10px;
+  flex-grow: 1;
+}
+
+.productTitle {
+  margin: 0 0 10px;
+  font-size: 20px;
+  display: inline-block;
+  font-weight: 400;
+}
+
+.productHeaderInfo {
+  display: flex;
+  align-items: baseline;
+}
+
+.productHeaderAvailability {
+  margin-right: 15px;
+  font-size: 12px;
+}
+
+.productInStock {
+  color: #69b815;
+}
+
+.productNotStock {
+  color: #a2a2a2;
+}
+
+.productHeaderArticle {
+  font-size: 12px;
+  margin-right: 15px;
+}
+
+.productHeaderRaiting {
+  font-size: 12px;
+}

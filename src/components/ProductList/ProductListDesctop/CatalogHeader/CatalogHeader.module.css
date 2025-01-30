@@ -1,0 +1,5 @@
+.catalogTopRows {
+  display: flex;
+  align-items: flex-end;
+  margin: 0px -10px;
+}

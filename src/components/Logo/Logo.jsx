@@ -1,11 +1,18 @@
 import { Link } from "react-router-dom";
 import css from "./Logo.module.css";
+import l from "../../assets/img/logoSilvago.png";
 
-const Logo = () => {
+const Logo = ({ width, color }) => {
   return (
     <div className={css.logo}>
       <Link className={css.logoLink} to={"/"}>
-        Silvago
+        <img
+          src={l}
+          alt="Silvago"
+          width={width}
+          height={50}
+          style={{ filter: color }}
+        />
       </Link>
     </div>
   );

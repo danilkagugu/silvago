@@ -1,0 +1,30 @@
+.productGroup {
+  margin-bottom: 40px;
+}
+
+.productDescriptionHeader {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.productDescriptionNav {
+  display: flex;
+}
+
+.descriptionNavTab {
+  position: relative;
+  margin-right: 20px;
+  border: 0;
+  color: #848483;
+  cursor: pointer;
+}
+
+.tabActive {
+  color: #000;
+}
+
+.text {
+  line-height: 1.57;
+}

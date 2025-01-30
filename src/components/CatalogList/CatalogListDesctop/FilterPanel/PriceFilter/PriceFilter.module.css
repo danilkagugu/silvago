@@ -1,0 +1,96 @@
+.filterSectionTitle {
+  font-size: 16px;
+  font-weight: bold;
+  word-break: break-word;
+}
+
+.filterPrice {
+  margin-top: 9px;
+}
+
+.filterPriceInputs {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.field {
+  border: 1px solid #acacac;
+  background: #fff;
+  border-radius: 4px;
+  line-height: normal;
+  vertical-align: middle;
+  transition: border-color 0.1s;
+  padding: 6px 8px;
+  font-size: 16px;
+  height: 36px;
+}
+
+.filterPriceField {
+  height: 26px;
+  padding: 0 6px;
+  min-width: 4.1em;
+  border-radius: 2px;
+  font-size: 14px;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.15);
+  -webkit-appearance: none;
+}
+
+.filterPriceSep {
+  flex-shrink: 0;
+  width: 12px;
+  height: 1px;
+  margin: 11px 2px 0;
+  background-color: #acacac;
+}
+
+.filterPriceBtn {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-block;
+  outline: 0;
+  text-align: center;
+  text-decoration: none !important;
+  vertical-align: middle;
+  white-space: nowrap;
+  border-radius: 4px;
+  color: #666;
+  border: 1px solid #d8d8d8;
+  background: #fff;
+  box-shadow: none;
+  transition: all 0.15s;
+  font-weight: normal;
+  flex: 0 0 auto;
+  height: 26px;
+  line-height: 26px;
+  margin-left: 10px;
+  font-size: 12px;
+}
+
+.btnContent {
+  padding: 0 13px;
+}
+
+.priceSlider {
+  height: 4px;
+  position: relative;
+  border-radius: 2px;
+  background-clip: padding-box;
+  background-color: rgba(221, 191, 191, 0.2);
+}
+
+/* PRICE FILTER */
+
+.sliderTrack {
+  height: 4px;
+  border-radius: 2px;
+  position: relative;
+}
+
+.sliderThumb {
+  height: 16px;
+  width: 16px;
+  background-color: #b22222;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}

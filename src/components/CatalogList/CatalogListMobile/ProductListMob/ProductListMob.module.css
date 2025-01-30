@@ -1,0 +1,10 @@
+.goods {
+  display: grid;
+  grid-template-rows: 1fr;
+  row-gap: 32px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.goodsItem {
+  padding: 0 16px;
+}

@@ -1,9 +1,7 @@
 import css from "./Catalogy.module.css";
-// import catologyJson from "./NextCatalog.json";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // import transliterate from "../../helpers/transliterate";
 import { useEffect, useState } from "react";
-import { getCategories } from "../../services/productApi";
 import { IoSearch } from "react-icons/io5";
 import SearchProduct from "../SearchProduct/SearchProduct";
 import { LuHeart } from "react-icons/lu";
@@ -14,32 +12,33 @@ import RegisterForm from "../RegisterForm/RegisterForm";
 import { PiUserFill } from "react-icons/pi";
 import { apiLogoutUser } from "../../redux/auth/operations";
 import { selectFavoritesQuantity } from "../../redux/product/selectors";
+import { store } from "../../redux/store";
+import { fetchAllCategoriesTorgsoft } from "../../redux/inventoryStore/operations";
+import { selectAllCategoriesTorgsoft } from "../../redux/inventoryStore/selectors";
+import CategoryTree from "./CategoryTree";
 
 const Catalogy = () => {
   const navigate = useNavigate();
-  const [categories, setCategories] = useState();
   const [searchQuery, setSearchQuery] = useState("");
   const [openLoginForm, setOpenLoginForm] = useState(false);
   const [openRegisterForm, setOpenRegisterForm] = useState(false);
+  const [showOutOfStockMessage, setShowOutOfStockMessage] = useState(false);
   const login = useSelector(selectIsLoggedIn);
+  // console.log("login: ", login);
   const user = useSelector(selectUserData);
+  // console.log("user: ", user);
   const favoriteProductsLength = useSelector(selectFavoritesQuantity);
 
   const dispatch = useDispatch();
+  const token = store.getState().auth.token;
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await getCategories();
+    dispatch(fetchAllCategoriesTorgsoft());
+  }, [dispatch]);
 
-        setCategories(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const categoriesTorgsoft = useSelector(selectAllCategoriesTorgsoft);
+  // console.log("categoriesTorgsoft: ", categoriesTorgsoft);
 
-    fetchCategories();
-  }, []);
   const handleCategoryClick = (slug) => {
     navigate(`/catalog/${slug}`);
   };
@@ -68,35 +67,34 @@ const Catalogy = () => {
     dispatch(apiLogoutUser());
     navigate("/");
   };
+
+  const clickHeart = () => {
+    if (token) {
+      console.log("token: ", token);
+      navigate("/user-cabinet/favorite");
+    } else {
+      // Якщо кількість перевищує максимальну, показуємо повідомлення
+      setShowOutOfStockMessage(true);
+      // Приховуємо повідомлення через 2-3 секунди
+      setTimeout(() => {
+        setShowOutOfStockMessage(false);
+      }, 2000); // 2000 мілісекунд = 2 секунди
+    }
+  };
+
   return (
     <div className={css.catalogyMenu}>
-      <ul className={css.catalogyList}>
-        {categories &&
-          categories.map((category) => (
-            <li className={css.catologyItem} key={category._id}>
-              <div
-                className={css.catologyBox}
-                onClick={() => handleCategoryClick(category.slug)}
-              >
-                <p className={css.itemText}>{category.name}</p>
-              </div>
-              {category.items.length > 0 && (
-                <ul className={css.dropDownMenu}>
-                  {category.items.map((item) => (
-                    <li className={css.downMenuItem} key={item._id}>
-                      <Link
-                        to={`/catalog/${category.slug}/${item.slug}`}
-                        className={css.downMenuLink}
-                      >
-                        <p className={css.downMenuText}>{item.name}</p>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </li>
-          ))}
-      </ul>
+      <div className={css.headerColumn}>
+        <div className={css.headerSection}>
+          <div className={css.productsMenu}>
+            {categoriesTorgsoft && categoriesTorgsoft.length > 0 ? (
+              <CategoryTree categoriesTorgsoft={categoriesTorgsoft} />
+            ) : (
+              <div className={css.noCategories}>Категорії не знайдено</div>
+            )}
+          </div>
+        </div>
+      </div>
       <div className={css.resultbox}>
         <div className={css.searchBox}>
           <IoSearch className={`${css.iconSearch} ${css.icon}`} />
@@ -122,13 +120,26 @@ const Catalogy = () => {
         <div className={css.favoriteBox}>
           <LuHeart
             className={`${css.iconUser} ${css.favoriteIcon}`}
-            onClick={() => {
-              navigate("/user-cabinet/favorite");
-            }}
+            onClick={clickHeart}
           />
-          <span className={css.amountProductsFavorites}>
-            {favoriteProductsLength}
-          </span>
+          {token && (
+            <span className={css.amountProductsFavorites}>
+              {favoriteProductsLength}
+            </span>
+          )}
+
+          <div className={css.notificationsContainer}>
+            <div
+              className={`${css.notificationInfo} ${css.notification} ${css.notificationExpends}`}
+              style={{
+                display: showOutOfStockMessage ? "block" : "none",
+              }}
+            >
+              <div className={css.notificationText}>
+                Спочатку увійдіть в профіль
+              </div>
+            </div>
+          </div>
         </div>
         <div className={css.userCabinet}>
           <div className={css.userFIOWrapper}>
@@ -136,7 +147,7 @@ const Catalogy = () => {
               <>
                 <PiUserFill className={css.iconUser} />
                 <p className={css.userFIO}>
-                  {user.name} {user.serName}
+                  {user.firstName} {user.lastName}
                 </p>
               </>
             ) : (

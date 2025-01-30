@@ -1,13 +1,13 @@
 import BasketRigth from "../../components/BasketRigth/BasketRigth";
 // import BasketContactData from "../../components/BasketContactData/BasketContactData";
 
-import Layout from "../../components/Layout/Layout";
+import LayoutBasket from "../../components/LayoutBasket/LayoutBasket";
 
 const Basket = () => {
   return (
-    <Layout>
+    <LayoutBasket>
       <BasketRigth />
-    </Layout>
+    </LayoutBasket>
   );
 };
 
