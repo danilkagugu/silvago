@@ -1,0 +1,65 @@
+.catalogCardInfo {
+  position: relative;
+  padding: 0 15px 15px;
+}
+
+.catalogCardBrand {
+  margin-bottom: 4px;
+  font-weight: 700;
+  font-size: 15px;
+  height: 19px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.catalogCardTitle {
+  margin: 0 0 6px;
+  padding-bottom: 2px;
+  font-size: 13px;
+  line-height: 1.4;
+  font-weight: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 4.2em;
+}
+
+.catalogCardPriceBox {
+  display: flex;
+  align-items: center;
+  margin-top: 9px;
+}
+
+.catalogCardPrice {
+  align-self: center;
+  color: #000;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.catalogCardPriceBox .catalogCardPrice:not(:only-child) {
+  margin-right: 10px;
+}
+
+.lightPrice {
+  color: #acacac !important;
+}
+
+.catalogCardOldPrice {
+  line-height: 0.8;
+  color: #acacac;
+  text-decoration: line-through;
+}
+
+.catalogCardAvailable {
+  margin-top: 4px;
+  font-size: 13px;
+  color: #83b224;
+}
+
+.notAvailable {
+  color: #a2a2a2;
+}

@@ -1,38 +1,32 @@
 import { useNavigate, useParams } from "react-router-dom";
 import css from "./OrderDetails.module.css";
-import { useEffect, useState } from "react";
-import { getOrderById } from "../../services/productApi";
+import { useEffect } from "react";
 import { formatDate } from "../../helpers/productActions";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchOrderById } from "../../redux/order/operations";
+import { selectOrderById } from "../../redux/order/selectors";
 
 const OrderDetails = () => {
+  const dispatch = useDispatch();
+
   const { orderId } = useParams();
-  const [orderById, setOrderById] = useState([]);
   const navigate = useNavigate();
-  // console.log("orderById: ", orderById);
 
   useEffect(() => {
-    const fetchOrder = async () => {
-      try {
-        const order = await getOrderById(orderId);
-        // console.log("order: ", order);
-        setOrderById(order);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchOrder();
-  }, [orderId]);
+    if (orderId) {
+      dispatch(fetchOrderById(orderId));
+    }
+  }, [dispatch, orderId]);
 
-  const order = orderById[0] || {};
-
-  const {
-    user,
-    status,
-
-    basket = [],
-  } = order;
+  const orderDetails = useSelector(selectOrderById);
+  // console.log("orderDetails: ", orderDetails);
+  if (!orderDetails) {
+    return <div>Loading...</div>; // Optionally add a loading state
+  }
+  const { user, status, basket = [] } = orderDetails;
 
   const navigateProductClick = (id) => {
+    if (!id) return;
     navigate(`/product/${id}`);
   };
 
@@ -49,7 +43,7 @@ const OrderDetails = () => {
               </dd>
               <dt className={css.orderContactItemA}>Ім&apos;я та прізвище</dt>
               <dd className={css.orderContactItemB}>
-                {user?.name} {user?.serName}
+                {user?.name || ""} {user?.serName || ""}
               </dd>
               <dt className={css.orderContactItemA}>Е-пошта</dt>
               <dd className={css.orderContactItemB}>{user?.email}</dd>
@@ -105,7 +99,9 @@ const OrderDetails = () => {
             </ul>
             <div className={css.orderSummary}>
               <div className={css.orderSummaryA}>Всього</div>
-              <div className={css.orderSummaryB}>{order.totalAmount} грн</div>
+              <div className={css.orderSummaryB}>
+                {orderDetails.totalAmount} грн
+              </div>
             </div>
           </div>
         </div>
@@ -122,7 +118,7 @@ const OrderDetails = () => {
               <tr className={css.invoiceItem}>
                 <td className={css.invoiceName}>Дата</td>
                 <td className={css.invoiceValue}>
-                  {formatDate(order.createdAt)}
+                  {formatDate(orderDetails.createdAt)}
                 </td>
               </tr>
               <tr className={css.invoiceItem}>
@@ -203,7 +199,9 @@ const OrderDetails = () => {
                   );
                 })}
             </ul>
-            <div className={css.orderDetailsTotal}>{order.totalAmount} грн</div>
+            <div className={css.orderDetailsTotal}>
+              {orderDetails.totalAmount} грн
+            </div>
           </div>
         </div>
       </div>

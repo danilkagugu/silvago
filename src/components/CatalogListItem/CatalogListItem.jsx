@@ -1,174 +1,168 @@
-import { useNavigate } from "react-router-dom";
-
 import css from "./CatalogListItem.module.css";
 import { useEffect, useState } from "react";
-import { getTopSellingProduct } from "../../services/productApi";
-
-import { LuHeart } from "react-icons/lu";
 import {
-  addProductFavorite,
   getFavoriteProducts,
+  fetchTopProducts,
+  fetchProductVariation,
   removeProductFavorite,
+  addProductFavorite,
 } from "../../redux/product/operations";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct } from "../../redux/basket/operations";
-import { selectFavoritesProducts } from "../../redux/product/selectors";
+import {
+  selectFavoritesProducts,
+  selectTopProducts,
+} from "../../redux/product/selectors";
+import { selectUserData } from "../../redux/auth/selectors";
+import ProductImage from "./ProductImage/ProductImage";
+import ProductInfo from "./ProductInfo/ProductInfo";
+import ProductModifications from "./ProductModifications/ProductModifications";
+import ProductActions from "./ProductActions/ProductActions";
 
-const CatalogListItem = ({ product, quantities, selectedVolume }) => {
+const CatalogListItem = ({ product, defaultProductVariations }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+
   const favorites = useSelector(selectFavoritesProducts);
-  const [topProducts, setTopProducts] = useState([]);
-  const [localFavorites, setLocalFavorites] = useState([]);
-  useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
-        const data = await dispatch(getFavoriteProducts()).unwrap();
-        setLocalFavorites(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const { id } = useSelector(selectUserData);
+  const topProducts = useSelector(selectTopProducts);
 
-    fetchFavorites();
-  }, [dispatch]);
-
-  useEffect(() => {
-    setLocalFavorites(favorites);
-  }, [favorites]);
-
-  const handleToggleFavorite = async (product) => {
-    if (!product || !product._id) {
-      console.warn("Product is invalid.");
-      return;
-    }
-
-    const isFavorite = localFavorites.some((item) => item._id === product._id);
-
-    if (isFavorite) {
-      dispatch(removeProductFavorite(product._id));
-    } else {
-      dispatch(addProductFavorite(product._id));
-    }
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getTopSellingProduct();
-        setTopProducts(result);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const isTopProduct = topProducts.some(
-    (topProduct) => topProduct._id === product._id
+  const [quantities, setQuantities] = useState(
+    product.variations.reduce(
+      (acc, variant) => ({
+        ...acc,
+        [variant.idTorgsoft]: 1,
+      }),
+      {}
+    )
   );
 
-  const getPrice = () => {
-    const volumeDetail =
-      product.volumes.find(
-        (vol) => vol.volume === selectedVolume[product._id]
-      ) || product.volumes[0];
-    const discount = volumeDetail.discount || 0;
-    const oldPrice = volumeDetail.price;
-    const newPrice = oldPrice * (1 - discount / 100);
-    return { newPrice, oldPrice };
-  };
+  const [activeVariation, setActiveVariation] = useState(
+    product.activeVariation || product.variations[0]
+  );
 
-  // Обробка кліку на товар
-  const handleProductClick = () => {
-    const volumeDetail = product.volumes.find(
-      (vol) => vol.volume === selectedVolume[product._id]
+  useEffect(() => {
+    setActiveVariation(product.activeVariation || product.variations[0]);
+  }, [product.activeVariation, product.variations]);
+
+  useEffect(() => {
+    dispatch(fetchTopProducts());
+    dispatch(getFavoriteProducts(id));
+  }, [dispatch, id]);
+
+  const handleToggleFavorite = async (productId, idTorgsoft) => {
+    const isFavorite = favorites.some(
+      (fav) =>
+        fav.productId === productId && fav.variation.idTorgsoft === idTorgsoft
     );
 
-    if (volumeDetail) {
-      navigate(`/product/${volumeDetail.slug}`);
-    }
+    const action = isFavorite
+      ? removeProductFavorite({ userId: id, productId, idTorgsoft })
+      : addProductFavorite({ userId: id, productId, idTorgsoft });
+
+    await dispatch(action);
+    dispatch(getFavoriteProducts(id));
   };
 
-  const volumeDetail = product.volumes.find(
-    (vol) => vol.volume === selectedVolume[product._id]
-  );
-  // console.log("volumeDetail", volumeDetail);
   const handleAddToBasket = () => {
-    dispatch(
-      addProduct({
-        slug: volumeDetail.slug,
-        quantity: quantities[product._id],
-        volume: selectedVolume[product._id],
-        price: volumeDetail.price,
-      })
-    );
+    const currentQuantity = quantities[activeVariation.idTorgsoft];
+    if (currentQuantity > 0 && currentQuantity <= activeVariation.quantity) {
+      dispatch(
+        addProduct({
+          slug: activeVariation.slug,
+          quantity: currentQuantity,
+          volume: activeVariation.volume,
+          tone: activeVariation.tone,
+        })
+      );
+    }
   };
-  const isFavorite = localFavorites.some((item) => item._id === product._id);
+
+  const handleQuantityChange = (idTorgsoft, value) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [idTorgsoft]: Math.min(Math.max(value, 1), activeVariation.quantity || 1),
+    }));
+  };
+
+  const handleVolumeChange = (volumeId) => {
+    const selectedVariation = product.variations.find(
+      (variant) => variant.idTorgsoft === volumeId
+    );
+
+    if (selectedVariation) {
+      setActiveVariation(selectedVariation);
+    } else {
+      console.error("Варіацію з таким об'ємом не знайдено");
+    }
+  };
+
+  const handleToneChange = (tone) => {
+    const selectedVariation = product.variations.find(
+      (variant) =>
+        variant.tone === tone && variant.volume === activeVariation.volume
+    );
+
+    if (selectedVariation) {
+      setActiveVariation(selectedVariation);
+    } else {
+      console.error("Варіацію з таким тоном не знайдено");
+    }
+  };
+
+  const handleDecrement = (idTorgsoft) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [idTorgsoft]: Math.max(prev[idTorgsoft] - 1, 1),
+    }));
+  };
+
+  const handleIncrement = (idTorgsoft) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [idTorgsoft]: Math.min(prev[idTorgsoft] + 1, activeVariation.quantity),
+    }));
+  };
+
+  const isFavorite = favorites.some(
+    (fav) =>
+      fav.productId === product._id &&
+      fav.variation.idTorgsoft === activeVariation?.idTorgsoft
+  );
+
   return (
-    <div className={css.cardContainer} id={product._id}>
-      <LuHeart
-        className={isFavorite ? css.isFavoriteProduct : css.iconFavorite}
-        onClick={() => handleToggleFavorite(product)}
-      />
-
-      {/* Інформація про товар */}
-      <div className={css.cardBox} onClick={handleProductClick}>
-        <div className={css.imgBox}>
-          {volumeDetail && (
-            <img
-              className={css.imgBrand}
-              src={volumeDetail.image}
-              alt={product.name}
+    <div className={css.catalogCard}>
+      <div className={css.cardContainer} id={product._id}>
+        <div className={css.catalogCardMain}>
+          <div className={css.catalogCardMainB}>
+            <ProductImage
+              isTopProduct={topProducts.some(
+                (topProduct) => topProduct._id === product._id
+              )}
+              volumeDetail={activeVariation}
             />
-          )}
-        </div>
-
-        {/* Це якщо буде писатись з перечеркнутой ціною */}
-        <div className={css.boxInfo}>
-          <p className={css.brandTitle}>{product.name}</p>
-          {product.volumes.some((vol) => vol.discount > 0) && (
-            <p className={css.brandPrice}>
-              <span className={css.oldPrice}>{getPrice().oldPrice} ₴</span>
-              <span className={css.newPrice}>
-                {Math.ceil(getPrice().newPrice)} ₴
-              </span>
-            </p>
-          )}
-          {!product.volumes.some((vol) => vol.discount > 0) && (
-            <p className={css.brandPrice}>{getPrice().oldPrice} ₴</p>
-          )}
-          <div className={css.productAction}>
-            {product.volumes.some((vol) => vol.discount > 0) && (
-              <div className={`${css.sell} `}>Sell</div>
-            )}
-            {isTopProduct && <div className={css.top}>Top</div>}
+            <ProductInfo product={product} volumeDetail={activeVariation} />
           </div>
         </div>
+        <div className={css.catalogCardFooter}>
+          <ProductModifications
+            handleToneChange={handleToneChange}
+            handleVolumeChange={handleVolumeChange}
+            product={product}
+            volumeDetail={activeVariation}
+          />
+          <ProductActions
+            handleAddToBasket={handleAddToBasket}
+            handleDecrement={handleDecrement}
+            handleIncrement={handleIncrement}
+            handleQuantityChange={handleQuantityChange}
+            handleToggleFavorite={handleToggleFavorite}
+            isFavorite={isFavorite}
+            product={product}
+            quantities={quantities}
+            volumeDetail={activeVariation}
+          />
+        </div>
       </div>
-
-      {/* Контейнери для кількості і кнопки */}
-      <div className={css.priceBox}>
-        <button className={css.buyButton} onClick={handleAddToBasket}>
-          Купити
-        </button>
-      </div>
-
-      {/* Обсяги товару */}
-      {/* <div className={css.volumeOptions}>
-        {product.volumes.map((vol) => (
-          <button
-            key={vol._id}
-            className={`${css.volumeOption} ${
-              selectedVolume[product._id] === vol.volume ? css.selected : ""
-            }`}
-            onClick={() => handleVolumeSelect(product._id, vol.volume)}
-          >
-            {vol.volume} мл
-          </button>
-        ))}
-      </div> */}
     </div>
   );
 };

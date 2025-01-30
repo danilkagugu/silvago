@@ -20,7 +20,7 @@ const LoginForm = ({ openLogin, closeLogin, regFormOn }) => {
   });
 
   const INITIAL_FORM_DATA = {
-    email: "danil@gmail.com",
+    email: "danulo1@gmail.com",
     password: "123456789",
   };
   const {

@@ -13,6 +13,10 @@ import storage from "redux-persist/lib/storage";
 import { authReducer } from "./auth/slice";
 import { basketReducer } from "./basket/slice";
 import { productsReducer } from "./product/slice";
+import { orderReducer } from "./order/slice";
+import { searchReducer } from "./filterProduct/slice";
+import { inventoryInfoReducer } from "./inventoryStore/slice";
+import { deliveryReducer } from "./novaPoshta/slice";
 
 const authConfig = {
   key: "auth",
@@ -32,6 +36,10 @@ export const store = configureStore({
     auth: persistReducer(authConfig, authReducer),
     basket: persistReducer(basketConfig, basketReducer),
     products: productsReducer,
+    orders: orderReducer,
+    search: searchReducer,
+    inventory: inventoryInfoReducer,
+    delivery: deliveryReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

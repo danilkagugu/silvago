@@ -7,28 +7,26 @@ import { deleteProduct } from "../../redux/basket/operations";
 import { useDispatch } from "react-redux";
 
 const CatalogItem = ({
-  productImg,
-  productName,
   productPrice,
-  id,
-  slug,
   handleQuantityChange,
   item,
-  details,
   discountedPrice,
+  slug,
 }) => {
   const isMobile = window.innerWidth <= 1440;
   const dispatch = useDispatch();
   // console.log("item", item);
   const [showOutOfStockMessage, setShowOutOfStockMessage] = useState(false);
   const navigate = useNavigate();
-  const handleProductClick = (slug) => {
+  const handleProductClick = () => {
     navigate(`/product/${slug}`);
+    console.log("slug: ", slug);
   };
 
   const handleIncrement = () => {
-    if (item.quantity < details.volume.quantity) {
-      handleQuantityChange(item.product, item.volume, item.quantity + 1);
+    if (item.quantity < item.quantityStock) {
+      handleQuantityChange(item._id, item.volume, item.quantity + 1, item.tone);
+      console.log("item.product: ", item);
     } else {
       // Якщо кількість перевищує максимальну, показуємо повідомлення
       setShowOutOfStockMessage(true);
@@ -41,13 +39,14 @@ const CatalogItem = ({
 
   // const tt = useSelector(selectBasket);
   const handleDelete = () => {
+    // console.log("hello");
     const isConfirmed = window.confirm(
       "Ви впевнені, що хочете видалити цей продукт?"
     );
     if (isConfirmed) {
       dispatch(
         deleteProduct({
-          productId: id,
+          productId: item._id,
           volume: item.volume,
         })
       );
@@ -58,16 +57,13 @@ const CatalogItem = ({
     <>
       {!isMobile ? (
         <>
-          <div
-            className={css.itemIamge}
-            onClick={() => handleProductClick(slug)}
-          >
+          <div className={css.itemIamge} onClick={handleProductClick}>
             <img
               className={`${css.imgItem} ${
-                details.volume.quantity === 0 ? css.outOfStock : ""
+                item.quantityStock === 0 ? css.outOfStock : ""
               }`}
-              src={productImg}
-              alt={productName}
+              src={item.image}
+              alt={item.productName}
             />
           </div>
           <div className={css.itemContent}>
@@ -77,25 +73,17 @@ const CatalogItem = ({
               </span>
             </button>
             <div className={css.orderItemDescription}>
-              <div
-                className={css.orderItemTitle}
-                onClick={() => handleProductClick(slug)}
-              >
-                <p className={css.productName}>{productName}</p>
+              <div className={css.orderItemTitle}>
+                <p className={css.productName}>{item.productName}</p>
               </div>
               <div className={css.orderItemContainer}>
-                <p
-                  className={
-                    details.volume.quantity === 0 ? css.itemMissing : ""
-                  }
-                >
+                <p className={item.quantityStock === 0 ? css.itemMissing : ""}>
                   {productPrice} грн
                 </p>
               </div>
             </div>
             <div className={css.orderItemControl}>
-              {/* max={details.volume.quantity} */}
-              {details.volume.quantity > 0 && (
+              {item.quantityStock > 0 && (
                 <div className={css.orderItemQuanity}>
                   <div className={css.counter}>
                     <div className={css.counterContainer}>
@@ -105,43 +93,50 @@ const CatalogItem = ({
                         }`}
                         onClick={() =>
                           handleQuantityChange(
-                            item.product,
+                            item._id,
                             item.volume,
-                            item.quantity - 1
+                            item.quantity - 1,
+                            item.tone
                           )
                         }
+                        disabled={item.quantity === 1}
                       >
-                        <FiMinus className={css.iconMinus} />
+                        <FiMinus className={`${css.icon} ${css.iconMinus}`} />
                       </button>
                       <div className={css.counterInput}>
                         <input
                           className={css.counterField}
                           type="text"
-                          value={item.quantity}
+                          value={
+                            item.quantityStock < item.quantity
+                              ? item.quantityStock
+                              : item.quantity
+                          }
                           min={"1"}
-                          max={details.volume.quantity}
+                          max={item.quantityStock}
                           onChange={(e) => {
                             const newQuantity = Math.max(
                               1,
-                              Math.min(e.target.value, details.volume.quantity)
+                              Math.min(e.target.value, item.quantityStock)
                             );
                             handleQuantityChange(
-                              item.product,
+                              item._id,
                               item.volume,
-                              newQuantity
+                              newQuantity,
+                              item.tone
                             );
                           }}
                         />
                       </div>
                       <button
                         className={`${css.counterBtn} ${
-                          item.quantity === details.volume.quantity
+                          item.quantity === item.quantityStock
                             ? css.disabled
                             : ""
                         }`}
                         onClick={handleIncrement}
                       >
-                        <FiPlus className={css.iconPlus} />
+                        <FiPlus className={`${css.icon} ${css.iconPlus}`} />
                       </button>
                     </div>
 
@@ -156,17 +151,15 @@ const CatalogItem = ({
                   </div>
                 </div>
               )}
-              {/* <div className={css.orderItemCost}>
-            {details && item.quantity * discountedPrice} грн
-          </div> */}
+
               <div
                 className={
-                  details.volume.quantity > 0
+                  item.quantityStock > 0
                     ? css.orderItemCost
                     : css.orderItemMissing
                 }
               >
-                {details.volume.quantity > 0
+                {item.quantityStock > 0
                   ? `${item.quantity * discountedPrice} грн`
                   : "Немає в наявності"}
               </div>
@@ -187,20 +180,23 @@ const CatalogItem = ({
               </div>
             </div>
           </div>
-          <div className={css.cartItemImage}>
+          <div className={css.cartItemImage} onClick={handleProductClick}>
             <div className={css.image}>
               <div className={css.imageBox}>
                 <img
-                  className={css.imageProduct}
-                  src={details?.volume.image}
-                  alt={details.product.name}
+                  // className={css.imageProduct}
+                  className={`${css.imageProduct} ${
+                    item.quantityStock === 0 ? css.outOfStock : ""
+                  }`}
+                  src={item.image}
+                  alt={item.productName}
                 />
               </div>
             </div>
           </div>
           <div className={css.cartItemContent}>
             <div className={css.cartItemTitle}>
-              <p>{details.product.name}</p>
+              <p>{item.productName}</p>
             </div>
             <div className={css.cartItemPriceBlock}>
               <div className={css.cartItemPriceContainer}>
@@ -208,61 +204,69 @@ const CatalogItem = ({
                   {Math.ceil(discountedPrice)} грн
                 </div>
               </div>
-              <div className={css.cartItemCost}>
-                {item.quantity * discountedPrice} грн
-              </div>
+              {item.quantityStock > 0 && (
+                <div className={css.cartItemCost}>
+                  {item.quantity * discountedPrice} грн
+                </div>
+              )}
             </div>
             <div className={css.cartItemButtons}>
-              <div className={css.counter}>
-                <div className={css.counterContainer}>
-                  <div className={css.counterBox}>
-                    <button
-                      className={`${css.btnMinus} ${
-                        item.quantity === 1 ? css.disabled : ""
-                      }`}
-                      onClick={() =>
-                        handleQuantityChange(
-                          item.product,
-                          item.volume,
-                          item.quantity - 1
-                        )
-                      }
-                    >
-                      <FiMinus className={css.iconMinus} />
-                    </button>
-                    <div>
-                      <input
-                        className={css.counterInput}
-                        type="text"
-                        value={item.quantity}
-                        min={"1"}
-                        max={details.volume.quantity}
-                        onChange={(e) => {
-                          const newQuantity = Math.max(
-                            1,
-                            Math.min(e.target.value, details.volume.quantity)
-                          );
+              {item.quantityStock > 0 ? (
+                <div className={css.counter}>
+                  <div className={css.counterContainer}>
+                    <div className={css.counterBox}>
+                      <button
+                        className={`${css.btnMinus} ${
+                          item.quantity === 1 ? css.disabled : ""
+                        }`}
+                        onClick={() =>
                           handleQuantityChange(
-                            item.product,
+                            item._id,
                             item.volume,
-                            newQuantity
-                          );
-                        }}
-                      />
+                            item.quantity - 1,
+                            item.tone
+                          )
+                        }
+                      >
+                        <FiMinus className={css.iconMinus} />
+                      </button>
+                      <div>
+                        <input
+                          className={css.counterInput}
+                          type="text"
+                          value={item.quantity}
+                          min={"1"}
+                          max={item.quantityStock}
+                          onChange={(e) => {
+                            const newQuantity = Math.max(
+                              1,
+                              Math.min(e.target.value, item.quantityStock)
+                            );
+                            handleQuantityChange(
+                              item._id,
+                              item.volume,
+                              newQuantity,
+                              item.tone
+                            );
+                          }}
+                        />
+                      </div>
+                      <button
+                        className={`${css.btnPlus} ${
+                          item.quantity === item.quantityStock
+                            ? css.disabled
+                            : ""
+                        }`}
+                        onClick={handleIncrement}
+                      >
+                        <FiPlus className={css.iconPlus} />
+                      </button>
                     </div>
-                    <button
-                      className={`${css.btnPlus} ${
-                        item.quantity === details.volume.quantity
-                          ? css.disabled
-                          : ""
-                      }`}
-                      onClick={handleIncrement}
-                    >
-                      <FiPlus className={css.iconPlus} />
-                    </button>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className={css.orderItemMissingMob}>Немає в наявності</div>
+              )}
               <button className={css.btnRemove} onClick={handleDelete}>
                 <span className={css.btnIconRemove}>
                   <CiTrash className={css.iconRemove} />

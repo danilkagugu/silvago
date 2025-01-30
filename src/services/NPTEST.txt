@@ -1,0 +1,46 @@
+// features/novaPoshtaSlice.js
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { getAllCities, getArea, getPostOffice } from './yourAPIfile';
+
+export const fetchAllCities = createAsyncThunk('novaPoshta/fetchAllCities', async () => {
+  const response = await getAllCities();
+  return response.data;
+});
+
+export const fetchAreas = createAsyncThunk('novaPoshta/fetchAreas', async () => {
+  const response = await getArea();
+  return response.data;
+});
+
+export const fetchPostOffices = createAsyncThunk('novaPoshta/fetchPostOffices', async (selectedCity) => {
+  const response = await getPostOffice(selectedCity);
+  return response.data;
+});
+
+const novaPoshtaSlice = createSlice({
+  name: 'novaPoshta',
+  initialState: {
+    areas: [],
+    cities: [],
+    postOffices: [],
+    loading: false,
+    error: null,
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchAllCities.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchAllCities.fulfilled, (state, action) => {
+        state.cities = action.payload;
+        state.loading = false;
+      })
+      .addCase(fetchAllCities.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      // Подібні редюсери для fetchAreas та fetchPostOffices
+  },
+});
+
+export default novaPoshtaSlice.reducer;

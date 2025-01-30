@@ -1,11 +1,19 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
-import { getBrands, getCategories, getSkins } from "../../services/productApi";
 import css from "./ProductList.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { selectProducts } from "../../redux/product/selectors";
-import { getAllProduct } from "../../redux/product/operations";
-import { fetchFavoriteProducts } from "../../helpers/productActions";
+import {
+  selectDefaultVariations,
+  selectFavoritesProducts,
+  selectProductsFilter,
+  selectProductsTorgsoft,
+} from "../../redux/product/selectors";
+import {
+  getAllProduct,
+  getAllProductTorgsoft,
+  getFavoriteProducts,
+  getProductVariations,
+} from "../../redux/product/operations";
 import CatalogListItem from "../CatalogListItem/CatalogListItem";
 import {
   IoChevronBackSharp,
@@ -17,22 +25,34 @@ import { GoHome } from "react-icons/go";
 import { CiFilter } from "react-icons/ci";
 import { TbArrowsSort } from "react-icons/tb";
 
+import {
+  selectAllBrandsTorgsoft,
+  selectAllCategories,
+  selectAllFilters,
+} from "../../redux/inventoryStore/selectors";
+import {
+  fetchAllBrands,
+  fetchAllBrandsTorgsoft,
+  fetchAllCategories,
+  fetchAllFilters,
+  fetchAllSkins,
+} from "../../redux/inventoryStore/operations";
+
+import ProductListDesctop from "./ProductListDesctop/ProductListDesctop";
+
 const ProductList = () => {
   const dispatch = useDispatch();
   const sortingModalRef = useRef(null);
   const filterModalRef = useRef(null);
-
-  const [favoriteProducts, setFavoriteProducts] = useState(new Set());
-  const [quantities, setQuantities] = useState({});
-  const [categories, setCategories] = useState();
-  const [brands, setBrands] = useState([]);
-  const [selectedVolume, setSelectedVolume] = useState({});
+  // console.log("selectedVolume: ", selectedVolume);
   const [currentPage, setCurrentPage] = useState(1);
 
   const [selectedBrand, setSelectedBrand] = useState([]);
+  // console.log("selectedBrand: ", selectedBrand);
   const [selectedSection, setSelectedSection] = useState([]);
   // console.log("selectedSection: ", selectedSection);
-  const [skin, setSkin] = useState([]);
+  const [filteredBrands, setFilteredBrands] = useState([]);
+
   const [selectedSkin, setSelectedSkin] = useState([]);
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortingOpen, setSortingOpen] = useState(false);
@@ -40,9 +60,59 @@ const ProductList = () => {
   const [skinContentOpen, setSkinContentOpen] = useState(false);
   const [categoryContentOpen, setCategoryContentOpen] = useState(false);
   const [sortType, setSortType] = useState("popularity");
-  const dataProducts = useSelector(selectProducts);
 
-  const { categorySlug, subCategorySlug } = useParams();
+  // const favorite = useSelector(selectFavoritesProducts);
+  // const skin = useSelector(selectAllSkins);
+  const filters = useSelector(selectAllFilters);
+  // console.log("filters: ", filters);
+
+  const dataProductsTorgsoft = useSelector(selectProductsTorgsoft);
+
+  const defaultProductVariations = useSelector(selectDefaultVariations);
+
+  useEffect(() => {
+    dispatch(getProductVariations());
+  }, [dispatch]);
+
+  // const generateSkinNeedsFilters = (products) => {
+  //   const skinNeedsSet = new Set();
+
+  //   products.forEach((product) => {
+  //     if (product.skinNeeds && product.skinNeeds.trim() !== "") {
+  //       const skinNeedsArray = product.skinNeeds.split(", ");
+  //       skinNeedsArray.forEach((need) => skinNeedsSet.add(need));
+  //     }
+  //   });
+
+  //   return Array.from(skinNeedsSet);
+  // };
+
+  // Генеруємо список фільтрів
+
+  useEffect(() => {
+    dispatch(getAllProductTorgsoft());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchAllBrandsTorgsoft());
+  }, [dispatch]);
+
+  const brands = useSelector(selectAllBrandsTorgsoft);
+  // console.log("brands: ", brands);
+  useEffect(() => {
+    dispatch(fetchAllSkins());
+  }, [dispatch]);
+  useEffect(() => {
+    dispatch(fetchAllFilters());
+  }, [dispatch]);
+
+  const categories = useSelector(selectAllCategories);
+
+  // const brands = useSelector(selectAllBrands);
+  // console.log("favorite: ", favorite);
+
+  const { categorySlug, subCategorySlug, childCategorySlug } = useParams();
+
   const quantityFilter =
     (selectedBrand.length > 0 ? 1 : 0) +
     (selectedSkin.length > 0 ? 1 : 0) +
@@ -51,7 +121,6 @@ const ProductList = () => {
   const toggleFilterContent = () => {
     setFilterContentOpen((prevState) => !prevState); // Перемикання стану
   };
-  console.log("sortType: ", sortType);
   const toggleSortingContent = () => {
     setSortingOpen((prevState) => !prevState); // Перемикання стану
     if (!sortingOpen) {
@@ -117,78 +186,57 @@ const ProductList = () => {
     dispatch(getAllProduct());
   }, [dispatch]);
 
+  // useEffect(() => {
+  //   dispatch(getFavoriteProducts());
+  // }, [dispatch]);
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const data = await getCategories();
-        const brands = await getBrands();
-        const skins = await getSkins();
-        setBrands(brands);
-        setCategories(data);
-        setSkin(skins);
-        const initialQuantities = {};
-        const initialVolume = {};
-        dataProducts.forEach((p) => {
-          initialQuantities[p._id] = 1;
-          const defaultVolume = getDefaultVolume(p.volumes);
-          if (defaultVolume) {
-            initialVolume[p._id] = defaultVolume;
-          }
-        });
-        setQuantities(initialQuantities);
-        setSelectedVolume(initialVolume);
-      } catch (error) {
-        console.log("Error fetching products:", error);
-      }
-    };
+    dispatch(fetchAllCategories());
+  }, [dispatch]);
 
-    fetchProducts();
-    fetchFavoriteProducts(setFavoriteProducts);
-  }, [dataProducts]);
+  useEffect(() => {
+    dispatch(fetchAllBrands());
+  }, [dispatch]);
 
-  const handleVolumeSelect = (productId, volume) => {
-    setSelectedVolume((prev) => ({
-      ...prev,
-      [productId]: volume,
-    }));
-  };
-
-  const getDefaultVolume = (volumes) => {
-    if (!volumes || volumes.length === 0) return 0;
-    return volumes.reduce(
-      (maxVol, vol) => (vol.volume > maxVol ? vol.volume : maxVol),
-      0
-    );
-  };
-
-  const filteredProducts = dataProducts.filter((product) => {
+  const filteredProducts = dataProductsTorgsoft.filter((product) => {
     if (!categories) return false;
 
+    // Знайти головну категорію за slug
     const category = categories.find((cat) => cat.slug === categorySlug);
     if (!category) return false;
 
+    // Якщо є subCategorySlug
     if (subCategorySlug) {
-      const subCategory = category.items.find(
+      const subCategory = category.children.find(
         (item) => item.slug === subCategorySlug
       );
       if (!subCategory) return false;
 
-      return (
-        product.category === category.name &&
-        product.subcategory === subCategory.name
-      );
-    } else {
-      return product.category === category.name;
+      // Якщо є childCategorySlug
+      if (childCategorySlug) {
+        const childCategory = subCategory.children.find(
+          (item) => item.slug === childCategorySlug
+        );
+        if (!childCategory) return false;
+
+        // Перевірити, чи продукт належить дочірній категорії
+        return product.categories.some(
+          (cat) => cat.slug === childCategory.slug
+        );
+      }
+
+      // Перевірити, чи продукт належить підкатегорії
+      return product.categories.some((cat) => cat.slug === subCategory.slug);
     }
+
+    // Перевірити, чи продукт належить головній категорії
+    return product.categories.some((cat) => cat.slug === category.slug);
   });
 
   // Пагінація
   const ITEMS_PER_PAGE = 15;
   const totalPages = Math.ceil(filteredProducts.length / ITEMS_PER_PAGE);
 
-  // const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  // const endIndex = startIndex + ITEMS_PER_PAGE;
-  // const productsToDisplay = filteredProducts.slice(startIndex, endIndex);
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
@@ -201,15 +249,25 @@ const ProductList = () => {
     return category ? category.name : "";
   };
   const getSubCategoryName = (category, slug) => {
-    const subCategory = category?.items.find((item) => item.slug === slug);
+    const subCategory = category?.children.find((item) => item.slug === slug);
     return subCategory ? subCategory.name : "";
+  };
+  const getChildSubCategoryName = (category, slug) => {
+    const childSubCategory = category?.children.find(
+      (item) => item.slug === slug
+    );
+    return childSubCategory ? childSubCategory.name : "";
   };
 
   const currentCategory = categories?.find((cat) => cat.slug === categorySlug);
-  // console.log("currentCategory: ", currentCategory);
 
   const currentSubCategory = currentCategory
-    ? currentCategory.items.find((item) => item.slug === subCategorySlug)
+    ? currentCategory.children.find((item) => item.slug === subCategorySlug)
+    : null;
+  const currentChildSubCategory = currentSubCategory
+    ? currentSubCategory.children.find(
+        (item) => item.slug === childCategorySlug
+      )
     : null;
 
   // Фільтри
@@ -219,6 +277,7 @@ const ProductList = () => {
   };
 
   const handleBrandSelect = (brand) => {
+    console.log("brand: ", brand);
     setSelectedBrand((prevSelectedBrands) => {
       if (prevSelectedBrands.includes(brand)) {
         // Видаляємо бренд з масиву, якщо він вже вибраний
@@ -226,17 +285,6 @@ const ProductList = () => {
       } else {
         // Додаємо бренд до масиву, якщо він ще не вибраний
         return [...prevSelectedBrands, brand];
-      }
-    });
-  };
-  const handleSkinSelect = (skin) => {
-    setSelectedSkin((prevSelectedSkins) => {
-      if (prevSelectedSkins.includes(skin)) {
-        // Видаляємо бренд з масиву, якщо він вже вибраний
-        return prevSelectedSkins.filter((b) => b !== skin);
-      } else {
-        // Додаємо бренд до масиву, якщо він ще не вибраний
-        return [...prevSelectedSkins, skin];
       }
     });
   };
@@ -252,6 +300,19 @@ const ProductList = () => {
       }
     });
   };
+
+  const handleSkinSelect = (skin) => {
+    setSelectedSkin((prevSelectedSkins) => {
+      if (prevSelectedSkins.includes(skin)) {
+        // Видаляємо бренд з масиву, якщо він вже вибраний
+        return prevSelectedSkins.filter((b) => b !== skin);
+      } else {
+        // Додаємо бренд до масиву, якщо він ще не вибраний
+        return [...prevSelectedSkins, skin];
+      }
+    });
+  };
+
   const handleRemoveBrand = (brandToRemove) => {
     setSelectedBrand((prev) => prev.filter((brand) => brand !== brandToRemove));
   };
@@ -268,49 +329,75 @@ const ProductList = () => {
     setSelectedSection([]);
   };
   const isBrandDisabled = (brandName) => {
-    return !dataProducts.some(
+    return !dataProductsTorgsoft.some(
       (item) =>
         item.brand === brandName &&
         (selectedSection.length === 0 ||
           selectedSection.includes(item.subcategory))
     );
   };
+
+  // console.log("dataProductsTorgsoft", dataProductsTorgsoft);
   const isSectionDisabled = (sectionName) => {
-    return !dataProducts.some(
-      (item) =>
-        item.subcategory === sectionName &&
-        (selectedBrand.length === 0 || selectedBrand.includes(item.brand))
-    );
+    return !dataProductsTorgsoft.some((product) => {
+      // Перевіряємо, чи категорія продукту збігається з переданим sectionName
+      return (
+        product.categories.includes(sectionName) && // Перевіряємо наявність категорії
+        (selectedBrand.length === 0 || selectedBrand.includes(product.brand)) // Перевіряємо вибраний бренд
+      );
+    });
   };
 
-  // console.log("dataProducts", dataProducts);
+  // console.log("dataProductsTorgsoft", dataProductsTorgsoft);
   const isSkinDisabled = (skin) => {
-    return !dataProducts.some((item) =>
-      item.filters.some((filter) => filter.label === skin)
-    );
+    // console.log("skin: ", skin);
+    return !dataProductsTorgsoft.some((item) => {
+      // console.log("item", item);
+      return item.skinNeeds && item.skinNeeds.includes(skin);
+    });
   };
-
-  const filterCountByBrand = (brandName) => {
-    return dataProducts.filter(
-      (item) =>
-        item.brand === brandName && // Фільтруємо за брендом
-        item.category === currentCategory.name // Фільтруємо за поточною категорією
-    ).length;
+  const filterCountByBrand = (brandName, selectedSections) => {
+    return dataProductsTorgsoft.filter((item) => {
+      const matchesBrand = item.brand === brandName; // Перевіряємо, чи бренд збігається
+      const matchesSection =
+        selectedSections.length === 0 || // Якщо категорії не обрані, враховуємо всі товари
+        selectedSections.some((section) =>
+          item.categories.some((category) => category.name === section.name)
+        ); // Перевіряємо, чи категорія збігається
+      return matchesBrand && matchesSection;
+    }).length;
   };
   const filterCountBySkin = (skinName) => {
-    return (
-      dataProducts &&
-      dataProducts.filter((item) =>
-        item.filters.some((filter) => filter.label === skinName)
-      ).length
-    );
+    if (!dataProductsTorgsoft || !skinName) return 0;
+
+    return dataProductsTorgsoft.filter((item) => {
+      // Перевіряємо, чи є skinNeeds у товарі, та чи включає він конкретне значення
+      if (!item.skinNeeds) return false;
+
+      // Розділяємо skinNeeds на масив значень
+      const skinNeedsArray = item.skinNeeds
+        .split(",")
+        .map((need) => need.trim());
+      // Перевіряємо, чи масив потреб шкіри включає потрібне значення
+      return skinNeedsArray.includes(skinName);
+    }).length;
   };
 
-  const filterCountBySection = (subcategory) => {
-    return dataProducts.filter((item) => item.subcategory === subcategory)
-      .length;
+  const filterCountBySection = (subcategory, selectedBrands) => {
+    return dataProductsTorgsoft.filter((item) => {
+      const matchesCategory =
+        Array.isArray(item.categories) &&
+        item.categories.some((category) => category.name === subcategory);
+
+      const matchesBrand =
+        selectedBrands.length === 0 ||
+        selectedBrands.some((brand) => brand.name === item.brand);
+
+      return matchesCategory && matchesBrand;
+    }).length;
   };
 
+  // console.log("defaultProductVariations", defaultProductVariations);
   const filterProductsByBrandsAndSections = (
     products,
     selectedBrands,
@@ -319,22 +406,38 @@ const ProductList = () => {
     selectedSkins
   ) => {
     return products.filter((item) => {
+      const productSkinNeeds = item.skinNeeds
+        ? item.skinNeeds.split(",").map((need) => need.trim())
+        : [];
+
       const matchesBrand =
-        selectedBrands.length > 0 ? selectedBrands.includes(item.brand) : true;
+        selectedBrands.length > 0
+          ? selectedBrands.some((brand) => brand.name === item.brand)
+          : true;
+
       const matchesSection =
         selectedSection.length > 0
-          ? selectedSection.includes(item.subcategory)
+          ? Array.isArray(item.categories) &&
+            item.categories.some((category) =>
+              selectedSection.some((section) => section.name === category.name)
+            )
           : true;
+
       const matchesCategory = currentCategory
-        ? currentCategory.name === item.category
+        ? Array.isArray(item.categories) &&
+          item.categories.some(
+            (category) => category.name === currentCategory.name
+          )
         : true;
       const matchesSkins =
         selectedSkins.length > 0
-          ? item.filters.some((filter) => selectedSkins.includes(filter.label))
+          ? productSkinNeeds.some((need) => selectedSkins.includes(need))
           : true;
+
       return matchesBrand && matchesSection && matchesCategory && matchesSkins;
     });
   };
+
   // console.log("selectedBrands", selectedBrands);
   const sortProducts = (products) => {
     let sortedProducts = [...products];
@@ -360,10 +463,9 @@ const ProductList = () => {
 
     return sortedProducts;
   };
-
   const sortedFilteredProducts = sortProducts(
     filterProductsByBrandsAndSections(
-      dataProducts,
+      filteredProducts,
       selectedBrand,
       selectedSection,
       currentCategory,
@@ -372,371 +474,106 @@ const ProductList = () => {
   );
 
   const isMobile = window.innerWidth <= 1440;
-
+  // console.log("categories", categories);
+  // console.log("currentCategory", currentCategory);
   const getProductLabel = (count) => {
     if (count === 1) return "товар";
     if (count >= 2 && count <= 4) return "товари";
     return "товарів";
   };
+
+  //
+
+  // console.log("brands", brands);
+
+  useEffect(() => {
+    const brandSet = new Set();
+
+    filteredProducts.forEach((item) => {
+      const matchingBrand = brands.find((brand) => brand.name === item.brand);
+      if (matchingBrand) {
+        brandSet.add(matchingBrand);
+      }
+    });
+
+    const filterBrandArray = Array.from(brandSet);
+
+    if (
+      filteredBrands.length !== filterBrandArray.length ||
+      !filteredBrands.every(
+        (brand, index) => brand._id === filterBrandArray[index]._id
+      )
+    ) {
+      setFilteredBrands(filterBrandArray);
+    }
+  }, [filteredProducts, brands, filteredBrands]);
+
+  const availableFilters = useMemo(() => {
+    // Отримуємо всі skinNeeds з продуктів для поточної категорії
+    const skinNeedsFromProducts = dataProductsTorgsoft
+      .filter(
+        (product) =>
+          product.categories.includes(currentCategory?.name) &&
+          (!currentSubCategory ||
+            product.categories.includes(currentSubCategory?.name))
+      )
+      .flatMap((product) =>
+        product.skinNeeds
+          ? product.skinNeeds.split(",").map((need) => need.trim())
+          : []
+      );
+
+    // Залишаємо лише унікальні значення
+    const uniqueSkinNeeds = Array.from(new Set(skinNeedsFromProducts));
+
+    return uniqueSkinNeeds;
+  }, [dataProductsTorgsoft, currentCategory, currentSubCategory]);
+  // console.log("availableFilters", availableFilters);
+
+  // console.log("category", currentCategory);
+
   return (
     <div>
       {/* Breadcrumbs */}
       {!isMobile ? (
         <>
-          <nav className={css.breadcrumbs}>
-            <div className={css.productGroupMenuItem}>
-              <Link to="/">Головна</Link>
-              <IoChevronForward className={`${css.icon} ${css.iconChevron}`} />
-            </div>
-            <div className={css.productGroupMenuItem}>
-              <Link to="/catalog">Каталог</Link>
-            </div>
-            {currentCategory && (
-              <div className={css.productGroupMenuItem}>
-                <IoChevronForward
-                  className={`${css.icon} ${css.iconChevron}`}
-                />
-                <Link className={css.navItem} to={`/catalog/${categorySlug}`}>
-                  {getCategoryName(categorySlug)}
-                </Link>
-              </div>
-            )}
-            {currentSubCategory && (
-              <div className={css.productGroupMenuItem}>
-                <IoChevronForward
-                  className={`${css.icon} ${css.iconChevron}`}
-                />
-                <Link to={`/catalog/${categorySlug}/${subCategorySlug}`}>
-                  {getSubCategoryName(currentCategory, subCategorySlug)}
-                </Link>
-              </div>
-            )}
-          </nav>
-          {/*  */}
-          <div className={css.catalogTopRows}>
-            <div className={css.catalogTopTitle}>
-              <h1 className={css.titleText}>
-                {currentCategory && currentCategory.name}{" "}
-                {/* {selectedBrand.length > 0 && `Бренд: ${selectedBrand.join(", ")}`}
-            {selectedSection.length > 0 &&
-              `, Розділ: ${selectedSection.join(", ")}`} */}
-              </h1>
-            </div>
-            <div className={css.catalogTopRight}>
-              <div className={css.catalogControls}>
-                <div className={css.catalogControlsItem}>
-                  <div className={css.catalogSorting}>
-                    <div className={css.catalogSortingTitle}>Сортування:</div>
-                    <div className={css.catalogSortingList}>
-                      <span
-                        className={`${css.catalogSortingItem} ${
-                          sortType === "popularity"
-                            ? css.catalogSortingItemActive
-                            : ""
-                        }`}
-                        onClick={() => handleSortChange("popularity")}
-                      >
-                        за популярністю
-                      </span>
-                      <span
-                        className={`${css.catalogSortingItem} ${
-                          sortType === "priceAsc"
-                            ? css.catalogSortingItemActive
-                            : ""
-                        }`}
-                        onClick={() => handleSortChange("priceAsc")}
-                      >
-                        спочатку дешевше
-                      </span>
-                      <span
-                        className={`${css.catalogSortingItem} ${
-                          sortType === "name"
-                            ? css.catalogSortingItemActive
-                            : ""
-                        }`}
-                        onClick={() => handleSortChange("name")}
-                      >
-                        За назвою
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                {/* <div className={css.catalogControlsItem}></div> */}
-              </div>
-            </div>
-          </div>
-          {/*  */}
-          <div className={css.catalogContentMain}>
-            <div
-              className={`${css.catalogContentMainRight} ${css.CatalogListProduct}`}
-            >
-              <div className={css.catalogContent}>
-                <ul className={css.list}>
-                  {sortedFilteredProducts.map((product) => (
-                    <li
-                      key={product._id}
-                      className={css.listItem}
-                      id={product._id}
-                    >
-                      <CatalogListItem
-                        favoriteProducts={favoriteProducts}
-                        handleVolumeSelect={handleVolumeSelect}
-                        product={product}
-                        quantities={quantities}
-                        selectedVolume={selectedVolume}
-                      />
-                    </li>
-                  ))}
-                </ul>
-                {totalPages > 1 && (
-                  <div className={css.paginationContainer}>
-                    <nav className={css.pageList}>
-                      <div className={css.pageContainer}>
-                        <button
-                          className={css.pageItem}
-                          onClick={() => handlePageChange(currentPage - 1)}
-                          disabled={currentPage === 1}
-                        >
-                          Назад
-                        </button>
-                        {Array.from({ length: totalPages }, (_, index) => (
-                          <button
-                            key={index + 1}
-                            className={`${css.pageItem} ${
-                              currentPage === index + 1 ? css.activePage : ""
-                            }`}
-                            onClick={() => handlePageChange(index + 1)}
-                          >
-                            {index + 1}
-                          </button>
-                        ))}
-                        <button
-                          className={css.pageItem}
-                          onClick={() => handlePageChange(currentPage + 1)}
-                          disabled={currentPage === totalPages}
-                        >
-                          Вперед
-                        </button>
-                      </div>
-                    </nav>
-                  </div>
-                )}
-              </div>
-            </div>
-            <div className={css.catalogContentMainLeft}>
-              <aside className={css.catalogSideBar}>
-                <div className={css.catalogGroup}>
-                  <div className={css.filterContainer}>
-                    {(selectedBrand.length > 0 ||
-                      selectedSkin.length > 0 ||
-                      selectedSection.length > 0) && (
-                      <div className={css.filterSection}>
-                        <div className={css.filterCurrent}>
-                          {selectedBrand.length > 0 && (
-                            <div className={css.filterCurrentGroup}>
-                              <span className={css.filterCurrentTitle}>
-                                Бренд:
-                              </span>
-                              <span className={css.filterCurrentBrand}>
-                                {selectedBrand.join(", ")}
-                              </span>
-                            </div>
-                          )}
-                          {selectedSkin.length > 0 && (
-                            <div className={css.filterCurrentGroup}>
-                              <span className={css.filterCurrentTitle}>
-                                Потреби шкіри:
-                              </span>
-                              <span className={css.filterCurrentBrand}>
-                                {selectedSkin.join(", ")}
-                              </span>
-                            </div>
-                          )}
-                          {selectedSection.length > 0 && (
-                            <div className={css.filterCurrentGroup}>
-                              <span className={css.filterCurrentTitle}>
-                                Розділ:
-                              </span>
-                              <span className={css.filterCurrentBrand}>
-                                {selectedSection.join(", ")}
-                              </span>
-                            </div>
-                          )}
-                          <p className={css.filterClear} onClick={clearFilter}>
-                            Очистити фільтр
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                    <div className={css.filterSection}>
-                      <div className={css.filterSectionTitle}>Бренд</div>
-                      <div className={css.filterList}>
-                        <ul className={css.filterBrandList}>
-                          {brands &&
-                            brands
-                              .filter(
-                                (brand) =>
-                                  brand.category &&
-                                  brand.category.some(
-                                    (cat) => cat.name === currentCategory.name // Відображаємо бренд лише якщо його категорія співпадає з вибраною
-                                  )
-                              )
-                              .map((brand) => (
-                                <li
-                                  className={`${css.filterBrandItem} ${
-                                    isBrandDisabled(brand.name)
-                                      ? css.disabledBrandItem
-                                      : ""
-                                  }`}
-                                  key={brand._id}
-                                  onClick={() => handleBrandSelect(brand.name)}
-                                >
-                                  <div className={css.filterCheck}>
-                                    <span className={css.label}>
-                                      <span
-                                        className={`${css.checkbox} ${
-                                          selectedBrand.includes(brand.name)
-                                            ? css.activeCheck
-                                            : ""
-                                        }`}
-                                      >
-                                        {selectedBrand.includes(brand.name) && (
-                                          <IoMdCheckmark
-                                            className={css.iconChek}
-                                          />
-                                        )}
-                                      </span>
-                                      <span className={css.filterBrandTitle}>
-                                        {brand.name}
-                                      </span>
-                                      <sup className={css.filterCount}>
-                                        {filterCountByBrand(brand.name)}
-                                      </sup>
-                                    </span>
-                                  </div>
-                                </li>
-                              ))}
-                        </ul>
-                      </div>
-                    </div>
-                    {currentCategory &&
-                      currentCategory.name === "Догляд за обличчям" && (
-                        <div className={css.filterSection}>
-                          <div className={css.filterSectionTitle}>
-                            Потреби шкіри
-                          </div>
-                          <div className={css.filterList}>
-                            <ul className={css.filterBrandList}>
-                              {skin &&
-                                skin.map((item) => (
-                                  <li
-                                    className={`${css.filterBrandItem} ${
-                                      isSkinDisabled(item.label)
-                                        ? css.disabledBrandItem
-                                        : ""
-                                    }`}
-                                    key={item._id}
-                                    onClick={() => handleSkinSelect(item.label)}
-                                  >
-                                    <div className={css.filterCheck}>
-                                      <span className={css.label}>
-                                        <span
-                                          className={`${css.checkbox} ${
-                                            selectedSkin.includes(item.label)
-                                              ? css.activeCheck
-                                              : ""
-                                          }`}
-                                        >
-                                          {selectedSkin.includes(
-                                            item.label
-                                          ) && (
-                                            <IoMdCheckmark
-                                              className={css.iconChek}
-                                            />
-                                          )}
-                                        </span>
-                                        <span className={css.filterBrandTitle}>
-                                          {item.label}
-                                        </span>
-                                        <sup className={css.filterCount}>
-                                          {filterCountBySkin(item.label)}
-                                        </sup>
-                                      </span>
-                                    </div>
-                                  </li>
-                                ))}
-                            </ul>
-                          </div>
-                        </div>
-                      )}
-                    {currentCategory &&
-                      currentCategory.name !== "Догляд за обличчям" && (
-                        <div className={css.filterSection}>
-                          <div className={css.filterSectionTitle}>Розділ</div>
-                          <div className={css.filterList}>
-                            <ul className={css.filterBrandList}>
-                              {categories &&
-                                categories
-                                  .filter(
-                                    (category) =>
-                                      category.name === currentCategory.name
-                                  ) // Додано фільтрацію категорій
-                                  .flatMap((category) => category.items) // Використовуйте flatMap для отримання елементів
-                                  .map((item) => (
-                                    <li
-                                      className={`${css.filterBrandItem} ${
-                                        isSectionDisabled(item.name)
-                                          ? css.disabledBrandItem
-                                          : ""
-                                      }`}
-                                      key={item._id}
-                                      onClick={() =>
-                                        handleSectionSelect(item.name)
-                                      }
-                                    >
-                                      <div className={css.filterCheck}>
-                                        <span className={css.label}>
-                                          <span
-                                            className={`${css.checkbox} ${
-                                              selectedSection.includes(
-                                                item.name
-                                              )
-                                                ? css.activeCheck
-                                                : ""
-                                            }`}
-                                          >
-                                            {selectedSection.includes(
-                                              item.name
-                                            ) && (
-                                              <IoMdCheckmark
-                                                className={css.iconChek}
-                                              />
-                                            )}
-                                          </span>
-                                          <span
-                                            className={css.filterBrandTitle}
-                                          >
-                                            {item.name}
-                                          </span>
-                                          <sup className={css.filterCount}>
-                                            {filterCountBySection(item.name)}
-                                          </sup>
-                                        </span>
-                                      </div>
-                                    </li>
-                                  ))}
-                            </ul>
-                          </div>
-                        </div>
-                      )}
-                  </div>
-                </div>
-              </aside>
-            </div>
-          </div>
+          <ProductListDesctop
+            categorySlug={categorySlug}
+            childCategorySlug={childCategorySlug}
+            currentCategory={currentCategory}
+            currentChildSubCategory={currentChildSubCategory}
+            currentSubCategory={currentSubCategory}
+            getCategoryName={getCategoryName}
+            getChildSubCategoryName={getChildSubCategoryName}
+            getSubCategoryName={getSubCategoryName}
+            subCategorySlug={subCategorySlug}
+            handleSortChange={handleSortChange}
+            sortType={sortType}
+            currentPage={currentPage}
+            defaultProductVariations={defaultProductVariations}
+            handlePageChange={handlePageChange}
+            sortedFilteredProducts={sortedFilteredProducts}
+            totalPages={totalPages}
+            availableFilters={availableFilters}
+            categories={categories}
+            clearFilter={clearFilter}
+            filterCountByBrand={filterCountByBrand}
+            filterCountBySection={filterCountBySection}
+            filterCountBySkin={filterCountBySkin}
+            filteredBrands={filteredBrands}
+            filters={filters}
+            handleBrandSelect={handleBrandSelect}
+            handleSectionSelect={handleSectionSelect}
+            handleSkinSelect={handleSkinSelect}
+            isSkinDisabled={isSkinDisabled}
+            selectedBrand={selectedBrand}
+            selectedSection={selectedSection}
+            selectedSkin={selectedSkin}
+          />
         </>
       ) : (
         <>
+          {/*   
           <nav className={css.breadcrumbsMob}>
             <div className={css.breadcrumbsListWrap}>
               <div className={css.breadcrumbsList}>
@@ -904,11 +741,8 @@ const ProductList = () => {
             {sortedFilteredProducts.map((product) => (
               <li className={css.goodsItem} key={product._id}>
                 <CatalogListItem
-                  favoriteProducts={favoriteProducts}
-                  handleVolumeSelect={handleVolumeSelect}
                   product={product}
-                  quantities={quantities}
-                  selectedVolume={selectedVolume}
+                  defaultProductVariations={defaultProductVariations}
                 />
               </li>
             ))}
@@ -1053,7 +887,7 @@ const ProductList = () => {
                                 filterContentOpen ? css.toogleContentOpen : ""
                               }`}
                             >
-                              {/* <div className={css.filterGroupSearch}></div> */}
+                              
                               <div className={css.filterGroupContent}>
                                 {brands &&
                                   brands
@@ -1062,7 +896,7 @@ const ProductList = () => {
                                         brand.category &&
                                         brand.category.some(
                                           (cat) =>
-                                            cat.name === currentCategory.name // Відображаємо бренд лише якщо його категорія співпадає з вибраною
+                                            cat.name === currentCategory.name  
                                         )
                                     )
                                     .map((brand) => (
@@ -1140,13 +974,13 @@ const ProductList = () => {
                                       skin.map((item) => (
                                         <div
                                           className={`${css.filterItem} ${
-                                            isSkinDisabled(item.label)
+                                            isSkinDisabled(item.name)
                                               ? css.disabledBrandItem
                                               : ""
                                           }`}
                                           key={item._id}
                                           onClick={() =>
-                                            handleSkinSelect(item.label)
+                                            handleSkinSelect(item.name)
                                           }
                                         >
                                           <div className={css.filterItemDiv}>
@@ -1157,7 +991,7 @@ const ProductList = () => {
                                                 className={css.filterCheckbox}
                                               >
                                                 {selectedSkin.includes(
-                                                  item.label
+                                                  item.name
                                                 ) && (
                                                   <IoMdCheckmark
                                                     className={
@@ -1173,14 +1007,14 @@ const ProductList = () => {
                                               <span
                                                 className={css.filterItemTitle}
                                               >
-                                                {item.label}
+                                                {item.name}
                                               </span>
                                               <span
                                                 className={
                                                   css.filterItemQuantity
                                                 }
                                               >
-                                                {filterCountBySkin(item.label)}
+                                                {filterCountBySkin(item.name)}
                                               </span>
                                             </span>
                                           </div>
@@ -1231,7 +1065,9 @@ const ProductList = () => {
                                             category.name ===
                                             currentCategory.name
                                         )
-                                        .flatMap((category) => category.items)
+                                        .flatMap(
+                                          (category) => category.children
+                                        )
                                         .map((item) => (
                                           <div
                                             className={`${css.filterItem}  ${
@@ -1353,7 +1189,8 @@ const ProductList = () => {
                 </ul>
               </div>
             </div>
-          </div>
+  </div>
+          */}
         </>
       )}
     </div>

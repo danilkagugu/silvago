@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { apiRefreshUser } from "../../redux/auth/operations";
 import BrandProducts from "../../pages/BrandProducts/BrandProducts";
+import LoaderSilvago from "../LoaderSilvago/LoaderSilvago";
 // import OrderDetails from "../OrderDetails/OrderDetails";
 const Home = lazy(() => import("../../pages/Home/Home"));
 const AboutUs = lazy(() => import("../../pages/AboutUs/AboutUs"));
@@ -27,8 +28,12 @@ const Settings = lazy(() => import("../../pages/Settings/Settings"));
 const SearchProducts = lazy(() =>
   import("../../pages/SearchProducts/SearchProducts")
 );
+const OrderSuccessPage = lazy(() =>
+  import("../../pages/OrderSuccessPage/OrderSuccessPage")
+);
 
 const NotFound = lazy(() => import("../../pages/NotFound/NotFound"));
+
 const App = () => {
   const dispatch = useDispatch();
 
@@ -36,7 +41,7 @@ const App = () => {
     dispatch(apiRefreshUser());
   }, [dispatch]);
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<LoaderSilvago />}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about-us" element={<AboutUs />} />
@@ -50,14 +55,19 @@ const App = () => {
           <Route path="history/:orderId" element={<OrderDetails />} />
         </Route>
         <Route
-          path="/catalog/:categorySlug/:subCategorySlug?"
+          path="/:categorySlug/:subCategorySlug?/:childCategorySlug?"
           element={<ProductListPage />}
         />
-        <Route path="/catalog" element={<Catalog />} />
+
+        {/* <Route path="/catalog" element={<Catalog />} /> */}
+        {/* <Route path="/catalog/filter?/:filterString?" element={<Catalog />} /> */}
+        <Route path="/catalog/*" element={<Catalog />} />
+        <Route path="/catalog/filter/*" element={<Catalog />} />
 
         <Route path="/product/:slug" element={<ProductDetail />} />
         <Route path="/brand/:brandName" element={<BrandProducts />} />
         <Route path="/search/" element={<SearchProducts />} />
+        <Route path="/order-success" element={<OrderSuccessPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>

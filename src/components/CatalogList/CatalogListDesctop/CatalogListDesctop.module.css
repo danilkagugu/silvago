@@ -1,0 +1,24 @@
+.catalogContentMain {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+
+.catalogContentMainRight {
+  margin-left: auto;
+}
+
+.catalogListProduct {
+  flex: 0 1 100%;
+  order: 2;
+  max-width: 100%;
+  flex-basis: calc(100% - 250px);
+  max-width: calc(100% - 250px);
+}
+
+.catalogContentMainLeft {
+  order: 1;
+  flex: 0 0 220px;
+  max-width: 220px;
+  will-change: min-height;
+}

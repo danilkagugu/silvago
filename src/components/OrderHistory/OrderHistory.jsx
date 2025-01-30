@@ -1,26 +1,21 @@
-import { useEffect, useState } from "react";
-import { getOrder } from "../../services/productApi";
+import { useEffect } from "react";
 import css from "./OrderHistory.module.css";
 import { useNavigate } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
 import { formatDate } from "../../helpers/productActions";
+import { useDispatch, useSelector } from "react-redux";
+import { selectAllOrders } from "../../redux/order/selectors";
+import { getAllOrders } from "../../redux/order/operations";
 
 const OrderHistory = () => {
   const navigate = useNavigate();
-  const [history, setHistory] = useState([]);
-  // console.log("history: ", history);
 
+  const dispatch = useDispatch();
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const orderData = await getOrder();
-        setHistory(orderData);
-      } catch (error) {
-        console.error("Помилка отримання продуктів:", error);
-      }
-    };
-    fetchProducts();
-  }, []);
+    dispatch(getAllOrders());
+  }, [dispatch]);
+
+  const history = useSelector(selectAllOrders);
 
   const handleOrderClick = (orderId) => {
     navigate(`/user-cabinet/history/${orderId}`);
@@ -42,7 +37,9 @@ const OrderHistory = () => {
       return "товарів";
     }
   };
-  const sortedHistory = history.sort((a, b) => b.orderNumber - a.orderNumber);
+  const sortedHistory = [...history].sort(
+    (a, b) => b.orderNumber - a.orderNumber
+  );
   return (
     <div>
       <h1 className={css.title}>Замовлення</h1>

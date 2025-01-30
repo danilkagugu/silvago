@@ -1,0 +1,36 @@
+.productGroup {
+  margin-bottom: 40px;
+}
+
+.productCharacteristics {
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 16px;
+  font-weight: bold;
+}
+.productCharacteristicsTitle {
+  padding: 15px 0 10px;
+}
+
+.productCharacteristicsBox {
+  margin-top: -4px;
+  font-size: 13px;
+}
+
+.productCharacteristicsTable {
+  border-collapse: collapse;
+  border-spacing: 0;
+  line-height: 1.5;
+}
+
+.productFeaturesCell {
+  padding: 4px 0;
+}
+
+.productFeaturesCellLeft {
+  font-weight: normal;
+  color: #acacac;
+  vertical-align: baseline;
+  text-align: left;
+  padding-right: 30px;
+}

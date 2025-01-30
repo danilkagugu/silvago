@@ -1,102 +1,57 @@
 import { useEffect, useState } from "react";
-import { getDiscountProducts } from "../../services/productApi";
 
 import { CiSquareChevLeft, CiSquareChevRight } from "react-icons/ci";
-import { Swiper, SwiperSlide, useSwiper } from "swiper/react";
+import { Swiper, SwiperSlide } from "swiper/react";
 import CatalogListItem from "../CatalogListItem/CatalogListItem";
 import { Navigation } from "swiper/modules";
-import {
-  fetchFavoriteProducts,
-  handleToggleFavorite,
-} from "../../helpers/productActions";
+
 import "swiper/css";
 import css from "./DiscountProduct.module.css";
-
-const CustomPrevButton = ({ slideTo }) => {
-  const swiper = useSwiper();
-  return (
-    <button
-      className={css.swiperButtonPrev}
-      onClick={() => swiper.slideTo(swiper.activeIndex - slideTo)}
-    >
-      <CiSquareChevLeft className={css.chevrone} />
-    </button>
-  );
-};
-
-const CustomNextButton = ({ slideTo }) => {
-  const swiper = useSwiper();
-  return (
-    <button
-      className={css.swiperButtonNext}
-      onClick={() => swiper.slideTo(swiper.activeIndex + slideTo)}
-    >
-      <CiSquareChevRight className={css.chevrone} />
-    </button>
-  );
-};
+import { useDispatch, useSelector } from "react-redux";
+import { selectDiscountProducts } from "../../redux/product/selectors";
+import { fetchDiscountProducts } from "../../redux/product/operations";
 
 const DiscountProduct = () => {
-  const [discountProducts, setDiscountProducts] = useState();
-  // console.log("discountProducts: ", discountProducts);
-  const [favoriteProducts, setFavoriteProducts] = useState(new Set());
+  const dispatch = useDispatch();
+
   const [quantities, setQuantities] = useState({});
+
   const [selectedVolume, setSelectedVolume] = useState({});
 
+  const discountProducts = useSelector(selectDiscountProducts);
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getDiscountProducts();
-        // console.log("data: ", data);
-        setDiscountProducts(data);
-        const initialQuantities = {};
-        const initialVolume = {};
-        data.forEach((p) => {
-          initialQuantities[p._id] = 1;
-          const defaultVolume = getDefaultVolume(p.volumes);
-          if (defaultVolume) {
-            initialVolume[p._id] = defaultVolume;
-          }
-        });
-        setQuantities(initialQuantities);
-        setSelectedVolume(initialVolume);
-        fetchFavoriteProducts(setFavoriteProducts);
-      } catch (error) {
-        console.log(error);
+    dispatch(fetchDiscountProducts());
+  }, [dispatch]);
+
+  useEffect(() => {
+    const initialQuantities = {};
+    const initialVolume = {};
+    discountProducts.forEach((p) => {
+      initialQuantities[p._id] = 1;
+      const defaultVolume = getDefaultVolume(p.volumes);
+      if (defaultVolume) {
+        initialVolume[p._id] = defaultVolume;
       }
-    };
+    });
+    setQuantities(initialQuantities);
+    setSelectedVolume(initialVolume);
+  }, [discountProducts]);
 
-    fetchData();
-  }, []);
+  const getDefaultVolume = (volumes) =>
+    volumes && volumes.length ? Math.max(...volumes.map((v) => v.volume)) : 0;
 
-  const getDefaultVolume = (volumes) => {
-    if (!volumes || volumes.length === 0) return 0;
-    return volumes.reduce(
-      (maxVol, vol) => (vol.volume > maxVol ? vol.volume : maxVol),
-      0
-    );
+  const breakpoints = {
+    0: { slidesPerView: "auto", spaceBetween: 10 },
+    481: { slidesPerView: "auto", spaceBetween: 20 },
+    769: { slidesPerView: "auto", spaceBetween: 30 },
+    1025: { slidesPerView: "auto", spaceBetween: 40 },
+    1441: { slidesPerView: 5, spaceBetween: 50 },
   };
 
-  const handleQuantityChange = (productId, amount) => {
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: Math.max(1, (prevQuantities[productId] || 1) + amount),
-    }));
-  };
-
-  const handleQuantityInputChange = (productId, value) => {
-    const newValue = Math.max(1, parseInt(value, 10) || 1);
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [productId]: newValue,
-    }));
-  };
-
-  const handleVolumeSelect = (productId, volume) => {
-    setSelectedVolume((prev) => ({
-      ...prev,
-      [productId]: volume,
-    }));
+  const navigation = {
+    prevEl: `.${css.swiperButtonPrev}`,
+    nextEl: `.${css.swiperButtonNext}`,
   };
 
   return (
@@ -106,59 +61,28 @@ const DiscountProduct = () => {
         modules={[Navigation]}
         spaceBetween={50}
         slidesPerView={5}
-        navigation={{
-          prevEl: ".swiper-button-prev",
-          nextEl: ".swiper-button-next",
-        }}
+        navigation={navigation}
         freeMode={true}
         pagination={{ clickable: true }}
         scrollbar={{ draggable: true }}
-        breakpoints={{
-          // для екранів від 0px до 480px
-          0: {
-            slidesPerView: "auto",
-            spaceBetween: 10,
-          },
-          // для екранів від 481px до 768px
-          481: {
-            slidesPerView: "auto",
-            spaceBetween: 20,
-          },
-          // для екранів від 769px до 1024px
-          769: {
-            slidesPerView: "auto",
-            spaceBetween: 30,
-          },
-          // для екранів від 1025px до 1440px
-          1025: {
-            slidesPerView: "auto",
-            spaceBetween: 40,
-          },
-          // для екранів від 1441px і більше
-          1441: {
-            slidesPerView: 5,
-            spaceBetween: 50,
-          },
-        }}
+        breakpoints={breakpoints}
       >
         {discountProducts &&
           discountProducts.map((item) => (
             <SwiperSlide key={item._id} className={css.swiperSlide}>
-              <CatalogListItem
+              {/* <CatalogListItem
                 product={item}
-                favoriteProducts={favoriteProducts}
                 quantities={quantities}
                 selectedVolume={selectedVolume}
-                handleQuantityChange={handleQuantityChange}
-                handleQuantityInputChange={handleQuantityInputChange}
-                handleVolumeSelect={handleVolumeSelect}
-                handleToggleFavorite={handleToggleFavorite}
-                setFavoriteProducts={setFavoriteProducts}
-              />
+              /> */}
             </SwiperSlide>
           ))}
-        <CustomPrevButton slideTo={2} />
-        <CustomNextButton slideTo={2} />
+        <button className={css.swiperButtonPrev}>
+          <CiSquareChevLeft className={css.chevrone} />
+        </button>
+        <button className={css.swiperButtonNext}>
+          <CiSquareChevRight className={css.chevrone} />
+        </button>
       </Swiper>
     </div>
   );

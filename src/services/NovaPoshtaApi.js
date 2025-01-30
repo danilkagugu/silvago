@@ -7,51 +7,6 @@ export const instance = axios.create({
   baseURL: BASE_URL,
 });
 
-export const getArea = async () => {
-  try {
-    const { data } = await instance.post("", {
-      apiKey: "c0c77fd4e35911237acd01d7278060a0",
-      modelName: "AddressGeneral",
-      calledMethod: "getAreas",
-      methodProperties: {},
-    });
-    return data;
-  } catch (error) {
-    console.error("Error fetching areas:", error);
-    throw error;
-  }
-};
-export const getAreaByRef = async (ref) => {
-  try {
-    const { data } = await instance.post("", {
-      apiKey: "c0c77fd4e35911237acd01d7278060a0",
-      modelName: "AddressGeneral",
-      calledMethod: "getAreas",
-      methodProperties: { Ref: ref },
-    });
-    // console.log("data!!!: ", data);
-    return data;
-  } catch (error) {
-    console.error("Error fetching areas:", error);
-    throw error;
-  }
-};
-
-export const getCities = async (selectedArea) => {
-  try {
-    const { data } = await instance.post("", {
-      apiKey: API_KEY_NP,
-      modelName: "AddressGeneral",
-      calledMethod: "getCities",
-      methodProperties: { AreaRef: selectedArea.Ref },
-    });
-    // const cities = data.data.map((city) => city.Description);
-    return data;
-  } catch (error) {
-    console.error("Error fetching cities:", error);
-    throw error;
-  }
-};
 export const getAllCities = async () => {
   try {
     const { data } = await instance.post("", {
@@ -60,7 +15,23 @@ export const getAllCities = async () => {
       calledMethod: "getCities",
       methodProperties: {},
     });
-    // console.log("data: ", typeof data.data);
+    // console.log("data: ", data.data);
+    // const cities = data.data.map((city) => city.Description);
+    return data;
+  } catch (error) {
+    console.error("Error fetching cities:", error);
+    throw error;
+  }
+};
+export const getInfoCity = async (selectedCity) => {
+  try {
+    const { data } = await instance.post("", {
+      apiKey: "c0c77fd4e35911237acd01d7278060a0",
+      modelName: "AddressGeneral",
+      calledMethod: "searchSettlements",
+      methodProperties: { CityName: selectedCity },
+    });
+    // console.log("data: ", data);
     // const cities = data.data.map((city) => city.Description);
     return data;
   } catch (error) {
@@ -83,6 +54,24 @@ export const getPostOffice = async (selectedCity) => {
     return data;
   } catch (error) {
     console.error("Error fetching cities:", error);
+    throw error;
+  }
+};
+export const getCurrentPostOffice = async (selectedCity, warehouseId) => {
+  try {
+    const { data } = await instance.post("", {
+      apiKey: API_KEY_NP,
+      modelName: "AddressGeneral",
+      calledMethod: "getWarehouses",
+      methodProperties: {
+        CityName: selectedCity, // Тут має бути рядок з назвою міста (Коростишів)
+        WarehouseId: warehouseId, // Тут має бути Number (наприклад, 2)
+      },
+    });
+
+    return data.data;
+  } catch (error) {
+    console.error("Error fetching warehouse:", error);
     throw error;
   }
 };

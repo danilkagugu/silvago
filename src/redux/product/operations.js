@@ -1,14 +1,21 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
-  addProductToFavorite,
-  deleteProductFromFavorite,
-  getFavoriteProduct,
+  addFavorite,
+  changeVariation,
+  fetchFilteredProductsApi,
+  getDefaultVariations,
+  getDiscountProducts,
+  getFavorite,
+  getPriceRenge,
   getProducts,
+  getTopSellingProduct,
   productById,
+  removeFavorite,
 } from "../../services/productApi";
+import { getGoods } from "../../services/api";
 
 export const getAllProduct = createAsyncThunk(
-  "products/get",
+  "products/getAll",
   async (_, thunkAPI) => {
     try {
       const data = await getProducts();
@@ -19,12 +26,72 @@ export const getAllProduct = createAsyncThunk(
   }
 );
 
+export const getAllProductTorgsoft = createAsyncThunk(
+  "products/getAllGoods",
+  async (_, thunkAPI) => {
+    try {
+      const data = await getGoods();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchTopProducts = createAsyncThunk(
+  "products/getTopProducts",
+  async (_, thunkAPI) => {
+    try {
+      const data = await getTopSellingProduct();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchDiscountProducts = createAsyncThunk(
+  "products/fetchDiscountProducts",
+  async (_, thunkAPI) => {
+    try {
+      const data = await getDiscountProducts();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
 export const getProductById = createAsyncThunk(
-  "product/getById",
+  "products/getById",
   async (slug, thunkAPI) => {
     try {
       const data = await productById(slug);
-      // console.log("slug: ", slug);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getProductVariations = createAsyncThunk(
+  "products/getDefaultVariation",
+  async (_, thunkAPI) => {
+    try {
+      const data = await getDefaultVariations();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchProductVariation = createAsyncThunk(
+  "products/getVariation",
+  async ({ productId, volumeId, tone }, thunkAPI) => {
+    try {
+      const data = await changeVariation(productId, volumeId, tone);
+      // console.log("data: ", data);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -33,10 +100,11 @@ export const getProductById = createAsyncThunk(
 );
 
 export const getFavoriteProducts = createAsyncThunk(
-  "favorite/get",
-  async (_, thunkAPI) => {
+  "products/getFavorites",
+  async (userId, thunkAPI) => {
     try {
-      const data = await getFavoriteProduct();
+      const data = await getFavorite(userId);
+      // console.log("data: ", data);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -45,10 +113,10 @@ export const getFavoriteProducts = createAsyncThunk(
 );
 
 export const addProductFavorite = createAsyncThunk(
-  "products/addFavoriteProduct",
-  async (productId, thunkAPI) => {
+  "products/addFavorite",
+  async ({ userId, productId, idTorgsoft }, thunkAPI) => {
     try {
-      const data = await addProductToFavorite(productId);
+      const data = await addFavorite(userId, productId, idTorgsoft);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -57,10 +125,36 @@ export const addProductFavorite = createAsyncThunk(
 );
 
 export const removeProductFavorite = createAsyncThunk(
-  "products/removeFavoriteProduct",
-  async (productId, thunkAPI) => {
+  "products/removeFavorite",
+  async ({ userId, productId, idTorgsoft }, thunkAPI) => {
     try {
-      const data = await deleteProductFromFavorite(productId);
+      const data = await removeFavorite(userId, productId, idTorgsoft);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchFilteredProducts = createAsyncThunk(
+  "products/fetchFilteredProducts",
+  async ({ category, brand, price }, thunkAPI) => {
+    // console.log("price: ", price);
+    // console.log("category: ", category);
+    try {
+      const data = await fetchFilteredProductsApi({ category, brand, price });
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const fetchPriceRenge = createAsyncThunk(
+  "products/priceRenge",
+  async (_, thunkAPI) => {
+    try {
+      const data = await getPriceRenge();
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

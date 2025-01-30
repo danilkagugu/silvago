@@ -5,50 +5,33 @@ import { CiTrash } from "react-icons/ci";
 import { addProduct } from "../../redux/basket/operations";
 import { useDispatch } from "react-redux";
 
-const FavoriteItem = ({
-  product,
-  selectedVolume,
-  handleRemoveFavorite,
-  quantities,
-}) => {
+const FavoriteItem = ({ product, handleRemoveFavorite, quantities }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const volumeDetail = product.volumes.find(
-    (vol) => vol.volume === selectedVolume[product._id]
-  );
   const getPrice = () => {
-    const volume = selectedVolume[product._id];
-    const volumeDetail = product.volumes.find((vol) => vol.volume === volume);
-    const defaultVolume = product.volumes[0];
-
-    const newPrice = volumeDetail
-      ? volumeDetail.price * (1 - volumeDetail.discount / 100)
-      : defaultVolume
-      ? defaultVolume.price * (1 - defaultVolume.discount / 100)
-      : 0;
-    const oldPrice = volumeDetail
-      ? volumeDetail.price
-      : defaultVolume
-      ? defaultVolume.price
-      : 0;
+    const newPrice = product.price * (1 - product.discount / 100);
+    const oldPrice = product.price;
 
     return { newPrice, oldPrice };
   };
-
   const handleAddToBasket = () => {
+    if (quantities[product.volumeId] > product.quantityInStock) {
+      console.log("quantities: ", quantities);
+      console.error("Not enough stock for this volume.");
+      return;
+    }
     dispatch(
       addProduct({
-        slug: volumeDetail.slug,
-        quantity: quantities[product._id],
-        volume: selectedVolume[product._id],
-        price: volumeDetail.price,
+        slug: product.slug,
+        quantity: quantities[product.volumeId],
+        volume: product.volume,
       })
     );
   };
 
   const handleProductClick = () => {
-    navigate(`/product/${volumeDetail.slug}`);
+    navigate(`/product/${product.slug}`);
   };
   return (
     <>
@@ -57,7 +40,7 @@ const FavoriteItem = ({
           <IoCloseSharp
             className={css.iconDelete}
             onClick={() => {
-              handleRemoveFavorite(product.product);
+              handleRemoveFavorite(product.product, product.volumeId);
             }}
           />
 
@@ -67,7 +50,9 @@ const FavoriteItem = ({
                 <div className={css.catalogCardImage}>
                   <div className={css.imgBox}>
                     <img
-                      className={css.catalogCardImgProduct}
+                      className={`${css.catalogCardImgProduct} ${
+                        product.quantityInStock === 0 ? css.productMissImg : ""
+                      }`}
                       src={product.image}
                       alt={product.productName}
                     />
@@ -78,7 +63,7 @@ const FavoriteItem = ({
                     <p>{product.productName}</p>
                   </div>
                   <div className={css.catalogCardPriceBox}>
-                    {product.volumes.some((vol) => vol.discount > 0) && (
+                    {product.discount > 0 && (
                       <>
                         <div className={css.catalogCardPriceOld}>
                           {getPrice().oldPrice} грн
@@ -88,7 +73,7 @@ const FavoriteItem = ({
                         </div>
                       </>
                     )}
-                    {!product.volumes.some((vol) => vol.discount > 0) && (
+                    {!product.discount > 0 && (
                       <div className={css.catalogCardPrice}>
                         {getPrice().oldPrice} грн
                       </div>
@@ -99,9 +84,18 @@ const FavoriteItem = ({
             </div>
             <div className={css.catalogCardFooter}>
               <div className={css.catalogCardFooterBtn}>
-                <button className={css.buyButton} onClick={handleAddToBasket}>
-                  Купити
-                </button>
+                {product.quantityInStock && product.quantityInStock > 0 ? (
+                  <button
+                    className={css.buyButtonMob}
+                    onClick={handleAddToBasket}
+                  >
+                    Купити
+                  </button>
+                ) : (
+                  <p className={` ${css.productMiss}`}>
+                    Повідомити про наявність
+                  </p>
+                )}
               </div>
             </div>
           </div>
@@ -122,7 +116,7 @@ const FavoriteItem = ({
             <div
               className={css.BtnDelMob}
               onClick={() => {
-                handleRemoveFavorite(product.product);
+                handleRemoveFavorite(product.product, product.volumeId);
               }}
             >
               <button className={css.btnDelete}>
@@ -136,7 +130,7 @@ const FavoriteItem = ({
             <p>{product.productName}</p>
           </div>
           <div className={css.catalogPriceBoxMob}>
-            {product.volumes.some((vol) => vol.discount > 0) && (
+            {product.discount > 0 && (
               <>
                 <div className={css.catalogCardPriceOldMob}>
                   {getPrice().oldPrice} грн
@@ -146,7 +140,7 @@ const FavoriteItem = ({
                 </div>
               </>
             )}
-            {!product.volumes.some((vol) => vol.discount > 0) && (
+            {!product.discount > 0 && (
               <div className={css.catalogCardPrice}>
                 {getPrice().oldPrice} грн
               </div>

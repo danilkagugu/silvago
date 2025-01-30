@@ -1,27 +1,25 @@
 import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/swiper-bundle.css";
-import { getBrands } from "../../services/productApi";
 import BrandItem from "../BrandItem/BrandItem";
 import css from "./SwiperBrands.module.css";
 import { Navigation, Pagination } from "swiper/modules";
 
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllBrands } from "../../redux/inventoryStore/operations";
+import { selectAllBrands } from "../../redux/inventoryStore/selectors";
+
 const SwiperBrands = () => {
-  const [brands, setBrands] = useState([]);
+  const dispatch = useDispatch();
+
   const [visibleBrandsCount, setVisibleBrandsCount] = useState(5);
   const [openList, setOpenList] = useState(false);
 
   useEffect(() => {
-    const fetchBrands = async () => {
-      try {
-        const brands = await getBrands();
-        setBrands(brands);
-      } catch (error) {
-        console.log("Error fetching brands:", error);
-      }
-    };
-    fetchBrands();
-  }, []);
+    dispatch(fetchAllBrands());
+  }, [dispatch]);
+
+  const brands = useSelector(selectAllBrands);
 
   const toggleOpenList = () => {
     setOpenList((prevState) => !prevState);

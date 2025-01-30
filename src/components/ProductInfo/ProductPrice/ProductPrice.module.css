@@ -1,0 +1,36 @@
+.productPriceContainer {
+  margin-bottom: 25px;
+}
+
+.productPriceWrapper {
+  display: flex;
+  align-items: center;
+}
+
+.productPrice {
+  margin-right: 10px;
+  flex-grow: 1;
+}
+
+.price {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.priceItemNew {
+  margin-right: 15px;
+  font-size: 28px;
+  color: #000;
+}
+
+.priceItem {
+  font-size: 28px;
+  color: #000;
+}
+
+.productOldPrice {
+  color: #acacac;
+  font-size: 21px;
+  text-decoration: line-through;
+}

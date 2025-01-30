@@ -1,0 +1,12 @@
+.catalogTopTitle {
+  flex: 1 1 auto;
+  margin: 0 10px;
+}
+
+.titleText {
+  font-size: 32px;
+  margin: 0 0 18px;
+  line-height: 1.1;
+  font-weight: normal;
+  color: #000;
+}

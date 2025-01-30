@@ -1,92 +1,144 @@
 import { useEffect, useMemo, useState } from "react";
-import { getBasketProduct, productById } from "../../services/productApi";
 import css from "./BasketRigth.module.css";
 
 import CatalogItem from "../CatalogItem/CatalogItem";
-import { updateProductQuantityBasket } from "../../redux/basket/operations";
+import {
+  getBasketInfo,
+  updateProductQuantityBasket,
+} from "../../redux/basket/operations";
 import { useDispatch } from "react-redux";
-//
 
 import CustomMaskedInput from "../RegisterForm/CustomMaskedInput";
 import { useSelector } from "react-redux";
 import { selectUserData } from "../../redux/auth/selectors";
-import { getPostOffice, getAllCities } from "../../services/NovaPoshtaApi";
 import { selectBasket } from "../../redux/basket/selectors";
 import { createOrder } from "../../redux/basket/operations";
 import { CiSearch } from "react-icons/ci";
 import { IoIosClose } from "react-icons/io";
+import {
+  selectCities,
+  selectCurrentCity,
+  selectCurrentOffice,
+  selectOffices,
+} from "../../redux/novaPoshta/selectors";
+import {
+  fetchCities,
+  fetchCurrentOffice,
+  fetchOffices,
+  infoCurrentCity,
+} from "../../redux/novaPoshta/operations";
+import { useNavigate } from "react-router-dom";
+import PhoneInput from "react-phone-input-2";
 
 const BasketRigth = () => {
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  // const [isMobile, setIsMobile] = useState(window.innerWidth <= 1440);
+
   const isMobile = window.innerWidth <= 1440;
-  const tt = useSelector(selectBasket);
-  // console.log("tt: ", tt);
-  const [basket, setBasket] = useState([]);
-  const [productDetails, setProductDetails] = useState({});
-  // const [offices, setOffices] = useState([]);
-  const [officesMob, setOfficesMob] = useState([]);
-  // console.log("officesMob: ", officesMob);
+
   const [selectedCityq, setSelectedCityq] = useState("");
-  // console.log("selectedCityq: ", selectedCityq);
   const [selectedOfficeq, setSelectedOfficeq] = useState("");
-  // console.log("offices: ", offices);
+  // console.log("selectedOfficeq: ", selectedOfficeq);
   const [openDropdown, setOpenDropdown] = useState(null);
-  // const [search, setSearch] = useState("");
   const [formData, setFormData] = useState({
-    name: "",
-    serName: "",
+    fullName: "",
     phone: "",
     email: "",
     city: "",
+    region: "",
     office: "",
+    comment: "",
   });
-
   const [openComentar, setOpenComentar] = useState(false);
   const [openOffice, setOpenOffice] = useState(false);
 
-  const dispatch = useDispatch();
-  const [cit, setCit] = useState();
   const [open, setOpen] = useState(false);
   const [searchOffice, setSearchOffice] = useState("");
   const [searchValue, setSearchValue] = useState("");
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const qwerty = await getAllCities();
-        // console.log("qwerty: ", qwerty);
-        setCit(qwerty);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetch();
-  }, []);
+  const [usedBonuses, setUsedBonuses] = useState(0);
+  console.log("usedBonuses: ", usedBonuses);
+
+  const basketData = useSelector(selectBasket);
+  // console.log("basketData: ", basketData);
+  const userData = useSelector(selectUserData);
+  // console.log("userData: ", userData);
+  const maxBonuses = userData?.bonuses || 0;
+  // console.log("maxBonuses: ", maxBonuses);
+
+  const cities = useSelector(selectCities);
+  const offices = useSelector(selectOffices);
+  const currentOffice = useSelector(selectCurrentOffice);
+  // console.log("currentOffice: ", currentOffice);
+  const currentCity = useSelector(selectCurrentCity);
+  // console.log("currentCity: ", currentCity[0]?.Addresses[0]);
+  const { Area } = (selectedCityq && currentCity?.[0]?.Addresses?.[0]) || {};
+  const { ShortAddress } = (currentOffice && currentOffice?.[0]) || {};
+  // console.log("ShortAddress: ", ShortAddress);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const basketData = await getBasketProduct();
-        // console.log("basketData: ", basketData);
+    if (Area) {
+      setFormData((prevData) => ({
+        ...prevData,
+        region: Area,
+      }));
+    }
+  }, [Area]);
 
-        if (basketData && Array.isArray(basketData.products)) {
-          setBasket(basketData.products);
+  useEffect(() => {
+    // Завантажуємо міста лише один раз
+    if (!cities.data || cities.data.length === 0) {
+      dispatch(fetchCities());
+    }
+  }, [dispatch, cities]);
 
-          const details = {};
-          for (const basketItem of basketData.products) {
-            // console.log("basketItem: ", basketItem);
-            const response = await productById(basketItem.slug);
-            details[basketItem.slug] = response;
-            // console.log("basketItem: ", basketItem);
-          }
-          setProductDetails(details);
-        } else {
-          console.error("Недійсний формат даних кошика:", basketData);
-        }
-      } catch (error) {
-        console.error("Помилка отримання продуктів у кошику:", error);
-      }
-    };
-    fetchProducts();
-  }, []);
+  useEffect(() => {
+    // Виконуємо запит на офіси тільки якщо обране місто
+    if (selectedCityq) {
+      dispatch(fetchOffices(selectedCityq));
+    }
+  }, [dispatch, selectedCityq]);
+
+  useEffect(() => {
+    if (selectedCityq && selectedOfficeq) {
+      dispatch(
+        fetchCurrentOffice({
+          cityName: selectedCityq, // Назва міста (наприклад, Коростишів)
+          warehouseId: selectedOfficeq?.Number, // Номер відділення (наприклад, 2)
+        })
+      );
+    }
+  }, [dispatch, selectedCityq, selectedOfficeq]);
+
+  useEffect(() => {
+    // Виконуємо запит на офіси тільки якщо обране місто
+    if (selectedCityq) {
+      dispatch(infoCurrentCity(selectedCityq));
+    }
+  }, [dispatch, selectedCityq]);
+
+  useEffect(() => {
+    dispatch(getBasketInfo());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (userData) {
+      setFormData((prevData) => ({
+        ...prevData,
+        fullName: ` ${userData?.lastName || ""} ${userData?.firstName || ""} ${
+          userData?.middleName || ""
+        }`.trim(),
+        // middleName: userData?.middleName || "",
+        phone: userData?.phone || "",
+        email: userData?.email || "",
+        city: userData?.city || "",
+        // region: Area,
+      }));
+      setSelectedCityq(userData?.city);
+    }
+  }, [userData]);
 
   useEffect(() => {
     if (open || openOffice) {
@@ -104,21 +156,15 @@ const BasketRigth = () => {
     };
   }, [open, openOffice]);
 
-  const handleQuantityChange = async (productId, volume, quantity) => {
+  const handleQuantityChange = async (productId, volume, quantity, tone) => {
     try {
-      await dispatch(
+      dispatch(
         updateProductQuantityBasket({
           productId,
           volume,
           quantity,
+          tone,
         })
-      );
-      setBasket((prevBasket) =>
-        prevBasket.map((item) =>
-          item.product === productId && item.volume === volume
-            ? { ...item, quantity: quantity }
-            : item
-        )
       );
     } catch (error) {
       console.error("Помилка оновлення кількості товару:", error);
@@ -126,92 +172,70 @@ const BasketRigth = () => {
   };
 
   const calculateTotalAmount = () => {
-    return basket.reduce((total, item) => {
-      const details = productDetails[item.slug];
-      if (details) {
-        const volumeDetail = details?.product?.volumes?.find(
-          (vol) => vol.volume === item.volume
-        );
-        if (volumeDetail) {
-          const price = volumeDetail.price;
-          const discount = volumeDetail.discount || 0;
-          const discountedPrice = price * (1 - discount / 100);
-          return total + item.quantity * discountedPrice;
-        }
-      }
-      return total;
+    return basketData.reduce((total, item) => {
+      const price = item.price;
+      const discount = item.discount || 0;
+      const discountedPrice = price * (1 - discount / 100);
+      return total + item.quantity * discountedPrice;
     }, 0);
   };
 
-  // ФОрма
-
-  const userData = useSelector(selectUserData);
-  // console.log("userData: ", userData);
-
-  useEffect(() => {
-    if (userData) {
-      const fetchArea = async () => {
-        setFormData((prevData) => ({
-          ...prevData,
-          name: userData?.name || "",
-          serName: userData?.serName || "",
-          phone: userData?.phone || "",
-          email: userData?.email || "",
-          city: userData?.city || "",
-        }));
-        setSelectedCityq(userData?.city);
-      };
-
-      fetchArea(); // Invoke the async function
+  const handleBonusesChange = (e) => {
+    const input = e.target.value;
+    if (input === "") {
+      setUsedBonuses(""); // Дозволяємо інпуту бути порожнім
+    } else {
+      const parsedValue = Math.min(
+        Number(input),
+        Math.min(maxBonuses, calculateTotalAmount())
+      );
+      setUsedBonuses(parsedValue);
     }
-  }, [userData]);
+  };
 
-  // console.log("userData", userData);
-
-  useEffect(() => {
-    const fetchOffices = async () => {
-      if (selectedCityq) {
-        try {
-          const officeData = await getPostOffice(selectedCityq);
-          setOfficesMob(officeData);
-        } catch (error) {
-          console.error("Error fetching post offices:", error);
-        }
-      }
-    };
-
-    fetchOffices();
-  }, [selectedCityq]);
-
-  //
-
-  //
-  const basketData = useSelector(selectBasket);
+  const totalAmountWithBonuses = calculateTotalAmount() - usedBonuses;
+  // console.log("totalAmountWithBonuses: ", totalAmountWithBonuses);
 
   const submitOrder = async (e) => {
     e.preventDefault();
     const { city, office } = formData;
+    console.log("office: ", office);
+    // console.log("formData: ", formData);
 
     if (!city || !office) {
-      console.error("Area, city, or office is missing.");
+      alert("Будь ласка, оберіть місто та відділення для доставки.");
       return;
     }
-    const basket = basketData;
+    const outOfStockItems = basketData.filter(
+      (item) => item.quantityStock === 0
+    );
+    if (outOfStockItems.length > 0) {
+      alert(
+        `Щоб продовжити, будь ласка, видаліть товари з кошика, яких немає в наявності.`
+      );
+      return;
+    }
+
     const user = {
-      name: formData.name,
-      serName: formData.serName,
+      fullName: formData.fullName || "",
       phone: formData.phone,
       email: formData.email,
-      address: {
-        city,
-        office,
-      },
+      comment: formData.comment,
+      city,
+      office,
+      region: Area,
+      bonusesUsed: usedBonuses,
     };
 
+    // console.log("user", user);
     try {
-      const response = await dispatch(createOrder({ user, basket })).unwrap();
-      if (response && response.message === "Order created successfully") {
+      const response = await dispatch(
+        createOrder({ user, basketData })
+      ).unwrap();
+      console.log("response", response);
+      if (response) {
         console.log("Order created successfully:", response.order);
+        navigate("/order-success");
       } else {
         console.error("Failed to create order:", response.message);
       }
@@ -219,6 +243,8 @@ const BasketRigth = () => {
       console.error("Error creating order:", error);
     }
   };
+
+  // Функція для обробки змін у полі введення
 
   const handleDropdownToggle = (dropdownName) => {
     if (openDropdown === dropdownName) {
@@ -232,58 +258,38 @@ const BasketRigth = () => {
 
   // console.log("searchValue: ", searchValue);
 
-  const popularCities = ["Київ", "Харків", "Одеса", "Дніпро", "Львів"];
-
+  // console.log("cities", cities);
   const filteredCities = useMemo(() => {
-    if (!cit) return;
-    if (!cit || !Array.isArray(cit.data)) {
-      console.error(
-        "Cit.data is not an array or contains undefined values:",
-        cit?.data
-      );
+    const popularCities = ["Київ", "Харків", "Одеса", "Дніпро", "Львів"];
+
+    if (!cities.data || !Array.isArray(cities.data)) {
       return [];
     }
+
     if (!searchValue || searchValue.length < 3) {
-      // Якщо searchValue порожній або містить менше ніж 3 букви
       return popularCities
-        .map(
-          (cityName) =>
-            cit &&
-            cit.data &&
-            cit.data.find((item) => item.Description === cityName)
+        .map((cityName) =>
+          cities.data.find((item) => item.Description === cityName)
         )
-        .filter(Boolean); // Фільтруємо null значення
+        .filter(Boolean);
     }
 
     const lowerCaseSearch = searchValue.toLowerCase();
-
-    // Фільтруємо популярні міста, якщо немає пошукового запиту
-    if (!searchValue) {
-      return popularCities
-        .map((cityName) =>
-          cit.data.find((item) => item.Description === cityName)
-        )
-        .filter(Boolean); // Фільтруємо undefined
-    }
-
-    // Точні збіги (міста, що починаються з пошукового запиту)
-    const exactMatches = cit.data.filter(
+    const exactMatches = cities.data.filter(
       (option) =>
         option.Description &&
         option.Description.toLowerCase().startsWith(lowerCaseSearch)
     );
 
-    // Часткові збіги (міста, що містять пошуковий запит, але не починаються з нього)
-    const partialMatches = cit.data.filter(
+    const partialMatches = cities.data.filter(
       (option) =>
         option.Description &&
         !option.Description.toLowerCase().startsWith(lowerCaseSearch) &&
         option.Description.toLowerCase().includes(lowerCaseSearch)
     );
 
-    // Об'єднуємо результати: точні збіги зверху, часткові після них
     return [...exactMatches, ...partialMatches];
-  }, [cit?.data, searchValue]);
+  }, [cities, searchValue]);
 
   const highlightText = (text, search) => {
     if (!search) return text;
@@ -300,8 +306,8 @@ const BasketRigth = () => {
     );
   };
   const firstOffice =
-    selectedCityq && officesMob.data && officesMob.data.length > 0
-      ? officesMob.data[0]
+    selectedCityq && offices.data && offices.data.length > 0
+      ? offices.data[0]
       : null;
 
   const selectCity = (city) => {
@@ -315,7 +321,7 @@ const BasketRigth = () => {
     setSelectedCityq(city.Description);
     setSearchValue(city.Description);
     setOpen(false);
-    setSelectedOfficeq("");
+    setSelectedOfficeq(firstOffice);
     setFormData({
       ...formData,
       city: city.Description,
@@ -337,8 +343,7 @@ const BasketRigth = () => {
       }));
     }
   }, [firstOffice]);
-
-  // console.log(firstOffice);
+  // console.log("formData: ", formData);
   // Функція для фільтрації офісів
   const filterOffices = (offices, searchValue) => {
     if (!offices || !offices.data) return [];
@@ -347,6 +352,10 @@ const BasketRigth = () => {
       item.Description.toLowerCase().includes(searchValue.toLowerCase())
     );
   };
+
+  // if (isLoadingCities) {
+  //   return <LoaderSilvago />;
+  // }
 
   return (
     <>
@@ -361,30 +370,78 @@ const BasketRigth = () => {
                     Одержувач замовлення
                   </h2>
                   <dl className={css.form}>
-                    <dt className={css.formHead}>ПІБ</dt>
+                    {/* <dt className={css.formHead}>Ім&apos;я</dt>
                     <dd className={css.formItem}>
                       <input
                         className={css.field}
-                        id="name"
+                        id="firstName"
                         type="text"
-                        value={formData.name + " " + formData.serName}
+                        value={`${formData.firstName}`}
                         onChange={(e) =>
-                          setFormData({ ...formData, name: e.target.value })
+                          setFormData({
+                            ...formData,
+                            firstName: e.target.value.trim(),
+                          })
                         }
                         placeholder="Ім'я"
                       />
                     </dd>
+                    <dt className={css.formHead}>Прізвище</dt>
+                    <dd className={css.formItem}>
+                      <input
+                        className={css.field}
+                        id="lastName"
+                        type="text"
+                        value={`${formData.lastName}`}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            lastName: e.target.value.trim(),
+                          })
+                        }
+                        placeholder="Ім'я"
+                      />
+                    </dd> */}
+                    <dt className={css.formHead}>ПІБ</dt>
+                    <dd className={css.formItem}>
+                      <input
+                        className={css.field}
+                        id="fullName"
+                        type="text"
+                        value={formData.fullName || ""}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            fullName: e.target.value, // Тепер не trim(), щоб дозволити пробіли
+                          })
+                        }
+                        placeholder="Ім'я Прізвище"
+                      />
+                    </dd>
                     <dt className={css.formHead}>Телефон</dt>
                     <dd className={css.formItem}>
-                      <CustomMaskedInput
-                        className={css.field}
-                        id="phone"
-                        value={formData.phone}
-                        onChange={(e) =>
-                          setFormData({ ...formData, phone: e.target.value })
-                        }
-                        placeholder="Мобільний телефон"
-                      />
+                      <div className={css.phoneInputContainer}>
+                        <PhoneInput
+                          country={"ua"} // Встановлює префікс +380
+                          value={formData.phone}
+                          onChange={(phone) =>
+                            setFormData({
+                              ...formData,
+                              phone: phone.replace(/\D/g, ""), // Видаляє нецифрові символи
+                            })
+                          }
+                          placeholder="+38 (0__) ___-__-__"
+                          inputClass={css.customPhoneInput}
+                          specialLabel="" // Відключає додатковий лейбл
+                          enableSearch={false} // Вимикає пошук країни
+                          onlyCountries={["ua"]} // Дозволяє лише Україну
+                          disableCountryCode={false} // Включає префікс +380
+                          countryCodeEditable={false} // Забороняє редагування префіксу
+                          masks={{
+                            ua: "(..) ...-..-..",
+                          }}
+                        />
+                      </div>
                     </dd>
 
                     <dt className={css.formHead}>Місто</dt>
@@ -409,7 +466,7 @@ const BasketRigth = () => {
                         className={css.cityList}
                         style={{ display: open ? "block" : "none" }}
                       >
-                        {cit && cit.data && filteredCities.length > 0 ? (
+                        {cities && cities.data && filteredCities.length > 0 ? (
                           filteredCities.map((item) => (
                             <li
                               className={css.optionsListItem}
@@ -419,7 +476,6 @@ const BasketRigth = () => {
                             >
                               <div className={css.optionItem}>
                                 <div className={css.optionItemTitle}>
-                                  {/* {highlightText(item.Description, searchValue)} */}
                                   {item.Description}
                                 </div>
                               </div>
@@ -432,7 +488,26 @@ const BasketRigth = () => {
                         )}
                       </ul>
                     </dd>
-                    <p>коментар</p>
+                    <dt className={css.formHead}>Коментар</dt>
+                    <dd className={css.formItem}>
+                      {!openComentar ? (
+                        <p onClick={() => setOpenComentar(true)}>
+                          Додати коментар до замовлення
+                        </p>
+                      ) : (
+                        <textarea
+                          className={`${css.field} ${css.textareaText}`}
+                          id="comment"
+                          type="text"
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              comment: e.target.value,
+                            })
+                          }
+                        />
+                      )}
+                    </dd>
                   </dl>
                 </div>
                 <div className={css.checkoutBodyItem}>
@@ -479,9 +554,9 @@ const BasketRigth = () => {
                               />
                             </div>
                             <ul className={css.selectboxitOptions}>
-                              {filterOffices(officesMob, searchOffice).length >
+                              {filterOffices(offices, searchOffice).length >
                               0 ? (
-                                filterOffices(officesMob, searchOffice).map(
+                                filterOffices(offices, searchOffice).map(
                                   (item) => (
                                     <li
                                       key={item.Ref}
@@ -510,7 +585,7 @@ const BasketRigth = () => {
                   </dl>
                 </div>
                 <span className={css.deleteThis}></span>
-                <button className={css.btnLogin} type="submit">
+                <button className={css.btnSubmit} type="submit">
                   Оформити замовлення
                 </button>
               </form>
@@ -522,36 +597,25 @@ const BasketRigth = () => {
               <h2 className={css.orderHeader}>Ваше замовлення</h2>
 
               <ul className={css.orderList}>
-                {tt.map((item) => {
-                  // console.log("tt: ", tt);
-                  const details = productDetails[item.slug];
-                  // console.log("productDetails: ", productDetails);
-                  // console.log("details: ", details);
-                  const uniqueKey = `${item.product}-${item.volume}`;
-                  const volumeDetail = details?.product?.volumes?.find(
-                    (vol) => vol.volume === item.volume
-                  );
-                  const price = volumeDetail ? volumeDetail.price : 0;
-                  const discount = volumeDetail
-                    ? volumeDetail.discount || 0
-                    : 0;
+                {basketData.map((item) => {
+                  const uniqueKey = `${item._id}-${item.volume}`;
+
+                  const price = item ? item.price : 0;
+                  const discount = item ? item.discount || 0 : 0;
                   const discountedPrice = price * (1 - discount / 100);
                   return (
                     <li
                       className={css.orderListItem}
                       key={uniqueKey}
-                      id={item.product}
+                      id={item._id}
                     >
-                      {details && (
+                      {item && (
                         <CatalogItem
-                          productImg={details.volume.image}
-                          productName={details.product.name}
+                          key={`${item._id}-${item.volume}`}
+                          slug={item.slug}
                           productPrice={Math.ceil(discountedPrice)}
-                          id={item.product}
-                          slug={details.volume.slug}
                           item={item}
                           handleQuantityChange={handleQuantityChange}
-                          details={details}
                           discountedPrice={discountedPrice}
                         />
                       )}
@@ -560,8 +624,22 @@ const BasketRigth = () => {
                 })}
               </ul>
               <div className={css.totalAmount}>
+                <div className={css.bonusBlock}>
+                  <label htmlFor="bonusesInput" className={css.bonusLabel}>
+                    Використати бонуси (доступно: {maxBonuses} грн)
+                  </label>
+                  <input
+                    type="number"
+                    id="bonusesInput"
+                    value={usedBonuses === 0 ? "" : usedBonuses}
+                    onChange={handleBonusesChange}
+                    className={css.bonusInput}
+                    min="0"
+                    max={Math.min(maxBonuses, calculateTotalAmount())}
+                  />
+                </div>
                 <h3 className={css.totalAmountTitle}>
-                  Загальна сума: {calculateTotalAmount()} грн
+                  Загальна сума: {totalAmountWithBonuses} грн
                 </h3>
               </div>
             </div>
@@ -576,14 +654,33 @@ const BasketRigth = () => {
                   <h3 className={css.heading}>Одержувач замовлення</h3>
                   <div className={css.formList}>
                     <div className={css.formItemMob}>
-                      <div className={css.formItemTitle}>ПІБ</div>
+                      <div className={css.formItemTitle}>Ім&apos;я</div>
                       <div className={css.formItemContent}>
                         <input
                           className={css.input}
                           type="text"
-                          value={formData.name + " " + formData.serName}
+                          value={formData.firstName}
                           onChange={(e) =>
-                            setFormData({ ...formData, name: e.target.value })
+                            setFormData({
+                              ...formData,
+                              firstName: e.target.value.trim(),
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                    <div className={css.formItemMob}>
+                      <div className={css.formItemTitle}>Прізвище</div>
+                      <div className={css.formItemContent}>
+                        <input
+                          className={css.input}
+                          type="text"
+                          value={formData.lastName}
+                          onChange={(e) =>
+                            setFormData({
+                              ...formData,
+                              lastName: e.target.value.trim(),
+                            })
                           }
                         />
                       </div>
@@ -634,6 +731,12 @@ const BasketRigth = () => {
                         ) : (
                           <textarea
                             className={`${css.input} ${css.inputComent}`}
+                            onChange={(e) =>
+                              setFormData({
+                                ...formData,
+                                comment: e.target.value,
+                              })
+                            }
                           />
                         )}
                       </div>
@@ -697,7 +800,7 @@ const BasketRigth = () => {
                         className={css.searchField}
                         type="text"
                         placeholder="назва міста"
-                        value={searchValue}
+                        value={searchValue || formData.city}
                         onChange={(e) => setSearchValue(e.target.value)}
                       />
                     </div>
@@ -715,7 +818,7 @@ const BasketRigth = () => {
                   <div className={css.main}>
                     <div className={css.contentViewport}>
                       <ul className={css.optionsList}>
-                        {cit && cit.data && filteredCities.length > 0 ? (
+                        {cities && cities.data && filteredCities.length > 0 ? (
                           filteredCities.map((item) => (
                             <li
                               className={css.optionsListItem}
@@ -776,8 +879,8 @@ const BasketRigth = () => {
                   <div className={css.main}>
                     <div className={css.contentViewport}>
                       <ul className={css.optionsList}>
-                        {filterOffices(officesMob, searchValue).length > 0 ? (
-                          filterOffices(officesMob, searchValue).map((item) => (
+                        {filterOffices(offices, searchValue).length > 0 ? (
+                          filterOffices(offices, searchValue).map((item) => (
                             <li
                               className={`${css.optionsListItem} ${
                                 !selectedOfficeq?.Ref
@@ -824,33 +927,23 @@ const BasketRigth = () => {
             <div className={css.orderDetailsHeader}>Ваше замовлення</div>
             <div className={css.orderDetailsBody}>
               <ul>
-                {tt.map((item) => {
-                  // console.log("tt: ", tt);
-                  const details = productDetails[item.slug];
-                  // console.log("productDetails: ", productDetails);
-                  // console.log("details: ", details);
+                {basketData.map((item) => {
                   const uniqueKey = `${item.product}-${item.volume}`;
-                  const volumeDetail = details?.product?.volumes?.find(
-                    (vol) => vol.volume === item.volume
-                  );
-                  const price = volumeDetail ? volumeDetail.price : 0;
-                  const discount = volumeDetail
-                    ? volumeDetail.discount || 0
-                    : 0;
+
+                  const price = item ? item.price : 0;
+                  const discount = item ? item.discount || 0 : 0;
+
                   const discountedPrice = price * (1 - discount / 100);
                   return (
                     <li className={css.orderDetailsBlock} key={uniqueKey}>
                       <div className={css.cartItem}>
-                        {details && (
+                        {item && (
                           <CatalogItem
-                            productImg={details.volume.image}
-                            productName={details.product.name}
+                            key={`${item.product}-${item.volume}`}
+                            slug={item.slug}
                             productPrice={Math.ceil(discountedPrice)}
-                            id={item.product}
-                            slug={details.volume.slug}
                             item={item}
                             handleQuantityChange={handleQuantityChange}
-                            details={details}
                             discountedPrice={discountedPrice}
                           />
                         )}

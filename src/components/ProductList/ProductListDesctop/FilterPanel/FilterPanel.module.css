@@ -1,0 +1,21 @@
+.catalogSideBar {
+  transform: translate3d(0, 0, 0);
+  will-change: position, transform;
+}
+
+.catalogGroup {
+  position: relative;
+  margin-top: 20px;
+}
+
+.catalogGroup:first-of-type {
+  margin-top: 0;
+}
+
+.filterContainer {
+  /* не знаю чі він треба */
+}
+
+.filterSection {
+  margin-bottom: 18px;
+}

@@ -1,0 +1,83 @@
+/* OrderSuccessPage.module.css */
+
+.successContainer {
+  position: relative;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: url(/src/assets/img/logoSilvago.png);
+  background-repeat: no-repeat;
+  background-position: center -20%;
+  background-size: contain;
+  opacity: 0.8;
+}
+
+.successContainer::after {
+  content: "";
+  position: absolute;
+  bottom: 7%;
+  left: 0;
+  right: 0;
+  height: 31%;
+  background-image: url(/src/assets/img/logoSilvago.png);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  transform: scaleY(-1);
+  opacity: 0.4;
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+}
+
+@media (max-width: 768px) {
+  .successContainer {
+    background-position: center 23%; /* Розташування логотипу вище */
+  }
+
+  .successContainer::after {
+    height: 13%;
+    bottom: 20%;
+    opacity: 0.3;
+  }
+}
+
+.successWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  /* height: 100vh; */
+  /* background-color: #f9f9f9; */
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.titleSuccess {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.textSuccess {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.btnSuccess {
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #333;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btnSuccess:hover {
+  background-color: #555;
+}

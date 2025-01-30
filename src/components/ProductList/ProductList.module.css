@@ -6,26 +6,6 @@
   padding: 20px;
 }
 
-.breadcrumbs {
-  display: flex;
-  margin: 0 0 10px;
-  font-size: 11px;
-  color: #acacac;
-  line-height: 1.6;
-}
-
-.productGroupMenuItem {
-  display: flex;
-  align-items: center;
-}
-.productGroupMenuItem a {
-  color: #acacac;
-  border: 0;
-}
-.productGroupMenuItem a:hover {
-  color: #000;
-}
-
 .catalogTopRows {
   display: flex;
   align-items: flex-end;
@@ -89,6 +69,7 @@
   border-right: 1px solid #e5e5e5;
   cursor: pointer;
 }
+
 .catalogSortingItem:hover {
   color: #545454;
 }
@@ -136,7 +117,7 @@
   display: flex;
   flex-wrap: wrap;
   margin: 0 -15px;
-  gap: 10px;
+  /* gap: 10px; */
 }
 
 /* .listItem {
@@ -1079,4 +1060,8 @@
   height: 40px;
   font-size: 16px;
   width: 100%;
+}
+
+.list .listItem {
+  width: 25%;
 }

@@ -5,10 +5,8 @@ import {
 } from "../../redux/product/selectors";
 import { useEffect, useRef, useState } from "react";
 import { getAllProduct } from "../../redux/product/operations";
-import { getBrands, getCategories } from "../../services/productApi";
 import { Link, useParams } from "react-router-dom";
 import css from "./ProductsByBrand.module.css";
-import { fetchFavoriteProducts } from "../../helpers/productActions";
 import CatalogListItem from "../CatalogListItem/CatalogListItem";
 import {
   IoChevronBackSharp,
@@ -19,7 +17,15 @@ import { IoIosClose, IoMdCheckmark } from "react-icons/io";
 import { GoHome } from "react-icons/go";
 import { CiFilter } from "react-icons/ci";
 import { TbArrowsSort } from "react-icons/tb";
-// import { addProduct } from "../../redux/basket/operations";
+
+import {
+  selectAllBrands,
+  selectAllCategories,
+} from "../../redux/inventoryStore/selectors";
+import {
+  fetchAllBrands,
+  fetchAllCategories,
+} from "../../redux/inventoryStore/operations";
 
 const ProductsByBrand = () => {
   // const navigate = useNavigate();
@@ -28,13 +34,9 @@ const ProductsByBrand = () => {
 
   const isMobile = window.innerWidth <= 1440;
 
-  const [brands, setBrands] = useState();
   // console.log("brands: ", brands);
   const [quantities, setQuantities] = useState({});
-  const [favoriteProducts, setFavoriteProducts] = useState(new Set());
   const [selectedVolume, setSelectedVolume] = useState({});
-  const [categories, setCategories] = useState();
-  // console.log("categories: ", categories);
 
   const [sortingOpen, setSortingOpen] = useState(false);
   const [sortType, setSortType] = useState("popularity");
@@ -43,6 +45,8 @@ const ProductsByBrand = () => {
   // FILTER
   const [filterOpen, setFilterOpen] = useState(false);
   const [categoryContentOpen, setCategoryContentOpen] = useState(false);
+
+  const brands = useSelector(selectAllBrands);
 
   const { brandName } = useParams();
 
@@ -56,24 +60,18 @@ const ProductsByBrand = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await getCategories();
+    dispatch(fetchAllCategories());
+  }, [dispatch]);
 
-        setCategories(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+  const categories = useSelector(selectAllCategories);
 
-    fetchCategories();
-  }, []);
+  useEffect(() => {
+    dispatch(fetchAllBrands());
+  }, [dispatch]);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const data = await getBrands();
-        setBrands(data);
         const initialQuantities = {};
         const initialVolume = {};
         dataProducts.forEach((p) => {
@@ -91,7 +89,6 @@ const ProductsByBrand = () => {
     };
 
     fetchProducts();
-    fetchFavoriteProducts(setFavoriteProducts);
   }, [dataProducts]);
 
   useEffect(() => {
@@ -121,22 +118,6 @@ const ProductsByBrand = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [sortingOpen, filterOpen]);
-
-  const handleVolumeSelect = (productId, volume) => {
-    setSelectedVolume((prev) => ({
-      ...prev,
-      [productId]: volume,
-    }));
-  };
-
-  // const filteredProducts = dataProducts.filter((product) => {
-  //   if (!brands) return false;
-
-  //   const brand = brands.find((cat) => cat.name === brandName);
-  //   if (!brand) return false;
-
-  //   return product.brand === brand.name;
-  // });
 
   const getDefaultVolume = (volumes) => {
     if (!volumes || volumes.length === 0) return 0;
@@ -347,8 +328,6 @@ const ProductsByBrand = () => {
                       id={product._id}
                     >
                       <CatalogListItem
-                        favoriteProducts={favoriteProducts}
-                        handleVolumeSelect={handleVolumeSelect}
                         product={product}
                         quantities={quantities}
                         selectedVolume={selectedVolume}
@@ -559,8 +538,6 @@ const ProductsByBrand = () => {
             {sortedFilteredProducts.map((product) => (
               <li className={css.goodsItem} key={product._id}>
                 <CatalogListItem
-                  favoriteProducts={favoriteProducts}
-                  handleVolumeSelect={handleVolumeSelect}
                   product={product}
                   quantities={quantities}
                   selectedVolume={selectedVolume}

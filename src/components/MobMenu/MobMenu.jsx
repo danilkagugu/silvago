@@ -8,7 +8,6 @@ import {
 } from "react-icons/fa";
 import css from "./MobMenu.module.css";
 import logo from "../../assets/img/3wr.png";
-import { getCategories } from "../../services/productApi";
 import { apiLoginUser, apiLogoutUser } from "../../redux/auth/operations";
 import { useDispatch, useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../../redux/auth/selectors";
@@ -20,6 +19,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
 import CustomMaskedInput from "../RegisterForm/CustomMaskedInput";
 import { requestSignUp } from "../../services/authApi";
+import { selectAllCategories } from "../../redux/inventoryStore/selectors";
+import { fetchAllCategories } from "../../redux/inventoryStore/operations";
 
 const MobMenu = ({ closeMenu, openMobMenu }) => {
   const navigate = useNavigate();
@@ -32,6 +33,8 @@ const MobMenu = ({ closeMenu, openMobMenu }) => {
 
   const dispatch = useDispatch();
   const login = useSelector(selectIsLoggedIn);
+
+  const categories = useSelector(selectAllCategories);
 
   useEffect(() => {
     if (openMobMenu) {
@@ -50,17 +53,20 @@ const MobMenu = ({ closeMenu, openMobMenu }) => {
   }, [openMobMenu]);
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const fetchCategoriess = async () => {
       try {
-        const data = await getCategories();
-        setMenuStack([{ items: data, title: "Categories", slug: null }]); // Ініціалізуємо перший рівень меню
+        setMenuStack([{ items: categories, title: "Categories", slug: null }]); // Ініціалізуємо перший рівень меню
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
 
-    fetchCategories();
-  }, []);
+    fetchCategoriess();
+  }, [categories]);
+
+  useEffect(() => {
+    dispatch(fetchAllCategories());
+  }, [dispatch]);
 
   const currentLevel = menuStack.length - 1; // Поточний рівень меню
 
@@ -113,7 +119,7 @@ const MobMenu = ({ closeMenu, openMobMenu }) => {
   });
 
   const INITIAL_FORM_DATA = {
-    email: "danil@gmail.com",
+    email: "danulo1@gmail.com",
     password: "123456789",
   };
 
@@ -343,7 +349,7 @@ const MobMenu = ({ closeMenu, openMobMenu }) => {
                 >
                   <input
                     className={css.inputForm}
-                    id="email"
+                    id="emailLoginMob"
                     type="email"
                     {...register("email")}
                     placeholder="Email"

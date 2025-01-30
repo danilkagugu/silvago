@@ -1,0 +1,14 @@
+.catalogContent {
+  display: flex;
+  flex-direction: column;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+
+.list .listItem {
+  width: 25%;
+}

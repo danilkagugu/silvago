@@ -1,4 +1,4 @@
-.logo {
+/* .logo {
   color: rgb(0, 0, 0);
   font-size: 25.2px;
   font-weight: 700;
@@ -20,4 +20,24 @@
 
 .logoLink {
   color: #000;
+} */
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logoLink {
+  display: inline-block;
+}
+
+.logoLink img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+.logoLink img:hover {
+  transform: scale(1.05); /* збільшується при наведенні */
 }

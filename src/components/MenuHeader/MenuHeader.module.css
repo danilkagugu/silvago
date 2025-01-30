@@ -176,7 +176,26 @@
   .iconSearch {
     display: none;
   }
-  .favoriteIcon {
+  .favoriteBox {
     display: none;
   }
+}
+.favoriteBox {
+  position: relative;
+}
+
+.amountProductsFavorites {
+  transform: translateX(-50%);
+  position: absolute;
+  top: 11px;
+  left: 4px;
+  min-width: 7px;
+  padding: 0 4px;
+  height: 15px;
+  line-height: 15px;
+  border-radius: 15px;
+  background: #dd6c7a;
+  color: #fff;
+  font-size: 10px;
+  text-align: center;
 }

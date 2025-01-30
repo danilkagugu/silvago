@@ -49,6 +49,7 @@ const authSlice = createSlice({
       })
       .addCase(apiUpdateUser.fulfilled, (state, action) => {
         state.userData = action.payload.user;
+        // console.log("action.payload.user: ", action.payload.user);
         state.loading = false;
         console.log(state.userData.user);
       })

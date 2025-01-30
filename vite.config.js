@@ -10,4 +10,5 @@ export default defineConfig({
   build: {
     sourcemap: true,
   },
+  cacheDir: false, // додай це
 });

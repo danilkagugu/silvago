@@ -11,15 +11,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.quantityContainer {
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-  border-radius: 5px;
-  background-color: #f1f1f1;
-  padding: 7px;
-}
-
 .quantityButton {
   background-color: transparent;
   color: black;
@@ -56,11 +47,6 @@
 .basketTable td {
   /* border: 1px solid #ddd; */
   padding: 8px;
-}
-
-.quantityContainer {
-  display: flex;
-  align-items: center;
 }
 
 .qqqq {
@@ -101,19 +87,6 @@
 
 .inputBox {
   width: 33%;
-}
-
-.inputForm {
-  transition-duration: 300ms;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
-  width: 100%;
-  height: 50px;
-  padding: 13px;
-  border: 1px solid #e8e8e8;
-  background: #f9f9f9;
-  margin-bottom: 15px;
 }
 
 .fieldDesc {
@@ -954,4 +927,94 @@
   transition: all 0.1s;
   line-height: 1;
   color: #000 !important;
+}
+
+textarea:focus {
+  outline: 0;
+}
+.field.textareaText {
+  height: 86px;
+  resize: vertical;
+}
+.field:focus {
+  border-color: #000;
+}
+
+.btnSubmit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  max-width: 100%;
+  font-size: 18px;
+  color: #fff;
+  margin: 0 auto;
+  background-color: #000;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 600;
+  height: 100%;
+  margin-bottom: 15px;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.btnSubmit:hover {
+  color: black;
+  background-color: #fff;
+  border: 1px solid black;
+  transform: scale(1.05);
+}
+
+.successContainer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bonusBlock {
+  margin: 10px 0;
+}
+
+.bonusLabel {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.bonusInput {
+  width: 100%;
+  padding: 5px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.customPhoneInput {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 14px;
+  width: 100%;
+  caret-color: black; /* Курсор залишається видимим */
+  background: #fff;
+  transition: color 0.2s ease-in-out;
+}
+
+.customPhoneInput:focus,
+.customPhoneInput:hover {
+  color: black;
+}
+
+.customPhoneInput::placeholder {
+  color: transparent;
+}
+
+.customPhoneInput:focus::placeholder {
+  color: #999; /* Робить маску видимою при фокусі */
 }

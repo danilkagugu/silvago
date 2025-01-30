@@ -87,6 +87,10 @@
   font-size: 14px;
 }
 
+.productMissImg {
+  filter: grayscale(100%);
+}
+
 .catalogCardInfo {
   position: relative;
   padding: 0 15px 15px;
@@ -294,4 +298,13 @@
   color: #fff;
   font-weight: 600;
   border-radius: 8px;
+}
+.productMiss {
+  width: 100%;
+  text-align: center;
+  border-radius: 4px;
+  height: 38px;
+  font-size: 18px;
+  padding: 5px 10px;
+  border: 1px solid #000;
 }
