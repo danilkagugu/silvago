@@ -36,7 +36,7 @@ const ProductVolumeTone = ({
                         handleVolumeChange(product._id, variant.idTorgsoft)
                       }
                     >
-                      {variant.volume} мл
+                      {`${variant.volume + " " + product.measure}`}
                       {!isVolumeAvailable && (
                         <div className={`${css.tooltipWrapper}`}>
                           <div className={`${css.tooltip}  `}>
