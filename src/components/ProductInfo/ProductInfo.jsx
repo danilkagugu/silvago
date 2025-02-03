@@ -129,7 +129,9 @@ const ProductInfo = () => {
         slug: volume.slug,
         quantity: quantities[volume._id],
         volume: volume.volume,
-        tone: volume.tone,
+        tone: volume.tone
+          ? parseInt(volume.tone.match(/\d+/)?.[0]) || null
+          : null,
       })
     );
   };
