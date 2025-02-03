@@ -82,7 +82,7 @@ const ProductVolumeTone = ({
                       }`}
                       onClick={() => handleToneChange(product._id, uniqueTone)}
                     >
-                      {uniqueTone}
+                      {parseInt(uniqueTone.match(/\d+/)[0])}
                       {!isToneAvailable && (
                         <div className={`${css.tooltipWrapper}`}>
                           <div className={`${css.tooltip}   `}>

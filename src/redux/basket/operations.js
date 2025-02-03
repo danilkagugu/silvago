@@ -24,6 +24,7 @@ export const getBasketInfo = createAsyncThunk(
 export const addProduct = createAsyncThunk(
   "basket/addItem",
   async ({ slug, quantity, volume, tone }, thunkAPI) => {
+    console.log("tone: ", tone);
     try {
       const data = await addProductToBasket(slug, quantity, volume, tone);
       return data;

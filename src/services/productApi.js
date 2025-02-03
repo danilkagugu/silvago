@@ -104,6 +104,7 @@ export const addProductToBasket = async (slug, quantity, volume, tone) => {
     volume,
     tone,
   });
+  console.log("tone", tone);
   return data;
 };
 
