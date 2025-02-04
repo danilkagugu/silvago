@@ -87,15 +87,11 @@ const Catalogy = () => {
       <div className={css.headerColumn}>
         <div className={css.headerSection}>
           <div className={css.productsMenu}>
-            {categoriesTorgsoft && categoriesTorgsoft.length > 0 ? (
-              <CategoryTree categoriesTorgsoft={categoriesTorgsoft} />
-            ) : (
-              <div className={css.noCategories}>Категорії не знайдено</div>
-            )}
+          <CategoryTree categoriesTorgsoft={categoriesTorgsoft} />
           </div>
         </div>
       </div>
-      <div className={css.resultbox}>
+      {/* <div className={css.resultbox}>
         <div className={css.searchBox}>
           <IoSearch className={`${css.iconSearch} ${css.icon}`} />
           <input
@@ -115,7 +111,7 @@ const Catalogy = () => {
             <SearchProduct searchQuery={searchQuery} />
           </div>
         )}
-      </div>
+      </div> */}
       <div className={css.iconBox}>
         <div className={css.favoriteBox}>
           <LuHeart
