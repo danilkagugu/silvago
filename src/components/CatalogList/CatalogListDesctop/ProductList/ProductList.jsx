@@ -7,7 +7,6 @@ const ProductList = ({
   defaultProductVariations,
   onPageChange,
 }) => {
-  console.log("filterProduct: ", filterProduct);
   return (
     <div className={css.catalogContent}>
       <ul className={css.list}>
