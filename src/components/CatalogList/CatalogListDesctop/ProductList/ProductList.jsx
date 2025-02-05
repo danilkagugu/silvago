@@ -2,11 +2,16 @@ import CatalogListItem from "../../../CatalogListItem/CatalogListItem";
 import css from "./ProductList.module.css";
 import ProductPagination from "./ProductPagination/ProductPagination";
 
-const ProductList = ({ filterProduct, defaultProductVariations }) => {
+const ProductList = ({
+  filterProduct,
+  defaultProductVariations,
+  onPageChange,
+}) => {
+  console.log("filterProduct: ", filterProduct);
   return (
     <div className={css.catalogContent}>
       <ul className={css.list}>
-        {filterProduct.map((product) => (
+        {filterProduct?.products?.map((product) => (
           <li
             key={product._id}
             className={css.listItem}
@@ -19,7 +24,11 @@ const ProductList = ({ filterProduct, defaultProductVariations }) => {
           </li>
         ))}
       </ul>
-      <ProductPagination />
+      <ProductPagination
+        currentPage={filterProduct.currentPage}
+        totalPages={filterProduct.totalPages}
+        onPageChange={onPageChange}
+      />
     </div>
   );
 };

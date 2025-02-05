@@ -50,6 +50,7 @@ const CatalogList = () => {
   const [filterContentOpen, setFilterContentOpen] = useState(false);
   const [categoryContentOpen, setCategoryContentOpen] = useState(false);
   const [priceFilter, setPriceFilter] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Selectors
   const dataProductsTorgsoft = useSelector(selectProductsTorgsoft);
@@ -112,10 +113,12 @@ const CatalogList = () => {
             : null,
           brand: initialBrands.map((brand) => brand.numberId),
           category: initialSections.map((section) => section.idTorgsoft),
+          page: currentPage,
+          limir: 20,
         })
       );
     }
-  }, [location, dispatch, brandsTorgsoft, categories]);
+  }, [currentPage, location, dispatch, brandsTorgsoft, categories]);
 
   useEffect(() => {
     dispatch(getAllProductTorgsoft());
@@ -350,6 +353,21 @@ const CatalogList = () => {
     applyFilters(values, selectedBrand, selectedSection);
     updateURL();
   };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+
+    dispatch(
+      fetchFilteredProducts({
+        category: selectedSection.map((section) => section.idTorgsoft),
+        brand: selectedBrand.map((brand) => brand.numberId),
+        price: priceFilter ? `${priceFilter[0]}-${priceFilter[1]}` : null,
+        page, // Передаємо нову сторінку
+        limit: 20, // Обмеження кількості товарів на сторінку
+      })
+    );
+  };
+
   return (
     <div>
       {!isMobile ? (
@@ -376,6 +394,7 @@ const CatalogList = () => {
             onSubmit={handlePriceSubmit}
             handleBrandSelect={handleBrandSelect}
             priceFilter={priceFilter}
+            handlePageChange={handlePageChange}
           />
         </>
       ) : (

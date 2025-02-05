@@ -34,6 +34,7 @@ const createPrivateAxiosInstance = () => {
 export const getProducts = async () => {
   const instance = createPublicAxiosInstance();
   const { data } = await instance.get("/api/product");
+  console.log("data: ", data);
   return data;
 };
 export const getDefaultVariations = async () => {
@@ -186,7 +187,13 @@ export const volumeChange = async () => {
   return data;
 };
 
-export const fetchFilteredProductsApi = async ({ category, brand, price }) => {
+export const fetchFilteredProductsApi = async ({
+  category,
+  brand,
+  price,
+  page = 1,
+  limit = 20,
+}) => {
   const instance = createPublicAxiosInstance();
   const query = new URLSearchParams();
 
@@ -203,11 +210,15 @@ export const fetchFilteredProductsApi = async ({ category, brand, price }) => {
     query.append("price", price);
   }
 
+  query.append("page", page);
+  query.append("limit", limit);
+
   // Формуємо URL
   const url = `/api/product/getcatalog?${query.toString()}`;
 
   try {
     const { data } = await instance.get(url);
+    console.log("data: ", data);
     return data;
   } catch (error) {
     console.error("Error fetching filtered products:", error);
