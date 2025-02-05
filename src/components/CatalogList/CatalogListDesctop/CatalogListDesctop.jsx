@@ -25,6 +25,7 @@ const CatalogListDesctop = ({
   onSubmit,
   handleBrandSelect,
   priceFilter,
+  handlePageChange,
 }) => {
   return (
     <>
@@ -43,6 +44,7 @@ const CatalogListDesctop = ({
           <ProductList
             defaultProductVariations={defaultProductVariations}
             filterProduct={filterProduct}
+            onPageChange={handlePageChange}
           />
         </div>
         <div className={css.catalogContentMainLeft}>

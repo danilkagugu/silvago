@@ -138,11 +138,17 @@ export const removeProductFavorite = createAsyncThunk(
 
 export const fetchFilteredProducts = createAsyncThunk(
   "products/fetchFilteredProducts",
-  async ({ category, brand, price }, thunkAPI) => {
+  async ({ category, brand, price, page = 1, limit = 20 }, thunkAPI) => {
     // console.log("price: ", price);
     // console.log("category: ", category);
     try {
-      const data = await fetchFilteredProductsApi({ category, brand, price });
+      const data = await fetchFilteredProductsApi({
+        category,
+        brand,
+        price,
+        page,
+        limit,
+      });
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
