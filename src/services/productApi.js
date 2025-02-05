@@ -202,7 +202,6 @@ export const fetchFilteredProductsApi = async ({
     query.append("category", category.join(","));
   }
   if (Array.isArray(brand) && brand.length > 0) {
-    console.log("brand: ", brand);
     // Додаємо ідентифікатори брендів
     query.append("brand", brand.join(",")); // Передаємо numberId
   }
@@ -218,7 +217,6 @@ export const fetchFilteredProductsApi = async ({
 
   try {
     const { data } = await instance.get(url);
-    console.log("data: ", data);
     return data;
   } catch (error) {
     console.error("Error fetching filtered products:", error);
