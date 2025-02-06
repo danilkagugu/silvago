@@ -1,29 +1,16 @@
 import { useEffect, useState, useRef, useMemo } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import css from "./ProductList.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectDefaultVariations,
-  selectFavoritesProducts,
-  selectProductsFilter,
   selectProductsTorgsoft,
 } from "../../redux/product/selectors";
 import {
   getAllProduct,
   getAllProductTorgsoft,
-  getFavoriteProducts,
   getProductVariations,
 } from "../../redux/product/operations";
-import CatalogListItem from "../CatalogListItem/CatalogListItem";
-import {
-  IoChevronBackSharp,
-  IoChevronDown,
-  IoChevronForward,
-} from "react-icons/io5";
-import { IoIosClose, IoMdCheckmark } from "react-icons/io";
-import { GoHome } from "react-icons/go";
-import { CiFilter } from "react-icons/ci";
-import { TbArrowsSort } from "react-icons/tb";
 
 import {
   selectAllBrandsTorgsoft,
@@ -41,6 +28,7 @@ import {
 import ProductListDesctop from "./ProductListDesctop/ProductListDesctop";
 
 const ProductList = () => {
+  console.log("hello");
   const dispatch = useDispatch();
   const sortingModalRef = useRef(null);
   const filterModalRef = useRef(null);
@@ -185,10 +173,6 @@ const ProductList = () => {
   useEffect(() => {
     dispatch(getAllProduct());
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   dispatch(getFavoriteProducts());
-  // }, [dispatch]);
 
   useEffect(() => {
     dispatch(fetchAllCategories());
