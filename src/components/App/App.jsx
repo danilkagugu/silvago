@@ -37,6 +37,17 @@ const NotFound = lazy(() => import("../../pages/NotFound/NotFound"));
 const App = () => {
   const dispatch = useDispatch();
 
+  // const location = useLocation();
+
+  // useEffect(() => {
+  //   const titles = {
+  //     "/": "Головна - Silvago",
+  //     "/about-us": "Про нас - Silvago",
+  //     "/brands": "Бренди - Silvago",
+  //   };
+  //   document.title = titles[location.pathname] || "Silvago";
+  // }, [location.pathname]);
+
   useEffect(() => {
     dispatch(apiRefreshUser());
   }, [dispatch]);
@@ -62,7 +73,7 @@ const App = () => {
         {/* <Route path="/catalog" element={<Catalog />} /> */}
         {/* <Route path="/catalog/filter?/:filterString?" element={<Catalog />} /> */}
         <Route path="/catalog/*" element={<Catalog />} />
-        <Route path="/catalog/filter/*" element={<Catalog />} />
+        {/* <Route path="/catalog/filter/*" element={<Catalog />} /> */}
 
         <Route path="/product/:slug" element={<ProductDetail />} />
         <Route path="/brand/:brandName" element={<BrandProducts />} />
