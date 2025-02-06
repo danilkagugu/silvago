@@ -5,8 +5,6 @@ import PriceFilter from "./PriceFilter/PriceFilter";
 import SelectedFilters from "./SelectedFilters/SelectedFilters";
 
 const FilterPanel = ({
-  brandsTorgsoft,
-  filterCountByBrand,
   clearFilter,
   selectedBrand,
   categories,
@@ -22,6 +20,7 @@ const FilterPanel = ({
   onSubmit,
   handleBrandSelect,
   priceFilter,
+  brandsCount
 }) => {
   return (
     <aside className={css.catalogSideBar}>
@@ -41,12 +40,11 @@ const FilterPanel = ({
         )}
         <div className={css.filterSection}>
           <BrandFilter
-            brandsTorgsoft={brandsTorgsoft}
-            filterCountByBrand={filterCountByBrand}
             selectedBrand={selectedBrand}
             selectedSection={selectedSection}
             setSelectedBrand={setSelectedBrand}
             handleBrandSelect={handleBrandSelect}
+            brandsCount={brandsCount}
           />
         </div>
 

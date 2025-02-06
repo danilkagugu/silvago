@@ -3,6 +3,7 @@ import {
   addFavorite,
   changeVariation,
   fetchFilteredProductsApi,
+  getCountProductByFiltersApi,
   getDefaultVariations,
   getDiscountProducts,
   getFavorite,
@@ -161,6 +162,17 @@ export const fetchPriceRenge = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const data = await getPriceRenge();
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+export const getCountProductByFilters = createAsyncThunk(
+  "products/countByFilters",
+  async (_, thunkAPI) => {
+    try {
+      const data = await getCountProductByFiltersApi();
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

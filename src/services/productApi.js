@@ -229,3 +229,9 @@ export const getPriceRenge = async () => {
   const { data } = await instance.get("/api/product/price-range");
   return data;
 };
+
+export const getCountProductByFiltersApi = async () => {
+  const instance = createPublicAxiosInstance();
+  const { data } = await instance.get("/api/product/filter");
+  return data;
+}

@@ -5,18 +5,12 @@ const CategoryFilter = ({
   selectedSection,
   filterCountBySection,
   selectedBrand,
-  setSelectedSection,
   handleSectionSelect,
 }) => {
-  const handleCategoryChange = (category) => {
-    setSelectedSection((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
-  };
+  
 
   const renderCategories = (categories) => {
+    // console.log('categoriesFilter: ', categories);
     const flatCategories = [];
 
     const flattenCategories = (categories) => {

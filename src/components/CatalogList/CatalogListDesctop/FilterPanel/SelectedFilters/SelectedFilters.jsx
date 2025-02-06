@@ -5,8 +5,8 @@ const SelectedFilters = ({
   selectedSection,
   clearFilter,
   priceFilter,
-}) => {
-  console.log("selectedSection", selectedSection);
+}) => { 
+  console.log('selectedBrand',selectedBrand);
   return (
     <div className={css.filterCurrent}>
       {selectedBrand.length > 0 && (

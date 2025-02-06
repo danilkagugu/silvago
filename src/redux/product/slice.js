@@ -12,6 +12,7 @@ import {
   getProductVariations,
   removeProductFavorite,
   fetchPriceRenge,
+  getCountProductByFilters,
 } from "./operations";
 
 const INITIAL_STATE = {
@@ -30,6 +31,8 @@ const INITIAL_STATE = {
   skinNeedsFilter: [], // Додаємо цей стейт для відстеження активних фільтрів
   minPrice: null,
   maxPrice: null,
+  brandsCount: [], 
+  categoriesCount: []
 };
 
 const productSlice = createSlice({
@@ -101,7 +104,7 @@ const productSlice = createSlice({
       .addCase(removeProductFavorite.fulfilled, (state, action) => {
         state.favorites = action.payload.products || [];
         state.favoritesQuantity = state.favorites.length;
-      })
+      })     
 
       .addCase(getFavoriteProducts.fulfilled, (state, action) => {
         if (!Array.isArray(action.payload)) {
@@ -112,6 +115,11 @@ const productSlice = createSlice({
         state.favorites = action.payload;
         state.favoritesQuantity = state.favorites.length;
         state.loading = false;
+      })
+      .addCase(getCountProductByFilters.fulfilled, (state, action) => {
+        state.brandsCount = action.payload.brandsCount;
+      state.categoriesCount = action.payload.categoriesCount;
+      state.loading = false;
       })
 
       .addMatcher(
@@ -127,7 +135,9 @@ const productSlice = createSlice({
           addProductFavorite.pending,
           removeProductFavorite.pending,
           fetchTopProducts.pending,
-          fetchDiscountProducts.pending
+          
+          fetchDiscountProducts.pending,
+          getCountProductByFilters.pending,
         ),
         (state) => {
           state.loading = true;
@@ -147,7 +157,8 @@ const productSlice = createSlice({
           addProductFavorite.rejected,
           removeProductFavorite.rejected,
           fetchTopProducts.rejected,
-          fetchDiscountProducts.rejected
+          fetchDiscountProducts.rejected,
+          getCountProductByFilters.rejected,
         ),
         (state, action) => {
           state.loading = false;
