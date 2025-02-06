@@ -1,15 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import css from "./CatalogList.module.css";
-import { lazy, useCallback, useEffect, useRef, useState } from "react";
+import {   useEffect, useRef, useState } from "react";
 import {
   fetchFilteredProducts,
-  fetchPriceRenge,
-  getAllProductTorgsoft,
-  getCountProductByFilters,
+ 
   getProductVariations,
 } from "../../redux/product/operations";
 import {
-  selectBrandsCount,
   selectDefaultVariations,
   // selectProductLoading,
   selectProductsFilter,
@@ -19,11 +16,6 @@ import {
 } from "../../redux/product/selectors";
 
 import {
-  fetchAllBrandsTorgsoft,
-  fetchAllCategories,
-} from "../../redux/inventoryStore/operations";
-import {
-  selectAllBrandsTorgsoft,
   selectAllCategories,
 } from "../../redux/inventoryStore/selectors";
 
@@ -32,9 +24,13 @@ import CatalogListDesctop from "./CatalogListDesctop/CatalogListDesctop";
 
 import CatalogListMobile from "./CatalogListMobile/CatalogListMobile";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { useCatalogFilters } from "../../hooks/useCatalogFilters";
 
 const CatalogList = ({brandsCount}) => {
   const isMobile = window.innerWidth <= 1440;
+
+  const { filters, updateFilters } = useCatalogFilters();
+  console.log('filters: ', filters);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -66,61 +62,98 @@ const CatalogList = ({brandsCount}) => {
    
    
   
-  useEffect(() => {
-    const params = Object.fromEntries([...searchParams.entries()]);
+  // useEffect(() => {
+  //   const params = Object.fromEntries([...searchParams.entries()]);
 
-    // Парсинг параметрів фільтрів
-    const initialPriceFilter = params.price
-      ? params.price.split("-").map(Number)
-      : null;
-      const initialBrands = params.brand
-      ? params.brand.split(",").map((id) => ({
+  //   // Парсинг параметрів фільтрів
+  //   const initialPriceFilter = params.price
+  //     ? params.price.split("-").map(Number)
+  //     : null;
+  //     const initialBrands = params.brand
+  //     ? params.brand.split(",").map((id) => ({
         
-          numberId: id,
-          name: brandsCount.find((brand) => String(brand.numberId) === id)?.name,
-        }))
-      : [];
-      // console.log('initialBrands',initialBrands);
-    const initialSections = params.parent
-      ? params.parent.split(",").map(Number)
-      : [];
-    const page = params.page ? Number(params.page) : 1;
+  //         numberId: id,
+  //         name: brandsCount.find((brand) => String(brand.numberId) === id)?.name,
+  //       }))
+  //     : [];
+  //     // console.log('initialBrands',initialBrands);
+  //   const initialSections = params.parent
+  //     ? params.parent.split(",").map(Number)
+  //     : [];
+  //   const page = params.page ? Number(params.page) : 1;
 
-    // Оновлення стану фільтрів
-    if (initialPriceFilter) setPriceFilter(initialPriceFilter);
-    if (initialBrands.length > 0) setSelectedBrand(initialBrands);
-    if (initialSections.length > 0) {
-      setSelectedSection(
-        initialSections
-          .map((idTorgsoft) =>
-            categories.find((category) => category.idTorgsoft === idTorgsoft)
-          )
-          .filter(Boolean)
-      );
-    }
+  //   // Оновлення стану фільтрів
+  //   if (initialPriceFilter) setPriceFilter(initialPriceFilter);
+  //   if (initialBrands.length > 0) setSelectedBrand(initialBrands);
+  //   if (initialSections.length > 0) {
+  //     setSelectedSection(
+  //       initialSections
+  //         .map((idTorgsoft) =>
+  //           categories.find((category) => category.idTorgsoft === idTorgsoft)
+  //         )
+  //         .filter(Boolean)
+  //     );
+  //   }
 
-    // Застосовуємо сторінку, якщо вона відрізняється
-    if (page !== currentPage) {
-      setCurrentPage(page);
-    }
+  //   // Застосовуємо сторінку, якщо вона відрізняється
+  //   if (page !== currentPage) {
+  //     setCurrentPage(page);
+  //   }
 
-    // Викликаємо API для застосування фільтрів тільки після оновлення стану
+  //   // Викликаємо API для застосування фільтрів тільки після оновлення стану
+  //   dispatch(
+  //     fetchFilteredProducts({
+  //       price: params.price,
+  //       brand: params.brand?.split(",") || [],
+  //       category: initialSections,
+  //       page,
+  //       limit: 20,
+  //     })
+  //   );
+  // }, [searchParams, categories, currentPage, dispatch]);
+
+
+  useEffect(() => {
     dispatch(
       fetchFilteredProducts({
-        price: params.price,
-        brand: params.brand?.split(",") || [],
-        category: initialSections,
-        page,
+        price: filters.price,
+        brand: filters.brands,
+        category: filters.categories,        
+        page: filters.page,
         limit: 20,
       })
     );
-  }, [searchParams, categories, currentPage, dispatch]);
+  }, [filters, dispatch]);
+
+  // useEffect(() => {
+  //   let cancel = false;
+  
+  //   dispatch(
+  //     fetchFilteredProducts({
+  //       price: filters.price,
+  //       brand: filters.brands,
+  //       category: filters.categories,
+  //       page: filters.page,
+  //       limit: 20,
+  //     })
+  //   ).finally(() => {
+  //     if (cancel) return;
+  //   });
+  
+  //   return () => {
+  //     cancel = true;  // Скасування попереднього запиту при повторному ефекті
+  //   };
+  // }, [JSON.stringify(filters), dispatch]);  // JSON.stringify для порівняння фільтрів
+  
+
+
+  
 
  
 
-  useEffect(() => {
-    updateURL(currentPage);
-  }, [priceFilter, selectedBrand, selectedSection, currentPage]);
+  // useEffect(() => {
+  //   updateURL(currentPage);
+  // }, [priceFilter, selectedBrand, selectedSection, currentPage]);
 
   useEffect(() => {
     if (minPriceProduct !== null && maxPriceProduct !== null) {
@@ -268,19 +301,14 @@ const CatalogList = ({brandsCount}) => {
   };
 
   const handleBrandSelect = (brand) => {
-    const exists = selectedBrand.some((b) => b.numberId === brand.numberId);
-
-    // Якщо бренд вже обрано — видаляємо його, якщо ні — додаємо
-    const updatedBrands = exists
-      ? selectedBrand.filter((b) => b.numberId !== brand.numberId)
-      : [...selectedBrand, brand];
-
-    setSelectedBrand(updatedBrands);
-
-    // Оновлюємо фільтри та URL
-    applyFilters(rangeValues, updatedBrands, selectedSection, currentPage);
-    // updateURL(currentPage);
+    const brandId = brand.numberId;  // Витягуємо тільки ідентифікатор бренду
+    const updatedBrands = filters.brands.includes(brandId)
+      ? filters.brands.filter((id) => id !== brandId)
+      : [...filters.brands, brandId];
+  
+    updateFilters({ ...filters, brands: updatedBrands });
   };
+  
 
   const handleSectionSelect = (section) => {
     const exists = selectedSection.some(
@@ -296,8 +324,15 @@ const CatalogList = ({brandsCount}) => {
     setSelectedSection(updatedSections);
 
     // Оновлюємо фільтри миттєво
-    applyFilters(rangeValues, selectedBrand, updatedSections, currentPage);
-    // updateURL(currentPage);
+    updateFilters({ ...filters, categories: updatedSections });
+  };
+
+  const handlePriceSubmit = (values) => {
+    updateFilters({ ...filters, price: values });
+  };
+
+  const handlePageChange = (page) => {
+    updateFilters({ ...filters, page });
   };
 
   const clearFilter = () => {
@@ -340,18 +375,7 @@ const CatalogList = ({brandsCount}) => {
     setSelectedSection((prev) => prev.filter((brand) => brand !== section));
   };
 
-  const handlePriceSubmit = (values) => {
-    setPriceFilter(values);
-    applyFilters(values, selectedBrand, selectedSection, currentPage);
-    // updateURL(currentPage);
-  };
 
-  const handlePageChange = (page) => {
-    console.log("Page change requested:", page);
-    // setCurrentPage(page);
-
-    applyFilters(priceFilter, selectedBrand, selectedSection, page);
-  };
   if (!brandsCount.length) {
     return <div>Завантаження...</div>;
   }

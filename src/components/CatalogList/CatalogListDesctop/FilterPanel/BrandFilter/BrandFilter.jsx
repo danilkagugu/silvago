@@ -3,9 +3,9 @@ import css from "./BrandFilter.module.css";
  
 const BrandFilter = ({ 
   selectedBrand,
-  filterCountByBrand,
-  selectedSection,
-  handleBrandSelect,brandsCount
+  
+  handleBrandSelect,
+  brandsCount
 }) => {
 
   // console.log('brandsCount: ', brandsCount);
