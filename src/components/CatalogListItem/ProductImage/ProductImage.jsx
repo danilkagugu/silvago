@@ -20,6 +20,7 @@ const ProductImage = ({ volumeDetail, isTopProduct }) => {
             alt={volumeDetail.fullName}
             height={310}
             width={310}
+            loading="lazy"
           />
         </div>
       </Link>

@@ -11,9 +11,7 @@ const CatalogListDesctop = ({
   defaultProductVariations,
   filterProduct,
   clearFilter,
-  brandsTorgsoft,
   categories,
-  filterCountByBrand,
   filterCountBySection,
   handleSectionSelect,
   maxPrice,
@@ -26,6 +24,7 @@ const CatalogListDesctop = ({
   handleBrandSelect,
   priceFilter,
   handlePageChange,
+  brandsCount
 }) => {
   return (
     <>
@@ -50,9 +49,7 @@ const CatalogListDesctop = ({
         <div className={css.catalogContentMainLeft}>
           <FilterPanel
             clearFilter={clearFilter}
-            brandsTorgsoft={brandsTorgsoft}
             categories={categories}
-            filterCountByBrand={filterCountByBrand}
             filterCountBySection={filterCountBySection}
             handleSectionSelect={handleSectionSelect}
             maxPrice={maxPrice}
@@ -66,6 +63,7 @@ const CatalogListDesctop = ({
             onSubmit={onSubmit}
             handleBrandSelect={handleBrandSelect}
             priceFilter={priceFilter}
+            brandsCount={brandsCount}
           />
         </div>
       </div>

@@ -1,13 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import css from "./CatalogList.module.css";
-import { useEffect, useRef, useState } from "react";
+import { lazy, useCallback, useEffect, useRef, useState } from "react";
 import {
   fetchFilteredProducts,
   fetchPriceRenge,
   getAllProductTorgsoft,
+  getCountProductByFilters,
   getProductVariations,
 } from "../../redux/product/operations";
 import {
+  selectBrandsCount,
   selectDefaultVariations,
   // selectProductLoading,
   selectProductsFilter,
@@ -26,11 +28,12 @@ import {
 } from "../../redux/inventoryStore/selectors";
 
 import CatalogListDesctop from "./CatalogListDesctop/CatalogListDesctop";
+// const CatalogListDesctop = lazy(() => import("./CatalogListDesctop/CatalogListDesctop"));
 
 import CatalogListMobile from "./CatalogListMobile/CatalogListMobile";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
-const CatalogList = () => {
+const CatalogList = ({brandsCount}) => {
   const isMobile = window.innerWidth <= 1440;
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -59,10 +62,10 @@ const CatalogList = () => {
   const minPriceProduct = useSelector(selectProductsMinPrice);
   const maxPriceProduct = useSelector(selectProductsMaxPrice);
   const defaultProductVariations = useSelector(selectDefaultVariations);
-  const brandsTorgsoft = useSelector(selectAllBrandsTorgsoft);
-  // console.log("brandsTorgsoft: ", brandsTorgsoft);
   const categories = useSelector(selectAllCategories);
-
+   
+   
+  
   useEffect(() => {
     const params = Object.fromEntries([...searchParams.entries()]);
 
@@ -70,12 +73,14 @@ const CatalogList = () => {
     const initialPriceFilter = params.price
       ? params.price.split("-").map(Number)
       : null;
-    const initialBrands = params.brand
+      const initialBrands = params.brand
       ? params.brand.split(",").map((id) => ({
+        
           numberId: id,
-          name: brandsTorgsoft.find((brand) => brand.numberId === id)?.name,
+          name: brandsCount.find((brand) => String(brand.numberId) === id)?.name,
         }))
       : [];
+      // console.log('initialBrands',initialBrands);
     const initialSections = params.parent
       ? params.parent.split(",").map(Number)
       : [];
@@ -109,15 +114,9 @@ const CatalogList = () => {
         limit: 20,
       })
     );
-  }, [searchParams, brandsTorgsoft, categories, currentPage, dispatch]);
+  }, [searchParams, categories, currentPage, dispatch]);
 
-  useEffect(() => {
-    dispatch(fetchAllCategories());
-    dispatch(fetchAllBrandsTorgsoft());
-    dispatch(getAllProductTorgsoft());
-
-    dispatch(fetchPriceRenge());
-  }, [dispatch]);
+ 
 
   useEffect(() => {
     updateURL(currentPage);
@@ -166,6 +165,8 @@ const CatalogList = () => {
     };
   }, [sortingOpen, filterOpen]);
 
+   
+
   const updateURL = (page) => {
     const params = new URLSearchParams();
 
@@ -194,7 +195,7 @@ const CatalogList = () => {
       ? `/catalog/filter?${params.toString()}`
       : "/catalog";
 
-    console.log("Updating URL to:", newUrl);
+    // console.log("Updating URL to:", newUrl);
 
     // Уникаємо зайвих оновлень URL
     if (location.pathname + location.search !== newUrl) {
@@ -202,15 +203,35 @@ const CatalogList = () => {
     }
   };
 
+  // const updateURL = useCallback(() => {
+  //   const params = new URLSearchParams();
+  
+  //   if (priceFilter) {
+  //     params.append("price", `${priceFilter[0]}-${priceFilter[1]}`);
+  //   }
+  
+  //   if (selectedBrand.length > 0) {
+  //     params.append("brand", selectedBrand.map((brand) => brand.numberId).join(","));
+  //   }
+  
+  //   if (selectedSection.length > 0) {
+  //     params.append("category", selectedSection.map((section) => section.idTorgsoft).join(","));
+  //   }
+  
+  //   if (currentPage > 1) {
+  //     params.append("page", currentPage);
+  //   }
+  
+  //   const newUrl = params.toString() ? `/catalog/filter?${params.toString()}` : "/catalog";
+  //   if (location.pathname + location.search !== newUrl) {
+  //     navigate(newUrl, { replace: true });
+  //   }
+  // }, [ navigate, location.pathname]);
+  
+
   const applyFilters = (price, brands, sections, page = 1) => {
     const priceRange = price ? `${price[0]}-${price[1]}` : null;
-    console.log("saedaszfrewev");
-    console.log("Applying filters:", {
-      price: priceRange,
-      brands: brands.map((brand) => brand.numberId),
-      sections: sections.map((section) => section.idTorgsoft),
-      page,
-    });
+    
     dispatch(
       fetchFilteredProducts({
         category: sections.map((section) => section.idTorgsoft),
@@ -291,18 +312,7 @@ const CatalogList = () => {
     return "товарів";
   };
 
-  const filterCountByBrand = (brandName, selectedSections) => {
-    // console.log("selectedSections: ", selectedSections);
-    return dataProductsTorgsoft.filter((item) => {
-      const matchesBrand = item.brand === brandName; // Перевіряємо, чи бренд збігається
-      const matchesSection =
-        selectedSections.length === 0 || // Якщо категорії не обрані, враховуємо всі товари
-        selectedSections.some((section) =>
-          item.categories.some((category) => category.name === section.name)
-        ); // Перевіряємо, чи категорія збігається
-      return matchesBrand && matchesSection;
-    }).length;
-  };
+  
   const filterCountBySection = (subcategory, selectedBrands) => {
     return dataProductsTorgsoft.filter((item) => {
       const matchesCategory =
@@ -342,17 +352,17 @@ const CatalogList = () => {
 
     applyFilters(priceFilter, selectedBrand, selectedSection, page);
   };
-
+  if (!brandsCount.length) {
+    return <div>Завантаження...</div>;
+  }
   return (
     <div>
       {!isMobile ? (
         <>
           <CatalogListDesctop
-            brandsTorgsoft={brandsTorgsoft}
             categories={categories}
             clearFilter={clearFilter}
             defaultProductVariations={defaultProductVariations}
-            filterCountByBrand={filterCountByBrand}
             filterCountBySection={filterCountBySection}
             handleSectionSelect={handleSectionSelect}
             handleSortChange={handleSortChange}
@@ -370,6 +380,7 @@ const CatalogList = () => {
             handleBrandSelect={handleBrandSelect}
             priceFilter={priceFilter}
             handlePageChange={handlePageChange}
+            brandsCount={brandsCount}
           />
         </>
       ) : (
@@ -385,12 +396,10 @@ const CatalogList = () => {
             handleRemoveSection={handleRemoveSection}
             defaultProductVariations={defaultProductVariations}
             filterProduct={filterProduct}
-            brandsTorgsoft={brandsTorgsoft}
             categories={categories}
             categoryContentOpen={categoryContentOpen}
             clearFilter={clearFilter}
             filterContentOpen={filterContentOpen}
-            filterCountByBrand={filterCountByBrand}
             filterCountBySection={filterCountBySection}
             filterOpen={filterOpen}
             getProductLabel={getProductLabel}
