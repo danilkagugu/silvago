@@ -14,8 +14,8 @@ export const selectDefaultVariations = (state) =>
   state.products.defaultProductVariations;
 export const selectProductLoading = (state) => state.products.loading;
 export const selectProductsFilter = (state) => state.products.items;
-export const selectProductsMinPrice = (state) => state.products.minPrice;
-export const selectProductsMaxPrice = (state) => state.products.maxPrice;
+export const selectProductsMinPrice = (state) => state.products.items.minPrice;
+export const selectProductsMaxPrice = (state) => state.products.items.maxPrice;
 export const selectBrandsCount = (state) => state.products.brandsCount;
 export const selectCategoriesCount = (state) => state.products.categoriesCount;
  

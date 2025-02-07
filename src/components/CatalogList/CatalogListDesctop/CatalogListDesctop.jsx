@@ -64,6 +64,7 @@ const CatalogListDesctop = ({
             handleBrandSelect={handleBrandSelect}
             priceFilter={priceFilter}
             brandsCount={brandsCount}
+            filterProduct={filterProduct}
           />
         </div>
       </div>

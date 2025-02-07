@@ -20,7 +20,7 @@ const FilterPanel = ({
   onSubmit,
   handleBrandSelect,
   priceFilter,
-  brandsCount
+  brandsCount,filterProduct
 }) => {
   return (
     <aside className={css.catalogSideBar}>
@@ -65,6 +65,7 @@ const FilterPanel = ({
             rangeValues={rangeValues}
             setRangeValues={setRangeValues}
             onSubmit={onSubmit}
+            filterProduct={filterProduct}
           />
         </div>
       </div>
