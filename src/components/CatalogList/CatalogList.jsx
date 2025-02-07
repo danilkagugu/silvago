@@ -7,7 +7,6 @@ import {
 } from "../../redux/product/operations";
 import {
   selectDefaultVariations,
-  // selectProductLoading,
   selectProductsFilter,
   selectProductsMaxPrice,
   selectProductsMinPrice,
@@ -17,44 +16,53 @@ import {
 import { selectAllCategories } from "../../redux/inventoryStore/selectors";
 
 import CatalogListDesctop from "./CatalogListDesctop/CatalogListDesctop";
-// const CatalogListDesctop = lazy(() => import("./CatalogListDesctop/CatalogListDesctop"));
 
 import CatalogListMobile from "./CatalogListMobile/CatalogListMobile";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { useCatalogFilters } from "../../hooks/useCatalogFilters";
+import { useSelectedFilters } from "../../hooks/useSelectedFilters";
 
 const CatalogList = ({ brandsCount }) => {
   const isMobile = window.innerWidth <= 1440;
 
   const { filters, updateFilters } = useCatalogFilters();
+<<<<<<< HEAD
+  const { selectedBrands, selectedSections} = useSelectedFilters(filters);
+  
+ 
+=======
+>>>>>>> main
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [searchParams] = useSearchParams();
-
+   
   const sortingModalRef = useRef(null);
   const filterModalRef = useRef(null);
 
   // State
   const [rangeValues, setRangeValues] = useState([]);
   const [sortType, setSortType] = useState("popularity");
-  const [selectedBrand, setSelectedBrand] = useState([]);
-  const [selectedSection, setSelectedSection] = useState([]);
+  
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortingOpen, setSortingOpen] = useState(false);
   const [filterContentOpen, setFilterContentOpen] = useState(false);
   const [categoryContentOpen, setCategoryContentOpen] = useState(false);
   const [priceFilter, setPriceFilter] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
 
   // Selectors
   const dataProductsTorgsoft = useSelector(selectProductsTorgsoft);
   // const loading = useSelector(selectProductLoading);
   const filterProduct = useSelector(selectProductsFilter);
+  // console.log('filterProduct: ', filterProduct);
   const minPriceProduct = useSelector(selectProductsMinPrice);
+  // console.log('minPriceProduct: ', minPriceProduct);
   const maxPriceProduct = useSelector(selectProductsMaxPrice);
   const defaultProductVariations = useSelector(selectDefaultVariations);
   const categories = useSelector(selectAllCategories);
+<<<<<<< HEAD
+   
+   
+   
+  
+  console.log("filters.price",filters.price);
+=======
 
   // useEffect(() => {
   //   const params = Object.fromEntries([...searchParams.entries()]);
@@ -105,6 +113,7 @@ const CatalogList = ({ brandsCount }) => {
   //     })
   //   );
   // }, [searchParams, categories, currentPage, dispatch]);
+>>>>>>> main
 
   useEffect(() => {
     dispatch(
@@ -117,6 +126,9 @@ const CatalogList = ({ brandsCount }) => {
       })
     );
   }, [JSON.stringify(filters), dispatch]);
+<<<<<<< HEAD
+ 
+=======
 
   // useEffect(() => {
   //   let cancel = false;
@@ -137,11 +149,13 @@ const CatalogList = ({ brandsCount }) => {
   //     cancel = true;  // Скасування попереднього запиту при повторному ефекті
   //   };
   // }, [JSON.stringify(filters), dispatch]);  // JSON.stringify для порівняння фільтрів
+>>>>>>> main
 
-  // useEffect(() => {
-  //   updateURL(currentPage);
-  // }, [priceFilter, selectedBrand, selectedSection, currentPage]);
 
+   
+
+ 
+ 
   useEffect(() => {
     if (minPriceProduct !== null && maxPriceProduct !== null) {
       setRangeValues([minPriceProduct, maxPriceProduct]);
@@ -185,6 +199,12 @@ const CatalogList = ({ brandsCount }) => {
     };
   }, [sortingOpen, filterOpen]);
 
+<<<<<<< HEAD
+   
+
+ 
+   
+=======
   const updateURL = (page) => {
     const params = new URLSearchParams();
 
@@ -260,6 +280,7 @@ const CatalogList = ({ brandsCount }) => {
     );
     updateURL(page);
   };
+>>>>>>> main
 
   const toggleFilter = () => {
     setFilterOpen((prev) => !prev);
@@ -289,39 +310,42 @@ const CatalogList = ({ brandsCount }) => {
     const updatedBrands = filters.brands.includes(brandId)
       ? filters.brands.filter((id) => id !== brandId)
       : [...filters.brands, brandId];
+<<<<<<< HEAD
+  
+    updateFilters({ ...filters, brands: updatedBrands,page: 1 });
+=======
 
     updateFilters({ ...filters, brands: updatedBrands });
+>>>>>>> main
   };
 
   const handleSectionSelect = (section) => {
-    const exists = selectedSection.some(
-      (s) => s.idTorgsoft === section.idTorgsoft
-    );
-
-    const updatedSections = exists
-      ? selectedSection.filter((s) => {
-          return s.idTorgsoft !== section.idTorgsoft;
-        })
-      : [...selectedSection, section];
-
-    setSelectedSection(updatedSections);
-
-    // Оновлюємо фільтри миттєво
-    updateFilters({ ...filters, categories: updatedSections });
+    const categoryId = section.idTorgsoft;
+    const exists = filters.categories.includes(categoryId);
+  
+    const updatedCategories = exists
+      ? filters.categories.filter((id) => id !== categoryId)
+      : [...filters.categories, categoryId];
+  
+    updateFilters({ ...filters, categories: updatedCategories,page: 1 });
   };
+  
 
   const handlePriceSubmit = (values) => {
-    updateFilters({ ...filters, price: values });
+    // Перевіряємо, чи є значення ціни дійсними
+    if (values[0] >= 0 && values[1] > values[0]) {
+      updateFilters({ ...filters, price: values,page: 1 });
+    }
   };
 
   const handlePageChange = (page) => {
     updateFilters({ ...filters, page });
   };
 
+  
+
   const clearFilter = () => {
-    setSelectedBrand([]);
-    setSelectedSection([]);
-    setPriceFilter(null);
+    updateFilters({ brands: [], categories: [], price: null, page: 1 });
   };
 
   const getProductLabel = (count) => {
@@ -344,22 +368,23 @@ const CatalogList = ({ brandsCount }) => {
     }).length;
   };
 
-  const quantityFilter =
-    (selectedBrand.length > 0 ? 1 : 0) + (selectedSection.length > 0 ? 1 : 0);
+   
 
   // Фільтр в aside
 
   const handleRemoveBrand = (brandToRemove) => {
-    setSelectedBrand((prev) => prev.filter((brand) => brand !== brandToRemove));
+    // setSelectedBrands((prev) => prev.filter((brand) => brand !== brandToRemove));
   };
 
   const handleRemoveSection = (section) => {
-    setSelectedSection((prev) => prev.filter((brand) => brand !== section));
+    // setSelectedSection((prev) => prev.filter((brand) => brand !== section));
   };
 
   if (!brandsCount.length) {
     return <div>Завантаження...</div>;
   }
+
+  
   return (
     <div>
       {!isMobile ? (
@@ -373,14 +398,13 @@ const CatalogList = ({ brandsCount }) => {
             handleSortChange={handleSortChange}
             maxPrice={maxPriceProduct}
             minPrice={minPriceProduct}
-            selectedBrand={selectedBrand}
-            selectedSection={selectedSection}
+            selectedBrand={selectedBrands}
+            selectedSection={selectedSections}
             sortType={sortType}
             filterProduct={filterProduct}
             rangeValues={rangeValues}
             setRangeValues={setRangeValues}
-            setSelectedBrand={setSelectedBrand}
-            setSelectedSection={setSelectedSection}
+            
             onSubmit={handlePriceSubmit}
             handleBrandSelect={handleBrandSelect}
             priceFilter={priceFilter}
@@ -391,9 +415,7 @@ const CatalogList = ({ brandsCount }) => {
       ) : (
         <>
           <CatalogListMobile
-            selectedBrand={selectedBrand}
-            selectedSection={selectedSection}
-            quantityFilter={quantityFilter}
+            
             sortType={sortType}
             toggleFilter={toggleFilter}
             toggleSortingContent={toggleSortingContent}

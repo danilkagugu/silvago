@@ -2,21 +2,17 @@ import { Range } from "react-range";
 import css from "./PriceFilter.module.css";
 import { useState, useEffect } from "react";
 
-const PriceFilter = ({ minPrice, maxPrice, onSubmit, setRangeValues }) => {
-  const DEFAULT_MIN = 1; // Мінімальна ціна за замовчуванням
-  const DEFAULT_MAX = 100; // Максимальна ціна за замовчуванням
+const PriceFilter = ({ filterProduct, onSubmit }) => {
 
-  const effectiveMinPrice = minPrice < maxPrice ? minPrice : DEFAULT_MIN;
-  const effectiveMaxPrice = maxPrice > minPrice ? maxPrice : DEFAULT_MAX;
+  const minPrice = filterProduct?.minPrice ?? 0;  // Встановлюється 0, поки немає даних
+  // console.log('filterProduct: ', filterProduct);
+  const maxPrice = filterProduct?.maxPrice ?? 1000 ;
+  const [localRangeValues, setLocalRangeValues] = useState([minPrice, maxPrice]);
 
-  const [localRangeValues, setLocalRangeValues] = useState([
-    effectiveMinPrice,
-    effectiveMaxPrice,
-  ]);
-
+  // Оновлюємо значення в локальному стані, коли приходять нові дані з бекенду
   useEffect(() => {
-    setLocalRangeValues([effectiveMinPrice, effectiveMaxPrice]);
-  }, [effectiveMinPrice, effectiveMaxPrice]);
+    setLocalRangeValues([minPrice, maxPrice]);
+  }, [minPrice, maxPrice]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -24,8 +20,6 @@ const PriceFilter = ({ minPrice, maxPrice, onSubmit, setRangeValues }) => {
       onSubmit(localRangeValues);
     }
   };
-
-  const STEP = 1;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -37,15 +31,12 @@ const PriceFilter = ({ minPrice, maxPrice, onSubmit, setRangeValues }) => {
             type="number"
             value={localRangeValues[0] ?? ""}
             onChange={(e) => {
-              const value =
-                e.target.value === ""
-                  ? null
-                  : Math.max(effectiveMinPrice, +e.target.value);
+              const value = Math.max(minPrice, Number(e.target.value));
               setLocalRangeValues([value, localRangeValues[1]]);
             }}
             onBlur={() => {
               if (localRangeValues[0] === null) {
-                setLocalRangeValues([effectiveMinPrice, localRangeValues[1]]);
+                setLocalRangeValues([minPrice, localRangeValues[1]]);
               }
             }}
           />
@@ -55,23 +46,16 @@ const PriceFilter = ({ minPrice, maxPrice, onSubmit, setRangeValues }) => {
             type="number"
             value={localRangeValues[1] ?? ""}
             onChange={(e) => {
-              const value =
-                e.target.value === ""
-                  ? null
-                  : Math.min(effectiveMaxPrice, +e.target.value);
+              const value = Math.min(maxPrice, Number(e.target.value));
               setLocalRangeValues([localRangeValues[0], value]);
             }}
             onBlur={() => {
               if (localRangeValues[1] === null) {
-                setLocalRangeValues([localRangeValues[0], effectiveMaxPrice]);
+                setLocalRangeValues([localRangeValues[0], maxPrice]);
               }
             }}
           />
-          <button
-            type="submit"
-            className={css.filterPriceBtn}
-            onClick={() => setRangeValues(localRangeValues)}
-          >
+          <button type="submit" className={css.filterPriceBtn}>
             <span className={css.btnContent}>ОК</span>
           </button>
         </div>
@@ -79,9 +63,9 @@ const PriceFilter = ({ minPrice, maxPrice, onSubmit, setRangeValues }) => {
         {/* Слайдер */}
         <div className={css.priceSlider}>
           <Range
-            step={STEP}
-            min={effectiveMinPrice}
-            max={effectiveMaxPrice}
+            step={1}
+            min={minPrice}
+            max={maxPrice}
             values={localRangeValues}
             onChange={(values) => setLocalRangeValues(values)}
             renderTrack={({ props, children }) => (
@@ -91,13 +75,9 @@ const PriceFilter = ({ minPrice, maxPrice, onSubmit, setRangeValues }) => {
                 style={{
                   ...props.style,
                   background: `linear-gradient(to right, #ccc 0%, #b22222 ${
-                    ((localRangeValues[0] - effectiveMinPrice) /
-                      (effectiveMaxPrice - effectiveMinPrice)) *
-                    100
+                    ((localRangeValues[0] - minPrice) / (maxPrice - minPrice)) * 100
                   }%, #b22222 ${
-                    ((localRangeValues[1] - effectiveMinPrice) /
-                      (effectiveMaxPrice - effectiveMinPrice)) *
-                    100
+                    ((localRangeValues[1] - minPrice) / (maxPrice - minPrice)) * 100
                   }%, #ccc 100%)`,
                 }}
               >
