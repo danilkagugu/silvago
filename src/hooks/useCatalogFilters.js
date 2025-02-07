@@ -33,8 +33,6 @@ export const useCatalogFilters = () => {
         params.append("category", newFilters.categories.join(","));
       }
 
-       
-
       if (newFilters.page > 1) {
         params.append("page", newFilters.page);
       }
