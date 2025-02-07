@@ -25,21 +25,17 @@ const CatalogList = ({ brandsCount }) => {
   const isMobile = window.innerWidth <= 1440;
 
   const { filters, updateFilters } = useCatalogFilters();
-<<<<<<< HEAD
-  const { selectedBrands, selectedSections} = useSelectedFilters(filters);
-  
- 
-=======
->>>>>>> main
+  const { selectedBrands, selectedSections } = useSelectedFilters(filters);
+
   const dispatch = useDispatch();
-   
+
   const sortingModalRef = useRef(null);
   const filterModalRef = useRef(null);
 
   // State
   const [rangeValues, setRangeValues] = useState([]);
   const [sortType, setSortType] = useState("popularity");
-  
+
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortingOpen, setSortingOpen] = useState(false);
   const [filterContentOpen, setFilterContentOpen] = useState(false);
@@ -56,64 +52,8 @@ const CatalogList = ({ brandsCount }) => {
   const maxPriceProduct = useSelector(selectProductsMaxPrice);
   const defaultProductVariations = useSelector(selectDefaultVariations);
   const categories = useSelector(selectAllCategories);
-<<<<<<< HEAD
-   
-   
-   
-  
-  console.log("filters.price",filters.price);
-=======
 
-  // useEffect(() => {
-  //   const params = Object.fromEntries([...searchParams.entries()]);
-
-  //   // Парсинг параметрів фільтрів
-  //   const initialPriceFilter = params.price
-  //     ? params.price.split("-").map(Number)
-  //     : null;
-  //     const initialBrands = params.brand
-  //     ? params.brand.split(",").map((id) => ({
-
-  //         numberId: id,
-  //         name: brandsCount.find((brand) => String(brand.numberId) === id)?.name,
-  //       }))
-  //     : [];
-  //     // console.log('initialBrands',initialBrands);
-  //   const initialSections = params.parent
-  //     ? params.parent.split(",").map(Number)
-  //     : [];
-  //   const page = params.page ? Number(params.page) : 1;
-
-  //   // Оновлення стану фільтрів
-  //   if (initialPriceFilter) setPriceFilter(initialPriceFilter);
-  //   if (initialBrands.length > 0) setSelectedBrand(initialBrands);
-  //   if (initialSections.length > 0) {
-  //     setSelectedSection(
-  //       initialSections
-  //         .map((idTorgsoft) =>
-  //           categories.find((category) => category.idTorgsoft === idTorgsoft)
-  //         )
-  //         .filter(Boolean)
-  //     );
-  //   }
-
-  //   // Застосовуємо сторінку, якщо вона відрізняється
-  //   if (page !== currentPage) {
-  //     setCurrentPage(page);
-  //   }
-
-  //   // Викликаємо API для застосування фільтрів тільки після оновлення стану
-  //   dispatch(
-  //     fetchFilteredProducts({
-  //       price: params.price,
-  //       brand: params.brand?.split(",") || [],
-  //       category: initialSections,
-  //       page,
-  //       limit: 20,
-  //     })
-  //   );
-  // }, [searchParams, categories, currentPage, dispatch]);
->>>>>>> main
+  console.log("filters.price", filters.price);
 
   useEffect(() => {
     dispatch(
@@ -126,36 +66,7 @@ const CatalogList = ({ brandsCount }) => {
       })
     );
   }, [JSON.stringify(filters), dispatch]);
-<<<<<<< HEAD
- 
-=======
 
-  // useEffect(() => {
-  //   let cancel = false;
-
-  //   dispatch(
-  //     fetchFilteredProducts({
-  //       price: filters.price,
-  //       brand: filters.brands,
-  //       category: filters.categories,
-  //       page: filters.page,
-  //       limit: 20,
-  //     })
-  //   ).finally(() => {
-  //     if (cancel) return;
-  //   });
-
-  //   return () => {
-  //     cancel = true;  // Скасування попереднього запиту при повторному ефекті
-  //   };
-  // }, [JSON.stringify(filters), dispatch]);  // JSON.stringify для порівняння фільтрів
->>>>>>> main
-
-
-   
-
- 
- 
   useEffect(() => {
     if (minPriceProduct !== null && maxPriceProduct !== null) {
       setRangeValues([minPriceProduct, maxPriceProduct]);
@@ -199,89 +110,6 @@ const CatalogList = ({ brandsCount }) => {
     };
   }, [sortingOpen, filterOpen]);
 
-<<<<<<< HEAD
-   
-
- 
-   
-=======
-  const updateURL = (page) => {
-    const params = new URLSearchParams();
-
-    if (priceFilter) {
-      params.append("price", `${priceFilter[0]}-${priceFilter[1]}`);
-    }
-
-    if (selectedBrand.length > 0) {
-      const brandIds = selectedBrand.map((brand) => brand.numberId).join(",");
-      params.append("brand", brandIds);
-    }
-
-    if (selectedSection.length > 0) {
-      const sectionIds = selectedSection
-        .map((section) => section.idTorgsoft)
-        .join(",");
-      params.append("category", sectionIds);
-    }
-
-    if (page > 1) {
-      params.append("page", page);
-    }
-
-    // Формуємо URL залежно від наявності фільтрів
-    const newUrl = params.toString()
-      ? `/catalog/filter?${params.toString()}`
-      : "/catalog";
-
-    // console.log("Updating URL to:", newUrl);
-
-    // Уникаємо зайвих оновлень URL
-    if (location.pathname + location.search !== newUrl) {
-      navigate(newUrl, { replace: true });
-    }
-  };
-
-  // const updateURL = useCallback(() => {
-  //   const params = new URLSearchParams();
-
-  //   if (priceFilter) {
-  //     params.append("price", `${priceFilter[0]}-${priceFilter[1]}`);
-  //   }
-
-  //   if (selectedBrand.length > 0) {
-  //     params.append("brand", selectedBrand.map((brand) => brand.numberId).join(","));
-  //   }
-
-  //   if (selectedSection.length > 0) {
-  //     params.append("category", selectedSection.map((section) => section.idTorgsoft).join(","));
-  //   }
-
-  //   if (currentPage > 1) {
-  //     params.append("page", currentPage);
-  //   }
-
-  //   const newUrl = params.toString() ? `/catalog/filter?${params.toString()}` : "/catalog";
-  //   if (location.pathname + location.search !== newUrl) {
-  //     navigate(newUrl, { replace: true });
-  //   }
-  // }, [ navigate, location.pathname]);
-
-  const applyFilters = (price, brands, sections, page = 1) => {
-    const priceRange = price ? `${price[0]}-${price[1]}` : null;
-
-    dispatch(
-      fetchFilteredProducts({
-        category: sections.map((section) => section.idTorgsoft),
-        brand: brands.map((brand) => brand.numberId),
-        price: priceRange,
-        page,
-        limit: 20,
-      })
-    );
-    updateURL(page);
-  };
->>>>>>> main
-
   const toggleFilter = () => {
     setFilterOpen((prev) => !prev);
     document.body.classList.toggle(css.modalOpen, !filterOpen);
@@ -310,39 +138,31 @@ const CatalogList = ({ brandsCount }) => {
     const updatedBrands = filters.brands.includes(brandId)
       ? filters.brands.filter((id) => id !== brandId)
       : [...filters.brands, brandId];
-<<<<<<< HEAD
-  
-    updateFilters({ ...filters, brands: updatedBrands,page: 1 });
-=======
 
-    updateFilters({ ...filters, brands: updatedBrands });
->>>>>>> main
+    updateFilters({ ...filters, brands: updatedBrands, page: 1 });
   };
 
   const handleSectionSelect = (section) => {
     const categoryId = section.idTorgsoft;
     const exists = filters.categories.includes(categoryId);
-  
+
     const updatedCategories = exists
       ? filters.categories.filter((id) => id !== categoryId)
       : [...filters.categories, categoryId];
-  
-    updateFilters({ ...filters, categories: updatedCategories,page: 1 });
+
+    updateFilters({ ...filters, categories: updatedCategories, page: 1 });
   };
-  
 
   const handlePriceSubmit = (values) => {
     // Перевіряємо, чи є значення ціни дійсними
     if (values[0] >= 0 && values[1] > values[0]) {
-      updateFilters({ ...filters, price: values,page: 1 });
+      updateFilters({ ...filters, price: values, page: 1 });
     }
   };
 
   const handlePageChange = (page) => {
     updateFilters({ ...filters, page });
   };
-
-  
 
   const clearFilter = () => {
     updateFilters({ brands: [], categories: [], price: null, page: 1 });
@@ -368,8 +188,6 @@ const CatalogList = ({ brandsCount }) => {
     }).length;
   };
 
-   
-
   // Фільтр в aside
 
   const handleRemoveBrand = (brandToRemove) => {
@@ -384,7 +202,6 @@ const CatalogList = ({ brandsCount }) => {
     return <div>Завантаження...</div>;
   }
 
-  
   return (
     <div>
       {!isMobile ? (
@@ -404,7 +221,6 @@ const CatalogList = ({ brandsCount }) => {
             filterProduct={filterProduct}
             rangeValues={rangeValues}
             setRangeValues={setRangeValues}
-            
             onSubmit={handlePriceSubmit}
             handleBrandSelect={handleBrandSelect}
             priceFilter={priceFilter}
@@ -415,7 +231,6 @@ const CatalogList = ({ brandsCount }) => {
       ) : (
         <>
           <CatalogListMobile
-            
             sortType={sortType}
             toggleFilter={toggleFilter}
             toggleSortingContent={toggleSortingContent}
