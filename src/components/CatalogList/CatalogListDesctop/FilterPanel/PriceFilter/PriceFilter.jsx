@@ -3,11 +3,13 @@ import css from "./PriceFilter.module.css";
 import { useState, useEffect } from "react";
 
 const PriceFilter = ({ filterProduct, onSubmit }) => {
-
-  const minPrice = filterProduct?.minPrice ?? 0;  // Встановлюється 0, поки немає даних
+  const minPrice = filterProduct?.minPrice ?? 0; // Встановлюється 0, поки немає даних
   // console.log('filterProduct: ', filterProduct);
-  const maxPrice = filterProduct?.maxPrice ?? 1000 ;
-  const [localRangeValues, setLocalRangeValues] = useState([minPrice, maxPrice]);
+  const maxPrice = filterProduct?.maxPrice ?? 1000;
+  const [localRangeValues, setLocalRangeValues] = useState([
+    minPrice,
+    maxPrice,
+  ]);
 
   // Оновлюємо значення в локальному стані, коли приходять нові дані з бекенду
   useEffect(() => {
@@ -75,9 +77,11 @@ const PriceFilter = ({ filterProduct, onSubmit }) => {
                 style={{
                   ...props.style,
                   background: `linear-gradient(to right, #ccc 0%, #b22222 ${
-                    ((localRangeValues[0] - minPrice) / (maxPrice - minPrice)) * 100
+                    ((localRangeValues[0] - minPrice) / (maxPrice - minPrice)) *
+                    100
                   }%, #b22222 ${
-                    ((localRangeValues[1] - minPrice) / (maxPrice - minPrice)) * 100
+                    ((localRangeValues[1] - minPrice) / (maxPrice - minPrice)) *
+                    100
                   }%, #ccc 100%)`,
                 }}
               >
