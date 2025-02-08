@@ -1,46 +1,44 @@
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useCallback } from "react";
 
 export const useCatalogFilters = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  // Парсимо фільтри з URL
-  const filters = {
-    brands: searchParams.get("brand")?.split(",") || [],
-    categories: searchParams.get("category")?.split(",") || [],
-    price: searchParams.get("price")
-      ? searchParams.get("price").split("-").map(Number)
-      : null,
-    page: Number(searchParams.get("page")) || 1,
+  // Функція для формування URL у новому форматі
+  const buildCustomUrl = (params) => {
+    const baseUrl = '/catalog/filter';
+
+    // Видаляємо параметри з дефолтними значеннями
+    const validParams = Object.entries(params)
+      .filter(([key, value]) => {
+        if (key === 'page' && value === 1) return false; // Пропускаємо `page=1`
+        if (Array.isArray(value)) return value.length > 0;
+        return value !== null && value !== undefined && value !== '';
+      });
+
+    const queryString = validParams
+      .map(([key, value]) => {
+        if (Array.isArray(value)) {
+          return `${key}=${value.join(',')}`;
+        }
+        return `${key}=${value}`;
+      })
+      .join(';');
+
+    return queryString ? `${baseUrl}/${queryString}/` : baseUrl;
   };
 
   // Функція для оновлення фільтрів і синхронізації з URL
   const updateFilters = useCallback(
     (newFilters) => {
-      const params = new URLSearchParams();
-      if (newFilters.price) {
-        params.append("price", `${newFilters.price[0]}-${newFilters.price[1]}`);
-      }
+      // Формуємо новий URL
+      const url = buildCustomUrl(newFilters);
 
-      if (newFilters.brands.length > 0) {
-        params.append("brand", newFilters.brands.join(","));
-      }
-
-      if (newFilters.categories.length > 0) {
-        params.append("category", newFilters.categories.join(","));
-      }
-
-      if (newFilters.page > 1) {
-        params.append("page", newFilters.page);
-      }
-
-      // Оновлення URL
-      setSearchParams(params);
-      navigate(`/catalog/filter?${params.toString()}`, { replace: true });
+      // Оновлюємо URL без перезавантаження сторінки
+      navigate(url, { replace: true });
     },
-    [setSearchParams, navigate]
+    [navigate]
   );
 
-  return { filters, updateFilters };
+  return { updateFilters };
 };

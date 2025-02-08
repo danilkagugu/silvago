@@ -2,6 +2,7 @@ import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import css from "./ProductPagination.module.css";
 
 const ProductPagination = ({ currentPage, totalPages, onPageChange }) => {
+  // console.log('currentPage: ', currentPage);
   const renderPageNumbers = () => {
     const pages = [];
 
