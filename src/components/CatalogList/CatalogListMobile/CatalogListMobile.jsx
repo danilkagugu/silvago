@@ -9,8 +9,8 @@ const CatalogListMobile = ({
   sortType,
   toggleFilter,
   toggleSortingContent,
-  handleRemoveBrand,
-  handleRemoveSection,
+  // handleRemoveBrand,
+  // handleRemoveSection,
   defaultProductVariations,
   sortedFilteredProducts,
   brandsTorgsoft,
@@ -39,8 +39,8 @@ const CatalogListMobile = ({
         sortType={sortType}
         toggleFilter={toggleFilter}
         toggleSortingContent={toggleSortingContent}
-        handleRemoveBrand={handleRemoveBrand}
-        handleRemoveSection={handleRemoveSection}
+        // handleRemoveBrand={handleRemoveBrand}
+        // handleRemoveSection={handleRemoveSection}
       />
       <ProductListMob
         defaultProductVariations={defaultProductVariations}
@@ -58,8 +58,8 @@ const CatalogListMobile = ({
         filterOpen={filterOpen}
         getProductLabel={getProductLabel}
         handleBrandSelect={handleBrandSelect}
-        handleRemoveBrand={handleRemoveBrand}
-        handleRemoveSection={handleRemoveSection}
+        // handleRemoveBrand={handleRemoveBrand}
+        // handleRemoveSection={handleRemoveSection}
         handleSectionSelect={handleSectionSelect}
         selectedBrand={selectedBrand}
         selectedSection={selectedSection}

@@ -19,13 +19,17 @@ import CatalogListDesctop from "./CatalogListDesctop/CatalogListDesctop";
 
 import CatalogListMobile from "./CatalogListMobile/CatalogListMobile";
 import { useCatalogFilters } from "../../hooks/useCatalogFilters";
-import { parseFiltersFromUrl, useSelectedFilters } from "../../hooks/useSelectedFilters";
+import {
+  parseFiltersFromUrl,
+  useSelectedFilters,
+} from "../../hooks/useSelectedFilters";
 
 const CatalogList = ({ brandsCount }) => {
   const isMobile = window.innerWidth <= 1440;
 
-  const {  updateFilters } = useCatalogFilters();
+  const { updateFilters } = useCatalogFilters();
   const { selectedBrands, selectedSections, filters } = useSelectedFilters();
+  // console.log("filters: ", filters);
   // console.log('selectedBrands: ', selectedBrands);
 
   const dispatch = useDispatch();
@@ -41,7 +45,7 @@ const CatalogList = ({ brandsCount }) => {
   const [sortingOpen, setSortingOpen] = useState(false);
   const [filterContentOpen, setFilterContentOpen] = useState(false);
   const [categoryContentOpen, setCategoryContentOpen] = useState(false);
-  const [priceFilter, setPriceFilter] = useState(null);
+  // const [priceFilter, setPriceFilter] = useState(null);
 
   // Selectors
   const dataProductsTorgsoft = useSelector(selectProductsTorgsoft);
@@ -54,11 +58,10 @@ const CatalogList = ({ brandsCount }) => {
   const defaultProductVariations = useSelector(selectDefaultVariations);
   const categories = useSelector(selectAllCategories);
 
-// console.log('filters',filters);
   useEffect(() => {
     dispatch(
       fetchFilteredProducts({
-        price: rangeValues.length === 2 ? rangeValues : filters.price,
+        price: filters.price,
         brand: filters.brands,
         category: filters.categories,
         page: filters.page || 1,
@@ -133,18 +136,15 @@ const CatalogList = ({ brandsCount }) => {
     toggleSortingContent();
   };
 
-   
-
-
   const handleBrandSelect = (brand) => {
     const brandId = brand.numberId;
     const currentFilters = parseFiltersFromUrl(location.pathname); // Отримуємо актуальні фільтри з URL
-  
+
     // Додаємо або видаляємо бренд із фільтрів
     const updatedBrands = currentFilters.brands.includes(brandId)
       ? currentFilters.brands.filter((id) => id !== brandId)
       : [...currentFilters.brands, brandId];
-  
+
     updateFilters({
       brands: updatedBrands,
       categories: currentFilters.categories || [],
@@ -152,19 +152,18 @@ const CatalogList = ({ brandsCount }) => {
       page: 1,
     });
   };
-  
-  
+
   const handleSectionSelect = (section) => {
     const categoryId = section.idTorgsoft;
-  
+
     // Отримуємо актуальні фільтри з URL
     const currentFilters = parseFiltersFromUrl(location.pathname);
-  
+
     // Додаємо або видаляємо категорію із фільтрів
     const updatedCategories = currentFilters.categories.includes(categoryId)
       ? currentFilters.categories.filter((id) => id !== categoryId)
       : [...currentFilters.categories, categoryId];
-  
+
     updateFilters({
       brands: currentFilters.brands || [],
       categories: updatedCategories,
@@ -172,24 +171,30 @@ const CatalogList = ({ brandsCount }) => {
       page: 1,
     });
   };
-  
+
   const handlePriceSubmit = (values) => {
+    // console.log("values: ", values);
     if (values[0] >= 0 && values[1] > values[0]) {
-      const currentFilters = parseFiltersFromUrl();
-  
+      const currentFilters = parseFiltersFromUrl(location.pathname);
+      // console.log("currentFilters: ", currentFilters);
+
       // Оновлюємо ціновий фільтр
-      updateFilters({ ...currentFilters, price: values, page: 1 });
+      updateFilters({
+        brands: currentFilters.brands || [],
+        categories: currentFilters.categories || [],
+        price: values || null,
+        page: 1,
+      });
     }
   };
-  
+
   const handlePageChange = (page) => {
-    const currentFilters = parseFiltersFromUrl();
-    console.log('currentFilters: ', currentFilters);
-  
+    const currentFilters = parseFiltersFromUrl(location.pathname);
+    // console.log("currentFilters: ", currentFilters);
+
     // Оновлюємо сторінку в параметрах
     updateFilters({ ...currentFilters, page });
   };
-  
 
   const clearFilter = () => {
     // Створюємо об'єкт дефолтних значень фільтрів
@@ -199,7 +204,7 @@ const CatalogList = ({ brandsCount }) => {
       price: null,
       page: 1,
     };
-  
+
     // Оновлюємо фільтри до дефолтних значень
     updateFilters(defaultFilters);
   };
@@ -226,19 +231,18 @@ const CatalogList = ({ brandsCount }) => {
 
   // Фільтр в aside
 
-  const handleRemoveBrand = (brandToRemove) => {
-    // setSelectedBrands((prev) => prev.filter((brand) => brand !== brandToRemove));
-  };
+  // const handleRemoveBrand = (brandToRemove) => {
+  //   // setSelectedBrands((prev) => prev.filter((brand) => brand !== brandToRemove));
+  // };
 
-  const handleRemoveSection = (section) => {
-    // setSelectedSection((prev) => prev.filter((brand) => brand !== section));
-  };
+  // const handleRemoveSection = (section) => {
+  //   // setSelectedSection((prev) => prev.filter((brand) => brand !== section));
+  // };
 
   if (!brandsCount.length) {
     return <div>Завантаження...</div>;
   }
 
-   
   return (
     <div>
       {!isMobile ? (
@@ -258,9 +262,9 @@ const CatalogList = ({ brandsCount }) => {
             filterProduct={filterProduct}
             rangeValues={rangeValues}
             setRangeValues={setRangeValues}
-            onSubmit={handlePriceSubmit}
+            handlePriceSubmit={handlePriceSubmit}
             handleBrandSelect={handleBrandSelect}
-            priceFilter={priceFilter}
+            // priceFilter={priceFilter}
             handlePageChange={handlePageChange}
             brandsCount={brandsCount}
           />
@@ -271,8 +275,8 @@ const CatalogList = ({ brandsCount }) => {
             sortType={sortType}
             toggleFilter={toggleFilter}
             toggleSortingContent={toggleSortingContent}
-            handleRemoveBrand={handleRemoveBrand}
-            handleRemoveSection={handleRemoveSection}
+            // handleRemoveBrand={handleRemoveBrand}
+            // handleRemoveSection={handleRemoveSection}
             defaultProductVariations={defaultProductVariations}
             filterProduct={filterProduct}
             categories={categories}

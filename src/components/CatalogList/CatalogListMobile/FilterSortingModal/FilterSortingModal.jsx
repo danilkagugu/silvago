@@ -12,8 +12,8 @@ const FilterSortingModal = ({
   filterOpen,
   getProductLabel,
   handleBrandSelect,
-  handleRemoveBrand,
-  handleRemoveSection,
+  // handleRemoveBrand,
+  // handleRemoveSection,
   handleSectionSelect,
 
   selectedBrand,
@@ -39,8 +39,8 @@ const FilterSortingModal = ({
         filterOpen={filterOpen}
         getProductLabel={getProductLabel}
         handleBrandSelect={handleBrandSelect}
-        handleRemoveBrand={handleRemoveBrand}
-        handleRemoveSection={handleRemoveSection}
+        // handleRemoveBrand={handleRemoveBrand}
+        // handleRemoveSection={handleRemoveSection}
         handleSectionSelect={handleSectionSelect}
         selectedBrand={selectedBrand}
         selectedSection={selectedSection}

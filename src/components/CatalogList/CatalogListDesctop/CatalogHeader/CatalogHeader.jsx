@@ -8,8 +8,8 @@ const CatalogHeader = ({
   selectedSection,
   handleSortChange,
   sortType,
-  rangeValues,
-  priceFilter,
+  // rangeValues,
+  // priceFilter,
 }) => {
   return (
     <>
@@ -18,8 +18,8 @@ const CatalogHeader = ({
         <CatalogTitle
           selectedBrand={selectedBrand}
           selectedSection={selectedSection}
-          rangeValues={rangeValues}
-          priceFilter={priceFilter}
+          // rangeValues={rangeValues}
+          // priceFilter={priceFilter}
         />
         <SortingPanel handleSortChange={handleSortChange} sortType={sortType} />
       </div>

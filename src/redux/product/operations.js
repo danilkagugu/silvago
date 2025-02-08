@@ -150,6 +150,7 @@ export const fetchFilteredProducts = createAsyncThunk(
         page,
         limit,
       });
+      // console.log("data", data);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

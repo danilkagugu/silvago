@@ -7,8 +7,8 @@ const FilterModal = ({
   toggleFilter,
   selectedBrand,
   selectedSection,
-  handleRemoveBrand,
-  handleRemoveSection,
+  // handleRemoveBrand,
+  // handleRemoveSection,
   clearFilter,
   toggleFilterContent,
   filterContentOpen,
@@ -58,7 +58,7 @@ const FilterModal = ({
                             <span className={css.activeText}>{item}</span>
                             <span
                               className={css.iconFilterBrand}
-                              onClick={() => handleRemoveBrand(item)}
+                              // onClick={() => handleRemoveBrand(item)}
                             >
                               <IoIosClose className={css.iconFilterDel} />
                             </span>
@@ -82,7 +82,7 @@ const FilterModal = ({
                             <span className={css.activeText}>{item}</span>
                             <span
                               className={css.iconFilterBrand}
-                              onClick={() => handleRemoveSection(item)}
+                              // onClick={() => handleRemoveSection(item)}
                             >
                               <IoIosClose className={css.iconFilterDel} />
                             </span>

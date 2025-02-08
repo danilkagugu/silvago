@@ -4,8 +4,8 @@ import css from "./ActiveFiltersMob.module.css";
 const ActiveFiltersMob = ({
   selectedBrand,
   selectedSection,
-  handleRemoveBrand,
-  handleRemoveSection,
+  // handleRemoveBrand,
+  // handleRemoveSection,
 }) => {
   return (
     <>
@@ -24,7 +24,7 @@ const ActiveFiltersMob = ({
                       <span className={css.activeText}>{item}</span>
                       <span
                         className={css.iconFilterBrand}
-                        onClick={() => handleRemoveBrand(item)}
+                        // onClick={() => handleRemoveBrand(item)}
                       >
                         <IoIosClose className={css.iconFilterDel} />
                       </span>
@@ -46,7 +46,7 @@ const ActiveFiltersMob = ({
                       <span className={css.activeText}>{item}</span>
                       <span
                         className={css.iconFilterBrand}
-                        onClick={() => handleRemoveSection(item)}
+                        // onClick={() => handleRemoveSection(item)}
                       >
                         <IoIosClose className={css.iconFilterDel} />
                       </span>

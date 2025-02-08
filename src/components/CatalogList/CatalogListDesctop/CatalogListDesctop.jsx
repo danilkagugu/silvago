@@ -20,11 +20,11 @@ const CatalogListDesctop = ({
   setRangeValues,
   setSelectedBrand,
   setSelectedSection,
-  onSubmit,
+  handlePriceSubmit,
   handleBrandSelect,
-  priceFilter,
+  // priceFilter,
   handlePageChange,
-  brandsCount
+  brandsCount,
 }) => {
   return (
     <>
@@ -33,8 +33,8 @@ const CatalogListDesctop = ({
         selectedBrand={selectedBrand}
         selectedSection={selectedSection}
         sortType={sortType}
-        rangeValues={rangeValues}
-        priceFilter={priceFilter}
+        // rangeValues={rangeValues}
+        // priceFilter={priceFilter}
       />
       <div className={css.catalogContentMain}>
         <div
@@ -43,7 +43,7 @@ const CatalogListDesctop = ({
           <ProductList
             defaultProductVariations={defaultProductVariations}
             filterProduct={filterProduct}
-            onPageChange={handlePageChange}
+            handlePageChange={handlePageChange}
           />
         </div>
         <div className={css.catalogContentMainLeft}>
@@ -60,9 +60,9 @@ const CatalogListDesctop = ({
             setRangeValues={setRangeValues}
             setSelectedBrand={setSelectedBrand}
             setSelectedSection={setSelectedSection}
-            onSubmit={onSubmit}
+            handlePriceSubmit={handlePriceSubmit}
             handleBrandSelect={handleBrandSelect}
-            priceFilter={priceFilter}
+            // priceFilter={priceFilter}
             brandsCount={brandsCount}
             filterProduct={filterProduct}
           />

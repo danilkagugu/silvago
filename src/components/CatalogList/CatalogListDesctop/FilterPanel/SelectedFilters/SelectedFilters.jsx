@@ -4,7 +4,7 @@ const SelectedFilters = ({
   selectedBrand,
   selectedSection,
   clearFilter,
-  priceFilter,
+  // priceFilter,
 }) => {
   return (
     <div className={css.filterCurrent}>
@@ -28,14 +28,14 @@ const SelectedFilters = ({
           ))}
         </div>
       )}
-      {priceFilter && (
+      {/* {priceFilter && (
         <div className={css.filterCurrentGroup}>
           <span className={css.filterCurrentTitle}>Ціна, грн:</span>
           <span
             className={css.filterCurrentBrand}
           >{`${priceFilter[0]} - ${priceFilter[1]}`}</span>
         </div>
-      )}
+      )} */}
       <p className={css.filterClear} onClick={clearFilter}>
         Очистити фільтр
       </p>
