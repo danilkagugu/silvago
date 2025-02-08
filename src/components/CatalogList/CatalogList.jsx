@@ -53,8 +53,6 @@ const CatalogList = ({ brandsCount }) => {
   const defaultProductVariations = useSelector(selectDefaultVariations);
   const categories = useSelector(selectAllCategories);
 
-  console.log("filters.price", filters.price);
-
   useEffect(() => {
     dispatch(
       fetchFilteredProducts({

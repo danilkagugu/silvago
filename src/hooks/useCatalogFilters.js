@@ -15,8 +15,6 @@ export const useCatalogFilters = () => {
     page: Number(searchParams.get("page")) || 1,
   };
 
-  console.log('searchParams.get("price"):', searchParams.get("price"));
-
   // Функція для оновлення фільтрів і синхронізації з URL
   const updateFilters = useCallback(
     (newFilters) => {
@@ -24,7 +22,7 @@ export const useCatalogFilters = () => {
       if (newFilters.price) {
         params.append("price", `${newFilters.price[0]}-${newFilters.price[1]}`);
       }
-       
+
       if (newFilters.brands.length > 0) {
         params.append("brand", newFilters.brands.join(","));
       }
