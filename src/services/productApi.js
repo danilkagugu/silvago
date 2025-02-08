@@ -187,42 +187,6 @@ export const volumeChange = async () => {
   return data;
 };
 
-export const fetchFilteredProductsApi = async ({
-  category,
-  brand,
-  price,
-  page = 1,
-  limit = 20,
-}) => {
-  const instance = createPublicAxiosInstance();
-  const query = new URLSearchParams();
-
-  // Додаємо параметри тільки якщо вони існують
-  if (Array.isArray(category) && category.length > 0) {
-    query.append("category", category.join(","));
-  }
-  if (Array.isArray(brand) && brand.length > 0) {
-    // Додаємо ідентифікатори брендів
-    query.append("brand", brand.join(",")); // Передаємо numberId
-  }
-  if (price) {
-    query.append("price", price);
-  }
-
-  query.append("page", page);
-  query.append("limit", limit);
-
-  // Формуємо URL
-  const url = `/api/product/getcatalog?${query.toString()}`;
-
-  try {
-    const { data } = await instance.get(url);
-    return data;
-  } catch (error) {
-    console.error("Error fetching filtered products:", error);
-    throw error;
-  }
-};
 
 export const getPriceRenge = async () => {
   const instance = createPublicAxiosInstance();
@@ -235,3 +199,65 @@ export const getCountProductByFiltersApi = async () => {
   const { data } = await instance.get("/api/product/filter");
   return data;
 }
+
+
+
+
+
+/**
+ * Функція для отримання відфільтрованих товарів
+ * @param {Object} params - Параметри фільтрації
+ * @returns {Promise<Object>} - Відповідь з API
+ */
+export const fetchFilteredProductsApi = async ({
+  category,
+  brand,
+  price,
+  page = 1,
+  limit = 20
+}) => {
+  const instance = createPublicAxiosInstance();
+
+  // Функція для формування URL у потрібному форматі
+  const buildCustomUrl = (params) => {
+    // console.log('params: ', params);
+    const hasFilters =
+      (Array.isArray(params.brand) && params.brand.length > 0) ||
+      (Array.isArray(params.category) && params.category.length > 0) ||
+      (Array.isArray(params.price) && params.price.length === 2);
+// console.log('hasFilters',hasFilters);
+    // Визначаємо базовий URL
+    const baseUrl = hasFilters ? '/api/product/getcatalog/filter' : '/api/product/getcatalog';
+    const queryString = Object.entries(params)
+      .map(([key, value]) => {
+        if (Array.isArray(value) && value.length > 0) {
+          return `${key}=${value.join(',')}`;
+        }
+        return value ? `${key}=${value}` : '';
+      })
+      .filter(Boolean) // Видаляємо пусті параметри
+      .join(';');
+
+    return `${baseUrl}/${queryString}`;
+  };
+
+  // Формуємо параметри запиту
+  const url = buildCustomUrl({
+    brand,
+    category,
+    price: price ? price.join(',') : null,
+    page,
+    limit
+  });
+  try {
+    // Надсилаємо GET-запит
+    // console.log('URL:', url);
+
+    const  {data}  = await instance.get(url);
+    // console.log('data: ', data);
+    return data;
+  } catch (error) {
+    console.error('Помилка отримання товарів:', error);
+    throw error;
+  }
+};

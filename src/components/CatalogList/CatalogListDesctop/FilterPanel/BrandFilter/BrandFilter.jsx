@@ -8,13 +8,14 @@ const BrandFilter = ({
   brandsCount
 }) => {
 
-  // console.log('brandsCount: ', brandsCount);
+  // console.log('selectedBrand: ', selectedBrand);
    
 
   const renderBrands = () => {
     if (!brandsCount?.length) return null; // Перевірка наявності даних
 
     return brandsCount.map((brand) => {
+      // console.log('brand: ', brand);
       // console.log('brand: ', brand);
       const isSelected = selectedBrand.some(
         (selected) => selected.name === brand.name

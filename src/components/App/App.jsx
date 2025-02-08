@@ -65,10 +65,10 @@ const App = () => {
           <Route path="history" element={<History />} />
           <Route path="history/:orderId" element={<OrderDetails />} />
         </Route>
-        <Route
+        {/* <Route
           path="/:categorySlug/:subCategorySlug?/:childCategorySlug?"
           element={<ProductListPage />}
-        />
+        /> */}
 
         {/* <Route path="/catalog" element={<Catalog />} /> */}
         {/* <Route path="/catalog/filter?/:filterString?" element={<Catalog />} /> */}
