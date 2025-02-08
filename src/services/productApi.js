@@ -217,6 +217,7 @@ export const fetchFilteredProductsApi = async ({
 
   try {
     const { data } = await instance.get(url);
+    console.log("data: ", data);
     return data;
   } catch (error) {
     console.error("Error fetching filtered products:", error);
@@ -234,4 +235,4 @@ export const getCountProductByFiltersApi = async () => {
   const instance = createPublicAxiosInstance();
   const { data } = await instance.get("/api/product/filter");
   return data;
-}
+};
