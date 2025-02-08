@@ -1,8 +1,13 @@
 import { IoChevronBackSharp, IoChevronForward } from "react-icons/io5";
 import css from "./ProductPagination.module.css";
 
-const ProductPagination = ({ currentPage, totalPages, onPageChange }) => {
-  // console.log('currentPage: ', currentPage);
+const ProductPagination = ({
+  currentPage = 1,
+  totalPages = 1,
+  handlePageChange,
+}) => {
+  if (totalPages <= 1) return null;
+
   const renderPageNumbers = () => {
     const pages = [];
 
@@ -11,18 +16,34 @@ const ProductPagination = ({ currentPage, totalPages, onPageChange }) => {
       <span
         key={1}
         className={`${css.pageItem} ${currentPage === 1 ? css.activePage : ""}`}
-        onClick={() => onPageChange(1)}
+        onClick={() => handlePageChange(1)}
       >
         1
       </span>
     );
 
     if (totalPages > 1) {
-      // Якщо сторінок більше 10, додаємо логіку для `...`
+      // Логіка для випадків з кількістю сторінок ≤ 10
+      if (totalPages <= 10) {
+        for (let i = 2; i <= totalPages; i++) {
+          pages.push(
+            <span
+              key={i}
+              className={`${css.pageItem} ${
+                currentPage === i ? css.activePage : ""
+              }`}
+              onClick={() => handlePageChange(i)}
+            >
+              {i}
+            </span>
+          );
+        }
+      }
+
+      // Логіка для випадків з кількістю сторінок > 10
       if (totalPages > 10) {
         if (currentPage > 4) pages.push(<span key="dots-start">...</span>);
 
-        // Додаємо сторінки навколо поточної
         for (
           let i = Math.max(currentPage - 2, 2);
           i <= Math.min(currentPage + 2, totalPages - 1);
@@ -34,7 +55,7 @@ const ProductPagination = ({ currentPage, totalPages, onPageChange }) => {
               className={`${css.pageItem} ${
                 currentPage === i ? css.activePage : ""
               }`}
-              onClick={() => onPageChange(i)}
+              onClick={() => handlePageChange(i)}
             >
               {i}
             </span>
@@ -43,20 +64,20 @@ const ProductPagination = ({ currentPage, totalPages, onPageChange }) => {
 
         if (currentPage < totalPages - 3)
           pages.push(<span key="dots-end">...</span>);
-      }
 
-      // Завжди додаємо останню сторінку
-      pages.push(
-        <span
-          key={totalPages}
-          className={`${css.pageItem} ${
-            currentPage === totalPages ? css.activePage : ""
-          }`}
-          onClick={() => onPageChange(totalPages)}
-        >
-          {totalPages}
-        </span>
-      );
+        // Завжди додаємо останню сторінку
+        pages.push(
+          <span
+            key={totalPages}
+            className={`${css.pageItem} ${
+              currentPage === totalPages ? css.activePage : ""
+            }`}
+            onClick={() => handlePageChange(totalPages)}
+          >
+            {totalPages}
+          </span>
+        );
+      }
     }
 
     return pages;
@@ -68,7 +89,7 @@ const ProductPagination = ({ currentPage, totalPages, onPageChange }) => {
         <div className={css.pageContainer}>
           <span
             className={css.pageItem}
-            onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
+            onClick={() => currentPage > 1 && handlePageChange(currentPage - 1)}
           >
             <IoChevronBackSharp /> Назад
           </span>
@@ -78,7 +99,7 @@ const ProductPagination = ({ currentPage, totalPages, onPageChange }) => {
           <span
             className={css.pageItem}
             onClick={() =>
-              currentPage < totalPages && onPageChange(currentPage + 1)
+              currentPage < totalPages && handlePageChange(currentPage + 1)
             }
           >
             Вперед

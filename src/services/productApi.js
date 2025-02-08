@@ -187,7 +187,6 @@ export const volumeChange = async () => {
   return data;
 };
 
-
 export const getPriceRenge = async () => {
   const instance = createPublicAxiosInstance();
   const { data } = await instance.get("/api/product/price-range");
@@ -198,11 +197,7 @@ export const getCountProductByFiltersApi = async () => {
   const instance = createPublicAxiosInstance();
   const { data } = await instance.get("/api/product/filter");
   return data;
-}
-
-
-
-
+};
 
 /**
  * Функція для отримання відфільтрованих товарів
@@ -214,29 +209,39 @@ export const fetchFilteredProductsApi = async ({
   brand,
   price,
   page = 1,
-  limit = 20
+  limit = 20,
 }) => {
   const instance = createPublicAxiosInstance();
+  // console.log("price from productApi.js", price);
 
   // Функція для формування URL у потрібному форматі
   const buildCustomUrl = (params) => {
-    // console.log('params: ', params);
+    // console.log("params from productApi.js: ", params);
+    // console.log("params: ", typeof params.price);
     const hasFilters =
       (Array.isArray(params.brand) && params.brand.length > 0) ||
       (Array.isArray(params.category) && params.category.length > 0) ||
-      (Array.isArray(params.price) && params.price.length === 2);
-// console.log('hasFilters',hasFilters);
+      (Array.isArray(params.price) && params.price.length === 2) ||
+      (params.page && params.page > 1);
+    // console.log("hasFilters", hasFilters);
     // Визначаємо базовий URL
-    const baseUrl = hasFilters ? '/api/product/getcatalog/filter' : '/api/product/getcatalog';
-    const queryString = Object.entries(params)
+    const baseUrl = hasFilters
+      ? "/api/product/getcatalog/filter"
+      : "/api/product/getcatalog";
+
+    const validParams = Object.entries(params).filter(([key, value]) => {
+      if (key === "page" && value === 1) return false; // Пропускаємо page=1
+      if (key === "limit" && value === 20) return false; // Пропускаємо limit=20
+      if (Array.isArray(value)) return value.length > 0; // Пропускаємо порожні масиви
+      return value !== null && value !== undefined && value !== ""; // Пропускаємо пусті значення
+    });
+
+    const queryString = validParams
       .map(([key, value]) => {
-        if (Array.isArray(value) && value.length > 0) {
-          return `${key}=${value.join(',')}`;
-        }
-        return value ? `${key}=${value}` : '';
+        if (Array.isArray(value)) return `${key}=${value.join(",")}`;
+        return `${key}=${value}`;
       })
-      .filter(Boolean) // Видаляємо пусті параметри
-      .join(';');
+      .join(";");
 
     return `${baseUrl}/${queryString}`;
   };
@@ -245,19 +250,21 @@ export const fetchFilteredProductsApi = async ({
   const url = buildCustomUrl({
     brand,
     category,
-    price: price ? price.join(',') : null,
+    price,
+    // price: Array.isArray(price) ? price : price.split(",").map(Number) || null,
     page,
-    limit
+    limit,
   });
+
   try {
     // Надсилаємо GET-запит
-    // console.log('URL:', url);
+    // console.log("URL:", url);
 
-    const  {data}  = await instance.get(url);
+    const { data } = await instance.get(url);
     // console.log('data: ', data);
     return data;
   } catch (error) {
-    console.error('Помилка отримання товарів:', error);
+    console.error("Помилка отримання товарів:", error);
     throw error;
   }
 };

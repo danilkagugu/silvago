@@ -2,7 +2,7 @@ import { Range } from "react-range";
 import css from "./PriceFilter.module.css";
 import { useState, useEffect } from "react";
 
-const PriceFilter = ({ filterProduct, onSubmit }) => {
+const PriceFilter = ({ filterProduct, handlePriceSubmit }) => {
   const minPrice = filterProduct?.minPrice ?? 0; // Встановлюється 0, поки немає даних
   // console.log('filterProduct: ', filterProduct);
   const maxPrice = filterProduct?.maxPrice ?? 1000;
@@ -18,9 +18,8 @@ const PriceFilter = ({ filterProduct, onSubmit }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (onSubmit) {
-      onSubmit(localRangeValues);
-    }
+
+    handlePriceSubmit(localRangeValues);
   };
 
   return (

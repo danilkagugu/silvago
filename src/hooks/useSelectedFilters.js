@@ -11,37 +11,40 @@ import { useLocation } from "react-router-dom";
  */
 export const parseFiltersFromUrl = (pathname) => {
   // console.log('pathname: ', pathname);
-  const filterPart = pathname.split('/catalog/filter/')[1]?.split('/')[0];
+  const filterPart = pathname.split("/catalog/filter/")[1]?.split("/")[0];
 
-  if (!filterPart) return { brands: [], categories: [], price: null, page: 1 };
+  if (!filterPart) return { brands: [], categories: [], price: [], page: 1 };
 
-  const filters = filterPart.split(';').reduce((acc, param) => {
-    const [key, value] = param.split('=');
-    if (!key || !value) return acc;
+  const filters = filterPart.split(";").reduce(
+    (acc, param) => {
+      const [key, value] = param.split("=");
+      if (!key || !value) return acc;
 
-    const valuesArray = value.split(',');
-    // console.log('value: ', value);
+      const valuesArray = value.split(",");
+      // console.log("valuesArray: ", valuesArray);
+      // console.log('value: ', value);
 
-    switch (key) {
-      case 'brands':
-        acc.brands = valuesArray.map(Number).filter((num) => !isNaN(num));
-        break;
-      case 'categories':
-        acc.categories = valuesArray.map(Number).filter((num) => !isNaN(num));
-        break;
-      case 'price':
-        acc.price = valuesArray.map(Number).filter((num) => !isNaN(num));
-        break;
-      case 'page':
-        acc.page = parseInt(value, 10) || 1;
-        break;
-      default:
-        break;
-    }
+      switch (key) {
+        case "brands":
+          acc.brands = valuesArray.map(Number).filter((num) => !isNaN(num));
+          break;
+        case "categories":
+          acc.categories = valuesArray.map(Number).filter((num) => !isNaN(num));
+          break;
+        case "price":
+          acc.price = valuesArray.map(Number).filter((num) => !isNaN(num));
+          break;
+        case "page":
+          acc.page = parseInt(value, 10) || 1;
+          break;
+        default:
+          break;
+      }
 
-    return acc;
-  }, { brands: [], categories: [], price: null, page: 1 });
-console.log('filters',filters);
+      return acc;
+    },
+    { brands: [], categories: [], price: [], page: 1 }
+  );
   return filters;
 };
 
@@ -51,14 +54,16 @@ export const useSelectedFilters = () => {
   const allBrands = useSelector(selectBrandsCount);
 
   // Парсимо фільтри з актуального URL
-  const filters = useMemo(() => parseFiltersFromUrl(location.pathname), [location.pathname]);
-  // console.log('filters: ', filters);
+  const filters = useMemo(
+    () => parseFiltersFromUrl(location.pathname),
+    [location.pathname]
+  );
+  // console.log("filters from useSelectedFilters.js: ", filters.price);
 
   // Обчислюємо обрані бренди та категорії
   const selectedBrands = useMemo(() => {
     return allBrands.filter((brand) => filters.brands.includes(brand.numberId));
   }, [filters.brands, allBrands]);
-
   const selectedSections = useMemo(() => {
     return allCategories.filter((category) =>
       filters.categories.includes(category.idTorgsoft)

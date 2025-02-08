@@ -5,7 +5,7 @@ import ProductPagination from "./ProductPagination/ProductPagination";
 const ProductList = ({
   filterProduct,
   defaultProductVariations,
-  onPageChange,
+  handlePageChange,
 }) => {
   return (
     <div className={css.catalogContent}>
@@ -26,7 +26,7 @@ const ProductList = ({
       <ProductPagination
         currentPage={filterProduct.currentPage}
         totalPages={filterProduct.totalPages}
-        onPageChange={onPageChange}
+        handlePageChange={handlePageChange}
       />
     </div>
   );

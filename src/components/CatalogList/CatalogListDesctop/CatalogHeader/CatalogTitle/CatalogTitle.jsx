@@ -2,8 +2,8 @@ import css from "./CatalogTitle.module.css";
 const CatalogTitle = ({
   selectedBrand,
   selectedSection,
-  rangeValues,
-  priceFilter,
+  // rangeValues,
+  // priceFilter,
 }) => {
   const brandNames = selectedBrand.map((brand) => brand.name);
   const sectionNames = selectedSection.map(
@@ -15,8 +15,8 @@ const CatalogTitle = ({
         Головна Каталог
         {brandNames.length > 0 && ` Бренд: ${brandNames.join(", ")}`}
         {sectionNames.length > 0 && `, Розділ: ${sectionNames.join(", ")}`}
-        {priceFilter &&
-          `, Ціна, грн: ${rangeValues[0] ?? ""} – ${rangeValues[1] ?? ""}`}
+        {/* {priceFilter &&
+          `, Ціна, грн: ${rangeValues[0] ?? ""} – ${rangeValues[1] ?? ""}`} */}
       </h1>
     </div>
   );

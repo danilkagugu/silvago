@@ -12,8 +12,8 @@ const CatalogHeaderMob = ({
   sortType,
   toggleFilter,
   toggleSortingContent,
-  handleRemoveBrand,
-  handleRemoveSection,
+  // handleRemoveBrand,
+  // handleRemoveSection,
 }) => {
   return (
     <>
@@ -29,8 +29,8 @@ const CatalogHeaderMob = ({
         toggleSortingContent={toggleSortingContent}
       />
       <ActiveFiltersMob
-        handleRemoveBrand={handleRemoveBrand}
-        handleRemoveSection={handleRemoveSection}
+        // handleRemoveBrand={handleRemoveBrand}
+        // handleRemoveSection={handleRemoveSection}
         selectedBrand={selectedBrand}
         selectedSection={selectedSection}
       />
