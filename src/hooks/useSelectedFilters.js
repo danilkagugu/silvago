@@ -51,6 +51,7 @@ export const parseFiltersFromUrl = (pathname) => {
 export const useSelectedFilters = () => {
   const location = useLocation(); // Використовуємо useLocation для відстеження змін URL
   const allCategories = useSelector(selectAllCategories);
+  console.log('allCategories: ', allCategories);
   const allBrands = useSelector(selectBrandsCount);
 
   // Парсимо фільтри з актуального URL
@@ -59,16 +60,38 @@ export const useSelectedFilters = () => {
     [location.pathname]
   );
   // console.log("filters from useSelectedFilters.js: ", filters.price);
+// console.log('filters',filters);
+
+
+const flattenCategories = (categories) => {
+  const result = [];
+
+  const traverse = (category) => {
+    result.push({
+      idTorgsoft: category.idTorgsoft,
+      name: category.name,
+    });
+
+    if (category.children && category.children.length > 0) {
+      category.children.forEach(traverse);
+    }
+  };
+
+  categories.forEach(traverse);
+  return result;
+};
+const flattenedCategories = useMemo(() => flattenCategories(allCategories), [allCategories]);
+console.log('flattenedCategories: ', flattenedCategories);
 
   // Обчислюємо обрані бренди та категорії
   const selectedBrands = useMemo(() => {
-    return allBrands.filter((brand) => filters.brands.includes(brand.numberId));
+    return allBrands.filter((brand) => filters.brands.includes(brand.idTorgsoft));
   }, [filters.brands, allBrands]);
   const selectedSections = useMemo(() => {
-    return allCategories.filter((category) =>
+    return flattenedCategories.filter((category) =>
       filters.categories.includes(category.idTorgsoft)
     );
-  }, [filters.categories, allCategories]);
+  }, [filters.categories, flattenedCategories]);
 
   return { selectedBrands, selectedSections, filters };
 };

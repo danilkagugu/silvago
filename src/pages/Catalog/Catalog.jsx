@@ -15,24 +15,36 @@ import {
   selectBrandsCount,
   selectCategoriesCount,
 } from "../../redux/product/selectors";
+import { useSelectedFilters } from "../../hooks/useSelectedFilters";
 
 const Catalog = () => {
   const dispatch = useDispatch();
+   const { selectedBrands, selectedSections, filters } = useSelectedFilters();
+   console.log('selectedSections: ', selectedSections);
 
   const brandsCount = useSelector(selectBrandsCount);
   const categoriesCount = useSelector(selectCategoriesCount);
+  // console.log('categoriesCount: ', categoriesCount);
    
 
   useEffect(() => {
     dispatch(fetchAllCategories());
-    dispatch(getCountProductByFilters());
     dispatch(getAllProductTorgsoft());
     dispatch(fetchPriceRenge());
   }, [dispatch]);
+  useEffect(() => {
+    dispatch(getCountProductByFilters(filters));
+  }, [filters, dispatch]);
 
   return (
     <Layout>
-      <CatalogList brandsCount={brandsCount} categoriesCount={categoriesCount} />
+      <CatalogList brandsCount={brandsCount}
+       categoriesCount={categoriesCount} 
+      selectedBrands={selectedBrands}
+       selectedSections={selectedSections}
+       filters={filters}
+       />
+       
     </Layout>
   );
 };

@@ -21,16 +21,12 @@ import CatalogListMobile from "./CatalogListMobile/CatalogListMobile";
 import { useCatalogFilters } from "../../hooks/useCatalogFilters";
 import {
   parseFiltersFromUrl,
-  useSelectedFilters,
 } from "../../hooks/useSelectedFilters";
 
-const CatalogList = ({ brandsCount,categoriesCount }) => {
+const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSections,filters }) => {
   const isMobile = window.innerWidth <= 1440;
 
   const { updateFilters } = useCatalogFilters();
-  const { selectedBrands, selectedSections, filters } = useSelectedFilters();
-  // console.log("filters: ", filters);
-  // console.log('selectedBrands: ', selectedBrands);
 
   const dispatch = useDispatch();
 
@@ -137,7 +133,7 @@ const CatalogList = ({ brandsCount,categoriesCount }) => {
   };
 
   const handleBrandSelect = (brand) => {
-    const brandId = brand.numberId;
+    const brandId = brand.idTorgsoft;
     const currentFilters = parseFiltersFromUrl(location.pathname); // Отримуємо актуальні фільтри з URL
 
     // Додаємо або видаляємо бренд із фільтрів

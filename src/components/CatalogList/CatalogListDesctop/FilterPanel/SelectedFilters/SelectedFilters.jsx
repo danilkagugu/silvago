@@ -12,7 +12,7 @@ const SelectedFilters = ({
         <div className={css.filterCurrentGroup}>
           <span className={css.filterCurrentTitle}>Бренд:</span>
           {selectedBrand.map((brand) => (
-            <span className={css.filterCurrentBrand} key={brand.numberId}>
+            <span className={css.filterCurrentBrand} key={brand.idTorgsoft}>
               {brand.name}
             </span>
           ))}
@@ -22,7 +22,7 @@ const SelectedFilters = ({
         <div className={css.filterCurrentGroup}>
           <span className={css.filterCurrentTitle}>Розділ:</span>
           {selectedSection.map((category) => (
-            <span className={css.filterCurrentBrand} key={category._id}>
+            <span className={css.filterCurrentBrand} key={category.idTorgsoft}>
               {category.name}
             </span>
           ))}

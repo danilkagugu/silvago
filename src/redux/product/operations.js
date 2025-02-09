@@ -14,6 +14,7 @@ import {
   removeFavorite,
 } from "../../services/productApi";
 import { getGoods } from "../../services/api";
+import { parseFiltersFromUrl } from "../../hooks/useSelectedFilters";
 
 export const getAllProduct = createAsyncThunk(
   "products/getAll",
@@ -169,11 +170,27 @@ export const fetchPriceRenge = createAsyncThunk(
     }
   }
 );
+// export const getCountProductByFilters = createAsyncThunk(
+//   "products/countByFilters",
+//   async (_, thunkAPI) => {
+//     try {
+//       const data = await getCountProductByFiltersApi();
+//       return data;
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error.message);
+//     }
+//   }
+// );
+
+
 export const getCountProductByFilters = createAsyncThunk(
   "products/countByFilters",
   async (_, thunkAPI) => {
     try {
-      const data = await getCountProductByFiltersApi();
+      // Отримуємо поточні фільтри з URL
+      const filters = parseFiltersFromUrl(window.location.pathname);
+      // console.log('filters: ', filters);
+      const data = await getCountProductByFiltersApi(filters);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

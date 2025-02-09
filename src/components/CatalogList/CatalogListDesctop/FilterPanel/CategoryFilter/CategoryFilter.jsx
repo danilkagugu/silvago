@@ -9,7 +9,7 @@ const CategoryFilter = ({
 
   const renderCategories = () => {
     // console.log('categoriesFilter: ', categories);
-console.log('selectedSection,selectedSection',selectedSection);
+// console.log('selectedSection,selectedSection',selectedSection);
     if (!categoriesCount?.length) return null;
     // console.log('categoriesCount: ', categoriesCount);
      
