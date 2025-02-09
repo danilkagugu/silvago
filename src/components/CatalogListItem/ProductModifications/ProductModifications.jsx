@@ -7,6 +7,9 @@ const ProductModifications = ({
   handleVolumeChange,
   handleToneChange,
 }) => {
+
+  // console.log('volumeDetail',volumeDetail);
+  // console.log('product',product);
   return (
     <div>
       <div className={`${css.modification} ${css.modificationCompact}`}>
@@ -34,7 +37,8 @@ const ProductModifications = ({
                     key={variant.idTorgsoft}
                     onClick={() => handleVolumeChange(variant.idTorgsoft)}
                   >
-                    {variant.volume} мл
+                    {/* {variant.volume} мл */}
+                    {`${variant.volume + " " + product.measure}`}
                     {!isVolumeAvailable && (
                       <div className={`${css.tooltipWrapper}`}>
                         <div className={`${css.tooltip} ${css.tooltipTop}`}>

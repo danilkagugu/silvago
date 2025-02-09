@@ -51,7 +51,7 @@ export const parseFiltersFromUrl = (pathname) => {
 export const useSelectedFilters = () => {
   const location = useLocation(); // Використовуємо useLocation для відстеження змін URL
   const allCategories = useSelector(selectAllCategories);
-  console.log('allCategories: ', allCategories);
+  // console.log('allCategories: ', allCategories);
   const allBrands = useSelector(selectBrandsCount);
 
   // Парсимо фільтри з актуального URL
@@ -81,7 +81,7 @@ const flattenCategories = (categories) => {
   return result;
 };
 const flattenedCategories = useMemo(() => flattenCategories(allCategories), [allCategories]);
-console.log('flattenedCategories: ', flattenedCategories);
+// console.log('flattenedCategories: ', flattenedCategories);
 
   // Обчислюємо обрані бренди та категорії
   const selectedBrands = useMemo(() => {

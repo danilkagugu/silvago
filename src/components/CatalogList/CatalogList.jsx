@@ -23,6 +23,8 @@ import {
   parseFiltersFromUrl,
 } from "../../hooks/useSelectedFilters";
 
+ 
+
 const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSections,filters }) => {
   const isMobile = window.innerWidth <= 1440;
 
@@ -34,6 +36,7 @@ const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSectio
   const filterModalRef = useRef(null);
 
   // State
+   
   const [rangeValues, setRangeValues] = useState([]);
   const [sortType, setSortType] = useState("popularity");
 
@@ -53,6 +56,7 @@ const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSectio
   const maxPriceProduct = useSelector(selectProductsMaxPrice);
   const defaultProductVariations = useSelector(selectDefaultVariations);
   const categories = useSelector(selectAllCategories);
+ 
 
   useEffect(() => {
     dispatch(

@@ -22,6 +22,8 @@ const ProductVolumeTone = ({
                   const isVolumeAvailable = variant.quantity > 0; // Перевіряємо наявність об'єму
                   const isCurrentVolume =
                     volume?.idTorgsoft === variant.idTorgsoft;
+
+                    console.log('measure',product.measure);
                   return (
                     <button
                       key={variant.idTorgsoft}
