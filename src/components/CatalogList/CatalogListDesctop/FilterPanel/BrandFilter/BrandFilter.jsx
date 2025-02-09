@@ -2,8 +2,7 @@ import { IoMdCheckmark } from "react-icons/io";
 import css from "./BrandFilter.module.css";
  
 const BrandFilter = ({ 
-  selectedBrand,
-  
+  selectedBrand,  
   handleBrandSelect,
   brandsCount
 }) => {

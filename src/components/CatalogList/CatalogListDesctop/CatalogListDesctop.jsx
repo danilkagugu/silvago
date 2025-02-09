@@ -12,7 +12,6 @@ const CatalogListDesctop = ({
   filterProduct,
   clearFilter,
   categories,
-  filterCountBySection,
   handleSectionSelect,
   maxPrice,
   minPrice,
@@ -25,6 +24,7 @@ const CatalogListDesctop = ({
   // priceFilter,
   handlePageChange,
   brandsCount,
+  categoriesCount
 }) => {
   return (
     <>
@@ -50,7 +50,6 @@ const CatalogListDesctop = ({
           <FilterPanel
             clearFilter={clearFilter}
             categories={categories}
-            filterCountBySection={filterCountBySection}
             handleSectionSelect={handleSectionSelect}
             maxPrice={maxPrice}
             minPrice={minPrice}
@@ -64,6 +63,7 @@ const CatalogListDesctop = ({
             handleBrandSelect={handleBrandSelect}
             // priceFilter={priceFilter}
             brandsCount={brandsCount}
+            categoriesCount={categoriesCount}
             filterProduct={filterProduct}
           />
         </div>

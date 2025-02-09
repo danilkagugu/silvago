@@ -4,7 +4,6 @@ import CatalogList from "../../components/CatalogList/CatalogList";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchAllBrandsTorgsoft,
   fetchAllCategories,
 } from "../../redux/inventoryStore/operations";
 import {
@@ -15,7 +14,6 @@ import {
 import {
   selectBrandsCount,
   selectCategoriesCount,
-  selectProductLoading,
 } from "../../redux/product/selectors";
 
 const Catalog = () => {
@@ -23,8 +21,7 @@ const Catalog = () => {
 
   const brandsCount = useSelector(selectBrandsCount);
   const categoriesCount = useSelector(selectCategoriesCount);
-  // console.log('categoriesCount: ', categoriesCount);
-  // console.log('loading: ', loading);
+   
 
   useEffect(() => {
     dispatch(fetchAllCategories());
@@ -35,7 +32,7 @@ const Catalog = () => {
 
   return (
     <Layout>
-      <CatalogList brandsCount={brandsCount} />
+      <CatalogList brandsCount={brandsCount} categoriesCount={categoriesCount} />
     </Layout>
   );
 };

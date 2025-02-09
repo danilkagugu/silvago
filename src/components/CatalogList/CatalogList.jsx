@@ -24,7 +24,7 @@ import {
   useSelectedFilters,
 } from "../../hooks/useSelectedFilters";
 
-const CatalogList = ({ brandsCount }) => {
+const CatalogList = ({ brandsCount,categoriesCount }) => {
   const isMobile = window.innerWidth <= 1440;
 
   const { updateFilters } = useCatalogFilters();
@@ -215,19 +215,7 @@ const CatalogList = ({ brandsCount }) => {
     return "товарів";
   };
 
-  const filterCountBySection = (subcategory, selectedBrands) => {
-    return dataProductsTorgsoft.filter((item) => {
-      const matchesCategory =
-        Array.isArray(item.categories) &&
-        item.categories.some((category) => category.name === subcategory);
-
-      const matchesBrand =
-        selectedBrands.length === 0 ||
-        selectedBrands.some((brand) => brand.name === item.brand);
-
-      return matchesCategory && matchesBrand;
-    }).length;
-  };
+ 
 
   // Фільтр в aside
 
@@ -251,7 +239,6 @@ const CatalogList = ({ brandsCount }) => {
             categories={categories}
             clearFilter={clearFilter}
             defaultProductVariations={defaultProductVariations}
-            filterCountBySection={filterCountBySection}
             handleSectionSelect={handleSectionSelect}
             handleSortChange={handleSortChange}
             maxPrice={maxPriceProduct}
@@ -267,6 +254,7 @@ const CatalogList = ({ brandsCount }) => {
             // priceFilter={priceFilter}
             handlePageChange={handlePageChange}
             brandsCount={brandsCount}
+            categoriesCount={categoriesCount}
           />
         </>
       ) : (
@@ -283,7 +271,6 @@ const CatalogList = ({ brandsCount }) => {
             categoryContentOpen={categoryContentOpen}
             clearFilter={clearFilter}
             filterContentOpen={filterContentOpen}
-            filterCountBySection={filterCountBySection}
             filterOpen={filterOpen}
             getProductLabel={getProductLabel}
             handleBrandSelect={handleBrandSelect}
