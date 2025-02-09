@@ -19,7 +19,7 @@ import ProductInfo from "./ProductInfo/ProductInfo";
 import ProductModifications from "./ProductModifications/ProductModifications";
 import ProductActions from "./ProductActions/ProductActions";
 
-const CatalogListItem = ({ product, defaultProductVariations }) => {
+const CatalogListItem = ({ product }) => {
   const dispatch = useDispatch();
 
   const favorites = useSelector(selectFavoritesProducts);

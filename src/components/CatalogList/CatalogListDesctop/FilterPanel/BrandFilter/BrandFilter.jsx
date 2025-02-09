@@ -2,13 +2,13 @@ import { IoMdCheckmark } from "react-icons/io";
 import css from "./BrandFilter.module.css";
  
 const BrandFilter = ({ 
-  selectedBrand,
-  
+  selectedBrand,  
   handleBrandSelect,
   brandsCount
 }) => {
 
   // console.log('selectedBrand: ', selectedBrand);
+  // console.log('brandsCount',brandsCount);
    
 
   const renderBrands = () => {
@@ -33,7 +33,8 @@ const BrandFilter = ({
       return (
         <li
           className={itemClass}
-          key={brand._id}
+          key={brand.idTorgsoft}
+          id={brand.idTorgsoft}
           onClick={() => {
             // console.log("Selected brand:", brand);
             handleBrandSelect(brand); // Переконайтеся, що передаєте тільки `brand.name`

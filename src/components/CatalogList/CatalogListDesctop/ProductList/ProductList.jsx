@@ -33,3 +33,4 @@ const ProductList = ({
 };
 
 export default ProductList;
+// sort((a, b) => a.modelName.localeCompare(b.modelName, 'uk'))

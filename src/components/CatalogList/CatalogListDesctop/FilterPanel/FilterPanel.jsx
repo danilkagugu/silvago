@@ -7,20 +7,19 @@ import SelectedFilters from "./SelectedFilters/SelectedFilters";
 const FilterPanel = ({
   clearFilter,
   selectedBrand,
-  categories,
-  filterCountBySection,
   handleSectionSelect,
   selectedSection,
   maxPrice,
   minPrice,
   rangeValues,
   setRangeValues,
-  setSelectedBrand,
-  setSelectedSection,
+  // setSelectedBrand,
+  // setSelectedSection,
   handlePriceSubmit,
   handleBrandSelect,
   // priceFilter,
   brandsCount,
+  categoriesCount,
   filterProduct,
 }) => {
   return (
@@ -40,8 +39,6 @@ const FilterPanel = ({
         <div className={css.filterSection}>
           <BrandFilter
             selectedBrand={selectedBrand}
-            selectedSection={selectedSection}
-            setSelectedBrand={setSelectedBrand}
             handleBrandSelect={handleBrandSelect}
             brandsCount={brandsCount}
           />
@@ -49,12 +46,9 @@ const FilterPanel = ({
 
         <div className={css.filterSection}>
           <CategoryFilter
-            categories={categories}
-            filterCountBySection={filterCountBySection}
-            handleSectionSelect={handleSectionSelect}
-            selectedBrand={selectedBrand}
-            selectedSection={selectedSection}
-            setSelectedSection={setSelectedSection}
+          selectedSection={selectedSection}
+            handleSectionSelect={handleSectionSelect}            
+            categoriesCount={categoriesCount}
           />
         </div>
         <div className={css.filterSection}>

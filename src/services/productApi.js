@@ -193,11 +193,33 @@ export const getPriceRenge = async () => {
   return data;
 };
 
-export const getCountProductByFiltersApi = async () => {
+// export const getCountProductByFiltersApi = async () => {
+//   const instance = createPublicAxiosInstance();
+//   const { data } = await instance.get("/api/product/filter");
+//   return data;
+// };
+
+
+
+export const getCountProductByFiltersApi = async (filters) => {
   const instance = createPublicAxiosInstance();
-  const { data } = await instance.get("/api/product/filter");
+
+  // Формуємо параметри фільтрів для запиту
+  const queryString = Object.entries(filters)
+    .filter(([_, value]) => Array.isArray(value) ? value.length > 0 : !!value)
+    .map(([key, value]) => {
+      if (Array.isArray(value)) return `${key}=${value.join(",")}`;
+      return `${key}=${value}`;
+    })
+    .join("&");
+// console.log('queryString',queryString);
+  const url = queryString ? `/api/product/filter?${queryString}` : `/api/product/filter`;
+
+  // Надсилаємо запит
+  const { data } = await instance.get(url);
   return data;
 };
+
 
 /**
  * Функція для отримання відфільтрованих товарів

@@ -1,35 +1,27 @@
 import { IoMdCheckmark } from "react-icons/io";
 import css from "./CategoryFilter.module.css";
 const CategoryFilter = ({
-  categories,
   selectedSection,
-  filterCountBySection,
-  selectedBrand,
   handleSectionSelect,
+  categoriesCount
 }) => {
   
 
-  const renderCategories = (categories) => {
+  const renderCategories = () => {
     // console.log('categoriesFilter: ', categories);
-    const flatCategories = [];
+// console.log('selectedSection,selectedSection',selectedSection);
+    if (!categoriesCount?.length) return null;
+    // console.log('categoriesCount: ', categoriesCount);
+     
 
-    const flattenCategories = (categories) => {
-      categories.forEach((category) => {
-        flatCategories.push(category);
-        if (category.children?.length > 0) {
-          flattenCategories(category.children);
-        }
-      });
-    };
+    // flattenCategories(categories);
 
-    flattenCategories(categories);
-
-    return flatCategories.map((category) => {
+    return categoriesCount.map((category) => {
       const isSelected = selectedSection.some(
-        (selected) => selected.name === category.name
+        (selected) => selected.idTorgsoft === category.idTorgsoft
       );
       const isDisabled =
-        filterCountBySection(category?.name, selectedBrand) === 0;
+      category.count === 0;
 
       const itemClass = `${css.filterBrandItem} ${
         isDisabled ? css.disabledBrandItem : ""
@@ -39,10 +31,10 @@ const CategoryFilter = ({
       }`;
       return (
         <li
-          key={category._id}
-          id={category._id}
+          key={category.idTorgsoft}
+          id={category.idTorgsoft}
           className={itemClass}
-          onClick={() => handleSectionSelect(category)}
+          onClick={() => !isDisabled && handleSectionSelect(category)}
         >
           <div className={css.filterCheck}>
             <span className={css.label}>
@@ -51,7 +43,7 @@ const CategoryFilter = ({
               </span>
               <span className={css.filterBrandTitle}>{category?.name}</span>
               <sup className={css.filterCount}>
-                {filterCountBySection(category?.name, selectedBrand)}
+                {category.count}
               </sup>
             </span>
           </div>
@@ -63,7 +55,7 @@ const CategoryFilter = ({
     <>
       <div className={css.filterSectionTitle}>Розділ</div>
       <div className={css.filterList}>
-        <ul className={css.filterBrandList}>{renderCategories(categories)}</ul>
+        <ul className={css.filterBrandList}>{renderCategories()}</ul>
       </div>
     </>
   );
