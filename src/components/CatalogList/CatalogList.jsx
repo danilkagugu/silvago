@@ -25,7 +25,7 @@ import {
 
  
 
-const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSections,filters }) => {
+const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSections,selectedPriceRange,filters }) => {
   const isMobile = window.innerWidth <= 1440;
 
   const { updateFilters } = useCatalogFilters();
@@ -47,7 +47,7 @@ const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSectio
   // const [priceFilter, setPriceFilter] = useState(null);
 
   // Selectors
-  const dataProductsTorgsoft = useSelector(selectProductsTorgsoft);
+  // const dataProductsTorgsoft = useSelector(selectProductsTorgsoft);
   // const loading = useSelector(selectProductLoading);
   const filterProduct = useSelector(selectProductsFilter);
   // console.log('filterProduct: ', filterProduct);
@@ -245,6 +245,7 @@ const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSectio
             minPrice={minPriceProduct}
             selectedBrand={selectedBrands}
             selectedSection={selectedSections}
+            selectedPriceRange={selectedPriceRange}
             sortType={sortType}
             filterProduct={filterProduct}
             rangeValues={rangeValues}

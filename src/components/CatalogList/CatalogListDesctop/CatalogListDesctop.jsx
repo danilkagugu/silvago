@@ -24,7 +24,8 @@ const CatalogListDesctop = ({
   // priceFilter,
   handlePageChange,
   brandsCount,
-  categoriesCount
+  categoriesCount,
+  selectedPriceRange
 }) => {
   return (
     <>
@@ -65,6 +66,7 @@ const CatalogListDesctop = ({
             brandsCount={brandsCount}
             categoriesCount={categoriesCount}
             filterProduct={filterProduct}
+            selectedPriceRange={selectedPriceRange}
           />
         </div>
       </div>

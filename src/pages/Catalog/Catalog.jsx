@@ -19,7 +19,8 @@ import { useSelectedFilters } from "../../hooks/useSelectedFilters";
 
 const Catalog = () => {
   const dispatch = useDispatch();
-   const { selectedBrands, selectedSections, filters } = useSelectedFilters();
+   const { selectedBrands, selectedSections,selectedPriceRange, filters } = useSelectedFilters();
+   console.log('selectedPriceRange: ', selectedPriceRange);
 
   const brandsCount = useSelector(selectBrandsCount);
   const categoriesCount = useSelector(selectCategoriesCount);
@@ -41,6 +42,7 @@ const Catalog = () => {
        categoriesCount={categoriesCount} 
       selectedBrands={selectedBrands}
        selectedSections={selectedSections}
+       selectedPriceRange={selectedPriceRange}
        filters={filters}
        />
        
