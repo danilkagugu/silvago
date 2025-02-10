@@ -7,7 +7,6 @@ import {
   selectProductsTorgsoft,
 } from "../../redux/product/selectors";
 import {
-  getAllProduct,
   getAllProductTorgsoft,
   getProductVariations,
 } from "../../redux/product/operations";
@@ -28,7 +27,6 @@ import {
 import ProductListDesctop from "./ProductListDesctop/ProductListDesctop";
 
 const ProductList = () => {
-  console.log("hello");
   const dispatch = useDispatch();
   const sortingModalRef = useRef(null);
   const filterModalRef = useRef(null);
@@ -44,9 +42,7 @@ const ProductList = () => {
   const [selectedSkin, setSelectedSkin] = useState([]);
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortingOpen, setSortingOpen] = useState(false);
-  const [filterContentOpen, setFilterContentOpen] = useState(false);
-  const [skinContentOpen, setSkinContentOpen] = useState(false);
-  const [categoryContentOpen, setCategoryContentOpen] = useState(false);
+  
   const [sortType, setSortType] = useState("popularity");
 
   // const favorite = useSelector(selectFavoritesProducts);
@@ -62,20 +58,7 @@ const ProductList = () => {
     dispatch(getProductVariations());
   }, [dispatch]);
 
-  // const generateSkinNeedsFilters = (products) => {
-  //   const skinNeedsSet = new Set();
-
-  //   products.forEach((product) => {
-  //     if (product.skinNeeds && product.skinNeeds.trim() !== "") {
-  //       const skinNeedsArray = product.skinNeeds.split(", ");
-  //       skinNeedsArray.forEach((need) => skinNeedsSet.add(need));
-  //     }
-  //   });
-
-  //   return Array.from(skinNeedsSet);
-  // };
-
-  // Генеруємо список фільтрів
+  
 
   useEffect(() => {
     dispatch(getAllProductTorgsoft());
@@ -101,14 +84,7 @@ const ProductList = () => {
 
   const { categorySlug, subCategorySlug, childCategorySlug } = useParams();
 
-  const quantityFilter =
-    (selectedBrand.length > 0 ? 1 : 0) +
-    (selectedSkin.length > 0 ? 1 : 0) +
-    (selectedSection.length > 0 ? 1 : 0);
-
-  const toggleFilterContent = () => {
-    setFilterContentOpen((prevState) => !prevState); // Перемикання стану
-  };
+ 
   const toggleSortingContent = () => {
     setSortingOpen((prevState) => !prevState); // Перемикання стану
     if (!sortingOpen) {
@@ -119,9 +95,7 @@ const ProductList = () => {
       document.body.classList.remove(css.modalOpen);
     }
   };
-  const toggleSkinContent = () => {
-    setSkinContentOpen((prevState) => !prevState); // Перемикання стану
-  };
+ 
 
   const toggleFilter = () => {
     setFilterOpen((prevState) => !prevState); // Перемикання стану
@@ -134,9 +108,7 @@ const ProductList = () => {
     }
   };
 
-  const toggleCategory = () => {
-    setCategoryContentOpen((prevState) => !prevState); // Перемикання стану
-  };
+ 
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -170,9 +142,7 @@ const ProductList = () => {
     setCurrentPage(1);
   }, [categorySlug, subCategorySlug]);
 
-  useEffect(() => {
-    dispatch(getAllProduct());
-  }, [dispatch]);
+ 
 
   useEffect(() => {
     dispatch(fetchAllCategories());
@@ -297,40 +267,14 @@ const ProductList = () => {
     });
   };
 
-  const handleRemoveBrand = (brandToRemove) => {
-    setSelectedBrand((prev) => prev.filter((brand) => brand !== brandToRemove));
-  };
-  const handleRemoveSkin = (skin) => {
-    setSelectedSkin((prev) => prev.filter((brand) => brand !== skin));
-  };
-  const handleRemoveSection = (section) => {
-    setSelectedSection((prev) => prev.filter((brand) => brand !== section));
-  };
-
+  
   const clearFilter = () => {
     setSelectedBrand([]);
     setSelectedSkin([]);
     setSelectedSection([]);
   };
-  const isBrandDisabled = (brandName) => {
-    return !dataProductsTorgsoft.some(
-      (item) =>
-        item.brand === brandName &&
-        (selectedSection.length === 0 ||
-          selectedSection.includes(item.subcategory))
-    );
-  };
-
-  // console.log("dataProductsTorgsoft", dataProductsTorgsoft);
-  const isSectionDisabled = (sectionName) => {
-    return !dataProductsTorgsoft.some((product) => {
-      // Перевіряємо, чи категорія продукту збігається з переданим sectionName
-      return (
-        product.categories.includes(sectionName) && // Перевіряємо наявність категорії
-        (selectedBrand.length === 0 || selectedBrand.includes(product.brand)) // Перевіряємо вибраний бренд
-      );
-    });
-  };
+   
+ 
 
   // console.log("dataProductsTorgsoft", dataProductsTorgsoft);
   const isSkinDisabled = (skin) => {
@@ -381,7 +325,6 @@ const ProductList = () => {
     }).length;
   };
 
-  // console.log("defaultProductVariations", defaultProductVariations);
   const filterProductsByBrandsAndSections = (
     products,
     selectedBrands,
@@ -460,11 +403,7 @@ const ProductList = () => {
   const isMobile = window.innerWidth <= 1440;
   // console.log("categories", categories);
   // console.log("currentCategory", currentCategory);
-  const getProductLabel = (count) => {
-    if (count === 1) return "товар";
-    if (count >= 2 && count <= 4) return "товари";
-    return "товарів";
-  };
+  
 
   //
 

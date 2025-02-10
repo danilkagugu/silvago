@@ -9,10 +9,8 @@ const FilterPanel = ({
   selectedBrand,
   handleSectionSelect,
   selectedSection,
-  maxPrice,
-  minPrice,
+  
   rangeValues,
-  setRangeValues,
   // setSelectedBrand,
   // setSelectedSection,
   handlePriceSubmit,

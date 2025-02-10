@@ -8,15 +8,11 @@ const CatalogListDesctop = ({
   selectedBrand,
   selectedSection,
   sortType,
-  defaultProductVariations,
   filterProduct,
   clearFilter,
   categories,
   handleSectionSelect,
-  maxPrice,
-  minPrice,
-  rangeValues,
-  setRangeValues,
+   
   setSelectedBrand,
   setSelectedSection,
   handlePriceSubmit,
@@ -42,7 +38,6 @@ const CatalogListDesctop = ({
           className={`${css.catalogContentMainRight} ${css.catalogListProduct}`}
         >
           <ProductList
-            defaultProductVariations={defaultProductVariations}
             filterProduct={filterProduct}
             handlePageChange={handlePageChange}
           />
@@ -52,12 +47,10 @@ const CatalogListDesctop = ({
             clearFilter={clearFilter}
             categories={categories}
             handleSectionSelect={handleSectionSelect}
-            maxPrice={maxPrice}
-            minPrice={minPrice}
+             
             selectedBrand={selectedBrand}
             selectedSection={selectedSection}
-            rangeValues={rangeValues}
-            setRangeValues={setRangeValues}
+             
             setSelectedBrand={setSelectedBrand}
             setSelectedSection={setSelectedSection}
             handlePriceSubmit={handlePriceSubmit}
