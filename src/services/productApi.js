@@ -199,27 +199,26 @@ export const getPriceRenge = async () => {
 //   return data;
 // };
 
-
-
 export const getCountProductByFiltersApi = async (filters) => {
   const instance = createPublicAxiosInstance();
 
   // Формуємо параметри фільтрів для запиту
   const queryString = Object.entries(filters)
-    .filter(([_, value]) => Array.isArray(value) ? value.length > 0 : !!value)
+    .filter(([_, value]) => (Array.isArray(value) ? value.length > 0 : !!value))
     .map(([key, value]) => {
       if (Array.isArray(value)) return `${key}=${value.join(",")}`;
       return `${key}=${value}`;
     })
     .join("&");
-// console.log('queryString',queryString);
-  const url = queryString ? `/api/product/filter?${queryString}` : `/api/product/filter`;
+  // console.log('queryString',queryString);
+  const url = queryString
+    ? `/api/product/filter?${queryString}`
+    : `/api/product/filter`;
 
   // Надсилаємо запит
   const { data } = await instance.get(url);
   return data;
 };
-
 
 /**
  * Функція для отримання відфільтрованих товарів
@@ -248,8 +247,8 @@ export const fetchFilteredProductsApi = async ({
     // console.log("hasFilters", hasFilters);
     // Визначаємо базовий URL
     const baseUrl = hasFilters
-      ? "/api/product/getcatalog/filter"
-      : "/api/product/getcatalog";
+      ? "/api/product/catalog/filter"
+      : "/api/product/catalog";
 
     const validParams = Object.entries(params).filter(([key, value]) => {
       if (key === "page" && value === 1) return false; // Пропускаємо page=1
