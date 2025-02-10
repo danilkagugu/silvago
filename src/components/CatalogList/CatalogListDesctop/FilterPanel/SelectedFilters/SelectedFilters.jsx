@@ -5,6 +5,7 @@ const SelectedFilters = ({
   selectedSection,
   clearFilter,
   // priceFilter,
+  selectedPriceRange
 }) => {
   return (
     <div className={css.filterCurrent}>
@@ -28,14 +29,16 @@ const SelectedFilters = ({
           ))}
         </div>
       )}
-      {/* {priceFilter && (
-        <div className={css.filterCurrentGroup}>
-          <span className={css.filterCurrentTitle}>Ціна, грн:</span>
-          <span
-            className={css.filterCurrentBrand}
-          >{`${priceFilter[0]} - ${priceFilter[1]}`}</span>
-        </div>
-      )} */}
+     {selectedPriceRange?.minPrice !== undefined &&
+  selectedPriceRange?.maxPrice !== undefined && (
+    <div className={css.filterCurrentGroup}>
+      <span className={css.filterCurrentTitle}>Ціна, грн:</span>
+      <span className={css.filterCurrentBrand}>
+        {`${selectedPriceRange.minPrice} - ${selectedPriceRange.maxPrice}`}
+      </span>
+    </div>
+  )}
+
       <p className={css.filterClear} onClick={clearFilter}>
         Очистити фільтр
       </p>

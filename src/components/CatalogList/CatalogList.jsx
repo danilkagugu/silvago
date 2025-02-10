@@ -1,17 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import css from "./CatalogList.module.css";
 import { useEffect, useRef, useState } from "react";
-import {
-  fetchFilteredProducts,
-  getProductVariations,
-} from "../../redux/product/operations";
-import {
-  selectDefaultVariations,
-  selectProductsFilter,
-  selectProductsMaxPrice,
-  selectProductsMinPrice,
-  selectProductsTorgsoft,
-} from "../../redux/product/selectors";
+import { fetchFilteredProducts } from "../../redux/product/operations";
+import { selectProductsFilter } from "../../redux/product/selectors";
 
 import { selectAllCategories } from "../../redux/inventoryStore/selectors";
 
@@ -19,13 +10,16 @@ import CatalogListDesctop from "./CatalogListDesctop/CatalogListDesctop";
 
 import CatalogListMobile from "./CatalogListMobile/CatalogListMobile";
 import { useCatalogFilters } from "../../hooks/useCatalogFilters";
-import {
-  parseFiltersFromUrl,
-} from "../../hooks/useSelectedFilters";
+import { parseFiltersFromUrl } from "../../hooks/useSelectedFilters";
 
- 
-
-const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSections,filters }) => {
+const CatalogList = ({
+  brandsCount,
+  categoriesCount,
+  selectedBrands,
+  selectedSections,
+  selectedPriceRange,
+  filters,
+}) => {
   const isMobile = window.innerWidth <= 1440;
 
   const { updateFilters } = useCatalogFilters();
@@ -36,27 +30,19 @@ const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSectio
   const filterModalRef = useRef(null);
 
   // State
-   
-  const [rangeValues, setRangeValues] = useState([]);
-  const [sortType, setSortType] = useState("popularity");
 
+  const [sortType, setSortType] = useState("popularity");
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortingOpen, setSortingOpen] = useState(false);
   const [filterContentOpen, setFilterContentOpen] = useState(false);
   const [categoryContentOpen, setCategoryContentOpen] = useState(false);
-  // const [priceFilter, setPriceFilter] = useState(null);
 
   // Selectors
-  const dataProductsTorgsoft = useSelector(selectProductsTorgsoft);
-  // const loading = useSelector(selectProductLoading);
+
   const filterProduct = useSelector(selectProductsFilter);
-  // console.log('filterProduct: ', filterProduct);
-  const minPriceProduct = useSelector(selectProductsMinPrice);
-  // console.log('minPriceProduct: ', minPriceProduct);
-  const maxPriceProduct = useSelector(selectProductsMaxPrice);
-  const defaultProductVariations = useSelector(selectDefaultVariations);
   const categories = useSelector(selectAllCategories);
- 
+
+  //useEffect
 
   useEffect(() => {
     dispatch(
@@ -68,22 +54,7 @@ const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSectio
         limit: 20,
       })
     );
-  }, [rangeValues, filters, dispatch]);
-
-  useEffect(() => {
-    if (minPriceProduct !== null && maxPriceProduct !== null) {
-      setRangeValues([minPriceProduct, maxPriceProduct]);
-    }
-  }, [minPriceProduct, maxPriceProduct]);
-
-  useEffect(() => {
-    dispatch(
-      getProductVariations({
-        minPrice: rangeValues[0],
-        maxPrice: rangeValues[1],
-      })
-    );
-  }, [rangeValues, dispatch]);
+  }, [filters, dispatch]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -215,8 +186,6 @@ const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSectio
     return "товарів";
   };
 
- 
-
   // Фільтр в aside
 
   // const handleRemoveBrand = (brandToRemove) => {
@@ -238,17 +207,13 @@ const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSectio
           <CatalogListDesctop
             categories={categories}
             clearFilter={clearFilter}
-            defaultProductVariations={defaultProductVariations}
             handleSectionSelect={handleSectionSelect}
             handleSortChange={handleSortChange}
-            maxPrice={maxPriceProduct}
-            minPrice={minPriceProduct}
             selectedBrand={selectedBrands}
             selectedSection={selectedSections}
+            selectedPriceRange={selectedPriceRange}
             sortType={sortType}
             filterProduct={filterProduct}
-            rangeValues={rangeValues}
-            setRangeValues={setRangeValues}
             handlePriceSubmit={handlePriceSubmit}
             handleBrandSelect={handleBrandSelect}
             // priceFilter={priceFilter}
@@ -265,7 +230,6 @@ const CatalogList = ({ brandsCount,categoriesCount,selectedBrands,selectedSectio
             toggleSortingContent={toggleSortingContent}
             // handleRemoveBrand={handleRemoveBrand}
             // handleRemoveSection={handleRemoveSection}
-            defaultProductVariations={defaultProductVariations}
             filterProduct={filterProduct}
             categories={categories}
             categoryContentOpen={categoryContentOpen}

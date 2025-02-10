@@ -4,7 +4,6 @@ import ProductPagination from "./ProductPagination/ProductPagination";
 
 const ProductList = ({
   filterProduct,
-  defaultProductVariations,
   handlePageChange,
 }) => {
   return (
@@ -18,7 +17,6 @@ const ProductList = ({
           >
             <CatalogListItem
               product={product}
-              defaultProductVariations={defaultProductVariations}
             />
           </li>
         ))}
