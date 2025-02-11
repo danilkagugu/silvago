@@ -193,12 +193,6 @@ export const getPriceRenge = async () => {
   return data;
 };
 
-// export const getCountProductByFiltersApi = async () => {
-//   const instance = createPublicAxiosInstance();
-//   const { data } = await instance.get("/api/product/filter");
-//   return data;
-// };
-
 export const getCountProductByFiltersApi = async (filters) => {
   const instance = createPublicAxiosInstance();
 
@@ -231,14 +225,12 @@ export const fetchFilteredProductsApi = async ({
   price,
   page = 1,
   limit = 20,
+  categorySlug,
 }) => {
   const instance = createPublicAxiosInstance();
-  // console.log("price from productApi.js", price);
 
   // Функція для формування URL у потрібному форматі
   const buildCustomUrl = (params) => {
-    // console.log("params from productApi.js: ", params);
-    // console.log("params: ", typeof params.price);
     const hasFilters =
       (Array.isArray(params.brand) && params.brand.length > 0) ||
       (Array.isArray(params.category) && params.category.length > 0) ||
@@ -246,9 +238,22 @@ export const fetchFilteredProductsApi = async ({
       (params.page && params.page > 1);
     // console.log("hasFilters", hasFilters);
     // Визначаємо базовий URL
-    const baseUrl = hasFilters
-      ? "/api/product/catalog/filter"
-      : "/api/product/catalog";
+    // const baseUrl = hasFilters
+    //   ? "/api/product/catalog/filter"
+    //   : "/api/product/catalog";
+
+    let baseUrl;
+    if (categorySlug) {
+      // Якщо є categorySlug, вибираємо між базовим URL для категорії та фільтрами
+      baseUrl = hasFilters
+        ? `/api/product/catalog/category/${categorySlug}/filter`
+        : `/api/product/catalog/category/${categorySlug}`;
+    } else {
+      // Якщо немає categorySlug, вибираємо між загальним URL каталогу та фільтрами
+      baseUrl = hasFilters
+        ? "/api/product/catalog/filter"
+        : "/api/product/catalog";
+    }
 
     const validParams = Object.entries(params).filter(([key, value]) => {
       if (key === "page" && value === 1) return false; // Пропускаємо page=1
@@ -264,7 +269,8 @@ export const fetchFilteredProductsApi = async ({
       })
       .join(";");
 
-    return `${baseUrl}/${queryString}`;
+    // return `${baseUrl}/${queryString}`;
+    return queryString ? `${baseUrl}/${queryString}` : baseUrl;
   };
 
   // Формуємо параметри запиту
