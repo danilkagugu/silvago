@@ -174,25 +174,24 @@ export const fetchPriceRenge = createAsyncThunk(
     }
   }
 );
-// export const getCountProductByFilters = createAsyncThunk(
-//   "products/countByFilters",
-//   async (_, thunkAPI) => {
-//     try {
-//       const data = await getCountProductByFiltersApi();
-//       return data;
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error.message);
-//     }
-//   }
-// );
-
 export const getCountProductByFilters = createAsyncThunk(
   "products/countByFilters",
   async (_, thunkAPI) => {
     try {
-      // Отримуємо поточні фільтри з URL
-      const filters = parseFiltersFromUrl(window.location.pathname);
-      // console.log('filters: ', filters);
+      // Отримуємо фільтри з URL
+      const location = window.location;
+      const filters = parseFiltersFromUrl(location.pathname, location.search);
+
+      // Додаємо categorySlug до фільтрів, якщо він є
+      const isCategoryPage = location.pathname.includes("/catalog/category/");
+      if (isCategoryPage) {
+        const categorySlug = location.pathname
+          .split("/catalog/category/")[1]
+          ?.split("/")[0];
+        filters.categorySlug = categorySlug;
+      }
+
+      // Відправляємо запит на бекенд
       const data = await getCountProductByFiltersApi(filters);
       return data;
     } catch (error) {

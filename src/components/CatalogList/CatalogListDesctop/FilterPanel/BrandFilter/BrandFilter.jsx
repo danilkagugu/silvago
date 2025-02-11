@@ -1,21 +1,15 @@
 import { IoMdCheckmark } from "react-icons/io";
 import css from "./BrandFilter.module.css";
- 
-const BrandFilter = ({ 
-  selectedBrand,  
-  handleBrandSelect,
-  brandsCount
-}) => {
 
+const BrandFilter = ({ selectedBrand, handleBrandSelect, brandsCount }) => {
   // console.log('selectedBrand: ', selectedBrand);
   // console.log('brandsCount',brandsCount);
-   
 
   const renderBrands = () => {
     if (!brandsCount?.length) return null; // Перевірка наявності даних
 
     return brandsCount.map((brand) => {
-      // console.log('brand: ', brand);
+      // console.log("brand: ", brand);
       // console.log('brand: ', brand);
       const isSelected = selectedBrand.some(
         (selected) => selected.name === brand.name
@@ -46,9 +40,7 @@ const BrandFilter = ({
                 {isSelected && <IoMdCheckmark className={css.iconChek} />}
               </span>
               <span className={css.filterBrandTitle}>{brand.name}</span>
-              <sup className={css.filterCount}>
-                {brand.count}
-              </sup>
+              <sup className={css.filterCount}>{brand.count}</sup>
             </span>
           </div>
         </li>

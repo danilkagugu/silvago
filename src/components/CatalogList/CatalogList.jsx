@@ -127,6 +127,7 @@ const CatalogList = ({
   };
 
   const handleSectionSelect = (section) => {
+    console.log("section: ", section);
     const categoryId = section.idTorgsoft;
 
     // Отримуємо актуальні фільтри з URL
