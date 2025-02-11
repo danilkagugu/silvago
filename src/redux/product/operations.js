@@ -140,7 +140,10 @@ export const removeProductFavorite = createAsyncThunk(
 
 export const fetchFilteredProducts = createAsyncThunk(
   "products/fetchFilteredProducts",
-  async ({ category, brand, price, page = 1, limit = 20 }, thunkAPI) => {
+  async (
+    { category, brand, price, page = 1, limit = 20, categorySlug },
+    thunkAPI
+  ) => {
     // console.log("price: ", price);
     // console.log("category: ", category);
     try {
@@ -150,6 +153,7 @@ export const fetchFilteredProducts = createAsyncThunk(
         price,
         page,
         limit,
+        categorySlug,
       });
       // console.log("data", data);
       return data;
@@ -181,7 +185,6 @@ export const fetchPriceRenge = createAsyncThunk(
 //     }
 //   }
 // );
-
 
 export const getCountProductByFilters = createAsyncThunk(
   "products/countByFilters",

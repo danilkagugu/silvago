@@ -14,21 +14,23 @@ import {
   selectCategoriesCount,
 } from "../../redux/product/selectors";
 import { useSelectedFilters } from "../../hooks/useSelectedFilters";
+import { useParams } from "react-router-dom";
 
 const Catalog = () => {
   const dispatch = useDispatch();
   const { selectedBrands, selectedSections, selectedPriceRange, filters } =
     useSelectedFilters();
-
+  const { categorySlug } = useParams();
+  console.log("categorySlug: ", categorySlug);
   const brandsCount = useSelector(selectBrandsCount);
   const categoriesCount = useSelector(selectCategoriesCount);
-  // console.log('categoriesCount: ', categoriesCount);
 
   useEffect(() => {
     dispatch(fetchAllCategories());
     dispatch(getAllProductTorgsoft());
     dispatch(fetchPriceRenge());
   }, [dispatch]);
+
   useEffect(() => {
     dispatch(getCountProductByFilters(filters));
   }, [filters, dispatch]);
@@ -42,6 +44,7 @@ const Catalog = () => {
         selectedSections={selectedSections}
         selectedPriceRange={selectedPriceRange}
         filters={filters}
+        categorySlug={categorySlug}
       />
     </Layout>
   );

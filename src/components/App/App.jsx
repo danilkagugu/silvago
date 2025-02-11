@@ -72,7 +72,10 @@ const App = () => {
 
         {/* <Route path="/catalog" element={<Catalog />} /> */}
         {/* <Route path="/catalog/filter?/:filterString?" element={<Catalog />} /> */}
-        <Route path="/catalog/*" element={<Catalog />} />
+        <Route path="/catalog" element={<Catalog />} />
+        <Route path="/catalog/filter/*" element={<Catalog />} />
+        <Route path="/catalog/category/:categorySlug/*" element={<Catalog />} />
+
         {/* <Route path="/catalog/filter/*" element={<Catalog />} /> */}
 
         <Route path="/product/:slug" element={<ProductDetail />} />

@@ -10,19 +10,23 @@ import { useLocation } from "react-router-dom";
  * @returns {Object} - Об'єкт фільтрів
  */
 export const parseFiltersFromUrl = (pathname) => {
-  // console.log('pathname: ', pathname);
-  const filterPart = pathname.split("/catalog/filter/")[1]?.split("/")[0];
+  let filtersPart = "";
 
-  if (!filterPart) return { brands: [], categories: [], price: [], page: 1 };
+  // Визначаємо, чи це фільтрація по категорії чи загальна
+  if (pathname.includes("/catalog/category/")) {
+    filtersPart = pathname.split("/filter/")[1]?.split("/")[0] || "";
+  } else if (pathname.includes("/catalog/filter/")) {
+    filtersPart = pathname.split("/catalog/filter/")[1]?.split("/")[0] || "";
+  }
 
-  const filters = filterPart.split(";").reduce(
+  if (!filtersPart) return { brands: [], categories: [], price: [], page: 1 };
+
+  const filters = filtersPart.split(";").reduce(
     (acc, param) => {
       const [key, value] = param.split("=");
       if (!key || !value) return acc;
 
       const valuesArray = value.split(",");
-      // console.log("valuesArray: ", valuesArray);
-      // console.log('value: ', value);
 
       switch (key) {
         case "brands":
@@ -59,32 +63,36 @@ export const useSelectedFilters = () => {
     [location.pathname]
   );
   // console.log("filters from useSelectedFilters.js: ", filters.price);
-// console.log('filters',filters);
+  // console.log('filters',filters);
 
+  const flattenCategories = (categories) => {
+    const result = [];
 
-const flattenCategories = (categories) => {
-  const result = [];
+    const traverse = (category) => {
+      result.push({
+        idTorgsoft: category.idTorgsoft,
+        name: category.name,
+      });
 
-  const traverse = (category) => {
-    result.push({
-      idTorgsoft: category.idTorgsoft,
-      name: category.name,
-    });
+      if (category.children && category.children.length > 0) {
+        category.children.forEach(traverse);
+      }
+    };
 
-    if (category.children && category.children.length > 0) {
-      category.children.forEach(traverse);
-    }
+    categories.forEach(traverse);
+    return result;
   };
-
-  categories.forEach(traverse);
-  return result;
-};
-const flattenedCategories = useMemo(() => flattenCategories(allCategories), [allCategories]);
-// console.log('flattenedCategories: ', flattenedCategories);
+  const flattenedCategories = useMemo(
+    () => flattenCategories(allCategories),
+    [allCategories]
+  );
+  // console.log('flattenedCategories: ', flattenedCategories);
 
   // Обчислюємо обрані бренди та категорії
   const selectedBrands = useMemo(() => {
-    return allBrands.filter((brand) => filters.brands.includes(brand.idTorgsoft));
+    return allBrands.filter((brand) =>
+      filters.brands.includes(brand.idTorgsoft)
+    );
   }, [filters.brands, allBrands]);
   const selectedSections = useMemo(() => {
     return flattenedCategories.filter((category) =>
@@ -100,5 +108,5 @@ const flattenedCategories = useMemo(() => flattenCategories(allCategories), [all
     return null;
   }, [filters.price]);
 
-  return { selectedBrands, selectedSections,selectedPriceRange, filters };
+  return { selectedBrands, selectedSections, selectedPriceRange, filters };
 };

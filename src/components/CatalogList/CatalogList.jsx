@@ -19,6 +19,7 @@ const CatalogList = ({
   selectedSections,
   selectedPriceRange,
   filters,
+  categorySlug,
 }) => {
   const isMobile = window.innerWidth <= 1440;
 
@@ -52,9 +53,10 @@ const CatalogList = ({
         category: filters.categories,
         page: filters.page || 1,
         limit: 20,
+        categorySlug,
       })
     );
-  }, [filters, dispatch]);
+  }, [categorySlug, filters, dispatch]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

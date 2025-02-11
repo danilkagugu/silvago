@@ -42,7 +42,7 @@ const ProductList = () => {
   const [selectedSkin, setSelectedSkin] = useState([]);
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortingOpen, setSortingOpen] = useState(false);
-  
+
   const [sortType, setSortType] = useState("popularity");
 
   // const favorite = useSelector(selectFavoritesProducts);
@@ -57,8 +57,6 @@ const ProductList = () => {
   useEffect(() => {
     dispatch(getProductVariations());
   }, [dispatch]);
-
-  
 
   useEffect(() => {
     dispatch(getAllProductTorgsoft());
@@ -84,7 +82,6 @@ const ProductList = () => {
 
   const { categorySlug, subCategorySlug, childCategorySlug } = useParams();
 
- 
   const toggleSortingContent = () => {
     setSortingOpen((prevState) => !prevState); // Перемикання стану
     if (!sortingOpen) {
@@ -95,7 +92,6 @@ const ProductList = () => {
       document.body.classList.remove(css.modalOpen);
     }
   };
- 
 
   const toggleFilter = () => {
     setFilterOpen((prevState) => !prevState); // Перемикання стану
@@ -107,8 +103,6 @@ const ProductList = () => {
       document.body.classList.remove(css.modalOpen);
     }
   };
-
- 
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -141,8 +135,6 @@ const ProductList = () => {
   useEffect(() => {
     setCurrentPage(1);
   }, [categorySlug, subCategorySlug]);
-
- 
 
   useEffect(() => {
     dispatch(fetchAllCategories());
@@ -267,14 +259,11 @@ const ProductList = () => {
     });
   };
 
-  
   const clearFilter = () => {
     setSelectedBrand([]);
     setSelectedSkin([]);
     setSelectedSection([]);
   };
-   
- 
 
   // console.log("dataProductsTorgsoft", dataProductsTorgsoft);
   const isSkinDisabled = (skin) => {
@@ -403,7 +392,6 @@ const ProductList = () => {
   const isMobile = window.innerWidth <= 1440;
   // console.log("categories", categories);
   // console.log("currentCategory", currentCategory);
-  
 
   //
 
