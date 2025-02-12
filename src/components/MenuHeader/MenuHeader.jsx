@@ -68,7 +68,7 @@ const MenuHeader = () => {
   return (
     <div className={css.menuContainer}>
       <Logo width={200} color={"invert(0)"} />
-      <ul className={css.MenuHeader}>
+      <ul className={css.menuHeader}>
         <li className={css.menuList}>
           <Link className={css.link} to={"/contacts"}>
             Контакти

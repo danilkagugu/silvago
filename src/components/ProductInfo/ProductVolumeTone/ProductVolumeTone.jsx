@@ -23,7 +23,6 @@ const ProductVolumeTone = ({
                   const isCurrentVolume =
                     volume?.idTorgsoft === variant.idTorgsoft;
 
-                    console.log('measure',product.measure);
                   return (
                     <button
                       key={variant.idTorgsoft}

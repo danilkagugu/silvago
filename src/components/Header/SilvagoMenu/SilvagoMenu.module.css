@@ -1,0 +1,19 @@
+.silvagoMenu {
+  height: 16px;
+  overflow: hidden;
+  font-size: 0;
+  white-space: normal;
+}
+
+.silvagoMenuItem {
+  display: inline-block;
+  margin-left: 15px;
+  font-size: 13px;
+}
+.silvagoMenuItem:first-child {
+  margin-left: 0;
+}
+
+.silvagoMenuLink {
+  color: #414141;
+}

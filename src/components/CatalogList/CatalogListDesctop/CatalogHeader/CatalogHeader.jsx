@@ -8,18 +8,18 @@ const CatalogHeader = ({
   selectedSection,
   handleSortChange,
   sortType,
-  // rangeValues,
-  // priceFilter,
+  selectedPriceRange,
+  categorySlug,
+  categories,
 }) => {
   return (
     <>
-      <BreadcrumbsCatalog />
+      <BreadcrumbsCatalog categorySlug={categorySlug} categories={categories} />
       <div className={css.catalogTopRows}>
         <CatalogTitle
           selectedBrand={selectedBrand}
           selectedSection={selectedSection}
-          // rangeValues={rangeValues}
-          // priceFilter={priceFilter}
+          selectedPriceRange={selectedPriceRange}
         />
         <SortingPanel handleSortChange={handleSortChange} sortType={sortType} />
       </div>

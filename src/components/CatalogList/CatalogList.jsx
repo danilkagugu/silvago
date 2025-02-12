@@ -4,13 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { fetchFilteredProducts } from "../../redux/product/operations";
 import { selectProductsFilter } from "../../redux/product/selectors";
 
-import { selectAllCategories } from "../../redux/inventoryStore/selectors";
-
 import CatalogListDesctop from "./CatalogListDesctop/CatalogListDesctop";
 
 import CatalogListMobile from "./CatalogListMobile/CatalogListMobile";
 import { useCatalogFilters } from "../../hooks/useCatalogFilters";
 import { parseFiltersFromUrl } from "../../hooks/useSelectedFilters";
+import { selectAllCategories } from "../../redux/inventoryStore/selectors";
 
 const CatalogList = ({
   brandsCount,
@@ -39,9 +38,8 @@ const CatalogList = ({
   const [categoryContentOpen, setCategoryContentOpen] = useState(false);
 
   // Selectors
-
-  const filterProduct = useSelector(selectProductsFilter);
   const categories = useSelector(selectAllCategories);
+  const filterProduct = useSelector(selectProductsFilter);
 
   //useEffect
 
@@ -127,7 +125,7 @@ const CatalogList = ({
   };
 
   const handleSectionSelect = (section) => {
-    console.log("section: ", section);
+    // console.log("section: ", section);
     const categoryId = section.idTorgsoft;
 
     // Отримуємо актуальні фільтри з URL
@@ -162,6 +160,17 @@ const CatalogList = ({
     }
   };
 
+  const handlePriceClear = () => {
+    const currentFilters = parseFiltersFromUrl(location.pathname);
+
+    updateFilters({
+      brands: currentFilters.brands || [],
+      categories: currentFilters.categories || [],
+      price: null, // Видаляємо ціновий фільтр
+      page: 1,
+    });
+  };
+
   const handlePageChange = (page) => {
     const currentFilters = parseFiltersFromUrl(location.pathname);
     // console.log("currentFilters: ", currentFilters);
@@ -189,16 +198,6 @@ const CatalogList = ({
     return "товарів";
   };
 
-  // Фільтр в aside
-
-  // const handleRemoveBrand = (brandToRemove) => {
-  //   // setSelectedBrands((prev) => prev.filter((brand) => brand !== brandToRemove));
-  // };
-
-  // const handleRemoveSection = (section) => {
-  //   // setSelectedSection((prev) => prev.filter((brand) => brand !== section));
-  // };
-
   if (!brandsCount.length) {
     return <div>Завантаження...</div>;
   }
@@ -208,7 +207,6 @@ const CatalogList = ({
       {!isMobile ? (
         <>
           <CatalogListDesctop
-            categories={categories}
             clearFilter={clearFilter}
             handleSectionSelect={handleSectionSelect}
             handleSortChange={handleSortChange}
@@ -218,11 +216,13 @@ const CatalogList = ({
             sortType={sortType}
             filterProduct={filterProduct}
             handlePriceSubmit={handlePriceSubmit}
+            handlePriceClear={handlePriceClear}
             handleBrandSelect={handleBrandSelect}
-            // priceFilter={priceFilter}
             handlePageChange={handlePageChange}
             brandsCount={brandsCount}
             categoriesCount={categoriesCount}
+            categorySlug={categorySlug}
+            categories={categories}
           />
         </>
       ) : (
@@ -231,10 +231,7 @@ const CatalogList = ({
             sortType={sortType}
             toggleFilter={toggleFilter}
             toggleSortingContent={toggleSortingContent}
-            // handleRemoveBrand={handleRemoveBrand}
-            // handleRemoveSection={handleRemoveSection}
             filterProduct={filterProduct}
-            categories={categories}
             categoryContentOpen={categoryContentOpen}
             clearFilter={clearFilter}
             filterContentOpen={filterContentOpen}

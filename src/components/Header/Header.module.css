@@ -1,15 +1,10 @@
-.headerBox {
+/* .headerBox {
   background-color: #fff;
   width: 100%;
 }
 
 .topHeader {
   display: none;
-}
-
-.header {
-  display: flex;
-  padding: 0 5px;
 }
 
 .menuBtn {
@@ -66,13 +61,6 @@
     max-width: 1440px;
   }
 
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px 16px;
-  }
-
   .headerWrapper {
     display: flex;
     flex-direction: column;
@@ -117,18 +105,18 @@
     gap: 20px;
   }
 }
-/*  */
+ 
 .searchResults {
   position: absolute;
-  top: 100%; /* Відстань від верху input */
+  top: 100%;
   left: 0;
   right: 0;
-  z-index: 1000; /* Щоб результати були поверх інших елементів */
+  z-index: 1000;
   background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
-  max-height: 300px; /* Максимальна висота списку */
-  overflow-y: auto; /* Прокрутка, якщо результатів багато */
+  max-height: 300px;
+  overflow-y: auto;
 }
 
 .searchResults ul {
@@ -160,12 +148,137 @@
 
 .filteredProductsBox {
   position: absolute;
-  top: 11%; /* Встановлює відстань від верху input */
+  top: 11%;
   right: 20%;
-  z-index: 1000; /* Щоб результати були поверх інших елементів */
+  z-index: 1000;
   background: white;
   border: 1px solid #ddd;
   border-radius: 4px;
-  max-height: 300px; /* Максимальна висота списку */
+  max-height: 300px;
   max-width: 600px;
+} */
+
+/* НОВІ СТИЛІ  ДЛЯ HEADER */
+
+.header {
+  position: relative;
+  z-index: 102;
+  margin-bottom: 30px;
+}
+
+.headerContainer {
+  background-color: #f3f3f3;
+}
+
+.headerTop {
+  color: #000;
+}
+
+.headerWrapper {
+  max-width: 1440px;
+  padding: 0 20px;
+  margin: 0 auto;
+}
+
+@media (min-width: 1280px) {
+  .headerWrapper {
+    padding: 0 30px;
+  }
+}
+
+.headerLayout {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+}
+
+.headerColumn {
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  max-width: 100%;
+}
+
+.headerColumn:not(:first-child) {
+  padding-left: 12px;
+}
+.headerColumn:only-child {
+  padding: 0;
+}
+
+.headerColumn:not(:last-child) {
+  padding-right: 12px;
+}
+
+@media (min-width: 1280px) {
+  .headerColumn:not(:last-child) {
+    padding-right: 16px;
+  }
+}
+
+@media (min-width: 1440px) {
+  .headerColumn:not(:last-child) {
+    padding-right: 20px;
+  }
+}
+
+.headerColumnRight {
+  justify-content: flex-end;
+}
+
+.headerSection {
+  flex: 0 1 auto;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  text-align: left;
+}
+
+.headerSection:not(:last-child) {
+  margin-right: 12px;
+}
+
+.headerSection:not(:first-child) {
+  margin-left: 12px;
+}
+
+.headerColumnMiddle {
+  flex-direction: column;
+  align-items: stretch;
+  flex: 9999 9999 auto;
+}
+
+.headerRow {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.headerRow:last-child {
+  margin-bottom: 0;
+}
+
+.headerColumnMiddle .headerSection:only-child {
+  flex: 1 1 100%;
+  max-width: 100%;
+}
+
+.headerBottom {
+  position: relative;
+  top: 20px;
+  margin: -20px 0 20px;
+  background: #363636;
+  color: #fff;
+}
+
+.headerLayoutBottom {
+  min-height: 40px;
+}
+
+.headerLayout {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

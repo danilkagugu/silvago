@@ -3,16 +3,13 @@ import css from "./CategoryFilter.module.css";
 const CategoryFilter = ({
   selectedSection,
   handleSectionSelect,
-  categoriesCount
+  categoriesCount,
 }) => {
-  
-
   const renderCategories = () => {
     // console.log('categoriesFilter: ', categories);
-// console.log('selectedSection,selectedSection',selectedSection);
+    // console.log('selectedSection,selectedSection',selectedSection);
     if (!categoriesCount?.length) return null;
     // console.log('categoriesCount: ', categoriesCount);
-     
 
     // flattenCategories(categories);
 
@@ -20,8 +17,7 @@ const CategoryFilter = ({
       const isSelected = selectedSection.some(
         (selected) => selected.idTorgsoft === category.idTorgsoft
       );
-      const isDisabled =
-      category.count === 0;
+      const isDisabled = category.count === 0;
 
       const itemClass = `${css.filterBrandItem} ${
         isDisabled ? css.disabledBrandItem : ""
@@ -42,9 +38,7 @@ const CategoryFilter = ({
                 {isSelected && <IoMdCheckmark className={css.iconChek} />}
               </span>
               <span className={css.filterBrandTitle}>{category?.name}</span>
-              <sup className={css.filterCount}>
-                {category.count}
-              </sup>
+              <sup className={css.filterCount}>{category.count}</sup>
             </span>
           </div>
         </li>

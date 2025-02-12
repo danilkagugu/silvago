@@ -1,6 +1,5 @@
 import { lazy, Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
-// import Header from "../Header/Header";
 import { Route, Routes } from "react-router-dom";
 import { apiRefreshUser } from "../../redux/auth/operations";
 import BrandProducts from "../../pages/BrandProducts/BrandProducts";
@@ -14,9 +13,9 @@ const UserCabinet = lazy(() => import("../../pages/UserCabinet/UserCabinet"));
 const DeliveryAndPayment = lazy(() =>
   import("../../pages/DeliveryAndPayment/DeliveryAndPayment")
 );
-const ProductListPage = lazy(() =>
-  import("../../pages/ProductListPage/ProductListPage")
-);
+// const ProductListPage = lazy(() =>
+//   import("../../pages/ProductListPage/ProductListPage")
+// );
 const Catalog = lazy(() => import("../../pages/Catalog/Catalog"));
 const ProductDetail = lazy(() =>
   import("../../pages/ProductDetail/ProductDetail")

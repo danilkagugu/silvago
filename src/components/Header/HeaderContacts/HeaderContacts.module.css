@@ -1,0 +1,45 @@
+.phones {
+  position: relative;
+  height: 30px;
+  z-index: 0;
+  display: inline-block;
+  vertical-align: middle;
+  transition: z-index 0.3s cubic-bezier(1, 0, 1, 0);
+}
+
+.phonesContainer {
+  position: relative;
+  z-index: 100;
+}
+
+.phones .phonesItem {
+  display: block;
+  padding-right: 20px;
+  position: relative;
+  color: #000;
+  border: none;
+  font-size: 18px;
+  line-height: 30px;
+  padding-left: 30px;
+  white-space: nowrap;
+  transition: all 0.3s;
+}
+
+.iconPhone {
+  display: inline-block;
+  position: absolute;
+  fill: #cbcbcb;
+  left: 0;
+  top: 4px;
+  width: 1em;
+  height: 1em;
+  transition: all 0.3s;
+  font-size: 20px;
+  vertical-align: middle;
+  transform: rotate(110deg);
+}
+
+.phonesItemLink {
+  color: inherit;
+  border: none;
+}

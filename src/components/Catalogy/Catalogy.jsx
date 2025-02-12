@@ -87,7 +87,7 @@ const Catalogy = () => {
       <div className={css.headerColumn}>
         <div className={css.headerSection}>
           <div className={css.productsMenu}>
-          <CategoryTree categoriesTorgsoft={categoriesTorgsoft} />
+            <CategoryTree categoriesTorgsoft={categoriesTorgsoft} />
           </div>
         </div>
       </div>

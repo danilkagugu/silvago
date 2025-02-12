@@ -7,7 +7,7 @@
 .filterList {
   padding-top: 9px;
   overflow: hidden auto;
-  height: 500px;
+  max-height: 500px;
 }
 
 .filterBrandList {

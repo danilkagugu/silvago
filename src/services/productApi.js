@@ -44,16 +44,12 @@ export const getDefaultVariations = async () => {
 };
 
 export const changeVariation = async (productId, volumeId, tone) => {
-  // console.log("volumeId: ", volumeId);
-  // console.log("productId: ", productId);
-  // console.log("tone: ", tone);
   const instance = createPublicAxiosInstance();
   const { data } = await instance.post("/api/product/get-variation", {
     productId,
     volumeId,
     tone,
   });
-  // console.log("data", data);
   return data;
 };
 
@@ -64,11 +60,9 @@ export const productById = async (slug) => {
 };
 
 export const getFavorite = async (userId) => {
-  // console.log("userId: ", userId);
   const instance = createPrivateAxiosInstance();
 
   const { data } = await instance.get(`/api/product/favorites/${userId}`);
-  // console.log("data: ", data);
 
   return data;
 };
@@ -85,14 +79,10 @@ export const addFavorite = async (userId, productId, idTorgsoft) => {
 };
 
 export const removeFavorite = async (userId, productId, idTorgsoft) => {
-  // console.log("idTorgsoft: ", idTorgsoft);
-  // console.log("productId: ", productId);
-  // console.log("userId: ", userId);
   const instance = createPrivateAxiosInstance();
   const { data } = await instance.delete(`/api/product/favorites`, {
     data: { userId, productId, idTorgsoft },
   });
-  // console.log("data", data);
   return data;
 };
 

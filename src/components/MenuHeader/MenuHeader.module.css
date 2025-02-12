@@ -1,4 +1,4 @@
-.MenuHeader {
+.menuHeader {
   display: none;
 }
 
@@ -110,7 +110,7 @@
     width: 100%;
   }
 
-  .MenuHeader {
+  .menuHeader {
     display: flex;
     align-items: center;
     justify-content: center;

@@ -5,7 +5,8 @@
 
 .filterCurrentGroup {
   margin-bottom: 7px;
-  display: inline-block;
+  display: flex;
+  flex-wrap: wrap;
   vertical-align: middle;
   margin-right: 15px;
 }
@@ -31,12 +32,36 @@
   vertical-align: top;
   line-height: 1;
   border: 0;
-  padding: 5px 20px 4px 6px;
+  padding: 4px 5px 3px 5px;
   background-color: #ddbfbf;
   border-radius: 3px;
   color: #fff;
   transition: all 0.15s;
   word-break: break-word;
+  cursor: pointer;
+}
+.filterCurrentBrand:hover {
+  background-color: #545454;
+  color: #fff;
+}
+
+.filterCurrentBrandContent {
+  color: #000;
+  opacity: 0.95;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.filterCurrentBrandDelIcon {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  vertical-align: middle;
+  /* font-size: 7px; */
+  line-height: 1;
+  color: inherit;
+  fill: #000;
 }
 
 .filterClear {
@@ -45,9 +70,12 @@
   vertical-align: top;
   line-height: 1;
   margin: 0 0 1px 0;
-  padding: 4px 6px 3px;
+  padding: 3px 5px 2px;
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 3px;
   transition: all 0.15s;
   cursor: pointer;
+}
+.filterClear:hover {
+  color: #545454;
 }
