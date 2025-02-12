@@ -1,0 +1,16 @@
+.headerLogo {
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.headerLogoLink {
+  border: 0;
+}
+
+.headerLogoImg {
+  width: 200px;
+  /* height: 100px; */
+  /* display: block; */
+  max-width: 100%;
+  height: auto;
+}

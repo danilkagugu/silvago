@@ -1,11 +1,11 @@
-.container {
+/* .container {
   max-width: 100%;
   width: 100%;
   margin: 0 auto;
   overflow: hidden;
-}
+} */
 
-@media screen and (min-width: 1440px) {
+/* @media screen and (min-width: 1440px) {
   .container {
     max-width: 1440px;
     width: 100%;
@@ -13,4 +13,10 @@
     padding: 64px 100px;
     margin-bottom: 20px;
   }
+} */
+.container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  min-width: 1000px;
 }

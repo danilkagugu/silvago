@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import css from "./BreadcrumbsCatalog.module.css";
 import { IoChevronForward } from "react-icons/io5";
 const BreadcrumbsCatalog = ({ categorySlug, categories }) => {
-  console.log("categorySlug: ", categorySlug);
   const findCategoryPath = (categories, slug, path = []) => {
     for (const category of categories) {
       const newPath = [...path, category]; // Додаємо поточну категорію в шлях
@@ -21,7 +20,6 @@ const BreadcrumbsCatalog = ({ categorySlug, categories }) => {
   const categoryPath = categorySlug
     ? findCategoryPath(categories, categorySlug)
     : [];
-  // console.log("categoryPath", categoryPath);
   return (
     <nav className={css.productGroupMenu}>
       {/* Головна */}

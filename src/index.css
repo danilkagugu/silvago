@@ -9,7 +9,7 @@
 }
 
 @font-face {
-  font-family: "OpenSans";
+  font-family: "Open Sans";
   src: url("./fonts/OpenSans-Regular.ttf") format("truetype");
   font-weight: 400;
   font-style: normal;
@@ -17,7 +17,7 @@
 }
 
 @font-face {
-  font-family: "OpenSans";
+  font-family: "Open Sans";
   src: url("./fonts/OpenSans-Bold.ttf") format("truetype");
   font-weight: 700;
   font-style: normal;
@@ -25,7 +25,7 @@
 }
 
 @font-face {
-  font-family: "OpenSans";
+  font-family: "Open Sans";
   src: url("./fonts/OpenSans-Semibold.ttf") format("truetype");
   font-weight: 500;
   font-style: italic;
@@ -39,7 +39,7 @@ a {
 }
 
 body {
-  font-family: "OpenSans", sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 16px; /* Спробуйте різні значення */
   letter-spacing: normal; /* Або відрегулюйте */
   line-height: 1.5; /* Відрегулюйте для зменшення висоти рядка */

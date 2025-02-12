@@ -1,0 +1,31 @@
+.silvagoBanner {
+  display: block;
+  border: 0;
+}
+
+.silvagoBannerContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 30px;
+  overflow: hidden;
+  background-color: #363636;
+}
+
+.silvagoBannerText {
+  color: #fff;
+  position: relative;
+}
+
+.topHeader {
+  background-color: #363636;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 15px;
+}
+
+.freeDelivery {
+  color: #fff;
+}
