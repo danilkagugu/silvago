@@ -45,11 +45,13 @@ const ProductInfo = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const productDetails = useSelector(selectProductDetails);
-  console.log("productDetails: ", productDetails);
+  // console.log("productDetails: ", productDetails?.breadcrumbs);
   const brandsTorgsoft = useSelector(selectAllBrandsTorgsoft);
   const favorites = useSelector(selectFavoritesProducts);
   const categories = useSelector(selectAllCategories);
-  const { id } = useSelector(selectUserData);
+  const userData = useSelector(selectUserData) || {};
+  const { id } = userData;
+
   const loading = useSelector(selectProductLoading);
 
   useEffect(() => {

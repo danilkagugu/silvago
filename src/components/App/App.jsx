@@ -14,9 +14,9 @@ const UserCabinet = lazy(() => import("../../pages/UserCabinet/UserCabinet"));
 const DeliveryAndPayment = lazy(() =>
   import("../../pages/DeliveryAndPayment/DeliveryAndPayment")
 );
-const ProductListPage = lazy(() =>
-  import("../../pages/ProductListPage/ProductListPage")
-);
+// const ProductListPage = lazy(() =>
+//   import("../../pages/ProductListPage/ProductListPage")
+// );
 const Catalog = lazy(() => import("../../pages/Catalog/Catalog"));
 const ProductDetail = lazy(() =>
   import("../../pages/ProductDetail/ProductDetail")

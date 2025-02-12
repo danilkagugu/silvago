@@ -21,7 +21,6 @@ const Catalog = () => {
   const { selectedBrands, selectedSections, selectedPriceRange, filters } =
     useSelectedFilters();
   const { categorySlug } = useParams();
-  console.log("categorySlug: ", categorySlug);
   const brandsCount = useSelector(selectBrandsCount);
   const categoriesCount = useSelector(selectCategoriesCount);
 

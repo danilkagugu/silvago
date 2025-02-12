@@ -14,6 +14,10 @@
   color: #acacac;
   border: 0;
 }
+.productGroupMenuItemText {
+  color: #acacac;
+  border: 0;
+}
 .productGroupMenuItemLink:hover {
   color: #000;
 }

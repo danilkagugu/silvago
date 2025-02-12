@@ -9,30 +9,29 @@ const FilterPanel = ({
   selectedBrand,
   handleSectionSelect,
   selectedSection,
-  
-  rangeValues,
-  // setSelectedBrand,
-  // setSelectedSection,
   handlePriceSubmit,
+  handlePriceClear,
   handleBrandSelect,
-  // priceFilter,
   brandsCount,
   categoriesCount,
   filterProduct,
-  selectedPriceRange
+  selectedPriceRange,
 }) => {
   return (
     <aside className={css.catalogSideBar}>
       <div className={css.catalogGroup}>
-        {(selectedBrand.length > 0 || selectedSection.length > 0 || (selectedPriceRange?.minPrice && selectedPriceRange?.maxPrice)) && (
+        {(selectedBrand.length > 0 ||
+          selectedSection.length > 0 ||
+          (selectedPriceRange?.minPrice && selectedPriceRange?.maxPrice)) && (
           <div className={css.filterSection}>
             <SelectedFilters
               clearFilter={clearFilter}
               selectedBrand={selectedBrand}
               selectedSection={selectedSection}
-              // priceFilter={priceFilter}
-              rangeValues={rangeValues}
               selectedPriceRange={selectedPriceRange}
+              handleBrandSelect={handleBrandSelect}
+              handleSectionSelect={handleSectionSelect}
+              handlePriceClear={handlePriceClear}
             />
           </div>
         )}
@@ -46,15 +45,13 @@ const FilterPanel = ({
 
         <div className={css.filterSection}>
           <CategoryFilter
-          selectedSection={selectedSection}
-            handleSectionSelect={handleSectionSelect}            
+            selectedSection={selectedSection}
+            handleSectionSelect={handleSectionSelect}
             categoriesCount={categoriesCount}
           />
         </div>
         <div className={css.filterSection}>
           <PriceFilter
-           
-           
             handlePriceSubmit={handlePriceSubmit}
             filterProduct={filterProduct}
             selectedPriceRange={selectedPriceRange}
