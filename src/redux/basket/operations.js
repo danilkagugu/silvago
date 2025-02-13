@@ -7,13 +7,13 @@ import {
   sendOrder,
   updateProductQuantity,
 } from "../../services/productApi";
-// import { getProductById } from "../product/operations";
 
 export const getBasketInfo = createAsyncThunk(
   "basket/info",
   async (_, thunkAPI) => {
     try {
-      const data = await getBasketProduct();
+      const token = thunkAPI.getState().auth.token;
+      const data = await getBasketProduct(token);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -24,9 +24,15 @@ export const getBasketInfo = createAsyncThunk(
 export const addProduct = createAsyncThunk(
   "basket/addItem",
   async ({ slug, quantity, volume, tone }, thunkAPI) => {
-    console.log("tone: ", tone);
     try {
-      const data = await addProductToBasket(slug, quantity, volume, tone);
+      const token = thunkAPI.getState().auth.token;
+      const data = await addProductToBasket(
+        slug,
+        quantity,
+        volume,
+        tone,
+        token
+      );
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -38,7 +44,8 @@ export const createOrder = createAsyncThunk(
   "order/create",
   async ({ user, basket }, thunkAPI) => {
     try {
-      const data = await sendOrder({ user, basket });
+      const token = thunkAPI.getState().auth.token;
+      const data = await sendOrder({ user, basket, token });
       console.log("data: ", data);
       return data;
     } catch (error) {
@@ -49,34 +56,38 @@ export const createOrder = createAsyncThunk(
 
 export const deleteProduct = createAsyncThunk(
   "basket/deleteProduct",
-  async ({ productId, volume }, { rejectWithValue }) => {
+  async ({ productId, volume }, thunkAPI) => {
     try {
-      const response = await deleteProductFromBasket({ productId, volume });
+      const token = thunkAPI.getState().auth.token;
+      const response = await deleteProductFromBasket({
+        productId,
+        volume,
+        token,
+      });
       console.log("response: ", response);
       return response; // Передаємо id і volume товару
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
 
 export const updateProductQuantityBasket = createAsyncThunk(
   "basket/updateProductQuantity",
-  async ({ productId, volume, quantity, tone }, { rejectWithValue }) => {
+  async ({ productId, volume, quantity, tone }, thunkAPI) => {
     try {
-      console.log("productId", productId);
-      console.log("volume", volume);
-      console.log("quantity", quantity);
+      const token = thunkAPI.getState().auth.token;
+
       const response = await updateProductQuantity({
         productId,
         volume,
         quantity,
         tone,
+        token,
       });
-      console.log("response", response);
       return response;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );

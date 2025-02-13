@@ -1,0 +1,114 @@
+.userBox {
+  border: 0;
+}
+
+.userBar {
+  position: relative;
+  margin: 0 -10px;
+}
+
+.userBarButton {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0 10px 0 38px;
+  height: 40px;
+  border: 0;
+  color: #fff;
+  background-color: #363636;
+  text-decoration: none;
+  transition: background-color 0.15s;
+}
+
+.userBarButton.hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.iconUser {
+  position: absolute;
+  top: 11px;
+  left: 12px;
+  font-size: 17px;
+  fill: currentColor;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+
+.userBarButtonText {
+  max-width: 140px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 16px;
+}
+
+.iconArrowDown {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  position: relative;
+  margin-left: 4px;
+  font-size: 13px;
+  fill: #fff;
+}
+
+.userBarDropDown {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  right: 0px;
+  z-index: 999;
+  top: 100%;
+  min-width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 3px 35px;
+  background: rgb(255, 255, 255);
+  padding: 8px 0px;
+  border-radius: 0px 0px 4px 4px;
+  transition: opacity 0.15s, visibility 0.15s;
+}
+
+.userBarDropDown.visible {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.userBarMenuItem {
+  position: relative;
+}
+
+.userBarMenuLink {
+  display: block;
+  border: 0;
+  font-size: 16px;
+  padding: 5px 20px 5px 38px;
+  white-space: nowrap;
+}
+
+.userBarMenuLink:hover {
+  color: #000;
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.iconHeart {
+  position: absolute;
+  top: 9px;
+  left: 14px;
+  font-size: 13px;
+  fill: #000;
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+
+.userBarMenuItemLogout:before {
+  content: "";
+  display: block;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.15);
+  margin: 6px 0;
+}

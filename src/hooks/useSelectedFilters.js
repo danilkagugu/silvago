@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { useSelector } from "react-redux";
-import { selectBrandsCount } from "../redux/product/selectors";
 import { selectAllCategories } from "../redux/inventoryStore/selectors";
 import { useLocation } from "react-router-dom";
+import { selectBrandsCount } from "../redux/product/selectors";
 
 /**
  * Функція для парсингу фільтрів з URL у новому форматі

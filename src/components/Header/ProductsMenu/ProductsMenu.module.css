@@ -58,6 +58,10 @@
   }
 }
 
+.productsMenuItem.hover .productsMenuTitleLink {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
 .productsSubMenu {
   border-radius: 4px;
   visibility: hidden;
@@ -100,6 +104,10 @@
   border: 0;
 }
 
+.productsSubMenuItemLink:hover {
+  color: #545454;
+}
+
 .productsSubMenuItemTitle {
   font-size: 15px;
   font-weight: bold;
@@ -120,4 +128,7 @@
   overflow-wrap: break-word;
   border-bottom: none;
   line-height: 1.4;
+}
+.subChildItem a:hover {
+  color: #545454;
 }

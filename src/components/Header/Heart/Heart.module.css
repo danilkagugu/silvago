@@ -1,0 +1,87 @@
+.favoritesView {
+  margin: 0 -10px;
+}
+.favoritesViewButton {
+  position: relative;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0 10px;
+  height: 40px;
+  color: #fff;
+  fill: #fff;
+  text-align: center;
+  border: 0;
+}
+
+.favoritesViewButton:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.favoritesViewButton.disablad {
+  background: none;
+  opacity: 0.4;
+  cursor: default;
+}
+
+.favoritesViewIcon {
+  position: relative;
+}
+
+.iconHeart {
+  display: inline-block;
+  font-size: 32px;
+  fill: #fff;
+  vertical-align: middle;
+}
+
+.favoritesViewCount {
+  transform: translateX(-50%);
+  position: absolute;
+  top: 12px;
+  left: 5px;
+  min-width: 7px;
+  padding: 0 4px;
+  height: 15px;
+  line-height: 15px;
+  border-radius: 15px;
+  background: #000;
+  color: #fff;
+  font-size: 10px;
+  text-align: center;
+}
+
+.heartTooltip {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  z-index: 999;
+  top: 85%; /* Встановлюємо під підкласом */
+  left: 92.7%;
+  transform: translateX(-50%);
+  background: #fff;
+  padding: 8px;
+  margin-top: 7px;
+  font-size: 14px;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 3px 35px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.15s, visibility 0s 0.15s;
+  text-align: center;
+  white-space: nowrap;
+  color: #000;
+}
+.heartTooltip.open {
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.heartTooltip:before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border: rgba(0, 0, 0, 0) 5px solid;
+  border-bottom-color: #fff;
+}

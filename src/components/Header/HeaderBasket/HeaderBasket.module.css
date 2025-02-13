@@ -2,6 +2,12 @@
   position: relative;
   font-size: 0;
   white-space: nowrap;
+  cursor: pointer;
+}
+
+.basketBox {
+  display: block;
+  border: 0;
 }
 
 .basketIcon {
@@ -9,7 +15,11 @@
   display: inline-block;
   vertical-align: middle;
   transition: all 0.15s;
-  fill: #e79eb0;
+  fill: #4b4b4b;
+}
+
+.basketBox:hover .basketIcon {
+  color: #808080;
 }
 
 .basketIconSvg {
@@ -49,6 +59,10 @@
   margin-bottom: 4px;
   transition: all 0.15s;
   color: #4b4b4b;
+}
+
+.basketBox:hover .basketTitle {
+  color: #808080;
 }
 
 .basketValue {

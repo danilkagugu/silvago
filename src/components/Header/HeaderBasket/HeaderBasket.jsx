@@ -1,16 +1,10 @@
 import { BsBasket } from "react-icons/bs";
 import css from "./HeaderBasket.module.css";
-import {
-  selectAllQuantity,
-  selectTotalPrice,
-} from "../../../redux/basket/selectors";
-import { useSelector } from "react-redux";
-const HeaderBasket = () => {
-  const totalPrice = useSelector(selectTotalPrice);
-  const allQuantity = useSelector(selectAllQuantity);
+
+const HeaderBasket = ({ totalPrice, allQuantity }) => {
   return (
     <div className={css.basket}>
-      <div>
+      <div className={css.basketBox}>
         <div className={css.basketIcon}>
           <BsBasket className={css.basketIconSvg} />
           <div className={css.basketItemsCount}>{allQuantity}</div>

@@ -105,7 +105,8 @@ export const getFavoriteProducts = createAsyncThunk(
   "products/getFavorites",
   async (userId, thunkAPI) => {
     try {
-      const data = await getFavorite(userId);
+      const token = thunkAPI.getState().auth.token;
+      const data = await getFavorite(userId, token);
       // console.log("data: ", data);
       return data;
     } catch (error) {
@@ -118,7 +119,8 @@ export const addProductFavorite = createAsyncThunk(
   "products/addFavorite",
   async ({ userId, productId, idTorgsoft }, thunkAPI) => {
     try {
-      const data = await addFavorite(userId, productId, idTorgsoft);
+      const token = thunkAPI.getState().auth.token;
+      const data = await addFavorite(userId, productId, idTorgsoft, token);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -130,7 +132,8 @@ export const removeProductFavorite = createAsyncThunk(
   "products/removeFavorite",
   async ({ userId, productId, idTorgsoft }, thunkAPI) => {
     try {
-      const data = await removeFavorite(userId, productId, idTorgsoft);
+      const token = thunkAPI.getState().auth.token;
+      const data = await removeFavorite(userId, productId, idTorgsoft, token);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
