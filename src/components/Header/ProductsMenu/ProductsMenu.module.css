@@ -73,6 +73,51 @@
   transition: visibility 0s 0.05s, opacity 0.05s ease-in;
 }
 
+.productsSubMenu.open {
+  visibility: visible;
+  opacity: 1;
+  height: auto;
+  transition: opacity 0.15s ease-in;
+}
+
 .productsSubMenuList {
   padding: 20px 20px 0;
+}
+
+.productsSubMenu.subMenuGrid .productsSubMenuList {
+  columns: 240px auto;
+  column-gap: 20px;
+}
+
+.productsSubMenuItem {
+  display: block;
+  break-inside: avoid-column;
+  padding-bottom: 20px;
+}
+
+.productsSubMenuItemLink {
+  display: block;
+  border: 0;
+}
+
+.productsSubMenuItemTitle {
+  font-size: 15px;
+  font-weight: bold;
+  display: block;
+}
+
+.subChildList {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.subChildItem {
+  margin-bottom: 8px;
+}
+
+.subChildItem a {
+  display: block;
+  overflow-wrap: break-word;
+  border-bottom: none;
+  line-height: 1.4;
 }
