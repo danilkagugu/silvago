@@ -1,27 +1,47 @@
 import css from "./Header.module.css";
 
-// import { MdOutlineMenu } from "react-icons/md";
-import { useState } from "react";
-// import MobMenu from "../MobMenu/MobMenu";
-
-import Catalogy from "../Catalogy/Catalogy";
-// import MenuHeader from "../MenuHeader/MenuHeader";
 import HeaderLogo from "./HeaderLogo/HeaderLogo";
 import SilvagoMenu from "./SilvagoMenu/SilvagoMenu";
 import HeaderSearch from "./HeaderSearch/HeaderSearch";
 import HeaderContacts from "./HeaderContacts/HeaderContacts";
 import HeaderBasket from "./HeaderBasket/HeaderBasket";
 import ProductsMenu from "./ProductsMenu/ProductsMenu";
+import Heart from "./Heart/Heart";
+import UserBar from "./UserBar/UserBar";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchAllCategoriesTorgsoft } from "../../redux/inventoryStore/operations";
+import {
+  selectAllQuantity,
+  selectTotalPrice,
+} from "../../redux/basket/selectors";
+import { selectIsLoggedIn, selectUserData } from "../../redux/auth/selectors";
+import { selectFavoritesQuantity } from "../../redux/product/selectors";
+import { selectAllCategoriesTorgsoft } from "../../redux/inventoryStore/selectors";
 
 const Header = () => {
-  const [openMobMenu, setOpenMobMenu] = useState(false);
+  const dispatch = useDispatch();
 
+  //Selectors
+
+  const totalPrice = useSelector(selectTotalPrice);
+  const allQuantity = useSelector(selectAllQuantity);
+  const login = useSelector(selectIsLoggedIn);
+  const favoriteProductsLength = useSelector(selectFavoritesQuantity);
+  const categoriesTorgsoft = useSelector(selectAllCategoriesTorgsoft);
+  const user = useSelector(selectUserData);
+
+  // useEffect
+
+  useEffect(() => {
+    dispatch(fetchAllCategoriesTorgsoft());
+  }, [dispatch]);
   return (
     <div className={css.header}>
       <div className={css.headerContainer}>
         <div className={css.headerTop}>
           <div className={css.headerWrapper}>
-            <div className={css.headerLayout}>
+            <div className={`${css.headerLayout} ${css.headerLayoutMiddle}`}>
               <div className={`${css.headerColumn}`}>
                 <div className={css.headerSection}>
                   <HeaderLogo />
@@ -48,7 +68,10 @@ const Header = () => {
                   <HeaderContacts />
                 </div>
                 <div className={css.headerSection}>
-                  <HeaderBasket />
+                  <HeaderBasket
+                    allQuantity={allQuantity}
+                    totalPrice={totalPrice}
+                  />
                 </div>
               </div>
             </div>
@@ -59,41 +82,24 @@ const Header = () => {
             <div className={`${css.headerLayout} ${css.headerLayoutBottom}`}>
               <div className={`${css.headerColumn} ${css.headerColumnLeft}`}>
                 <div className={css.headerSection}>
-                  <ProductsMenu />
+                  <ProductsMenu categoriesTorgsoft={categoriesTorgsoft} />
                 </div>
               </div>
-              <div
-                className={`${css.headerColumn} ${css.headerColumnRight}`}
-              ></div>
+              <div className={`${css.headerColumn} ${css.headerColumnRight}`}>
+                <div className={css.headerSection}>
+                  <Heart
+                    favoriteProductsLength={favoriteProductsLength}
+                    login={login}
+                  />
+                </div>
+                <div className={css.headerSection}>
+                  <UserBar user={user} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      {/* <div className={css.topHeader}>
-        <p className={css.freeDelivery}>
-          Безкоштовна доставка від 1200 грн ❤ Відправлення замовлення щодня
-        </p>
-      </div> */}
-      {/* <div className={css.headerWrapper}>
-        <div className={css.header}>
-          <div className={css.menuBtn}>
-            <MdOutlineMenu
-              className={`${css.iconMenu} ${css.icon}`}
-              onClick={() => {
-                setOpenMobMenu(true);
-              }}
-            />
-          </div>
-
-          <MenuHeader />
-
-           
-          <div className={css.leftHeaderMenu}>
-            <MobMenu closeMenu={setOpenMobMenu} openMobMenu={openMobMenu} />
-          </div>
-        </div>
-      </div> */}
-      <Catalogy />
     </div>
   );
 };

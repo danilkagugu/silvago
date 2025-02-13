@@ -1,5 +1,4 @@
 import axios from "axios";
-import { store } from "../redux/store";
 
 export const BASE_URL = "http://localhost:3030/";
 // export const BASE_URL = "https://silvago-backend.onrender.com/";
@@ -10,15 +9,10 @@ export const createPublicAxiosInstance = () => {
   });
 };
 
-// Інстанс з токеном (для захищених запитів)
-const createPrivateAxiosInstance = () => {
-  const token = store.getState().auth.token; // Отримуємо токен з Redux або localStorage
-  // console.log("token: ", token);
-
+const createPrivateAxiosInstance = (token) => {
   if (!token) {
-    // Якщо токен відсутній, можна або повернути null, або вивести помилку
     console.log("Користувач не авторизований");
-    return null; // Не створювати інстанс, якщо токен відсутній
+    return null;
   }
 
   return axios.create({
@@ -34,7 +28,6 @@ const createPrivateAxiosInstance = () => {
 export const getProducts = async () => {
   const instance = createPublicAxiosInstance();
   const { data } = await instance.get("/api/product");
-  console.log("data: ", data);
   return data;
 };
 export const getDefaultVariations = async () => {
@@ -59,16 +52,16 @@ export const productById = async (slug) => {
   return data;
 };
 
-export const getFavorite = async (userId) => {
-  const instance = createPrivateAxiosInstance();
+export const getFavorite = async (userId, token) => {
+  const instance = createPrivateAxiosInstance(token);
 
   const { data } = await instance.get(`/api/product/favorites/${userId}`);
 
   return data;
 };
 
-export const addFavorite = async (userId, productId, idTorgsoft) => {
-  const instance = createPrivateAxiosInstance();
+export const addFavorite = async (userId, productId, idTorgsoft, token) => {
+  const instance = createPrivateAxiosInstance(token);
 
   const { data } = await instance.post(`/api/product/favorites`, {
     userId,
@@ -78,16 +71,22 @@ export const addFavorite = async (userId, productId, idTorgsoft) => {
   return data;
 };
 
-export const removeFavorite = async (userId, productId, idTorgsoft) => {
-  const instance = createPrivateAxiosInstance();
+export const removeFavorite = async (userId, productId, idTorgsoft, token) => {
+  const instance = createPrivateAxiosInstance(token);
   const { data } = await instance.delete(`/api/product/favorites`, {
     data: { userId, productId, idTorgsoft },
   });
   return data;
 };
 
-export const addProductToBasket = async (slug, quantity, volume, tone) => {
-  const instance = createPrivateAxiosInstance();
+export const addProductToBasket = async (
+  slug,
+  quantity,
+  volume,
+  tone,
+  token
+) => {
+  const instance = createPrivateAxiosInstance(token);
 
   const { data } = await instance.post(`/api/product/${slug}/basket/`, {
     slug,
@@ -99,8 +98,8 @@ export const addProductToBasket = async (slug, quantity, volume, tone) => {
   return data;
 };
 
-export const deleteProductFromBasket = async ({ productId, volume }) => {
-  const instance = createPrivateAxiosInstance();
+export const deleteProductFromBasket = async ({ productId, volume, token }) => {
+  const instance = createPrivateAxiosInstance(token);
 
   const { data } = await instance.delete(`/api/product/basket/delete`, {
     data: { productId: productId, volume: volume },
@@ -109,8 +108,8 @@ export const deleteProductFromBasket = async ({ productId, volume }) => {
   return data;
 };
 
-export const getBasketProduct = async () => {
-  const instance = createPrivateAxiosInstance();
+export const getBasketProduct = async ({ token }) => {
+  const instance = createPrivateAxiosInstance(token);
 
   const { data } = await instance.get("/api/product/basket");
   return data;
@@ -121,8 +120,9 @@ export const updateProductQuantity = async ({
   volume,
   quantity,
   tone,
+  token,
 }) => {
-  const instance = createPrivateAxiosInstance();
+  const instance = createPrivateAxiosInstance(token);
 
   console.log("productId", productId);
   const { data } = await instance.patch(`/api/product/basket/${productId}`, {
@@ -134,26 +134,25 @@ export const updateProductQuantity = async ({
   return data;
 };
 
-export const sendOrder = async ({ user, basket }) => {
-  const instance = createPrivateAxiosInstance();
+export const sendOrder = async ({ user, basket, token }) => {
+  const instance = createPrivateAxiosInstance(token);
 
   const { data } = await instance.post("/api/product/basket/order", {
     user,
     basket,
   });
-  console.log("data", data);
   return data;
 };
 
-export const getOrder = async () => {
-  const instance = createPrivateAxiosInstance();
+export const getOrder = async (token) => {
+  const instance = createPrivateAxiosInstance(token);
 
   const { data } = await instance.get("/api/product/order");
   return data;
 };
 
-export const getOrderById = async (orderId) => {
-  const instance = createPrivateAxiosInstance();
+export const getOrderById = async (orderId, token) => {
+  const instance = createPrivateAxiosInstance(token);
 
   const { data } = await instance.get(`/api/product/order/${orderId}`);
   return data;

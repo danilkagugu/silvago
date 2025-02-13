@@ -1,10 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-// import Catalogy from "../Catalogy/Catalogy";
 import css from "./MenuHeader.module.css";
 // import { FaChevronDown } from "react-icons/fa6";
 import { BsBasket, BsTelephone } from "react-icons/bs";
 import Logo from "../Logo/Logo";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import {
   selectAllQuantity,
   // selectBasket,

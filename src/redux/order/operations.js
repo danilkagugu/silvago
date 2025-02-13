@@ -5,7 +5,8 @@ export const getAllOrders = createAsyncThunk(
   "order/info",
   async (_, thunkAPI) => {
     try {
-      const data = await getOrder();
+      const token = thunkAPI.getState().auth.token;
+      const data = await getOrder(token);
       // console.log("data: ", data);
       return data;
     } catch (error) {
@@ -18,8 +19,8 @@ export const fetchOrderById = createAsyncThunk(
   "order/getById",
   async (id, thunkAPI) => {
     try {
-      const data = await getOrderById(id);
-      // console.log("data: ", data);
+      const token = thunkAPI.getState().auth.token;
+      const data = await getOrderById(id, token);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

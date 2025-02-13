@@ -1,23 +1,24 @@
 import css from "./CatalogListItem.module.css";
 import { useEffect, useState } from "react";
-import {
-  getFavoriteProducts,
-  fetchTopProducts,
-  fetchProductVariation,
-  removeProductFavorite,
-  addProductFavorite,
-} from "../../redux/product/operations";
+
 import { useDispatch, useSelector } from "react-redux";
-import { addProduct } from "../../redux/basket/operations";
-import {
-  selectFavoritesProducts,
-  selectTopProducts,
-} from "../../redux/product/selectors";
+
 import { selectUserData } from "../../redux/auth/selectors";
 import ProductImage from "./ProductImage/ProductImage";
 import ProductInfo from "./ProductInfo/ProductInfo";
 import ProductModifications from "./ProductModifications/ProductModifications";
 import ProductActions from "./ProductActions/ProductActions";
+import {
+  addProductFavorite,
+  fetchTopProducts,
+  getFavoriteProducts,
+  removeProductFavorite,
+} from "../../redux/product/operations";
+import {
+  selectFavoritesProducts,
+  selectTopProducts,
+} from "../../redux/product/selectors";
+import { addProduct } from "../../redux/basket/operations";
 
 const CatalogListItem = ({ product }) => {
   const dispatch = useDispatch();

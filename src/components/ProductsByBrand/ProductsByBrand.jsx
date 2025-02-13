@@ -1,10 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-  // selectProductDetails,
-  selectProducts,
-} from "../../redux/product/selectors";
+
 import { useEffect, useRef, useState } from "react";
-import { getAllProduct } from "../../redux/product/operations";
 import { Link, useParams } from "react-router-dom";
 import css from "./ProductsByBrand.module.css";
 import CatalogListItem from "../CatalogListItem/CatalogListItem";
@@ -26,6 +22,8 @@ import {
   fetchAllBrands,
   fetchAllCategories,
 } from "../../redux/inventoryStore/operations";
+import { getAllProduct } from "../../redux/product/operations";
+import { selectProducts } from "../../redux/product/selectors";
 
 const ProductsByBrand = () => {
   // const navigate = useNavigate();

@@ -191,6 +191,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.headerLayoutMiddle {
   height: 80px;
 }
 
