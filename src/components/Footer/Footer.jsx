@@ -1,102 +1,156 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import logoSilvago from "../../assets/img/logoSilvago.png";
+import { IoLogoInstagram } from "react-icons/io5";
+import { FaPhone, FaTelegram, FaTiktok } from "react-icons/fa";
+import { AiTwotoneMail } from "react-icons/ai";
+import { FaLocationDot } from "react-icons/fa6";
 
-import Logo from "../Logo/Logo";
 import css from "./Footer.module.css";
 
 import { selectAllCategories } from "../../redux/inventoryStore/selectors";
-import { fetchAllCategories } from "../../redux/inventoryStore/operations";
 
 const Footer = () => {
-  const navigate = useNavigate();
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchAllCategories());
-  }, [dispatch]);
-
   const categories = useSelector(selectAllCategories);
 
-  const handleCategoryClick = (slug) => {
-    navigate(`/catalog/${slug}`);
-  };
+  const menuItems = [
+    { name: "Про нас", path: "/about-us" },
+    { name: "FAQ", path: "/faq" },
+    { name: "Доставка і оплата", path: "/delivery-and-payment" },
+    { name: "Контакти", path: "/contacts" },
+  ];
   return (
-    <div className={css.footer}>
+    <div className={css.footer} id="footer">
       <div className={css.footerContainer}>
-        <div className={css.footerList}>
-          <ul className={css.footerMenu}>
-            <li className={css.footerMenuItem}>
-              <Logo width={220} color={"invert(1)"} />
-            </li>
-            <li>
-              <h4 className={css.footerTitles}>Каталог</h4>
-              <ul className={css.catalogyList}>
-                {categories &&
-                  categories.map((category) => (
-                    <li className={css.catologyItem} key={category._id}>
-                      <div
-                        className={css.catologyBox}
-                        onClick={() => handleCategoryClick(category.slug)}
+        <div className={css.footerWrapper}>
+          <div className={css.footerColumns}>
+            <div
+              className={`${css.footerColumnsItem} ${css.footerColumnsItemDob}`}
+            >
+              <div className={css.footerColumnsItemWrap}>
+                <div className={css.footerLogo}>
+                  <Link className={css.headerLogoLink} to={"/"}>
+                    <img
+                      src={logoSilvago}
+                      alt="Silvago ❤️ Доглядова та декоративна косметика"
+                      className={css.footerLogoImg}
+                    />
+                  </Link>
+                </div>
+                <div className={css.footerCopyright}>
+                  © 2022—2025 <br />
+                  Silvago - магазин професійної косметики
+                </div>
+              </div>
+            </div>
+            <div className={css.footerColumnsItem}>
+              <div className={css.footerColumnsItemWrap}>
+                <div className={css.footerBlock}>
+                  <div className={css.footerHead}>Каталог</div>
+                  <ul className={css.footerMenu}>
+                    {categories.map((category) => (
+                      <li
+                        className={css.footerMenuItem}
+                        key={category.idTorgsoft}
                       >
-                        <p className={css.itemText}>{category.name}</p>
-                      </div>
-                    </li>
-                  ))}
-              </ul>
-            </li>
-            <li>
-              <h4 className={css.footerTitles}>Клієнтам</h4>
-              <ul>
-                <li className={css.catologyBox}>
-                  <p className={css.itemText}>Оплата і доставка</p>
-                </li>
-                <li className={css.catologyBox}>
-                  <p className={css.itemText}>Контакти</p>
-                </li>
-                <li className={css.catologyBox}>
-                  <p className={css.itemText}>Обмін та повернення</p>
-                </li>
-                <li className={css.catologyBox}>
-                  <p className={css.itemText}>Публічна оферта</p>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <h4 className={css.footerTitles}>Контактна інформація</h4>
-              <ul>
-                <li className={css.catologyBox}>
-                  <p className={css.itemText}>Мобільний номер</p>
-                </li>
-                <li className={css.catologyBox}>
-                  <p className={css.itemText}>Мобільний номер</p>
-                </li>
-                <li className={css.catologyBox}>
-                  <p className={css.itemText}>Мобільний номер</p>
-                </li>
-                <li className={css.catologyBox}>
-                  <p className={css.itemText}>Почта</p>
-                </li>
-                <li className={css.catologyBox}>
-                  <p className={css.itemText}>Соц мережі іконки</p>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </div>{" "}
-        <div className={css.mobFooterMenu}>
-          <div className={css.phonesBlock}>
-            <a className={css.telNumber} href="tel:+380682825562">
-              +380682825562
-            </a>
-            <p className={css.contacts}>Контакти</p>
-          </div>
-          <div className={css.copyrightBlock}>
-            <p className={css.copyrightText}>© 2017—2024</p>
-            <p className={css.copyrightText}>
-              Silvago - онлайн магазин професійної косметики
-            </p>
+                        <Link
+                          className={css.footerMenuItemLink}
+                          to={`/catalog/category/${category.slug}`}
+                        >
+                          {category.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div className={css.footerColumnsItem}>
+              <div className={css.footerColumnsItemWrap}>
+                <div className={css.footerBlock}>
+                  <div className={css.footerHead}>Клієнтам</div>
+                  <ul className={css.footerMenu}>
+                    {menuItems.map((item) => (
+                      <li className={css.footerMenuItem} key={item.path}>
+                        <Link className={css.footerMenuItemLink} to={item.path}>
+                          {item.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className={css.footerBlock}>
+                  Ми в соцмережах
+                  <div className={css.footerSocialContainer}>
+                    <a
+                      href="https://www.instagram.com/silvago.ua/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={css.footerSocialIconLink}
+                      title="Інстаграм"
+                    >
+                      <IoLogoInstagram className={css.footerSocialIcon} />
+                    </a>
+                    <a
+                      href="https://www.tiktok.com/@silvago.ua"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={css.footerSocialIconLink}
+                      title="Тік Ток"
+                    >
+                      <FaTiktok className={css.footerSocialIcon} />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              className={`${css.footerColumnsItem} ${css.footerColumnsItemDob}`}
+            >
+              <div className={css.footerColumnsItemWrap}>
+                <div className={css.footerHead}>Контактна інформація</div>
+                <div className={css.footerContacts}>
+                  <div className={css.footerContactsGroup}>
+                    <FaPhone className={css.iconFooter} />
+                    <div className={css.footerContactsItem}>
+                      <a
+                        className={css.phonesItemLink}
+                        href="tel:+380682825562"
+                        aria-label={"Зателефонувати за номером +380682825562"}
+                      >
+                        +380682825562
+                      </a>
+                    </div>
+                  </div>
+                  <div className={css.footerContactsGroup}>
+                    <div className={css.footerContactsItem}>
+                      <FaTelegram className={css.iconFooter} />
+                      <a className={css.phonesItemLink} href="#">
+                        Telegram
+                      </a>
+                    </div>
+                    <div className={css.footerContactsItem}>
+                      <AiTwotoneMail className={css.iconFooter} />
+                      <a className={css.phonesItemLink} href="#">
+                        silvago@gmail.com
+                      </a>
+                    </div>
+                  </div>
+                  <div className={css.footerContactsGroup}>
+                    <FaLocationDot
+                      className={`${css.iconFooter} ${css.iconLocation}`}
+                    />
+                    <div className={css.footerAddress}>
+                      м.Коростишів
+                      <br /> Героїв Небесної Сотні, 56 <br /> З 09:30-17:30
+                    </div>
+                    <a href="#" className={css.phonesItemLink}>
+                      Мапа проїзду
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -1,5 +1,4 @@
 .productGroupMenu {
-  display: flex;
   margin: 0 0 10px;
   font-size: 11px;
   color: #acacac;
@@ -7,8 +6,7 @@
 }
 
 .productGroupMenuItem {
-  display: flex;
-  align-items: center;
+  display: inline-block;
 }
 .productGroupMenuItemLink {
   color: #acacac;
@@ -19,7 +17,7 @@
   border: 0;
 }
 .productGroupMenuItemLink:hover {
-  color: #000;
+  color: #545454;
 }
 
 .icon {

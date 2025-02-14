@@ -102,6 +102,31 @@ const ProductInfo = () => {
     }
   }, [productDetails, slug]);
 
+  useEffect(() => {
+    if (productDetails?.product && productDetails?.volume) {
+      const viewedProducts =
+        JSON.parse(localStorage.getItem("viewedProducts")) || [];
+
+      // Перевіряємо, чи товар вже є в списку
+      const isAlreadyViewed = viewedProducts.some(
+        (item) =>
+          item.product._id === productDetails.product._id &&
+          item.volume._id === productDetails.volume._id
+      );
+
+      if (!isAlreadyViewed) {
+        // Додаємо товар разом із `volume` (конкретна варіація)
+        const updatedProducts = [
+          { product: productDetails.product, volume: productDetails.volume },
+          ...viewedProducts,
+        ].slice(0, 20);
+
+        localStorage.setItem("viewedProducts", JSON.stringify(updatedProducts));
+      }
+    }
+  }, [productDetails]);
+
+  console.log("productDetails", productDetails);
   const handleToggleFavorite = async (product, idTorgsoft) => {
     if (!product || !product._id) {
       console.warn("Product is invalid.");
