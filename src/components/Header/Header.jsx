@@ -18,10 +18,11 @@ import {
 import { selectIsLoggedIn, selectUserData } from "../../redux/auth/selectors";
 import { selectFavoritesQuantity } from "../../redux/product/selectors";
 import { selectAllCategoriesTorgsoft } from "../../redux/inventoryStore/selectors";
+import { useLocation } from "react-router-dom";
 
 const Header = () => {
   const dispatch = useDispatch();
-
+  const location = useLocation();
   //Selectors
 
   const totalPrice = useSelector(selectTotalPrice);
@@ -37,7 +38,9 @@ const Header = () => {
     dispatch(fetchAllCategoriesTorgsoft());
   }, [dispatch]);
   return (
-    <div className={css.header}>
+    <div
+      className={`${css.header} ${location.pathname === "/" ? css.home : ""}`}
+    >
       <div className={css.headerContainer}>
         <div className={css.headerTop}>
           <div className={css.headerWrapper}>
@@ -71,6 +74,7 @@ const Header = () => {
                   <HeaderBasket
                     allQuantity={allQuantity}
                     totalPrice={totalPrice}
+                    login={login}
                   />
                 </div>
               </div>

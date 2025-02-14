@@ -14,7 +14,12 @@ const CatalogHeader = ({
 }) => {
   return (
     <>
-      <BreadcrumbsCatalog categorySlug={categorySlug} categories={categories} />
+      <div className={css.catalogHeader}>
+        <BreadcrumbsCatalog
+          categorySlug={categorySlug}
+          categories={categories}
+        />
+      </div>
       <div className={css.catalogTopRows}>
         <CatalogTitle
           selectedBrand={selectedBrand}

@@ -17,45 +17,57 @@ const ProductActions = ({
   return (
     <>
       {volumeDetail?.quantity > 0 && (
-        <div className={css.catalogCardFooterButtons}>
-          <div className={css.catalogCardFooterOrder}>
-            <div className={css.counter}>
-              <div className={css.counterContainer}>
-                <button
-                  className={`${css.counterBtn}`}
-                  onClick={() => handleDecrement(volumeDetail.idTorgsoft)}
-                >
-                  <FiMinus className={`${css.icon} ${css.iconMinus}`} />
-                </button>
-                <div className={css.counterInput}>
-                  <input
-                    className={css.counterField}
-                    value={quantities[volumeDetail.idTorgsoft]}
-                    min={1}
-                    max={volumeDetail.quantity}
-                    onChange={(e) =>
-                      handleQuantityChange(
-                        volumeDetail.idTorgsoft,
-                        parseInt(e.target.value, 10)
-                      )
-                    }
-                  />
+        <div>
+          <div className={css.catalogCardFooterButtons}>
+            <div className={css.catalogCardFooterOrder}>
+              <div className={css.counter}>
+                <div className={css.counterContainer}>
+                  <button
+                    className={`${css.counterBtn} ${
+                      quantities[volumeDetail.idTorgsoft] === 1
+                        ? css.disabled
+                        : ""
+                    }`}
+                    onClick={() => handleDecrement(volumeDetail.idTorgsoft)}
+                  >
+                    <FiMinus className={`${css.icon} ${css.iconMinus}`} />
+                  </button>
+                  <div className={css.counterInput}>
+                    <input
+                      className={css.counterField}
+                      type="number"
+                      value={quantities[volumeDetail.idTorgsoft]}
+                      min={1}
+                      max={volumeDetail.quantity}
+                      onChange={(e) =>
+                        handleQuantityChange(
+                          volumeDetail.idTorgsoft,
+                          parseInt(e.target.value, 10)
+                        )
+                      }
+                    />
+                  </div>
+                  <button
+                    className={`${css.counterBtn} ${
+                      quantities[volumeDetail.idTorgsoft] ===
+                      volumeDetail.quantity
+                        ? css.disabled
+                        : ""
+                    }`}
+                    onClick={() => handleIncrement(volumeDetail.idTorgsoft)}
+                    // disabled={quantity >= volumeDetail.quantity}
+                  >
+                    <FaPlus className={`${css.icon} ${css.iconPlus}`} />
+                  </button>
                 </div>
-                <button
-                  className={`${css.counterBtn}`}
-                  onClick={() => handleIncrement(volumeDetail.idTorgsoft)}
-                  // disabled={quantity >= volumeDetail.quantity}
-                >
-                  <FaPlus className={`${css.icon} ${css.iconPlus}`} />
-                </button>
               </div>
+              <button
+                className={`${css.btn} ${css.special}`}
+                onClick={() => handleAddToBasket()}
+              >
+                <span className={css.btnText}>Купити</span>
+              </button>
             </div>
-            <button
-              className={`${css.btn} ${css.special}`}
-              onClick={() => handleAddToBasket()}
-            >
-              Купити
-            </button>
           </div>
         </div>
       )}

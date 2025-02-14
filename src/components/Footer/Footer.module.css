@@ -1,10 +1,4 @@
-.footer {
-  background-color: #363636;
-  width: 100%;
-  border-top: 4px solid #d4d7db;
-}
-
-.footerContainer {
+/* .footerContainer {
   padding: 20px 8px 28px;
 }
 
@@ -13,9 +7,9 @@
     padding: 30px 20px 20px;
     max-width: 1440px;
   }
-}
+} */
 
-.footerList {
+/* .footerList {
   display: flex;
   justify-content: space-between;
 }
@@ -105,4 +99,167 @@
 
 .copyrightText {
   text-align: center;
+} */
+
+.footer {
+  /* width: 100%;
+  border-top: 4px solid #d4d7db; */
+  /*  */
+  background-color: #363636;
+  position: relative;
+  color: #fff;
+  font-size: 12px;
+}
+
+.footerContainer {
+  border-top: 4px solid #999999;
+  padding: 30px 0 60px;
+}
+.footerWrapper {
+  min-width: 960px;
+  max-width: 1440px;
+  padding: 0 20px;
+  margin: 0 auto;
+}
+
+@media screen and (min-width: 1280px) {
+  .footerWrapper {
+    padding: 0 30px;
+  }
+}
+.footerColumns {
+  display: flex;
+  margin: 0 -15px;
+}
+.footerColumnsItem {
+  flex: 1 0 0;
+}
+
+.footerColumnsItemDob {
+  flex: 2 0 0;
+}
+
+.footerColumnsItemWrap {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0 15px;
+}
+
+.footerLogo {
+  margin-bottom: 25px;
+}
+
+.headerLogoLink {
+  border: 0;
+}
+
+.footerLogoImg {
+  width: 200px;
+  filter: invert(1);
+}
+
+.footerCopyright {
+  line-height: 16px;
+  margin-bottom: 15px;
+}
+
+.footerBlock {
+  margin-bottom: 20px;
+}
+
+.footerBlock:last-child {
+  margin-bottom: 0;
+}
+
+.footerHead {
+  font-size: 14px;
+  font-weight: bold;
+  /* color: #121212; */
+  margin-bottom: 10px;
+}
+
+.footerMenu {
+  font-size: 13px;
+}
+
+.footerMenuItem {
+  margin-bottom: 8px;
+}
+
+.footerMenuItemLink {
+  color: #fff;
+  border-bottom-color: rgba(56, 56, 56, 0.4);
+}
+
+.footerSocialContainer {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 10px -9px -9px 0;
+  gap: 10px;
+}
+
+.footerSocialIconLink {
+  overflow: hidden;
+  margin: 0 9px 9px 0;
+  width: 24px;
+  height: 24px;
+  font-size: 24px;
+  border: 0;
+  color: rgba(255, 255, 255, 0.999) !important;
+  transition: all 0.15s;
+}
+
+.footerSocialIcon {
+  width: 24px;
+  height: 24px;
+  vertical-align: top;
+  fill: rgb(255, 255, 255);
+}
+
+.footerColumnsItemDob .footerContacts {
+  margin-bottom: -18px;
+}
+
+.footerColumnsItemDob .footerContacts {
+  columns: auto 2;
+  column-gap: 20px;
+}
+
+.footerContactsGroup {
+  position: relative;
+  -moz-column-break-inside: avoid;
+  break-inside: avoid;
+  padding-bottom: 18px;
+}
+
+.iconFooter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate3d(-24px, 0, 0);
+  font-size: 16px;
+  fill: #fff;
+  opacity: 0.6;
+}
+
+.footerContactsItem {
+  position: relative;
+  margin-bottom: 11px;
+  font-size: 13px;
+}
+
+.phonesItemLink {
+  color: #fff;
+  border: 0;
+}
+
+.iconLocation {
+  top: 1px;
+  margin-right: 5px;
+  font-size: 21px;
+}
+
+.footerAddress {
+  margin: 1px 0 5px;
 }

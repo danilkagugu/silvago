@@ -203,9 +203,9 @@ const CatalogList = ({
   }
 
   return (
-    <div>
+    <>
       {!isMobile ? (
-        <>
+        <div className={css.catalog}>
           <CatalogListDesctop
             clearFilter={clearFilter}
             handleSectionSelect={handleSectionSelect}
@@ -224,7 +224,7 @@ const CatalogList = ({
             categorySlug={categorySlug}
             categories={categories}
           />
-        </>
+        </div>
       ) : (
         <>
           <CatalogListMobile
@@ -246,7 +246,7 @@ const CatalogList = ({
           />
         </>
       )}
-    </div>
+    </>
   );
 };
 

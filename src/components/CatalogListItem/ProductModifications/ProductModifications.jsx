@@ -3,53 +3,46 @@ import css from "./ProductModifications.module.css";
 const ProductModifications = ({
   product,
   volumeDetail,
-
   handleVolumeChange,
   handleToneChange,
 }) => {
-
-  // console.log('volumeDetail',volumeDetail);
-  // console.log('product',product);
   return (
-    <div>
+    <>
       <div className={`${css.modification} ${css.modificationCompact}`}>
         <div className={css.modificationHead}>
           <div className={css.modificationTitle}>Об&apos;єм</div>
         </div>
-        <div className={css.modificationBody}>
-          <div className={css.modificationList}>
-            {product.variations
-              .filter((variant) => variant.tone === volumeDetail.tone) // Фільтруємо об'єми для поточного тону
-              .sort((a, b) => a.volume - b.volume)
-              .map((variant) => {
-                const isVolumeAvailable = variant.quantity > 0; // Перевіряємо наявність об'єму
-                const isCurrentVolume =
-                  volumeDetail.idTorgsoft === variant.idTorgsoft;
-                return (
-                  <span
-                    className={`${css.btn} ${css.modificationButton} ${
-                      isCurrentVolume ? css.modificationButtonActive : ""
-                    } ${
-                      !isVolumeAvailable && !isCurrentVolume
-                        ? css.buttonGray
-                        : ""
-                    }`}
-                    key={variant.idTorgsoft}
-                    onClick={() => handleVolumeChange(variant.idTorgsoft)}
-                  >
-                    {/* {variant.volume} мл */}
-                    {`${variant.volume + " " + product.measure}`}
-                    {!isVolumeAvailable && (
-                      <div className={`${css.tooltipWrapper}`}>
-                        <div className={`${css.tooltip} ${css.tooltipTop}`}>
-                          Немає в наявності
-                        </div>
+
+        <div className={css.modificationList}>
+          {product.variations
+            .filter((variant) => variant.tone === volumeDetail.tone) // Фільтруємо об'єми для поточного тону
+            .sort((a, b) => a.volume - b.volume)
+            .map((variant) => {
+              const isVolumeAvailable = variant.quantity > 0; // Перевіряємо наявність об'єму
+              const isCurrentVolume =
+                volumeDetail.idTorgsoft === variant.idTorgsoft;
+              return (
+                <span
+                  className={`${css.btn} ${css.modificationButton} ${
+                    isCurrentVolume ? css.modificationButtonActive : ""
+                  } ${
+                    !isVolumeAvailable && !isCurrentVolume ? css.buttonGray : ""
+                  }`}
+                  key={variant.idTorgsoft}
+                  onClick={() => handleVolumeChange(variant.idTorgsoft)}
+                >
+                  {/* {variant.volume} мл */}
+                  {`${variant.volume + " " + product.measure}`}
+                  {!isVolumeAvailable && (
+                    <div className={`${css.tooltipWrapper}`}>
+                      <div className={`${css.tooltip} ${css.tooltipTop}`}>
+                        Немає в наявності
                       </div>
-                    )}
-                  </span>
-                );
-              })}
-          </div>
+                    </div>
+                  )}
+                </span>
+              );
+            })}
         </div>
       </div>
       {product.variations.some((variant) => variant.tone) && ( // Відображення тільки якщо є тони
@@ -98,7 +91,7 @@ const ProductModifications = ({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

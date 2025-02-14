@@ -1,4 +1,5 @@
 import Layout from "../../components/Layout/Layout";
+import css from "./Catalog.module.css";
 
 import CatalogList from "../../components/CatalogList/CatalogList";
 import { useEffect } from "react";
@@ -15,6 +16,7 @@ import {
 } from "../../redux/product/selectors";
 import { useSelectedFilters } from "../../hooks/useSelectedFilters";
 import { useParams } from "react-router-dom";
+import ViewedProducts from "../../components/ViewedProducts/ViewedProducts";
 
 const Catalog = () => {
   const dispatch = useDispatch();
@@ -36,15 +38,18 @@ const Catalog = () => {
 
   return (
     <Layout>
-      <CatalogList
-        brandsCount={brandsCount}
-        categoriesCount={categoriesCount}
-        selectedBrands={selectedBrands}
-        selectedSections={selectedSections}
-        selectedPriceRange={selectedPriceRange}
-        filters={filters}
-        categorySlug={categorySlug}
-      />
+      <div className={css.wrapper}>
+        <CatalogList
+          brandsCount={brandsCount}
+          categoriesCount={categoriesCount}
+          selectedBrands={selectedBrands}
+          selectedSections={selectedSections}
+          selectedPriceRange={selectedPriceRange}
+          filters={filters}
+          categorySlug={categorySlug}
+        />
+      </div>
+      <ViewedProducts />
     </Layout>
   );
 };

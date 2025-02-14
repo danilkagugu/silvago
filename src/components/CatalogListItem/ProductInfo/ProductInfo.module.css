@@ -40,6 +40,10 @@
   line-height: 1.2;
 }
 
+.discountPrice {
+  color: #d9344a;
+}
+
 .catalogCardPriceBox .catalogCardPrice:not(:only-child) {
   margin-right: 10px;
 }
