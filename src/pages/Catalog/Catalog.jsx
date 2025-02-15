@@ -15,7 +15,7 @@ import {
   selectCategoriesCount,
 } from "../../redux/product/selectors";
 import { useSelectedFilters } from "../../hooks/useSelectedFilters";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import ViewedProducts from "../../components/ViewedProducts/ViewedProducts";
 
 const Catalog = () => {
@@ -23,6 +23,9 @@ const Catalog = () => {
   const { selectedBrands, selectedSections, selectedPriceRange, filters } =
     useSelectedFilters();
   const { categorySlug } = useParams();
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get("query") || "";
+  // console.log("query: ", query);
   const brandsCount = useSelector(selectBrandsCount);
   const categoriesCount = useSelector(selectCategoriesCount);
 
@@ -47,6 +50,7 @@ const Catalog = () => {
           selectedPriceRange={selectedPriceRange}
           filters={filters}
           categorySlug={categorySlug}
+          query={query}
         />
       </div>
       <ViewedProducts />

@@ -15,7 +15,6 @@ const HeaderSearch = () => {
   const dispatch = useDispatch();
   const result = useSelector(selectSearchResults);
   const loadingSearch = useSelector(selectSearchLoading);
-  console.log("result: ", result);
 
   useEffect(() => {
     const delaySearch = setTimeout(() => {
@@ -93,6 +92,7 @@ const HeaderSearch = () => {
             <li className={css.searchResultsItem}>
               <Link
                 className={`${css.searchResultsLink} ${css.searchResultsLinkAll}`}
+                to={`/catalog/search?query=${encodeURIComponent(query)}`}
               >
                 Всі результати пошуку
               </Link>

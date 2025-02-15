@@ -74,6 +74,8 @@ const App = () => {
         <Route path="/catalog" element={<Catalog />} />
         <Route path="/catalog/filter/*" element={<Catalog />} />
         <Route path="/catalog/category/:categorySlug/*" element={<Catalog />} />
+        <Route path="/catalog/search" element={<Catalog />} />
+        <Route path="/catalog/search/filter/*" element={<Catalog />} />
 
         {/* <Route path="/catalog/filter/*" element={<Catalog />} /> */}
 

@@ -15,6 +15,8 @@ export const parseFiltersFromUrl = (pathname) => {
   // Визначаємо, чи це фільтрація по категорії чи загальна
   if (pathname.includes("/catalog/category/")) {
     filtersPart = pathname.split("/filter/")[1]?.split("/")[0] || "";
+  } else if (pathname.includes("/catalog/search")) {
+    filtersPart = pathname.split("/filter/")[1]?.split("/")[0] || "";
   } else if (pathname.includes("/catalog/filter/")) {
     filtersPart = pathname.split("/catalog/filter/")[1]?.split("/")[0] || "";
   }

@@ -215,11 +215,13 @@ export const fetchFilteredProductsApi = async ({
   page = 1,
   limit = 20,
   categorySlug,
+  query,
 }) => {
   const instance = createPublicAxiosInstance();
 
   // Функція для формування URL у потрібному форматі
   const buildCustomUrl = (params) => {
+    console.log("params: ", params);
     const hasFilters =
       (Array.isArray(params.brand) && params.brand.length > 0) ||
       (Array.isArray(params.category) && params.category.length > 0) ||
@@ -237,13 +239,20 @@ export const fetchFilteredProductsApi = async ({
       baseUrl = hasFilters
         ? `/api/product/catalog/category/${categorySlug}/filter`
         : `/api/product/catalog/category/${categorySlug}`;
+    } else if (query) {
+      console.log("нема фільтри");
+      baseUrl = `/api/product/catalog/search`;
+      if (hasFilters) {
+        console.log("є фільтри");
+        baseUrl = `/api/product/catalog/search/filter`;
+      }
     } else {
       // Якщо немає categorySlug, вибираємо між загальним URL каталогу та фільтрами
       baseUrl = hasFilters
         ? "/api/product/catalog/filter"
         : "/api/product/catalog";
     }
-
+    console.log("baseUrl", baseUrl);
     const validParams = Object.entries(params).filter(([key, value]) => {
       if (key === "page" && value === 1) return false; // Пропускаємо page=1
       if (key === "limit" && value === 20) return false; // Пропускаємо limit=20
@@ -259,7 +268,9 @@ export const fetchFilteredProductsApi = async ({
       .join(";");
 
     // return `${baseUrl}/${queryString}`;
-    return queryString ? `${baseUrl}/${queryString}` : baseUrl;
+    return queryString
+      ? `${baseUrl}/${queryString}?query=${encodeURIComponent(query)}`
+      : `${baseUrl}?query=${encodeURIComponent(query)}`;
   };
 
   // Формуємо параметри запиту
@@ -271,6 +282,7 @@ export const fetchFilteredProductsApi = async ({
     page,
     limit,
   });
+  console.log("URL запиту на бекенд:", url);
 
   try {
     // Надсилаємо GET-запит
