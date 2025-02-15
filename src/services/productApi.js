@@ -183,6 +183,7 @@ export const getPriceRenge = async () => {
 };
 
 export const getCountProductByFiltersApi = async (filters) => {
+  console.log("filters: ", filters);
   const instance = createPublicAxiosInstance();
 
   // Формуємо параметри фільтрів для запиту
