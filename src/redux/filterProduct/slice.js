@@ -11,6 +11,12 @@ const INITIAL_STATE = {
 const searchSlice = createSlice({
   name: "search",
   initialState: INITIAL_STATE,
+  reducers: {
+    // Додаємо новий редюсер для очищення результатів
+    clearSearchResults: (state) => {
+      state.searchResults = [];
+    },
+  },
   extraReducers: (builder) =>
     builder
       .addCase(searchProducts.fulfilled, (state, action) => {
@@ -27,5 +33,5 @@ const searchSlice = createSlice({
         state.error = true;
       }),
 });
-
+export const { clearSearchResults } = searchSlice.actions;
 export const searchReducer = searchSlice.reducer;
