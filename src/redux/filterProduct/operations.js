@@ -5,7 +5,10 @@ export const searchProducts = createAsyncThunk(
   "search/searchProducts",
   async (query, thunkAPI) => {
     try {
-      const data = await searchProductApi(query);
+      if (!query || query.trim() === "") {
+        return []; // Якщо `query` пустий, повертаємо порожній масив
+      }
+      const data = await searchProductApi(query.trim());
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

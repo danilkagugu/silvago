@@ -9,18 +9,23 @@ import { selectBrandsCount } from "../redux/product/selectors";
  * @param {string} pathname - Поточний шлях
  * @returns {Object} - Об'єкт фільтрів
  */
-export const parseFiltersFromUrl = (pathname) => {
+export const parseFiltersFromUrl = (pathname, search) => {
   let filtersPart = "";
 
   // Визначаємо, чи це фільтрація по категорії чи загальна
   if (pathname.includes("/catalog/category/")) {
     filtersPart = pathname.split("/filter/")[1]?.split("/")[0] || "";
+  } else if (pathname.includes("/catalog/search")) {
+    filtersPart = pathname.split("/filter/")[1]?.split("/")[0] || "";
   } else if (pathname.includes("/catalog/filter/")) {
     filtersPart = pathname.split("/catalog/filter/")[1]?.split("/")[0] || "";
   }
-
-  if (!filtersPart) return { brands: [], categories: [], price: [], page: 1 };
-
+  const searchParams = new URLSearchParams(search);
+  const query = searchParams.get("query") || "";
+  console.log("queryQQQ: ", query);
+  if (!filtersPart)
+    return { brands: [], categories: [], price: [], page: 1, query };
+  console.log("filtersPart", filtersPart);
   const filters = filtersPart.split(";").reduce(
     (acc, param) => {
       const [key, value] = param.split("=");
@@ -47,7 +52,7 @@ export const parseFiltersFromUrl = (pathname) => {
 
       return acc;
     },
-    { brands: [], categories: [], price: [], page: 1 }
+    { brands: [], categories: [], price: [], page: 1, query }
   );
   return filters;
 };

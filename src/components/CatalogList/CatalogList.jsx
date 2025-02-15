@@ -19,9 +19,10 @@ const CatalogList = ({
   selectedPriceRange,
   filters,
   categorySlug,
+  query,
 }) => {
   const isMobile = window.innerWidth <= 1440;
-
+  console.log("categoriesCount", categoriesCount);
   const { updateFilters } = useCatalogFilters();
 
   const dispatch = useDispatch();
@@ -52,9 +53,10 @@ const CatalogList = ({
         page: filters.page || 1,
         limit: 20,
         categorySlug,
+        query,
       })
     );
-  }, [categorySlug, filters, dispatch]);
+  }, [categorySlug, filters, query, dispatch]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -110,6 +112,7 @@ const CatalogList = ({
   const handleBrandSelect = (brand) => {
     const brandId = brand.idTorgsoft;
     const currentFilters = parseFiltersFromUrl(location.pathname); // Отримуємо актуальні фільтри з URL
+    console.log("currentFilters: ", currentFilters);
 
     // Додаємо або видаляємо бренд із фільтрів
     const updatedBrands = currentFilters.brands.includes(brandId)

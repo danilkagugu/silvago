@@ -44,9 +44,12 @@ export const getBrandsTorgsoft = async () => {
 };
 
 export const searchProductApi = async (query) => {
+  if (!query || query.trim() === "") {
+    return []; // Якщо `query` пустий, повертаємо порожній масив
+  }
   const instance = createPublicAxiosInstance();
   const { data } = await instance.get(`/api/product/search`, {
-    params: { query },
+    params: { query: query.trim() },
   });
   return data;
 };
