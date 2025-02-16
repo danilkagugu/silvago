@@ -8,31 +8,38 @@ const ProductPrice = ({
   isFavorite,
   loading,
 }) => {
-  // console.log("isFavorite", isFavorite);
+  const isDiscount = Number(volume.discount) > 0;
+  console.log("isDiscount: ", isDiscount);
   return (
     <div className={css.productPriceContainer}>
       <div className={css.productPriceWrapper}>
-        <div className={css.productPrice}>
-          <div className={css.price}>
-            <div
-              className={
-                volume && volume.discount > 0 ? css.priceItemNew : css.priceItem
-              }
-            >
-              {volume.discountPrice} ₴
+        <div className={`${css.productBlock} ${css.productBlockI}`}>
+          <div className={css.productPrice}>
+            <div className={css.productPriceBox}>
+              <div
+                className={`${css.productPriceItem} ${
+                  isDiscount ? css.productPriceItemNew : ""
+                }`}
+              >
+                {isDiscount ? volume.discountPrice : volume.retailPrice} ₴
+              </div>
+              {isDiscount && (
+                <div className={css.productOldPrice}>
+                  {volume.retailPrice} ₴
+                </div>
+              )}
             </div>
-            {volume && volume.discount ? (
-              <div className={css.productOldPrice}>{volume.retailPrice} ₴</div>
-            ) : null}
           </div>
         </div>
-        <FavoritesService
-          handleToggleFavorite={handleToggleFavorite}
-          isFavorite={isFavorite}
-          product={product}
-          volume={volume}
-          loading={loading}
-        />
+        <div className={css.productBlock}>
+          <FavoritesService
+            handleToggleFavorite={handleToggleFavorite}
+            isFavorite={isFavorite}
+            product={product}
+            volume={volume}
+            loading={loading}
+          />
+        </div>
       </div>
     </div>
   );

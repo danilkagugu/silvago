@@ -1,10 +1,13 @@
 import Layout from "../../components/Layout/Layout";
 import ProductInfo from "../../components/ProductInfo/ProductInfo";
+import css from "./ProductDetail.module.css";
 
 const ProductDetail = () => {
   return (
     <Layout>
-      <ProductInfo />
+      <div className={css.wrapper}>
+        <ProductInfo />
+      </div>
     </Layout>
   );
 };

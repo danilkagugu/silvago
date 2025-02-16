@@ -1,38 +1,25 @@
-.productGroupMenu {
-  display: flex;
-  flex-wrap: wrap; /* Запобігає розриву, якщо не вистачає місця */
-  align-items: center; /* Вирівнює елементи по вертикалі */
+.breadcrumbs {
   margin: 0 0 10px;
   font-size: 11px;
   color: #acacac;
   line-height: 1.6;
-  gap: 5px; /* Відстань між елементами */
 }
 
-.productGroupMenuItem {
-  display: flex;
-  align-items: center; /* Вирівнює іконки та текст по вертикалі */
-  white-space: nowrap; /* Запобігає переносу тексту на новий рядок */
+.breadcrumbsItem {
+  display: inline-block;
 }
-.navItem,
-.itemText {
+
+.breadcrumbs a {
   color: #acacac;
   border: 0;
-  width: max-content;
-}
-.navItem:hover {
-  color: #000;
 }
 
 .icon {
   display: inline-block;
-  font-size: 32px;
-  width: 1em;
-  height: 1em;
+
   vertical-align: middle;
 }
-
-.iconChevron {
+.breadcrumbsIconChevron {
   margin: 0 5px;
   font-size: 8px;
   fill: currentColor;

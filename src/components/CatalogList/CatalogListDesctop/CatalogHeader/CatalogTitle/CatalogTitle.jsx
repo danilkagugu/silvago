@@ -6,6 +6,7 @@ const CatalogTitle = ({
   selectedBrand,
   selectedSection,
   selectedPriceRange,
+  query,
 }) => {
   const categories = useSelector(selectAllCategories);
   const { categorySlug } = useParams();
@@ -33,13 +34,22 @@ const CatalogTitle = ({
   const categoryName = currentCategory
     ? currentCategory.name
     : "Silvago Каталог";
+
+  const titleName = () => {
+    if (query) return `Результати пошуку «${query}»`;
+    return currentCategory ? currentCategory.name : "Silvago Каталог";
+  };
+
   return (
     <div className={css.catalogTopTitle}>
       <h1 className={css.titleText}>
-        {categoryName}
-        {brandNames.length > 0 && ` Бренд: ${brandNames.join(", ")}`}
-        {sectionNames.length > 0 && `, Розділ: ${sectionNames.join(", ")}`}
-        {selectedPriceRange?.minPrice !== undefined &&
+        {titleName()}
+        {!query && brandNames.length > 0 && ` Бренд: ${brandNames.join(", ")}`}
+        {!query &&
+          sectionNames.length > 0 &&
+          `, Розділ: ${sectionNames.join(", ")}`}
+        {!query &&
+          selectedPriceRange?.minPrice !== undefined &&
           selectedPriceRange?.maxPrice !== undefined &&
           `, Ціна, грн: ${selectedPriceRange?.minPrice} – ${selectedPriceRange?.maxPrice}`}
       </h1>

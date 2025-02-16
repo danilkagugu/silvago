@@ -1,23 +1,45 @@
-.productVolumesContainer {
+.productSection {
   margin-bottom: 40px;
 }
+.productSectionModifications {
+  margin-top: -7px;
+}
 
-.volumesTop {
+.productModifications {
+  display: block;
+}
+
+.modification {
+  margin: 20px 0;
+}
+.modification:last-child {
+  margin-bottom: 0;
+}
+
+.modification:first-child {
+  margin-top: 0;
+}
+
+.modificationTop {
   margin-bottom: 10px;
 }
 
-.volumesTitle {
+.modificationTitle {
   font-size: 15px;
 }
 
-.volumesList {
+.modificationMain {
+  display: block;
+}
+
+.modificationList {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   margin: 0 -10px -5px 0;
 }
 
-.volumeButton {
+.btn {
   position: relative;
   box-sizing: border-box;
   display: inline-block;
@@ -40,6 +62,15 @@
   line-height: 38px;
   font-size: 18px;
   transition: all 0.15s;
+}
+
+.btn:hover {
+  background: #fff;
+  border-color: #666;
+  color: #666;
+}
+
+.modificationButton {
   font-size: 14px;
   font-weight: normal;
   height: 32px;
@@ -48,7 +79,11 @@
   padding: 0 10px;
 }
 
-.selected {
+.modificationButton:last-of-type {
+  margin-right: 10px;
+}
+
+.modificationButtonActive {
   background: #000;
   border: 1px solid #000;
   color: #fff;
@@ -56,7 +91,11 @@
   pointer-events: none;
 }
 
-.buttonGray::after {
+.modificationButtonStockout {
+  border-color: #acacac;
+}
+
+.modificationButtonStockout:after {
   content: "";
   position: absolute;
   left: -1px;
@@ -69,14 +108,14 @@
 
 .tooltipWrapper {
   position: relative;
-  display: inline-block; /* Щоб позиціонування працювало правильно */
+  display: inline-block;
 }
 
 .tooltip {
   display: none;
   position: absolute;
   z-index: 1000;
-  top: -55px; /* Розташування над кнопкою */
+  top: -55px;
   left: 50%;
   transform: translateX(-50%);
   max-width: 200px;
@@ -89,6 +128,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.volumeButton:hover .tooltip {
+.modificationButton:hover .tooltip {
   display: block;
 }

@@ -1,4 +1,4 @@
-.productSectionBuy {
+.productSection {
   margin-bottom: 40px;
 }
 
@@ -8,6 +8,83 @@
   flex-wrap: wrap;
   gap: 10px;
   margin-bottom: 10px;
+}
+
+.productOrderBlock {
+  margin-right: 10px;
+}
+
+.productOrderBlock:last-child {
+  margin-right: 0;
+}
+
+.btn {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-block;
+  line-height: 1;
+  padding: 0;
+  outline: 0;
+  border: none;
+  background: rgba(0, 0, 0, 0);
+  text-align: center;
+  text-decoration: none !important;
+  vertical-align: middle;
+  cursor: pointer;
+  white-space: nowrap;
+  border-radius: 4px;
+  color: #666;
+  border: 1px solid #d8d8d8;
+  background: #fff;
+  box-shadow: none;
+  height: 38px;
+  line-height: 38px;
+  font-size: 18px;
+  transition: all 0.15s;
+}
+
+.btn.special {
+  color: #fff;
+  border: 0;
+  background: #3b3b3b;
+  box-shadow: none;
+}
+
+.btn.special:hover {
+  background: #4a4a4a;
+  border-color: #fff;
+  color: #fff;
+}
+
+.btn.inBasket {
+  border: 1px solid #fff;
+  background: none;
+  box-shadow: none;
+  text-shadow: none;
+  font-weight: normal;
+}
+.btn.inBasket.special {
+  border-color: #e79eb0;
+  color: #e79eb0;
+}
+
+.btn.inBasket.special:hover {
+  background: rgba(231, 158, 176, 0.1);
+}
+
+.btnText {
+  box-sizing: border-box;
+  width: 100%;
+  float: left;
+  padding: 0 16px;
+}
+
+.btn.special .btnText {
+  margin: 0;
+}
+
+.btn.inBasket .btnText {
+  margin: -1px 0;
 }
 
 .productBuyBtn {

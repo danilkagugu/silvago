@@ -20,6 +20,7 @@ const CatalogListDesctop = ({
   selectedPriceRange,
   categorySlug,
   categories,
+  query,
 }) => {
   return (
     <>
@@ -31,6 +32,7 @@ const CatalogListDesctop = ({
         selectedPriceRange={selectedPriceRange}
         categorySlug={categorySlug}
         categories={categories}
+        query={query}
       />
       <div className={css.catalogContentMain}>
         <div

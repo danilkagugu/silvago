@@ -126,7 +126,6 @@ const ProductInfo = () => {
     }
   }, [productDetails]);
 
-  console.log("productDetails", productDetails);
   const handleToggleFavorite = async (product, idTorgsoft) => {
     if (!product || !product._id) {
       console.warn("Product is invalid.");
@@ -217,73 +216,73 @@ const ProductInfo = () => {
 
   return (
     <>
-      {
-        <div className={css.desctop}>
-          {product && (
-            <div className={css.productContent}>
-              <div className={css.productLeft}>
-                <ProductMedia
-                  brand={brandsTorgsoft.find(
-                    (b) =>
-                      b.name.trim().toLowerCase() ===
-                      product.brand.trim().toLowerCase()
-                  )}
-                  handleBrandClick={(brandId) => navigate(`/brand/${brandId}`)}
+      <section className={css.product}>
+        {product && (
+          <div className={css.productContent}>
+            <div
+              className={`${css.productColumn} ${css.productColumnSticky} ${css.productColumnLeft}`}
+            >
+              <ProductMedia
+                brand={brandsTorgsoft.find(
+                  (b) =>
+                    b.name.trim().toLowerCase() ===
+                    product.brand.trim().toLowerCase()
+                )}
+                handleBrandClick={(brandId) => navigate(`/brand/${brandId}`)}
+                volume={volume}
+              />
+            </div>
+            <div
+              className={`${css.productColumn} ${css.productColumnSticky}  ${css.productRight}`}
+            >
+              <div className={css.productColumnContainer}>
+                <ProductMainInfo
+                  categories={categories}
+                  product={product}
                   volume={volume}
+                  breadcrumbs={breadcrumbs}
+                  handleToggleFavorite={handleToggleFavorite}
+                  handleToneChange={handleToneChange}
+                  handleVolumeChange={handleVolumeChange}
+                  handleAddToBasket={handleAddToBasket}
+                  quantities={quantities}
+                  slug={slug}
+                  isFavorite={favorites.some(
+                    (fav) =>
+                      fav.productId === product._id &&
+                      fav.variation.idTorgsoft === volume.idTorgsoft
+                  )}
+                  loading={loading}
+                />
+
+                <ProductCharacteristics
+                  product={product}
+                  productDetails={productDetails}
+                />
+
+                <ProductDescriptionTabs
+                  descriptionTab={descriptionTab}
+                  product={product}
+                  setDescriptionTab={setDescriptionTab}
+                />
+
+                <ProductAdditionalInfoTabs
+                  descriptionInfoTab={descriptionInfoTab}
+                  setDescriptionInfoTab={setDescriptionInfoTab}
+                  tabsInfo={[
+                    "Доставка",
+                    "Оплата",
+                    "Гарантія",
+                    "Повернення",
+                    "Консультація",
+                  ]}
                 />
               </div>
-              <div className={css.productRight}>
-                <div>
-                  <div className={css.productGroup}>
-                    <ProductMainInfo
-                      categories={categories}
-                      product={product}
-                      volume={volume}
-                      breadcrumbs={breadcrumbs}
-                      handleToggleFavorite={handleToggleFavorite}
-                      handleToneChange={handleToneChange}
-                      handleVolumeChange={handleVolumeChange}
-                      handleAddToBasket={handleAddToBasket}
-                      quantities={quantities}
-                      slug={slug}
-                      isFavorite={favorites.some(
-                        (fav) =>
-                          fav.productId === product._id &&
-                          fav.variation.idTorgsoft === volume.idTorgsoft
-                      )}
-                      loading={loading}
-                    />
-                  </div>
-
-                  <ProductCharacteristics
-                    product={product}
-                    productDetails={productDetails}
-                  />
-
-                  <ProductDescriptionTabs
-                    descriptionTab={descriptionTab}
-                    product={product}
-                    setDescriptionTab={setDescriptionTab}
-                  />
-
-                  <ProductAdditionalInfoTabs
-                    descriptionInfoTab={descriptionInfoTab}
-                    setDescriptionInfoTab={setDescriptionInfoTab}
-                    tabsInfo={[
-                      "Доставка",
-                      "Оплата",
-                      "Гарантія",
-                      "Повернення",
-                      "Консультація",
-                    ]}
-                  />
-                </div>
-              </div>
             </div>
-          )}
-          <div className={css.productDetailsBottom}></div>
-        </div>
-      }
+          </div>
+        )}
+        {/* <div className={css.productDetailsBottom}></div> */}
+      </section>
     </>
   );
 };

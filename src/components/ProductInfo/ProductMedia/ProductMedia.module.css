@@ -1,3 +1,7 @@
+.productColumnContainer {
+  display: block;
+}
+
 .productGallery {
   margin-bottom: 40px;
 }
@@ -21,11 +25,32 @@
 }
 
 .titlePhotoContainer {
+  position: absolute !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.galerryItem {
+  text-align: center;
+}
+
+.galleryLink {
+  border: 0;
+}
+
+.galleryPhotoImg {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 0;
   right: 0;
+  margin: auto;
+  max-width: 100%;
+  max-height: 100%;
+  width: 390px;
+  height: 390px;
 }
 
 .logoBrand {
@@ -41,8 +66,87 @@
   cursor: pointer;
 }
 
+.productSticker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  line-height: 1;
+}
+.productStickerImage {
+  position: relative;
+  z-index: 1;
+  margin-top: 2px;
+}
+.productStickerImage:first-child {
+  margin-top: 0;
+}
+
+.productStickerImageWrap {
+  display: inline-block;
+}
+
+.productStickerImg {
+  display: block;
+  width: 50%;
+  height: auto;
+}
+
+.galleryProductLogo {
+  position: absolute;
+  z-index: 50;
+  border: 0;
+  top: 15px;
+  right: 15px;
+  padding: 5px;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
 .photoCarusel {
   position: relative;
   margin-top: 10px;
   text-align: center;
+}
+
+.galleryThumbnailsContainer {
+  height: 100%;
+  overflow: hidden;
+  text-align: center;
+}
+
+.galleryThumbnailsList {
+  display: inline-flex;
+  flex-wrap: wrap;
+  vertical-align: top;
+  margin: 0 auto;
+}
+
+.galleryThumb {
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0);
+  background: #fff;
+  margin-right: 5px;
+  width: 78px !important;
+  height: 78px !important;
+}
+.galleryThumb:hover {
+  border-color: #545454;
+}
+
+.galleryThumbSpan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.galleryThumbImg {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
 }

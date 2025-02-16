@@ -11,6 +11,7 @@ const CatalogHeader = ({
   selectedPriceRange,
   categorySlug,
   categories,
+  query,
 }) => {
   return (
     <>
@@ -18,6 +19,7 @@ const CatalogHeader = ({
         <BreadcrumbsCatalog
           categorySlug={categorySlug}
           categories={categories}
+          query={query}
         />
       </div>
       <div className={css.catalogTopRows}>
@@ -25,6 +27,7 @@ const CatalogHeader = ({
           selectedBrand={selectedBrand}
           selectedSection={selectedSection}
           selectedPriceRange={selectedPriceRange}
+          query={query}
         />
         <SortingPanel handleSortChange={handleSortChange} sortType={sortType} />
       </div>
