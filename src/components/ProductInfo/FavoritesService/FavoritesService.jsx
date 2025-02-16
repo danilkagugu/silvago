@@ -8,10 +8,9 @@ const FavoritesService = ({
   isFavorite,
   loading,
 }) => {
-  // console.log("volume", volume);
   return (
-    <div className={css.productLikeBox}>
-      <div className={css.productLikeItem}>
+    <div className={css.productActionBox}>
+      <div className={css.productActionItem}>
         <button
           className={css.favoriteBtn}
           onClick={() => handleToggleFavorite(product, volume.idTorgsoft)}

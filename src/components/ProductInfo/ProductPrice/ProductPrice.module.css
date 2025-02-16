@@ -7,30 +7,48 @@
   align-items: center;
 }
 
-.productPrice {
+.productBlock {
   margin-right: 10px;
-  flex-grow: 1;
 }
 
-.price {
+.productBlock:last-child {
+  margin-right: 0;
+}
+
+.productBlockI {
+  flex-grow: 1;
+}
+.productPrice {
+  display: block;
+}
+
+.productPriceBox {
   display: flex;
   align-items: baseline;
   flex-wrap: wrap;
 }
 
-.priceItemNew {
-  margin-right: 15px;
+.productPriceItem {
   font-size: 28px;
   color: #000;
 }
-
-.priceItem {
-  font-size: 28px;
-  color: #000;
+.productPriceItemNew {
+  margin-right: 15px;
+  color: #d9344a;
 }
 
 .productOldPrice {
+  position: relative;
   color: #acacac;
   font-size: 21px;
-  text-decoration: line-through;
+}
+
+.productOldPrice:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: #acacac;
 }

@@ -226,6 +226,7 @@ const CatalogList = ({
             categoriesCount={categoriesCount}
             categorySlug={categorySlug}
             categories={categories}
+            query={query}
           />
         </div>
       ) : (

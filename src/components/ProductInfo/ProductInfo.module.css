@@ -3,34 +3,33 @@
   overflow: hidden;
 }
 
-@media (max-width: 1439.9px) {
-  .desctop {
-    display: none;
-  }
-}
-
 .productContent {
   display: flex;
   align-items: flex-start;
 }
 
-.productLeft {
-  position: sticky;
-  top: 20px;
-  z-index: 2;
-  width: 50%;
-  padding-right: 20px;
+.product {
+  color: #000;
+}
+
+.productColumn {
   box-sizing: border-box;
 }
 
-.productRight {
+.productColumnSticky {
   position: sticky;
   top: 20px;
   z-index: 2;
-  width: 50%;
-  padding-left: 20px;
 }
 
-.productGroup {
-  margin-bottom: 40px;
+.productColumnLeft {
+  width: 50%;
+  padding-right: 20px;
+}
+.productColumnContainer {
+  display: block;
+}
+.productRight {
+  width: 50%;
+  padding-left: 20px;
 }

@@ -6,7 +6,6 @@ import ProductVolumeTone from "../ProductVolumeTone/ProductVolumeTone";
 import css from "./ProductMainInfo.module.css";
 
 const ProductMainInfo = ({
-  categories,
   product,
   volume,
   handleToggleFavorite,
@@ -20,43 +19,42 @@ const ProductMainInfo = ({
   breadcrumbs,
 }) => {
   return (
-    <>
-      <div className={css.productGroupItemHeader}>
-        {/* ТУТ НАДА ЗРОБИТЬ НАВІГАЦІЮ ПО МЕНЮ */}
-
-        <Breadcrumbs
-          categories={categories}
-          product={product}
-          volume={volume}
-          breadcrumbs={breadcrumbs}
-        />
-        {/* ТУТ НАДА ЗРОБИТЬ НАВІГАЦІЮ ПО МЕНЮ */}
-        <ProductTitle volume={volume} />
+    <div className={css.productGroup}>
+      <div className={css.productGroupItem}>
+        <div className={css.productGroupItemHeader}>
+          <Breadcrumbs breadcrumbs={breadcrumbs} />
+          <ProductTitle volume={volume} />
+        </div>
       </div>
 
-      <ProductPrice
-        handleToggleFavorite={handleToggleFavorite}
-        isFavorite={isFavorite}
-        product={product}
-        volume={volume}
-        loading={loading}
-      />
+      <div className={css.productGroupItem}>
+        <ProductPrice
+          handleToggleFavorite={handleToggleFavorite}
+          isFavorite={isFavorite}
+          product={product}
+          volume={volume}
+          loading={loading}
+        />
+      </div>
 
-      <ProductVolumeTone
-        handleToneChange={handleToneChange}
-        handleVolumeChange={handleVolumeChange}
-        product={product}
-        volume={volume}
-      />
-
-      <ProductBuy
-        handleAddToBasket={handleAddToBasket}
-        product={product}
-        quantities={quantities}
-        slug={slug}
-        volume={volume}
-      />
-    </>
+      <div className={css.productGroupItem}>
+        <ProductVolumeTone
+          handleToneChange={handleToneChange}
+          handleVolumeChange={handleVolumeChange}
+          product={product}
+          volume={volume}
+        />
+      </div>
+      <div className={css.productGroupItem}>
+        <ProductBuy
+          handleAddToBasket={handleAddToBasket}
+          product={product}
+          quantities={quantities}
+          slug={slug}
+          volume={volume}
+        />
+      </div>
+    </div>
   );
 };
 

@@ -1,3 +1,10 @@
+.productGroup {
+  margin-bottom: 40px;
+}
+.productGroupItem {
+  display: block;
+}
+
 .productGroupItemHeader {
   margin-bottom: 20px;
 }
