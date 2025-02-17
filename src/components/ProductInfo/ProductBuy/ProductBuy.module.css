@@ -64,12 +64,12 @@
   font-weight: normal;
 }
 .btn.inBasket.special {
-  border-color: #e79eb0;
-  color: #e79eb0;
+  border-color: #515151;
+  color: #686868;
 }
 
 .btn.inBasket.special:hover {
-  background: rgba(231, 158, 176, 0.1);
+  background: rgba(159, 159, 159, 0.1);
 }
 
 .btnText {

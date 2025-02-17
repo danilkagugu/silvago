@@ -28,3 +28,6 @@
 .text {
   line-height: 1.57;
 }
+.productDescriptionBox {
+  overflow: hidden;
+}

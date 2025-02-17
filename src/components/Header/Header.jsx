@@ -68,7 +68,7 @@ const Header = () => {
               </div>
               <div className={`${css.headerColumn} ${css.headerColumnRight}`}>
                 <div className={css.headerSection}>
-                  <HeaderContacts />
+                  {/* <HeaderContacts /> */}
                 </div>
                 <div className={css.headerSection}>
                   <HeaderBasket

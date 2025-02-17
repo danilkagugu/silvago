@@ -3,7 +3,7 @@ import css from "./ModalBasket.module.css";
 import { useEffect, useState } from "react";
 import { GoPlus } from "react-icons/go";
 import { HiArrowNarrowLeft, HiOutlineMinus } from "react-icons/hi";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CiTrash } from "react-icons/ci";
 import {
   deleteProduct,
@@ -12,7 +12,6 @@ import {
   updateProductQuantityBasket,
 } from "../../redux/basket/operations";
 import { useDispatch, useSelector } from "react-redux";
-import { IoChevronBackOutline } from "react-icons/io5";
 import {
   selectBasket,
   selectLoading,
@@ -39,10 +38,6 @@ const ModalBasket = ({ closeModal, open }) => {
       }
     });
   }, [basketDataA, tttt, dispatch]);
-  const handleProductClick = (slug) => {
-    navigate(`/product/${slug}`);
-    closeModal();
-  };
 
   useEffect(() => {
     dispatch(getBasketInfo());
@@ -114,65 +109,72 @@ const ModalBasket = ({ closeModal, open }) => {
       // Оновлюємо стан для конкретного товару
       setShowOutOfStockMessage((prev) => ({
         ...prev,
-        [item.product]: true,
+        [item.idTorgsoft]: true,
       }));
 
       // Приховуємо повідомлення через 2 секунди для конкретного товару
       setTimeout(() => {
         setShowOutOfStockMessage((prev) => ({
           ...prev,
-          [item.product]: false,
+          [item.idTorgsoft]: false,
         }));
       }, 2000);
     }
   };
   return (
-    <div className={`${css.modalOverley} ${open ? css.modalOverleyOpen : ""}`}>
-      <div className={`${css.popup} ${open ? css.popupShow : ""}`}>
+    <div
+      className={`${css.modalOverley} `}
+      style={{
+        display: open ? "block" : "none",
+      }}
+    >
+      <section
+        className={`${css.popup} `}
+        style={{
+          display: open ? "block" : "none",
+        }}
+      >
         <div className={css.popupBlock}>
-          {loading && (
-            <div className={css.loaderOverlay}>
-              <div className={css.loader}>
-                <Loader />
-              </div>
-            </div>
-          )}
-          <IoMdClose className={css.iconClose} onClick={closeModal} />
-          <IoChevronBackOutline
-            className={css.iconCloseChevron}
-            onClick={closeModal}
-          />
+          <div className={css.popupClose}>
+            <IoMdClose className={css.iconClose} onClick={closeModal} />
+          </div>
 
-          <h2 className={css.popupTitle}>Кошик</h2>
+          <div className={css.popupTitle}>Кошик</div>
           <div className={css.cartBasket}>
-            <table className={css.cartItemsDesctop}>
-              <thead>
-                <tr>
-                  <td></td>
-                  <td></td>
-                  <td className={css.cartHeader}>
-                    <div className={css.cartHeaderDiv}>
-                      <span>Кількість</span>
-                    </div>
-                  </td>
-                  <td className={`${css.cartHeader} ${css.cartHeaderCost}`}>
-                    <div className={css.cartHeaderDiv}>
-                      <span>Вартість</span>
-                    </div>
-                  </td>
-                </tr>
-              </thead>
-              <tbody className={css.cartBody}>
+            <div className={css.cartContent}>
+              <div
+                className={css.loaderContainer}
+                style={{ display: loading ? "block" : "none" }}
+              >
+                <div className={css.loaderSpinner}>
+                  <Loader />
+                </div>
+              </div>
+
+              <table className={css.cartItems}>
+                <thead>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td className={css.cartHeader}>
+                      <div className={css.cartHeaderB}>
+                        <span>Кількість</span>
+                      </div>
+                    </td>
+                    <td className={`${css.cartHeader} ${css.cartHeaderCost}`}>
+                      <div className={css.cartHeaderB}>
+                        <span>Вартість</span>
+                      </div>
+                    </td>
+                  </tr>
+                </thead>
+
                 {basketDataA &&
                   basketDataA.map((item) => {
                     // console.log("item: ", item);
-                    // console.log("basketDataA: ", basketDataA);
                     const details = tttt[item.slug];
                     // console.log("details: ", details);
-                    // console.log("item: ", item);
 
-                    // const uniqueKey = `${item.product}-${item.volume}`;
-                    // console.log("details: ", details);
                     const volumeDetail = details?.product?.variations?.find(
                       (vol) =>
                         vol.volume === item.volume && vol.tone === item.tone
@@ -185,195 +187,207 @@ const ModalBasket = ({ closeModal, open }) => {
                     const discountedPrice = price * (1 - discount / 100);
                     return (
                       details && (
-                        <tr
-                          className={css.cartProduct}
-                          key={details.volume._id}
-                          id={details.volume._id}
+                        <tbody
+                          className={css.cartSection}
+                          key={volumeDetail?.idTorgsoft}
+                          id={volumeDetail?.idTorgsoft}
                         >
-                          <td
-                            className={`${css.cartSell} ${css.cartImg}`}
-                            onClick={() => handleProductClick(item.slug)}
-                          >
-                            <div className={css.iconRemove}>
-                              <span
-                                className={css.trashBox}
-                                onClick={() =>
-                                  handleRemoveProduct({
-                                    productId: item.product,
-                                    volume: item.volume,
-                                  })
-                                }
-                              >
-                                <CiTrash className={css.iconTrash} />
-                              </span>
-                            </div>
-                            <div className={css.imgBox}>
-                              <img
-                                className={`${css.productImg} ${
-                                  details.volume.quantity === 0
-                                    ? css.outOfStock
-                                    : ""
-                                }`}
-                                src={details?.volume?.image}
-                                alt={details?.volume?.fullName}
-                              />
-                            </div>
-                          </td>
-                          <td
-                            className={`${css.cartSell}`}
-                            onClick={() => handleProductClick(item.slug)}
-                          >
-                            <div className={css.productTitle}>
-                              <p>{details?.volume?.fullName}</p>
-                            </div>
-                            <div className={css.productPrice}>
-                              <p className={css.priceInfo}>
-                                {Math.ceil(discountedPrice)} грн
-                              </p>
-                            </div>
-                          </td>
-                          {details?.volume?.quantity > 0 && (
-                            <td className={`${css.cartSell} ${css.quantity}`}>
-                              <div className={css.counter}>
-                                <div className={css.counterConteiner}>
-                                  <button
-                                    className={`${css.counterBtn} `}
-                                    onClick={() => {
-                                      if (item.quantity === 1) {
-                                        // Викликаємо функцію видалення товару
-                                        handleRemoveProduct({
-                                          productId: item.product,
-                                          volume: item.volume,
-                                        });
-                                      } else {
-                                        // Зменшуємо кількість
-                                        handleQuantityChange(
-                                          item._id,
-                                          item.volume,
-                                          item.quantity - 1,
-                                          item.tone
-                                        );
-                                      }
-                                    }}
-                                  >
-                                    <HiOutlineMinus
-                                      className={`${css.icon} ${css.iconMinus}`}
-                                    />
-                                  </button>
-                                  <div className={css.counterInput}>
-                                    <input
-                                      className={css.counterField}
-                                      type="text"
-                                      // value={item.quantity}
-                                      value={
-                                        details?.volume?.quantity <
-                                        item.quantity
-                                          ? details?.volume?.quantity
-                                          : item.quantity
-                                      }
-                                      min={"1"}
-                                      max={details.volume.quantity}
-                                      onChange={(e) =>
-                                        handleQuantityChange(
-                                          item._id,
-                                          item.volume,
-                                          Number(e.target.value),
-                                          item.tone
-                                        )
-                                      }
-                                    />
-                                  </div>
-                                  <button
-                                    className={`${css.counterBtn} ${
-                                      item.quantity ===
-                                      details?.volume?.quantity
-                                        ? css.disabled
-                                        : ""
-                                    }`}
-                                    onClick={() =>
-                                      handleIncrement(item, details)
-                                    }
-                                  >
-                                    <GoPlus
-                                      className={`${css.icon} ${css.iconPlus}`}
-                                    />
-                                  </button>
-                                </div>
-                                <p
-                                  className={css.outOfStockMessage}
-                                  // style={{
-                                  //   display: showOutOfStockMessage
-                                  //     ? "block"
-                                  //     : "none",
-                                  // }}
-                                  style={{
-                                    display: showOutOfStockMessage[item.product]
-                                      ? "block"
-                                      : "none",
-                                  }}
+                          <tr className={css.cartItem}>
+                            <td
+                              className={`${css.cartSell} ${css.image}`}
+                              // onClick={() => handleProductClick(item.slug)}
+                            >
+                              <div className={css.cartRemove}>
+                                <span
+                                  className={css.cartRemoveBtn}
+                                  onClick={() =>
+                                    handleRemoveProduct({
+                                      productId: item.product,
+                                      volume: item.volume,
+                                    })
+                                  }
                                 >
-                                  Більше немає в наявності
-                                </p>
+                                  <CiTrash className={css.iconTrash} />
+                                </span>
+                              </div>
+                              <div className={css.cartImage}>
+                                <Link to={`/product/${item.slug}`}>
+                                  <img
+                                    // className={`${css.productImg} ${
+                                    //   details.volume.quantity === 0
+                                    //     ? css.outOfStock
+                                    //     : ""
+                                    // }`}
+                                    src={details?.volume?.image}
+                                    alt={details?.volume?.fullName}
+                                    width={78}
+                                    height={78}
+                                  />
+                                </Link>
                               </div>
                             </td>
-                          )}
-                          <td
-                            className={`${css.cartSell} ${
-                              details?.volume?.quantity > 0
-                                ? css.cost
-                                : css.misingContainer
-                            }`}
-                          >
-                            <div
-                              className={
-                                details?.volume?.quantity > 0
-                                  ? css.orderItemCost
-                                  : css.orderItemMissing
-                              }
+                            <td
+                              className={`${css.cartSell} ${css.details}`}
+                              // onClick={() => handleProductClick(item.slug)}
                             >
-                              {details?.volume?.quantity > 0
-                                ? `${item.quantity * discountedPrice} грн`
-                                : "Немає в наявності"}
-                            </div>
-                          </td>
-                        </tr>
+                              <div className={css.cartTitle}>
+                                <Link to={`/product/${item.slug}`}>
+                                  {item.productName}
+                                </Link>
+                              </div>
+                              <div className={css.cartPrice}>
+                                {Math.ceil(discountedPrice)} грн
+                              </div>
+                            </td>
+                            {details?.volume?.quantity > 0 && (
+                              <td className={`${css.cartSell} ${css.quantity}`}>
+                                <div className={css.cartQuantity}>
+                                  <div
+                                    className={`${css.counter} ${css.counterLarge}`}
+                                  >
+                                    <div className={css.counterContainer}>
+                                      <button
+                                        className={`${css.counterBtn} `}
+                                        onClick={() => {
+                                          if (item.quantity === 1) {
+                                            // Викликаємо функцію видалення товару
+                                            handleRemoveProduct({
+                                              productId: item.product,
+                                              volume: item.volume,
+                                            });
+                                          } else {
+                                            // Зменшуємо кількість
+                                            handleQuantityChange(
+                                              item._id,
+                                              item.volume,
+                                              item.quantity - 1,
+                                              item.tone
+                                            );
+                                          }
+                                        }}
+                                      >
+                                        <HiOutlineMinus
+                                          className={`${css.iconMinus}`}
+                                        />
+                                      </button>
+                                      <div className={css.counterInput}>
+                                        <input
+                                          className={css.counterField}
+                                          type="text"
+                                          // value={item.quantity}
+                                          value={
+                                            details?.volume?.quantity <
+                                            item.quantity
+                                              ? details?.volume?.quantity
+                                              : item.quantity
+                                          }
+                                          min={"1"}
+                                          max={details.volume.quantity}
+                                          onChange={(e) =>
+                                            handleQuantityChange(
+                                              item._id,
+                                              item.volume,
+                                              Number(e.target.value),
+                                              item.tone
+                                            )
+                                          }
+                                        />
+                                      </div>
+                                      <button
+                                        className={`${css.counterBtn} ${
+                                          item.quantity ===
+                                          details?.volume?.quantity
+                                            ? css.disabled
+                                            : ""
+                                        }`}
+                                        onClick={() =>
+                                          handleIncrement(item, details)
+                                        }
+                                      >
+                                        <GoPlus
+                                          className={` ${css.iconPlus}`}
+                                        />
+                                      </button>
+                                    </div>
+                                    <div
+                                      className={css.counterMessage}
+                                      style={{
+                                        display: showOutOfStockMessage[
+                                          item.idTorgsoft
+                                        ]
+                                          ? "block"
+                                          : "none",
+                                      }}
+                                    >
+                                      Більше немає в наявності
+                                    </div>
+                                  </div>
+                                </div>
+                              </td>
+                            )}
+                            <td
+                              className={`${css.cartSell} ${
+                                details?.volume?.quantity > 0
+                                  ? css.cost
+                                  : css.misingContainer
+                              }`}
+                            >
+                              <div
+                                className={
+                                  details?.volume?.quantity > 0
+                                    ? css.cartCost
+                                    : css.orderItemMissing
+                                }
+                              >
+                                {details?.volume?.quantity > 0
+                                  ? `${item.quantity * discountedPrice} грн`
+                                  : "Немає в наявності"}
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
                       )
                     );
                   })}
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td className={css.cartFooter} colSpan={4}>
-                    <div className={css.cartTotalAmount}>
-                      <p className={css.cartText}>Всього</p>
-                      <p className={css.cartCost}>
-                        {calculateTotalAmount()} грн
-                      </p>
-                    </div>
-                    <div className={css.cartBtn}>
-                      <div className={css.cartBtnBack} onClick={closeModal}>
-                        <button className={`${css.btn} ${css.clear}`}>
-                          <HiArrowNarrowLeft className={css.arrowLeft} />
-                          Повернутись до покупок
-                        </button>
-                      </div>
-                      <div
-                        className={css.cartBtnOrder}
-                        onClick={() => {
-                          navigate("/basket");
-                        }}
-                      >
-                        <p className={`${css.btnq} ${css.cartBtnText}`}>
-                          Оформити замовлення
+
+                <tfoot className={css.cartFoot}>
+                  <tr>
+                    <td className={css.cartFooter} colSpan={4}>
+                      <div className={css.cartTotalAmount}>
+                        <p className={css.cartText}>Всього</p>
+                        <p className={`${css.cartCost} ${css.cartTextB}`}>
+                          {calculateTotalAmount()} грн
                         </p>
                       </div>
-                    </div>
-                  </td>
-                </tr>
-              </tfoot>
-            </table>
+                      <div className={css.cartBtn}>
+                        <div className={css.cartBtnBack} onClick={closeModal}>
+                          <button className={`${css.btn} ${css.clear}`}>
+                            <span className={css.btnContent}>
+                              <HiArrowNarrowLeft className={css.arrowLeft} />
+                              Повернутись до покупок
+                            </span>
+                          </button>
+                        </div>
+                        <div
+                          className={css.cartBtnOrder}
+                          onClick={() => {
+                            navigate("/basket");
+                          }}
+                        >
+                          <span className={`${css.btn} ${css.orderBtn}`}>
+                            <p className={`${css.btnContent}`}>
+                              Оформити замовлення
+                            </p>
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
-          <div className={css.cartItemsMobile}>
+          {/* <div className={css.cartItemsMobile}>
             <div className={css.mobileWrapper}>
               <div className={css.basketMobileContent}>
                 <div>
@@ -534,9 +548,9 @@ const ModalBasket = ({ closeModal, open }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
-      </div>
+      </section>
     </div>
   );
 };
