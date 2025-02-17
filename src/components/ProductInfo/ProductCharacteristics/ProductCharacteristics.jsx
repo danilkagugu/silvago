@@ -1,7 +1,7 @@
-import React from "react";
 import css from "./ProductCharacteristics.module.css";
 
 const ProductCharacteristics = ({ productDetails, product }) => {
+  console.log("product: ", product);
   return (
     <div className={css.productGroup}>
       <div className={css.productGroupItem}>
@@ -12,17 +12,10 @@ const ProductCharacteristics = ({ productDetails, product }) => {
           <div className={css.productCharacteristicsBox}>
             <table className={css.productCharacteristicsTable}>
               <tbody>
-                {product.characteristics &&
-                  product.characteristics.map((item, index) => {
-                    const {
-                      skinType,
-                      age,
-                      appointment,
-                      country,
-                      productClass,
-                      productType,
-                      series,
-                    } = item;
+                {/* {product &&
+                  product.map((item, index) => {
+                    const { country, brand } = item;
+                    console.log("country: ", country);
                     return (
                       <React.Fragment key={index}>
                         <tr key={1}>
@@ -83,7 +76,23 @@ const ProductCharacteristics = ({ productDetails, product }) => {
                         </tr>
                       </React.Fragment>
                     );
-                  })}
+                  })} */}
+                <tr key={1}>
+                  <th
+                    className={`${css.productFeaturesCell} ${css.productFeaturesCellLeft}`}
+                  >
+                    Бренд
+                  </th>
+                  <td className={css.productFeaturesCell}>{product.brand}</td>
+                </tr>
+                <tr key={2}>
+                  <th
+                    className={`${css.productFeaturesCell} ${css.productFeaturesCellLeft}`}
+                  >
+                    Країна виробник
+                  </th>
+                  <td className={css.productFeaturesCell}>{product.country}</td>
+                </tr>
               </tbody>
             </table>
           </div>

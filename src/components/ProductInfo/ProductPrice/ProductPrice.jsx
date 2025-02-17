@@ -9,7 +9,6 @@ const ProductPrice = ({
   loading,
 }) => {
   const isDiscount = Number(volume.discount) > 0;
-  console.log("isDiscount: ", isDiscount);
   return (
     <div className={css.productPriceContainer}>
       <div className={css.productPriceWrapper}>

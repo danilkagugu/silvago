@@ -1,7 +1,6 @@
 import css from "./ProductTitle.module.css";
 
 const ProductTitle = ({ volume }) => {
-  console.log("volume: ", volume);
   return (
     <div className={css.productHeader}>
       <div className={`${css.productHeaderRow} ${css.productHeaderRowTop}`}>

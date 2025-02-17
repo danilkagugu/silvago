@@ -11,7 +11,6 @@ export const createPublicAxiosInstance = () => {
 
 const createPrivateAxiosInstance = (token) => {
   if (!token) {
-    console.log("Користувач не авторизований");
     return null;
   }
 

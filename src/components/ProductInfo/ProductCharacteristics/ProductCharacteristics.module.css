@@ -2,6 +2,10 @@
   margin-bottom: 40px;
 }
 
+.productGroupItem {
+  display: block;
+}
+
 .productCharacteristics {
   margin-bottom: 20px;
   border-bottom: 1px solid #e5e5e5;

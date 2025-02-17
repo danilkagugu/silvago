@@ -35,6 +35,7 @@ const basketSlice = createSlice({
       })
       .addCase(fetchProductDetails.fulfilled, (state, action) => {
         const { slug, details } = action.payload;
+
         // console.log("action.payload: ", action.payload);
         state.productDetails[slug] = details;
         state.loading = false;

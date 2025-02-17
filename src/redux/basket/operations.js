@@ -97,7 +97,6 @@ export const fetchProductDetails = createAsyncThunk(
   async (slug, { rejectWithValue }) => {
     try {
       const response = await productById(slug);
-      console.log("response: ", response);
       return { slug, details: response };
     } catch (error) {
       return rejectWithValue(error);

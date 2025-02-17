@@ -14,6 +14,10 @@
   border: 0;
 }
 
+.breadcrumbs a:hover {
+  color: #545454;
+}
+
 .icon {
   display: inline-block;
 
