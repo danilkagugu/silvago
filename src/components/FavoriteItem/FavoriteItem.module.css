@@ -2,7 +2,6 @@
 
 .cardContainer {
   position: relative;
-  height: 100%;
   padding: 0 0 25px;
 }
 
@@ -135,15 +134,13 @@
   box-sizing: border-box;
   position: absolute;
   width: 100%;
-  padding: 17px 15px 16px;
+  background: #fff;
   padding: 0 15px 16px;
   margin-top: -1px;
-  border: 1px solid #ff8c8c;
+  border: 1px solid #c0c0c0;
   border-radius: 0 0 4px 4px;
   border-top: 0;
-  background: #fff;
-  z-index: 2;
-  /* box-shadow: 0 7px 15px rgba(59, 55, 43, 0.25); */
+  box-shadow: 0 7px 15px rgba(59, 55, 43, 0.25);
 }
 
 .cardContainer:hover .catalogCardFooter {

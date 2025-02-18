@@ -1,53 +1,36 @@
-.container {
-  width: 100%;
+.layoutAsideI {
+  display: block;
 }
 
-.list {
-  display: flex;
-  justify-content: center;
-  flex-direction: row;
-  border-bottom: 1px solid #ddd;
+.sideMenu {
+  margin-bottom: 20px;
 }
 
-@media (min-width: 1440px) {
-  .list {
-    flex-direction: column;
-  }
-
-  .textMobile {
-    display: none;
-  }
+.sideMenuList {
+  display: block;
 }
 
-.text {
-  font-size: 18px;
-  font-weight: bold;
+.sideMenu:last-child {
+  margin-bottom: 0;
 }
 
-.listItem {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-  cursor: pointer;
-  border-bottom: 1px solid #ddd;
+.sideMenuItem {
+  margin-top: 12px;
 }
 
-@media (min-width: 1440px) {
-  .textMobile {
-    display: none;
-  }
+.sideMenuItem:first-child {
+  margin-top: 0;
 }
 
-@media (max-width: 1439px) {
-  .textDesctop {
-    display: none;
-  }
-}
-
-.listItem:hover {
-  background-color: #e0e0e0;
-}
-
-.menuBox {
+.sideMenuItemBox {
+  display: inline-block;
+  font-weight: normal;
   font-size: 17px;
+}
+
+.sideMenuItemBox.active {
+  padding: 2px 6px;
+  margin: -2px -6px;
+  border-radius: 4px;
+  background-color: #f6f6f6;
 }

@@ -6,6 +6,7 @@ import { addProduct } from "../../redux/basket/operations";
 import { useDispatch } from "react-redux";
 
 const FavoriteItem = ({ product, handleRemoveFavorite, quantities }) => {
+  console.log("product: ", product);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 

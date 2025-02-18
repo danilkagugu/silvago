@@ -21,6 +21,7 @@ import {
 import { addProduct } from "../../redux/basket/operations";
 
 const CatalogListItem = ({ product }) => {
+  console.log("product: ", product);
   const dispatch = useDispatch();
 
   const favorites = useSelector(selectFavoritesProducts);

@@ -1,23 +1,33 @@
 /* UserCabinet.module.css */
-.container {
-  display: flex;
-  flex-direction: column;
+.wrapper {
+  min-width: 960px;
+  max-width: 1440px;
+  padding: 0 20px;
+  margin: 0 auto;
 }
 
-@media (min-width: 1440px) {
-  .container {
-    flex-direction: row;
+@media screen and (min-width: 1280px) {
+  .wrapper {
+    padding: 0 30px;
   }
 }
 
-.sidebar {
-  /* width: 250px;   */
-  /* background: #f4f4f4; */
-  padding: 20px 0;
-  /* border-right: 1px solid #ddd; */
+.layout {
+  display: flex;
+  margin-bottom: 40px;
+  min-height: 200px;
 }
 
-.content {
-  flex: 1;
-  padding: 20px;
+.layoutMain {
+  order: 1;
+  flex-grow: 1;
+  min-width: 0;
+}
+
+.layoutMainInner {
+  padding-left: 20px;
+}
+
+.layoutAside {
+  flex: 0 0 220px;
 }

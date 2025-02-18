@@ -7,15 +7,18 @@ import {
 } from "../../redux/product/operations";
 import { useDispatch, useSelector } from "react-redux";
 import { selectFavoritesProducts } from "../../redux/product/selectors";
+import { selectUserData } from "../../redux/auth/selectors";
 
 const FavoriteList = () => {
   const [quantities, setQuantities] = useState({});
   const dispatch = useDispatch();
   const favoriteProducts = useSelector(selectFavoritesProducts);
+  const { id } = useSelector(selectUserData);
+  console.log("favoriteProducts: ", favoriteProducts);
 
   useEffect(() => {
-    dispatch(getFavoriteProducts());
-  }, [dispatch]);
+    dispatch(getFavoriteProducts(id));
+  }, [dispatch, id]);
 
   useEffect(() => {
     const initialQuantities = {};
@@ -34,16 +37,21 @@ const FavoriteList = () => {
     }
   };
 
-  const isMobile = window.innerWidth <= 1440;
-
+  // const isMobile = window.innerWidth <= 1440;
+  console.log("favoriteProducts", favoriteProducts);
   return (
-    <div className={css.container}>
+    <section className={css.wishlist}>
+      <header className={css.wishlistHeader}>
+        <h1 className={css.wishlistTitle}>Обране</h1>
+        <span className={css.btnClearList}>Очистити</span>
+      </header>
+
       {favoriteProducts.length > 0 ? (
-        <ul className={isMobile ? `${css.goods} ${css.goodsGrid}` : css.list}>
+        <ul className={css.catalogGrid}>
           {favoriteProducts.map((item) => (
             <li
               key={`${item.volumeId}-${item.product}`}
-              className={isMobile ? css.goodsItem : css.listItem}
+              className={css.listItem}
               id={item.volumeId}
             >
               <FavoriteItem
@@ -57,7 +65,7 @@ const FavoriteList = () => {
       ) : (
         <p>товару ще немає</p>
       )}
-    </div>
+    </section>
   );
 };
 
