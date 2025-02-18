@@ -227,6 +227,12 @@
   margin-top: 6px;
 }
 
+.cartPrice.old {
+  text-decoration: line-through;
+  color: #acacac;
+  margin-right: 6px;
+}
+
 .cartSell.quantity {
   width: 95px;
   vertical-align: middle;

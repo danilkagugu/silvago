@@ -31,3 +31,20 @@
   flex-wrap: wrap;
   margin: 0 -15px;
 }
+
+.listItem {
+  vertical-align: top;
+  width: 25%;
+}
+
+@media screen and (min-width: 1280px) {
+  .listItem {
+    width: 25%;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .listItem {
+    width: 20%;
+  }
+}

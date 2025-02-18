@@ -45,9 +45,10 @@ const ProductInfo = () => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const productDetails = useSelector(selectProductDetails);
-  // console.log("productDetails: ", productDetails?.breadcrumbs);
+  console.log("productDetails: ", productDetails);
   const brandsTorgsoft = useSelector(selectAllBrandsTorgsoft);
   const favorites = useSelector(selectFavoritesProducts);
+  console.log("favorites: ", favorites);
   const categories = useSelector(selectAllCategories);
   const userData = useSelector(selectUserData) || {};
   const { id } = userData;
@@ -135,7 +136,7 @@ const ProductInfo = () => {
     const isFavorite = favorites.some(
       (fav) =>
         fav.productId === product._id &&
-        fav.variation.idTorgsoft === volume.idTorgsoft
+        fav.allVariations.idTorgsoft === volume.idTorgsoft
     );
     const action = isFavorite
       ? removeProductFavorite({
@@ -249,8 +250,8 @@ const ProductInfo = () => {
                   slug={slug}
                   isFavorite={favorites.some(
                     (fav) =>
-                      fav.productId === product._id &&
-                      fav.variation.idTorgsoft === volume.idTorgsoft
+                      fav?.productId === product?._id &&
+                      fav.allVariations.idTorgsoft === volume.idTorgsoft
                   )}
                   loading={loading}
                 />

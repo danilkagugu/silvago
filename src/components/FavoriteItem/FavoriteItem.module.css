@@ -1,133 +1,33 @@
-/* Desctop css */
-
-.cardContainer {
+/* НОВІ СТИІЛ */
+.catalogCard {
   position: relative;
   padding: 0 0 25px;
 }
-
-@media (max-width: 1439.9px) {
-  .cardContainer {
-    display: none;
-  }
-}
-
-.cardContainerBox {
-  position: relative;
-}
-
-.cardContainer:hover .iconDelete {
-  display: block;
-}
-
-.iconDelete {
-  display: none;
-  position: absolute;
+.catalogCard:hover {
   z-index: 50;
-  top: 8px;
-  right: 11px;
-  border: 0;
-  cursor: pointer;
+  border-color: rgba(0, 0, 0, 0);
 }
 
-.iconDelete:hover {
-  fill: #000;
-}
-
-.cardBox {
-  /* padding: 5px; */
+.cardContainer {
   position: relative;
 }
 
-.catalogCardHeader {
+.catalogCardMain {
   position: relative;
-  /* z-index: 1; */
 }
 
-.cardContainer:hover .catalogCardHeader {
-  background-color: #fff;
+.catalogCard:hover .catalogCardMain {
   border-radius: 4px 4px 0 0;
-  border: 1px solid #ff8c8c;
+  border: 1px solid #c0c0c0;
   box-shadow: 0 7px 15px rgba(59, 55, 43, 0.25);
 }
 
-.catalogCardTop {
-  position: relative;
-  margin-bottom: 15px;
-  padding: 15px 15px 0;
-}
-
-.catalogCardImage {
-  display: block;
+.catalogCardMainB {
   position: relative;
   z-index: 1;
-  overflow: hidden;
-  border: 0;
-  text-align: center;
-  height: 400px;
 }
 
-.imgBox {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  overflow: hidden;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-}
-
-.catalogCardImgProduct {
-  max-height: 100%;
-  max-width: 100%;
-  height: auto;
-  width: auto;
-  font-size: 14px;
-}
-
-.productMissImg {
-  filter: grayscale(100%);
-}
-
-.catalogCardInfo {
-  position: relative;
-  padding: 0 15px 15px;
-}
-
-.catalogCardTitle {
-  margin: 0 0 6px;
-  padding-bottom: 2px;
-  font-size: 13px;
-  line-height: 1.4;
-  font-weight: normal;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-height: 4.2em;
-}
-
-.catalogCardPriceBox {
-  display: flex;
-  align-items: center;
-  margin-top: 9px;
-}
-
-.catalogCardPrice {
-  align-self: center;
-  color: #000;
-  font-size: 15px;
-  font-weight: 700;
-  line-height: 1.2;
-}
-.catalogCardPriceOld {
-  line-height: 0.8;
-  color: #acacac;
-  text-decoration: line-through;
-  margin-right: 10px;
-}
+/* Футер картки */
 
 .catalogCardFooter {
   display: none;
@@ -143,165 +43,6 @@
   box-shadow: 0 7px 15px rgba(59, 55, 43, 0.25);
 }
 
-.cardContainer:hover .catalogCardFooter {
+.catalogCard:hover .catalogCardFooter {
   display: block;
-}
-
-.catalogCardFooterBtn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 20px 0 16px;
-}
-
-.buyButton {
-  padding: 10px 20px;
-  width: 100%;
-  background-color: #4b4b4b;
-  color: #fff;
-  font-weight: 600;
-  border-radius: 70px;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.buyButton:hover {
-  color: black;
-  background-color: #fff;
-  border: 1px solid black;
-}
-
-/* Mobile css */
-
-.catalogCardMob {
-  position: relative;
-}
-
-@media (min-width: 1440px) {
-  .catalogCardMob {
-    display: none;
-  }
-}
-
-.catalogCardHeaderMob {
-  position: relative;
-  margin-bottom: 8px;
-}
-
-.boxImageMob {
-  position: relative;
-  width: 100%;
-  padding-bottom: 100%;
-}
-
-.imageMob {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-
-.image {
-  width: 100%;
-  height: 100%;
-  -o-object-fit: contain;
-  object-fit: contain;
-}
-
-.catalogCardBtnMob {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 10;
-  display: grid;
-  gap: 8px;
-}
-
-.BtnDelMob {
-}
-
-.btnDelete {
-  height: 40px;
-  font-size: 16px;
-  background-color: transparent;
-}
-
-.iconDelMob {
-  display: inline-block;
-  font-size: 16px;
-  width: 1em;
-  height: 1em;
-  fill: #000;
-}
-
-.catalogCardFooterMob {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-}
-
-.catalogCardTitleMob {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  font-size: 13px;
-  font-weight: normal;
-  word-wrap: break-word;
-  max-width: 100%;
-}
-
-.catalogPriceBoxMob {
-  display: inline-flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: flex-start;
-  margin-top: 4px;
-}
-
-.catalogCardPriceOldMob {
-  font-size: 12px;
-  color: #acacac;
-  text-decoration: line-through;
-  margin-right: 6px;
-}
-
-.catalogCardPriceMob {
-  font-size: 14px;
-  font-weight: bold;
-  color: #000;
-}
-
-.catalogCardFooterBtnMob {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: -webkit-max-content;
-  grid-auto-columns: max-content;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.buyButtonMob {
-  padding: 10px 20px;
-  width: 100%;
-  background-color: #4b4b4b;
-  color: #fff;
-  font-weight: 600;
-  border-radius: 8px;
-}
-.productMiss {
-  width: 100%;
-  text-align: center;
-  border-radius: 4px;
-  height: 38px;
-  font-size: 18px;
-  padding: 5px 10px;
-  border: 1px solid #000;
 }

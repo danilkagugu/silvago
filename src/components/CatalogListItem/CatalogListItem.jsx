@@ -41,6 +41,7 @@ const CatalogListItem = ({ product }) => {
   const [activeVariation, setActiveVariation] = useState(
     product.activeVariation || product.variations[0]
   );
+  console.log("activeVariation", activeVariation);
 
   useEffect(() => {
     setActiveVariation(product.activeVariation || product.variations[0]);

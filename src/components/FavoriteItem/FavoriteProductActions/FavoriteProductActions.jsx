@@ -1,20 +1,19 @@
 import { FiMinus } from "react-icons/fi";
-import css from "./ProductActions.module.css";
+import css from "./FavoriteProductActions.module.css";
 import { FaPlus } from "react-icons/fa6";
 import { CiHeart } from "react-icons/ci";
 
-const ProductActions = ({
+const FavoriteProductActions = ({
   volumeDetail,
-  handleDecrement,
   quantities,
-  product,
   handleQuantityChange,
-  handleIncrement,
-  handleAddToBasket,
-  handleToggleFavorite,
+
   isFavorite,
+  handleFavoriteToggle,
+  handleAddToCart,
+  quantity,
+  setQuantity,
 }) => {
-  // console.log("product", product);
   return (
     <>
       {volumeDetail?.quantity > 0 && (
@@ -29,7 +28,8 @@ const ProductActions = ({
                         ? css.disabled
                         : ""
                     }`}
-                    onClick={() => handleDecrement(volumeDetail.idTorgsoft)}
+                    // onClick={() => handleDecrement(volumeDetail.idTorgsoft)}
+                    onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
                   >
                     <FiMinus className={`${css.icon} ${css.iconMinus}`} />
                   </button>
@@ -37,26 +37,31 @@ const ProductActions = ({
                     <input
                       className={css.counterField}
                       type="number"
-                      value={quantities[volumeDetail.idTorgsoft]}
+                      // value={quantities[volumeDetail.idTorgsoft]}
+                      value={quantity}
                       min={1}
                       max={volumeDetail.quantity}
-                      onChange={(e) =>
-                        handleQuantityChange(
-                          volumeDetail.idTorgsoft,
-                          parseInt(e.target.value, 10)
-                        )
-                      }
+                      // onChange={(e) =>
+                      //   handleQuantityChange(
+                      //     volumeDetail.idTorgsoft,
+                      //     parseInt(e.target.value, 10)
+                      //   )
+                      // }
+                      onChange={handleQuantityChange}
                     />
                   </div>
                   <button
-                    className={`${css.counterBtn} ${
-                      quantities[volumeDetail.idTorgsoft] ===
-                      volumeDetail.quantity
-                        ? css.disabled
-                        : ""
-                    }`}
-                    onClick={() => handleIncrement(volumeDetail.idTorgsoft)}
+                    className={`${css.counterBtn}
+                     ${
+                       quantities[volumeDetail.idTorgsoft] ===
+                       volumeDetail.quantity
+                         ? css.disabled
+                         : ""
+                     }
+                    `}
+                    // onClick={() => handleIncrement(volumeDetail.idTorgsoft)}
                     // disabled={quantity >= volumeDetail.quantity}
+                    onClick={() => setQuantity((prev) => prev + 1)}
                   >
                     <FaPlus className={`${css.icon} ${css.iconPlus}`} />
                   </button>
@@ -64,7 +69,7 @@ const ProductActions = ({
               </div>
               <button
                 className={`${css.btn} ${css.special}`}
-                onClick={() => handleAddToBasket()}
+                onClick={handleAddToCart}
               >
                 <span className={css.btnText}>Купити</span>
               </button>
@@ -76,9 +81,7 @@ const ProductActions = ({
         <div className={css.catalogCardToolbarItem}>
           <button
             className={css.favoritesButton}
-            onClick={() =>
-              handleToggleFavorite(product._id, volumeDetail.idTorgsoft)
-            }
+            onClick={handleFavoriteToggle}
           >
             <span className={css.favoritesButtonIcon}>
               <CiHeart
@@ -97,4 +100,4 @@ const ProductActions = ({
   );
 };
 
-export default ProductActions;
+export default FavoriteProductActions;

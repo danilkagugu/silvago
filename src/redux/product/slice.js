@@ -13,6 +13,7 @@ import {
   removeProductFavorite,
   fetchPriceRenge,
   getCountProductByFilters,
+  toogleFavorite,
 } from "./operations";
 
 const INITIAL_STATE = {
@@ -31,8 +32,8 @@ const INITIAL_STATE = {
   skinNeedsFilter: [], // Додаємо цей стейт для відстеження активних фільтрів
   minPrice: null,
   maxPrice: null,
-  brandsCount: [], 
-  categoriesCount: []
+  brandsCount: [],
+  categoriesCount: [],
 };
 
 const productSlice = createSlice({
@@ -100,11 +101,16 @@ const productSlice = createSlice({
         state.favorites = newFavorites;
         state.favoritesQuantity = newFavorites.length;
       })
+      .addCase(toogleFavorite.fulfilled, (state, action) => {
+        state.favorites = action.payload;
+        state.favoritesQuantity = state.favorites.length;
+        state.loading = false;
+      })
 
       .addCase(removeProductFavorite.fulfilled, (state, action) => {
         state.favorites = action.payload.products || [];
         state.favoritesQuantity = state.favorites.length;
-      })     
+      })
 
       .addCase(getFavoriteProducts.fulfilled, (state, action) => {
         if (!Array.isArray(action.payload)) {
@@ -118,8 +124,8 @@ const productSlice = createSlice({
       })
       .addCase(getCountProductByFilters.fulfilled, (state, action) => {
         state.brandsCount = action.payload.brandsCount;
-      state.categoriesCount = action.payload.categoriesCount;
-      state.loading = false;
+        state.categoriesCount = action.payload.categoriesCount;
+        state.loading = false;
       })
 
       .addMatcher(
@@ -135,9 +141,8 @@ const productSlice = createSlice({
           addProductFavorite.pending,
           removeProductFavorite.pending,
           fetchTopProducts.pending,
-          
           fetchDiscountProducts.pending,
-          getCountProductByFilters.pending,
+          getCountProductByFilters.pending
         ),
         (state) => {
           state.loading = true;
@@ -158,7 +163,7 @@ const productSlice = createSlice({
           removeProductFavorite.rejected,
           fetchTopProducts.rejected,
           fetchDiscountProducts.rejected,
-          getCountProductByFilters.rejected,
+          getCountProductByFilters.rejected
         ),
         (state, action) => {
           state.loading = false;

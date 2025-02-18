@@ -1,0 +1,198 @@
+.catalogCardFooterButtons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 20px 0 16px;
+}
+.catalogCardFooterButtons:first-of-type {
+  margin-top: 0;
+}
+
+.catalogCardFooterOrder {
+  position: relative;
+  margin-right: 15px;
+  margin-bottom: 4px;
+  margin-top: -8px;
+}
+
+.catalogCardFooterOrder:last-of-type {
+  margin-right: 0;
+}
+
+.counter {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  vertical-align: middle;
+}
+
+.catalogCardFooterOrder .counter:not(:last-child) {
+  margin-right: 4px;
+}
+
+.catalogCardFooterOrder .counter {
+  margin-top: 8px;
+}
+
+.counterContainer {
+  display: flex;
+  border-radius: 4px;
+  border: 1px solid #d7d7d7;
+  position: relative;
+  background: #fff;
+  width: 70px;
+  height: 26px;
+  box-sizing: border-box;
+}
+
+.counter .counterContainer {
+  width: 92px;
+  height: 38px;
+}
+
+.counterBtn {
+  flex: 1 0 auto;
+  height: 100%;
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  cursor: pointer;
+  color: #000;
+  border: 0;
+  padding: 0;
+  background: none;
+}
+
+.counterBtn.disabled {
+  opacity: 0.4;
+  cursor: default;
+  color: #000;
+}
+
+.icon {
+  display: inline-block;
+  font-size: 32px;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+
+.counterBtn .iconMinus,
+.counterBtn .iconPlus {
+  position: absolute;
+  font-size: 10px;
+  left: 50%;
+  top: 50%;
+  margin-top: -5px;
+  margin-left: -5px;
+  fill: currentColor;
+}
+
+.counterInput {
+  flex: 0 0 34px;
+  line-height: 1;
+}
+
+.counterField {
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  text-align: center;
+  color: #000;
+  background: none;
+  border-radius: 0;
+}
+
+.btn {
+  position: relative;
+  box-sizing: border-box;
+  display: inline-block;
+  line-height: 1;
+  padding: 0;
+  outline: 0;
+  border: none;
+  background: rgba(0, 0, 0, 0);
+  text-align: center;
+  text-decoration: none !important;
+  vertical-align: middle;
+  cursor: pointer;
+  white-space: nowrap;
+  border-radius: 4px;
+  color: #666;
+  border: 1px solid #d8d8d8;
+  background: #fff;
+  box-shadow: none;
+  height: 38px;
+  line-height: 38px;
+  font-size: 18px;
+  transition: all 0.15s;
+}
+
+.btn.special {
+  color: #fff;
+  border: 0;
+  background: #e79eb0;
+  box-shadow: none;
+  padding: 0 16px;
+  margin-top: 8px;
+}
+
+.btnText {
+  box-sizing: border-box;
+  width: 100%;
+  float: left;
+  /* padding: 0 16px; */
+}
+.btn.special .btnText {
+  margin: 0;
+}
+
+.catalogCardToolbar {
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  font-size: 11px;
+  margin: -6px -8px 14px;
+  justify-content: center;
+}
+
+.catalogCardToolbar:last-child {
+  margin-bottom: 0;
+}
+
+.catalogCardToolbarItem {
+  position: relative;
+  margin: 6px 8px 0;
+}
+
+.favoritesButton {
+  display: block;
+  white-space: nowrap;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.favoritesButtonIcon {
+  display: inline-block;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.iconHeart {
+  font-size: 20px;
+  stroke: #acacac;
+  /* fill: #fff; */
+}
+
+.favoritesButtonText {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 5px;
+  font-size: 12px;
+}
+
+.isFavorite {
+  fill: red;
+}

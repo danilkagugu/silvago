@@ -1,16 +1,20 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit";
 import {
   addProduct,
+  addToCart,
   createOrder,
   deleteProduct,
   fetchProductDetails,
   getBasketInfo,
+  getCart,
+  removeFromCart,
   updateProductQuantityBasket,
 } from "./operations";
 
 const INITIAL_STATE = {
   order: null,
   items: [],
+  cartItems: [],
   productDetails: {},
   allQuantity: 0,
   totalPrice: 0,
@@ -33,6 +37,52 @@ const basketSlice = createSlice({
         state.loading = false;
         state.error = null;
       })
+      .addCase(getCart.fulfilled, (state, action) => {
+        // ✅ Обробка отримання кошика
+        state.cartItems = action.payload || [];
+        // console.log("action.payload: ", action.payload);
+
+        state.allQuantity = state.cartItems.reduce((total, item) => {
+          return total + item.quantity;
+        }, 0);
+        state.totalPrice = state.cartItems.reduce((total, item) => {
+          return total + item.selectedVariation.discountPrice * item.quantity;
+        }, 0);
+
+        state.loading = false;
+        state.error = null;
+      })
+
+      .addCase(addToCart.fulfilled, (state, action) => {
+        // ✅ Додаємо обробку додавання в кошик
+        state.cartItems = action.payload || [];
+
+        state.allQuantity = state.cartItems.reduce((total, item) => {
+          return total + item.quantity;
+        }, 0);
+        state.totalPrice = state.cartItems.reduce((total, item) => {
+          return total + item.price * item.quantity;
+        }, 0);
+
+        state.loading = false;
+        state.error = null;
+      })
+
+      .addCase(removeFromCart.fulfilled, (state, action) => {
+        state.cartItems = action.payload.cartItems || [];
+        state.allQuantity = state.cartItems.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
+        state.totalPrice = state.cartItems.reduce(
+          (total, item) =>
+            total + item.selectedVariation.discountPrice * item.quantity,
+          0
+        );
+        state.loading = false;
+        state.error = null;
+      })
+
       .addCase(fetchProductDetails.fulfilled, (state, action) => {
         const { slug, details } = action.payload;
 
@@ -92,7 +142,10 @@ const basketSlice = createSlice({
           createOrder.pending,
           deleteProduct.pending,
           updateProductQuantityBasket.pending,
-          fetchProductDetails.pending
+          fetchProductDetails.pending,
+          addToCart.pending,
+          removeFromCart.pending,
+          getCart.pending
         ),
         (state) => {
           state.loading = true;
@@ -106,7 +159,10 @@ const basketSlice = createSlice({
           createOrder.rejected,
           deleteProduct.rejected,
           updateProductQuantityBasket.rejected,
-          fetchProductDetails.rejected
+          fetchProductDetails.rejected,
+          addToCart.rejected,
+          removeFromCart.rejected,
+          getCart.rejected
         ),
         (state) => {
           state.loading = false;

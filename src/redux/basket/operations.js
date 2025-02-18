@@ -1,9 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   addProductToBasket,
+  addToCartApi,
   deleteProductFromBasket,
   getBasketProduct,
+  getCartApi,
   productById,
+  removeFromCartApi,
   sendOrder,
   updateProductQuantity,
 } from "../../services/productApi";
@@ -31,6 +34,60 @@ export const addProduct = createAsyncThunk(
         quantity,
         volume,
         tone,
+        token
+      );
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getCart = createAsyncThunk(
+  "basket/getCart",
+  async (_, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.token;
+      const userId = thunkAPI.getState().auth.userData.id;
+      const data = await getCartApi(userId, token);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const addToCart = createAsyncThunk(
+  "basket/addToCart",
+  async ({ userId, productId, idTorgsoft, quantity }, thunkAPI) => {
+    console.log("idTorgsoft: ", idTorgsoft);
+    try {
+      const token = thunkAPI.getState().auth.token;
+      const data = await addToCartApi(
+        userId,
+        productId,
+        idTorgsoft,
+        quantity,
+        token
+      );
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+
+export const removeFromCart = createAsyncThunk(
+  "basket/removeFromCart",
+  async ({ userId, productId, idTorgsoft }, thunkAPI) => {
+    console.log("userId: ", userId);
+    console.log("idTorgsoft: ", idTorgsoft);
+    try {
+      const token = thunkAPI.getState().auth.token;
+      const data = await removeFromCartApi(
+        userId,
+        productId,
+        idTorgsoft,
         token
       );
       return data;
@@ -95,6 +152,7 @@ export const updateProductQuantityBasket = createAsyncThunk(
 export const fetchProductDetails = createAsyncThunk(
   "basket/fetchProductDetails",
   async (slug, { rejectWithValue }) => {
+    console.log("slug: ", slug);
     try {
       const response = await productById(slug);
       return { slug, details: response };

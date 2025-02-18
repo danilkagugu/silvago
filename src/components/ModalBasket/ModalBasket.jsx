@@ -7,26 +7,33 @@ import { Link, useNavigate } from "react-router-dom";
 import { CiTrash } from "react-icons/ci";
 import {
   deleteProduct,
-  fetchProductDetails,
   getBasketInfo,
+  getCart,
+  removeFromCart,
   updateProductQuantityBasket,
 } from "../../redux/basket/operations";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectBasket,
+  selectItemsCart,
   selectLoading,
   selectProductDetails,
 } from "../../redux/basket/selectors";
 
 import Loader from "../Loader/Loader";
+import { getProductById } from "../../redux/product/operations";
+import { selectUserData } from "../../redux/auth/selectors";
 
 const ModalBasket = ({ closeModal, open }) => {
   const dispatch = useDispatch();
   const [showOutOfStockMessage, setShowOutOfStockMessage] = useState({});
-
+  const userData = useSelector(selectUserData);
+  // console.log("userData: ", userData);
   const navigate = useNavigate();
   const loading = useSelector(selectLoading);
   const tttt = useSelector(selectProductDetails);
+  const itemsCart = useSelector(selectItemsCart);
+  // console.log("itemsCart: ", itemsCart);
 
   const basketDataA = useSelector(selectBasket);
   // console.log("basketDataA: ", basketDataA);
@@ -34,13 +41,14 @@ const ModalBasket = ({ closeModal, open }) => {
   useEffect(() => {
     basketDataA.forEach((item) => {
       if (!tttt[item.slug]) {
-        dispatch(fetchProductDetails(item.slug));
+        dispatch(getProductById(item.slug));
       }
     });
   }, [basketDataA, tttt, dispatch]);
 
   useEffect(() => {
     dispatch(getBasketInfo());
+    dispatch(getCart());
   }, [dispatch]);
 
   const handleQuantityChange = async (productId, volume, quantity, tone) => {
@@ -60,44 +68,32 @@ const ModalBasket = ({ closeModal, open }) => {
   };
 
   const calculateTotalAmount = () => {
-    return basketDataA.reduce((total, item) => {
-      const details = tttt[item.slug];
-      // console.log("details: ", details);
-      if (details) {
-        const volumeDetail = details?.product?.variations?.find(
-          (vol) => vol.volume === item.volume && vol.tone === item.tone
-        );
-        if (volumeDetail) {
-          const price = volumeDetail.retailPrice;
+    return itemsCart.reduce((total, item) => {
+      const selectedVariation = item.selectedVariation;
+      if (!selectedVariation) return total;
+      const price =
+        Number(selectedVariation.discount) > 0
+          ? selectedVariation.discountPrice
+          : selectedVariation.retailPrice;
 
-          const discount = volumeDetail.discount || 0;
-          const discountedPrice = price * (1 - discount / 100);
-          return total + item.quantity * discountedPrice;
-        }
-      }
-      return total;
+      return total + item.quantity * price;
     }, 0);
   };
-  const handleRemoveProduct = async ({ productId, volume }) => {
-    try {
-      const isConfirmed = window.confirm(
-        "Ви впевнені, що хочете видалити цей продукт?"
+
+  const handleRemove = (product) => {
+    console.log("product: ", product);
+    const isConfirmed = window.confirm(
+      "Ви впевнені, що хочете видалити цей продукт?"
+    );
+
+    if (isConfirmed) {
+      dispatch(
+        removeFromCart({
+          userId: userData.id,
+          productId: product.productId,
+          idTorgsoft: product.selectedVariation.idTorgsoft,
+        })
       );
-
-      if (isConfirmed) {
-        await dispatch(deleteProduct({ productId, volume }));
-
-        basketDataA.filter(
-          (item) => !(item.product === productId && item.volume === volume)
-        );
-
-        // Закриваємо модальне вікно, якщо в кошику залишився лише один товар
-        if (basketDataA.length === 1) {
-          closeModal();
-        }
-      }
-    } catch (error) {
-      console.error("Помилка видалення товару:", error);
     }
   };
 
@@ -169,28 +165,15 @@ const ModalBasket = ({ closeModal, open }) => {
                   </tr>
                 </thead>
 
-                {basketDataA &&
-                  basketDataA.map((item) => {
+                {itemsCart &&
+                  itemsCart.map((item) => {
                     // console.log("item: ", item);
-                    const details = tttt[item.slug];
-                    // console.log("details: ", details);
-
-                    const volumeDetail = details?.product?.variations?.find(
-                      (vol) =>
-                        vol.volume === item.volume && vol.tone === item.tone
-                    );
-                    // console.log("volumeDetail", volumeDetail);
-                    const price = volumeDetail ? volumeDetail.retailPrice : 0;
-                    const discount = volumeDetail
-                      ? volumeDetail.discount || 0
-                      : 0;
-                    const discountedPrice = price * (1 - discount / 100);
                     return (
-                      details && (
+                      itemsCart && (
                         <tbody
                           className={css.cartSection}
-                          key={volumeDetail?.idTorgsoft}
-                          id={volumeDetail?.idTorgsoft}
+                          key={item?.selectedVariation?.idTorgsoft}
+                          id={item?.selectedVariation?.idTorgsoft}
                         >
                           <tr className={css.cartItem}>
                             <td
@@ -200,26 +183,23 @@ const ModalBasket = ({ closeModal, open }) => {
                               <div className={css.cartRemove}>
                                 <span
                                   className={css.cartRemoveBtn}
-                                  onClick={() =>
-                                    handleRemoveProduct({
-                                      productId: item.product,
-                                      volume: item.volume,
-                                    })
-                                  }
+                                  onClick={() => handleRemove(item)}
                                 >
                                   <CiTrash className={css.iconTrash} />
                                 </span>
                               </div>
                               <div className={css.cartImage}>
-                                <Link to={`/product/${item.slug}`}>
+                                <Link
+                                  to={`/product/${item.selectedVariation.slug}`}
+                                >
                                   <img
                                     // className={`${css.productImg} ${
                                     //   details.volume.quantity === 0
                                     //     ? css.outOfStock
                                     //     : ""
                                     // }`}
-                                    src={details?.volume?.image}
-                                    alt={details?.volume?.fullName}
+                                    src={item.selectedVariation.image}
+                                    alt={item.selectedVariation.fullName}
                                     width={78}
                                     height={78}
                                   />
@@ -232,14 +212,27 @@ const ModalBasket = ({ closeModal, open }) => {
                             >
                               <div className={css.cartTitle}>
                                 <Link to={`/product/${item.slug}`}>
-                                  {item.productName}
+                                  {item.selectedVariation.fullName}
                                 </Link>
                               </div>
-                              <div className={css.cartPrice}>
-                                {Math.ceil(discountedPrice)} грн
-                              </div>
+                              {Number(item.selectedVariation.discount) > 0 ? (
+                                <>
+                                  <div
+                                    className={`${css.cartPrice} ${css.old}`}
+                                  >
+                                    {item.selectedVariation.discountPrice} грн
+                                  </div>
+                                  <div className={css.cartPrice}>
+                                    {item.selectedVariation.retailPrice} грн
+                                  </div>
+                                </>
+                              ) : (
+                                <div className={css.cartPrice}>
+                                  {item.selectedVariation.retailPrice} грн
+                                </div>
+                              )}
                             </td>
-                            {details?.volume?.quantity > 0 && (
+                            {item.selectedVariation.quantity > 0 && (
                               <td className={`${css.cartSell} ${css.quantity}`}>
                                 <div className={css.cartQuantity}>
                                   <div
@@ -251,10 +244,7 @@ const ModalBasket = ({ closeModal, open }) => {
                                         onClick={() => {
                                           if (item.quantity === 1) {
                                             // Викликаємо функцію видалення товару
-                                            handleRemoveProduct({
-                                              productId: item.product,
-                                              volume: item.volume,
-                                            });
+                                            handleRemove(item);
                                           } else {
                                             // Зменшуємо кількість
                                             handleQuantityChange(
@@ -276,13 +266,13 @@ const ModalBasket = ({ closeModal, open }) => {
                                           type="text"
                                           // value={item.quantity}
                                           value={
-                                            details?.volume?.quantity <
+                                            item.selectedVariation.quantity <
                                             item.quantity
-                                              ? details?.volume?.quantity
+                                              ? item.selectedVariation.quantity
                                               : item.quantity
                                           }
                                           min={"1"}
-                                          max={details.volume.quantity}
+                                          max={item.selectedVariation.quantity}
                                           onChange={(e) =>
                                             handleQuantityChange(
                                               item._id,
@@ -296,13 +286,13 @@ const ModalBasket = ({ closeModal, open }) => {
                                       <button
                                         className={`${css.counterBtn} ${
                                           item.quantity ===
-                                          details?.volume?.quantity
+                                          item.selectedVariation.quantity
                                             ? css.disabled
                                             : ""
                                         }`}
-                                        onClick={() =>
-                                          handleIncrement(item, details)
-                                        }
+                                        // onClick={() =>
+                                        //   handleIncrement(item, details)
+                                        // }
                                       >
                                         <GoPlus
                                           className={` ${css.iconPlus}`}
@@ -327,21 +317,31 @@ const ModalBasket = ({ closeModal, open }) => {
                             )}
                             <td
                               className={`${css.cartSell} ${
-                                details?.volume?.quantity > 0
+                                item.selectedVariation.quantity > 0
                                   ? css.cost
                                   : css.misingContainer
                               }`}
                             >
                               <div
                                 className={
-                                  details?.volume?.quantity > 0
+                                  item.selectedVariation.quantity > 0
                                     ? css.cartCost
                                     : css.orderItemMissing
                                 }
                               >
-                                {details?.volume?.quantity > 0
-                                  ? `${item.quantity * discountedPrice} грн`
-                                  : "Немає в наявності"}
+                                {item.selectedVariation.quantity > 0 ? (
+                                  <>
+                                    {item.quantity *
+                                      (Number(item.selectedVariation.discount) >
+                                      0
+                                        ? item.selectedVariation.discountPrice
+                                        : item.selectedVariation
+                                            .retailPrice)}{" "}
+                                    грн
+                                  </>
+                                ) : (
+                                  "Немає в наявності"
+                                )}
                               </div>
                             </td>
                           </tr>

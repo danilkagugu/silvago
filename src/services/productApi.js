@@ -67,6 +67,7 @@ export const addFavorite = async (userId, productId, idTorgsoft, token) => {
     productId,
     idTorgsoft,
   });
+  console.log("data", data);
   return data;
 };
 
@@ -75,6 +76,26 @@ export const removeFavorite = async (userId, productId, idTorgsoft, token) => {
   const { data } = await instance.delete(`/api/product/favorites`, {
     data: { userId, productId, idTorgsoft },
   });
+  console.log("data", data);
+  return data;
+};
+
+export const toogleFavoriteApi = async (
+  userId,
+  productId,
+  idTorgsoft,
+  token
+) => {
+  console.log("userId", userId);
+  console.log("productId", productId);
+  console.log("idTorgsoft", idTorgsoft);
+  const instance = createPrivateAxiosInstance(token);
+  const { data } = await instance.post(`/api/product/toggle-favorite`, {
+    userId,
+    productId,
+    idTorgsoft,
+  });
+  console.log("data", data);
   return data;
 };
 
@@ -97,6 +118,38 @@ export const addProductToBasket = async (
   return data;
 };
 
+export const addToCartApi = async (
+  userId,
+  productId,
+  idTorgsoft,
+  quantity,
+  token
+) => {
+  const instance = createPrivateAxiosInstance(token);
+  const { data } = await instance.post(`/api/product/cart/add`, {
+    userId,
+    productId,
+    idTorgsoft,
+    quantity,
+  });
+  return data;
+};
+
+export const removeFromCartApi = async (
+  userId,
+  productId,
+  idTorgsoft,
+  token
+) => {
+  const instance = createPrivateAxiosInstance(token);
+  console.log("userId", userId);
+  const { data } = await instance.delete(`/api/product/cart/remove`, {
+    data: { userId, productId, idTorgsoft }, // Передаємо дані в `data`
+    headers: { Authorization: `Bearer ${token}` }, // Додаємо токен
+  });
+  return data;
+};
+
 export const deleteProductFromBasket = async ({ productId, volume, token }) => {
   const instance = createPrivateAxiosInstance(token);
 
@@ -114,6 +167,14 @@ export const getBasketProduct = async ({ token }) => {
   return data;
 };
 
+export const getCartApi = async (userId, token) => {
+  const instance = createPrivateAxiosInstance(token);
+
+  const { data } = await instance.get(`/api/product/cart/get/${userId}`);
+  // console.log("data: ", data);
+  return data;
+};
+
 export const updateProductQuantity = async ({
   productId,
   volume,
@@ -123,7 +184,6 @@ export const updateProductQuantity = async ({
 }) => {
   const instance = createPrivateAxiosInstance(token);
 
-  console.log("productId", productId);
   const { data } = await instance.patch(`/api/product/basket/${productId}`, {
     volume,
     quantity,
