@@ -118,6 +118,13 @@ export const addProductToBasket = async (
   return data;
 };
 
+export const getCartApi = async (userId, token) => {
+  const instance = createPrivateAxiosInstance(token);
+
+  const { data } = await instance.get(`/api/product/cart/get/${userId}`);
+  return data;
+};
+
 export const addToCartApi = async (
   userId,
   productId,
@@ -164,14 +171,6 @@ export const getBasketProduct = async ({ token }) => {
   const instance = createPrivateAxiosInstance(token);
 
   const { data } = await instance.get("/api/product/basket");
-  return data;
-};
-
-export const getCartApi = async (userId, token) => {
-  const instance = createPrivateAxiosInstance(token);
-
-  const { data } = await instance.get(`/api/product/cart/get/${userId}`);
-  // console.log("data: ", data);
   return data;
 };
 

@@ -40,6 +40,7 @@ const basketSlice = createSlice({
       .addCase(getCart.fulfilled, (state, action) => {
         // ✅ Обробка отримання кошика
         state.cartItems = action.payload || [];
+
         // console.log("action.payload: ", action.payload);
 
         state.allQuantity = state.cartItems.reduce((total, item) => {
@@ -55,11 +56,12 @@ const basketSlice = createSlice({
 
       .addCase(addToCart.fulfilled, (state, action) => {
         // ✅ Додаємо обробку додавання в кошик
-        state.cartItems = action.payload || [];
+        state.cartItems = action.payload;
 
         state.allQuantity = state.cartItems.reduce((total, item) => {
           return total + item.quantity;
         }, 0);
+        // console.log("ПІСЛЯ state.cartItems: ", state.cartItems);
         state.totalPrice = state.cartItems.reduce((total, item) => {
           return total + item.price * item.quantity;
         }, 0);
