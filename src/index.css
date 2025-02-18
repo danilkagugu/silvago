@@ -40,9 +40,9 @@ a {
 
 body {
   font-family: "Open Sans", sans-serif;
-  font-size: 16px; /* Спробуйте різні значення */
   letter-spacing: normal; /* Або відрегулюйте */
-  line-height: 1.5; /* Відрегулюйте для зменшення висоти рядка */
+  font-size: 14px;
+  line-height: 1.3;
   padding: 0;
   margin: 0;
 }

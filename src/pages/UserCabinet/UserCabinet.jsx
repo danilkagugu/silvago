@@ -6,12 +6,16 @@ import Layout from "../../components/Layout/Layout";
 const UserCabinet = () => {
   return (
     <Layout>
-      <div className={css.container}>
-        <div className={css.sidebar}>
-          <UserMenu />
-        </div>
-        <div className={css.content}>
-          <Outlet />
+      <div className={css.wrapper}>
+        <div className={css.layout}>
+          <div className={css.layoutMain}>
+            <div className={css.layoutMainInner}>
+              <Outlet />
+            </div>
+          </div>
+          <aside className={css.layoutAside}>
+            <UserMenu />
+          </aside>
         </div>
       </div>
     </Layout>
