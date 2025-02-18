@@ -1,21 +1,61 @@
-import { useNavigate } from "react-router-dom";
 import css from "./FavoriteItem.module.css";
-import { IoCloseSharp } from "react-icons/io5";
-import { CiTrash } from "react-icons/ci";
-import { addProduct } from "../../redux/basket/operations";
-import { useDispatch } from "react-redux";
 
-const FavoriteItem = ({ product, handleRemoveFavorite, quantities }) => {
-  console.log("product: ", product);
-  const navigate = useNavigate();
+import { addProduct, addToCart } from "../../redux/basket/operations";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import FavoriteProductImage from "./FavoretiProductImage/FavoretiProductImage";
+import FavoriteProductInfo from "./FavoriteProductInfo/FavoriteProductInfo";
+import FavoriteProductModifications from "./FavoriteProductModifications/FavoriteProductModifications";
+import FavoriteProductActions from "./FavoriteProductActions/FavoriteProductActions";
+import { selectTopProducts } from "../../redux/product/selectors";
+import {
+  addProductFavorite,
+  getFavoriteProducts,
+  removeProductFavorite,
+  toogleFavorite,
+} from "../../redux/product/operations";
+
+const FavoriteItem = ({
+  product,
+
+  favoriteProducts,
+  id,
+}) => {
+  const [quantity, setQuantity] = useState(1);
+  const [quantities, setQuantities] = useState(
+    product.allVariations.reduce(
+      (acc, variant) => ({
+        ...acc,
+        [variant.idTorgsoft]: 1,
+      }),
+      {}
+    )
+  );
   const dispatch = useDispatch();
 
-  const getPrice = () => {
-    const newPrice = product.price * (1 - product.discount / 100);
-    const oldPrice = product.price;
+  const [selectedVariation, setSelectedVariation] = useState(
+    product.selectedVariation
+  );
+  useEffect(() => {
+    setQuantity(1); // При зміні варіації значення quantity завжди скидається на 1
+  }, [selectedVariation]);
+  const topProducts = useSelector(selectTopProducts);
 
-    return { newPrice, oldPrice };
+  const handleQuantityChanges = (e) => {
+    setQuantity(Math.max(Number(e.target.value), 1)); // Мінімум 1
   };
+
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        userId: id.id,
+        productId: product.productId,
+        idTorgsoft: selectedVariation.idTorgsoft,
+        quantity,
+      })
+    );
+  };
+
   const handleAddToBasket = () => {
     if (quantities[product.volumeId] > product.quantityInStock) {
       console.log("quantities: ", quantities);
@@ -31,130 +71,129 @@ const FavoriteItem = ({ product, handleRemoveFavorite, quantities }) => {
     );
   };
 
-  const handleProductClick = () => {
-    navigate(`/product/${product.slug}`);
-  };
-  return (
-    <>
-      <div className={css.cardContainer}>
-        <div className={css.cardContainerBox}>
-          <IoCloseSharp
-            className={css.iconDelete}
-            onClick={() => {
-              handleRemoveFavorite(product.product, product.volumeId);
-            }}
-          />
+  const handleVolumeChange = (volumeId) => {
+    const newVariation = product.allVariations.find(
+      (variant) => variant.idTorgsoft === volumeId
+    );
 
-          <div className={css.cardBox}>
-            <div className={css.catalogCardHeader} onClick={handleProductClick}>
-              <div className={css.catalogCardTop}>
-                <div className={css.catalogCardImage}>
-                  <div className={css.imgBox}>
-                    <img
-                      className={`${css.catalogCardImgProduct} ${
-                        product.quantityInStock === 0 ? css.productMissImg : ""
-                      }`}
-                      src={product.image}
-                      alt={product.productName}
-                    />
-                  </div>
-                </div>
-                <div className={css.catalogCardInfo}>
-                  <div className={css.catalogCardTitle}>
-                    <p>{product.productName}</p>
-                  </div>
-                  <div className={css.catalogCardPriceBox}>
-                    {product.discount > 0 && (
-                      <>
-                        <div className={css.catalogCardPriceOld}>
-                          {getPrice().oldPrice} грн
-                        </div>
-                        <div className={css.catalogCardPrice}>
-                          {Math.ceil(getPrice().newPrice)} грн
-                        </div>
-                      </>
-                    )}
-                    {!product.discount > 0 && (
-                      <div className={css.catalogCardPrice}>
-                        {getPrice().oldPrice} грн
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className={css.catalogCardFooter}>
-              <div className={css.catalogCardFooterBtn}>
-                {product.quantityInStock && product.quantityInStock > 0 ? (
-                  <button
-                    className={css.buyButtonMob}
-                    onClick={handleAddToBasket}
-                  >
-                    Купити
-                  </button>
-                ) : (
-                  <p className={` ${css.productMiss}`}>
-                    Повідомити про наявність
-                  </p>
-                )}
-              </div>
-            </div>
+    if (newVariation) {
+      setSelectedVariation(newVariation);
+    } else {
+      console.error("Варіацію з таким об'ємом не знайдено");
+    }
+  };
+
+  const handleToneChange = (tone) => {
+    const newVariation = product.allVariations.find(
+      (variant) =>
+        variant.tone === tone && variant.volume === selectedVariation.volume
+    );
+
+    if (newVariation) {
+      setSelectedVariation(newVariation);
+    } else {
+      console.error("Варіацію з таким тоном не знайдено");
+    }
+  };
+
+  const handleDecrement = (idTorgsoft) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [idTorgsoft]: Math.max(prev[idTorgsoft] - 1, 1),
+    }));
+  };
+
+  const handleIncrement = (idTorgsoft) => {
+    console.log("idTorgsoft: ", idTorgsoft);
+    setQuantities((prev) => ({
+      ...prev,
+      [idTorgsoft]: Math.min(prev[idTorgsoft] + 1, selectedVariation.quantity),
+    }));
+  };
+
+  const handleQuantityChange = (idTorgsoft, value) => {
+    setQuantities((prev) => ({
+      ...prev,
+      [idTorgsoft]: Math.min(
+        Math.max(value, 1),
+        selectedVariation.quantity || 1
+      ),
+    }));
+  };
+
+  const handleToggleFavorite = async (productId, idTorgsoft) => {
+    const isFavorite = favoriteProducts.some(
+      (fav) =>
+        fav.productId === productId && fav.variation.idTorgsoft === idTorgsoft
+    );
+
+    const action = isFavorite
+      ? removeProductFavorite({ userId: id.id, productId, idTorgsoft })
+      : addProductFavorite({ userId: id.id, productId, idTorgsoft });
+
+    await dispatch(action);
+    dispatch(getFavoriteProducts(id.id));
+  };
+
+  const isFavorite = favoriteProducts.some(
+    (fav) =>
+      fav.productId === product._id &&
+      fav.variation.idTorgsoft === selectedVariation?.idTorgsoft
+  );
+  const handleFavoriteToggle = () => {
+    dispatch(
+      toogleFavorite({
+        userId: id.id,
+        productId: product.productId,
+        idTorgsoft: product.selectedVariation.idTorgsoft,
+      })
+    );
+  };
+
+  return (
+    <div className={css.catalogCard}>
+      <div className={css.cardContainer} id={product._id}>
+        <div className={css.catalogCardMain}>
+          <div className={css.catalogCardMainB}>
+            <FavoriteProductImage
+              isTopProduct={topProducts.some(
+                (topProduct) => topProduct._id === product._id
+              )}
+              volumeDetail={selectedVariation}
+            />
+            <FavoriteProductInfo
+              product={product}
+              volumeDetail={selectedVariation}
+            />
           </div>
+        </div>
+        <div className={css.catalogCardFooter}>
+          <FavoriteProductModifications
+            handleToneChange={handleToneChange}
+            handleVolumeChange={handleVolumeChange}
+            product={product}
+            volumeDetail={selectedVariation}
+          />
+          <FavoriteProductActions
+            handleAddToBasket={handleAddToBasket}
+            handleDecrement={handleDecrement}
+            handleIncrement={handleIncrement}
+            handleQuantityChange={handleQuantityChange}
+            handleToggleFavorite={handleToggleFavorite}
+            isFavorite={isFavorite}
+            product={product}
+            quantities={quantities}
+            volumeDetail={selectedVariation}
+            id={id}
+            handleFavoriteToggle={handleFavoriteToggle}
+            handleAddToCart={handleAddToCart}
+            handleQuantityChanges={handleQuantityChanges}
+            quantity={quantity}
+            setQuantity={setQuantity}
+          />
         </div>
       </div>
-      <div className={css.catalogCardMob}>
-        <div className={css.catalogCardHeaderMob}>
-          <div className={css.boxImageMob}>
-            <div className={css.imageMob}>
-              <img
-                className={css.image}
-                src={product.image}
-                alt={product.productName}
-              />
-            </div>
-          </div>
-          <div className={css.catalogCardBtnMob}>
-            <div
-              className={css.BtnDelMob}
-              onClick={() => {
-                handleRemoveFavorite(product.product, product.volumeId);
-              }}
-            >
-              <button className={css.btnDelete}>
-                <CiTrash className={css.iconDelMob} />
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className={css.catalogCardFooterMob}>
-          <div className={css.catalogCardTitleMob}>
-            <p>{product.productName}</p>
-          </div>
-          <div className={css.catalogPriceBoxMob}>
-            {product.discount > 0 && (
-              <>
-                <div className={css.catalogCardPriceOldMob}>
-                  {getPrice().oldPrice} грн
-                </div>
-                <div className={css.catalogCardPriceMob}>
-                  {Math.ceil(getPrice().newPrice)} грн
-                </div>
-              </>
-            )}
-            {!product.discount > 0 && (
-              <div className={css.catalogCardPrice}>
-                {getPrice().oldPrice} грн
-              </div>
-            )}
-          </div>
-          <div className={css.catalogCardFooterBtnMob}>
-            <button className={css.buyButtonMob} onClick={handleAddToBasket}>
-              Купити
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
+    </div>
   );
 };
 

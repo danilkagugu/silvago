@@ -64,7 +64,7 @@ const BasketRigth = () => {
   const basketData = useSelector(selectBasket);
   // console.log("basketData: ", basketData);
   const userData = useSelector(selectUserData);
-  // console.log("userData: ", userData);
+  console.log("userData: ", userData);
   const maxBonuses = userData?.bonuses || 0;
   // console.log("maxBonuses: ", maxBonuses);
 

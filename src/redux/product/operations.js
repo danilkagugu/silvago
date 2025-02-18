@@ -12,6 +12,7 @@ import {
   getTopSellingProduct,
   productById,
   removeFavorite,
+  toogleFavoriteApi,
 } from "../../services/productApi";
 import { getGoods } from "../../services/api";
 import { parseFiltersFromUrl } from "../../hooks/useSelectedFilters";
@@ -121,6 +122,23 @@ export const addProductFavorite = createAsyncThunk(
     try {
       const token = thunkAPI.getState().auth.token;
       const data = await addFavorite(userId, productId, idTorgsoft, token);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+export const toogleFavorite = createAsyncThunk(
+  "products/toogleFavorite",
+  async ({ userId, productId, idTorgsoft }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.token;
+      const data = await toogleFavoriteApi(
+        userId,
+        productId,
+        idTorgsoft,
+        token
+      );
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

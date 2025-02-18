@@ -19,6 +19,8 @@ import { selectIsLoggedIn, selectUserData } from "../../redux/auth/selectors";
 import { selectFavoritesQuantity } from "../../redux/product/selectors";
 import { selectAllCategoriesTorgsoft } from "../../redux/inventoryStore/selectors";
 import { useLocation } from "react-router-dom";
+import { getFavoriteProducts } from "../../redux/product/operations";
+import { getUserInfo } from "../../redux/auth/operations";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -31,11 +33,18 @@ const Header = () => {
   const favoriteProductsLength = useSelector(selectFavoritesQuantity);
   const categoriesTorgsoft = useSelector(selectAllCategoriesTorgsoft);
   const user = useSelector(selectUserData);
+  const id = useSelector(selectUserData);
+  // console.log("id: ", id);
 
   // useEffect
 
   useEffect(() => {
     dispatch(fetchAllCategoriesTorgsoft());
+    dispatch(getFavoriteProducts(id.id));
+  }, [dispatch, id]);
+
+  useEffect(() => {
+    dispatch(getUserInfo());
   }, [dispatch]);
   return (
     <div
