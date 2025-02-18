@@ -6,22 +6,14 @@ import { HiArrowNarrowLeft, HiOutlineMinus } from "react-icons/hi";
 import { Link, useNavigate } from "react-router-dom";
 import { CiTrash } from "react-icons/ci";
 import {
-  deleteProduct,
-  getBasketInfo,
   getCart,
   removeFromCart,
   updateProductQuantityBasket,
 } from "../../redux/basket/operations";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectBasket,
-  selectItemsCart,
-  selectLoading,
-  selectProductDetails,
-} from "../../redux/basket/selectors";
+import { selectItemsCart, selectLoading } from "../../redux/basket/selectors";
 
 import Loader from "../Loader/Loader";
-import { getProductById } from "../../redux/product/operations";
 import { selectUserData } from "../../redux/auth/selectors";
 
 const ModalBasket = ({ closeModal, open }) => {
@@ -31,23 +23,9 @@ const ModalBasket = ({ closeModal, open }) => {
   // console.log("userData: ", userData);
   const navigate = useNavigate();
   const loading = useSelector(selectLoading);
-  const tttt = useSelector(selectProductDetails);
   const itemsCart = useSelector(selectItemsCart);
-  // console.log("itemsCart: ", itemsCart);
-
-  const basketDataA = useSelector(selectBasket);
-  // console.log("basketDataA: ", basketDataA);
 
   useEffect(() => {
-    basketDataA.forEach((item) => {
-      if (!tttt[item.slug]) {
-        dispatch(getProductById(item.slug));
-      }
-    });
-  }, [basketDataA, tttt, dispatch]);
-
-  useEffect(() => {
-    dispatch(getBasketInfo());
     dispatch(getCart());
   }, [dispatch]);
 
@@ -97,26 +75,26 @@ const ModalBasket = ({ closeModal, open }) => {
     }
   };
 
-  const handleIncrement = (item, details) => {
-    console.log("item: ", item);
-    if (item.quantity < details.volume.quantity) {
-      handleQuantityChange(item._id, item.volume, item.quantity + 1, item.tone);
-    } else {
-      // Оновлюємо стан для конкретного товару
-      setShowOutOfStockMessage((prev) => ({
-        ...prev,
-        [item.idTorgsoft]: true,
-      }));
+  // const handleIncrement = (item, details) => {
+  //   console.log("item: ", item);
+  //   if (item.quantity < details.volume.quantity) {
+  //     handleQuantityChange(item._id, item.volume, item.quantity + 1, item.tone);
+  //   } else {
+  //     // Оновлюємо стан для конкретного товару
+  //     setShowOutOfStockMessage((prev) => ({
+  //       ...prev,
+  //       [item.idTorgsoft]: true,
+  //     }));
 
-      // Приховуємо повідомлення через 2 секунди для конкретного товару
-      setTimeout(() => {
-        setShowOutOfStockMessage((prev) => ({
-          ...prev,
-          [item.idTorgsoft]: false,
-        }));
-      }, 2000);
-    }
-  };
+  //     // Приховуємо повідомлення через 2 секунди для конкретного товару
+  //     setTimeout(() => {
+  //       setShowOutOfStockMessage((prev) => ({
+  //         ...prev,
+  //         [item.idTorgsoft]: false,
+  //       }));
+  //     }, 2000);
+  //   }
+  // };
   return (
     <div
       className={`${css.modalOverley} `}

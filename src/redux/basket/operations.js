@@ -60,7 +60,6 @@ export const getCart = createAsyncThunk(
 export const addToCart = createAsyncThunk(
   "basket/addToCart",
   async ({ userId, productId, idTorgsoft, quantity }, thunkAPI) => {
-    console.log("idTorgsoft: ", idTorgsoft);
     try {
       const token = thunkAPI.getState().auth.token;
       const data = await addToCartApi(
@@ -70,6 +69,7 @@ export const addToCart = createAsyncThunk(
         quantity,
         token
       );
+      console.log("data", data);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

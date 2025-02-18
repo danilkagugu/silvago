@@ -38,7 +38,6 @@ export const requestLogout = async () => {
 
 export const requestGetCurrentUser = async () => {
   const { data } = await instance.get("/api/auth/current-client");
-  // console.log("data: ", data);
   return data;
 };
 

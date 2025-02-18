@@ -15,12 +15,7 @@ import {
   toogleFavorite,
 } from "../../redux/product/operations";
 
-const FavoriteItem = ({
-  product,
-
-  favoriteProducts,
-  id,
-}) => {
+const FavoriteItem = ({ product, favoriteProducts, id }) => {
   const [quantity, setQuantity] = useState(1);
   const [quantities, setQuantities] = useState(
     product.allVariations.reduce(
@@ -104,7 +99,6 @@ const FavoriteItem = ({
   };
 
   const handleIncrement = (idTorgsoft) => {
-    console.log("idTorgsoft: ", idTorgsoft);
     setQuantities((prev) => ({
       ...prev,
       [idTorgsoft]: Math.min(prev[idTorgsoft] + 1, selectedVariation.quantity),
@@ -137,8 +131,8 @@ const FavoriteItem = ({
 
   const isFavorite = favoriteProducts.some(
     (fav) =>
-      fav.productId === product._id &&
-      fav.variation.idTorgsoft === selectedVariation?.idTorgsoft
+      fav.productId === product.productId &&
+      fav.selectedVariation.idTorgsoft === selectedVariation?.idTorgsoft
   );
   const handleFavoriteToggle = () => {
     dispatch(
