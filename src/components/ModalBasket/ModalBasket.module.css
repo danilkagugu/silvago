@@ -58,13 +58,24 @@
 }
 
 .loaderContainer {
-  display: none;
-  position: fixed;
+  /* display: none; */
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 1001;
+}
+.loaderContainer::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 .loaderSpinner {
@@ -338,6 +349,18 @@
   color: #fff;
   font-size: 13px;
   white-space: nowrap;
+}
+
+.counterMessage:before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 11px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 6px 6px 0 6px;
+  border-color: #000 rgba(0, 0, 0, 0) rgba(0, 0, 0, 0) rgba(0, 0, 0, 0);
 }
 .cartQuantity .counterMessage {
   left: 25px;

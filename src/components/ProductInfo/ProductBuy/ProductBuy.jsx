@@ -2,13 +2,7 @@ import { useSelector } from "react-redux";
 import css from "./ProductBuy.module.css";
 import { selectBasket } from "../../../redux/basket/selectors";
 
-const ProductBuy = ({
-  volume,
-  product,
-  slug,
-  quantities,
-  handleAddToBasket,
-}) => {
+const ProductBuy = ({ volume, handleAddToCart }) => {
   const basketProduct = useSelector(selectBasket);
   // console.log("volume: ", volume);
   const inBasket = basketProduct.some(
@@ -24,9 +18,7 @@ const ProductBuy = ({
               className={`${css.btn} ${css.special} ${
                 inBasket ? css.inBasket : ""
               }`}
-              onClick={() => {
-                handleAddToBasket(slug, quantities[product._id], volume.volume);
-              }}
+              onClick={handleAddToCart}
             >
               <span className={css.btnText}>
                 {inBasket ? "В кошику" : "Купити"}

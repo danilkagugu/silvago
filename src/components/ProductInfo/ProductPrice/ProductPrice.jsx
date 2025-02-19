@@ -4,7 +4,7 @@ import FavoritesService from "../FavoritesService/FavoritesService";
 const ProductPrice = ({
   volume,
   product,
-  handleToggleFavorite,
+  handleFavoriteToggle,
   isFavorite,
   loading,
 }) => {
@@ -32,7 +32,7 @@ const ProductPrice = ({
         </div>
         <div className={css.productBlock}>
           <FavoritesService
-            handleToggleFavorite={handleToggleFavorite}
+            handleToggleFavorite={handleFavoriteToggle}
             isFavorite={isFavorite}
             product={product}
             volume={volume}

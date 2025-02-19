@@ -1,7 +1,6 @@
 import css from "./ProductCharacteristics.module.css";
 
 const ProductCharacteristics = ({ productDetails, product }) => {
-  console.log("product: ", product);
   return (
     <div className={css.productGroup}>
       <div className={css.productGroupItem}>

@@ -8,13 +8,12 @@ import css from "./ProductMainInfo.module.css";
 const ProductMainInfo = ({
   product,
   volume,
-  handleToggleFavorite,
+  handleFavoriteToggle,
   isFavorite,
   handleToneChange,
   handleVolumeChange,
-  handleAddToBasket,
-  quantities,
-  slug,
+
+  handleAddToCart,
   loading,
   breadcrumbs,
 }) => {
@@ -29,7 +28,7 @@ const ProductMainInfo = ({
 
       <div className={css.productGroupItem}>
         <ProductPrice
-          handleToggleFavorite={handleToggleFavorite}
+          handleFavoriteToggle={handleFavoriteToggle}
           isFavorite={isFavorite}
           product={product}
           volume={volume}
@@ -46,13 +45,7 @@ const ProductMainInfo = ({
         />
       </div>
       <div className={css.productGroupItem}>
-        <ProductBuy
-          handleAddToBasket={handleAddToBasket}
-          product={product}
-          quantities={quantities}
-          slug={slug}
-          volume={volume}
-        />
+        <ProductBuy handleAddToCart={handleAddToCart} volume={volume} />
       </div>
     </div>
   );

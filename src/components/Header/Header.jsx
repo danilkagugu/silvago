@@ -33,19 +33,21 @@ const Header = () => {
   const favoriteProductsLength = useSelector(selectFavoritesQuantity);
   const categoriesTorgsoft = useSelector(selectAllCategoriesTorgsoft);
   const user = useSelector(selectUserData);
-  const id = useSelector(selectUserData);
-  // console.log("id: ", id);
-
+  const userId = user?.id;
   // useEffect
-
-  useEffect(() => {
-    dispatch(fetchAllCategoriesTorgsoft());
-    dispatch(getFavoriteProducts(id.id));
-  }, [dispatch, id]);
 
   useEffect(() => {
     dispatch(getUserInfo());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchAllCategoriesTorgsoft());
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getFavoriteProducts(userId));
+  }, [dispatch, userId, favoriteProductsLength]);
+
   return (
     <div
       className={`${css.header} ${location.pathname === "/" ? css.home : ""}`}

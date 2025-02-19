@@ -86,16 +86,12 @@ export const toogleFavoriteApi = async (
   idTorgsoft,
   token
 ) => {
-  console.log("userId", userId);
-  console.log("productId", productId);
-  console.log("idTorgsoft", idTorgsoft);
   const instance = createPrivateAxiosInstance(token);
   const { data } = await instance.post(`/api/product/toggle-favorite`, {
     userId,
     productId,
     idTorgsoft,
   });
-  console.log("data", data);
   return data;
 };
 
@@ -153,6 +149,23 @@ export const removeFromCartApi = async (
   const { data } = await instance.delete(`/api/product/cart/remove`, {
     data: { userId, productId, idTorgsoft }, // Передаємо дані в `data`
     headers: { Authorization: `Bearer ${token}` }, // Додаємо токен
+  });
+  return data;
+};
+
+export const updateQuantityInCartApi = async (
+  userId,
+  productId,
+  idTorgsoft,
+  quantity,
+  token
+) => {
+  const instance = createPrivateAxiosInstance(token);
+  const { data } = await instance.patch(`/api/product/cart/update-quantity`, {
+    userId,
+    productId,
+    idTorgsoft,
+    quantity,
   });
   return data;
 };
@@ -355,3 +368,74 @@ export const fetchFilteredProductsApi = async ({
     throw error;
   }
 };
+
+/*
+
+// export const removeFromCart = async (req, res, next) => {
+//   try {
+//     const { userId, productId, idTorgsoft } = req.body;
+//     console.log("req.body: ", req.body);
+
+//     let cart = await Cart.findOne({ userId, status: "active" });
+//     if (!cart) {
+//       return res.status(404).json({ message: "Кошик порожній" });
+//     }
+
+//     const itemExists = cart.items.some(
+//       (item) =>
+//         item.productId.toString() === productId.toString() &&
+//         Number(item.idTorgsoft) === Number(idTorgsoft)
+//     );
+
+//     if (!itemExists) {
+//       return res.status(400).json({ message: "Товар не знайдено в кошику" });
+//     }
+
+//     cart.items = cart.items.filter(
+//       (item) =>
+//         !(
+//           item.productId.toString() === productId.toString() &&
+//           Number(item.idTorgsoft) === Number(idTorgsoft)
+//         )
+//     );
+
+//     if (cart.items.length === 0) {
+//       await Cart.findByIdAndDelete(cart._id);
+//       return res.status(200).json([]); // Повертаємо пустий масив замість об'єкта
+//     }
+
+//     cart = await Cart.findByIdAndUpdate(
+//       cart._id,
+//       { items: cart.items },
+//       { new: true }
+//     ).populate({
+//       path: "items.productId",
+//       model: "goods",
+//     });
+
+//     // Формуємо коректний формат відповіді (масив об'єктів, як у `addToCart`)
+//     const cartItems = cart.items.map((item) => {
+//       const product = item.productId;
+//       if (!product) return null;
+
+//       const selectedVariation = product.variations.find(
+//         (v) => Number(v.idTorgsoft) === Number(item.idTorgsoft)
+//       );
+
+//       return {
+//         productId: product._id,
+//         modelName: product.modelName,
+//         brand: product.brand,
+//         categories: product.categories,
+//         measure: product.measure,
+//         selectedVariation,
+//         quantity: item.quantity,
+//       };
+//     });
+
+//     res.status(200).json(cartItems.filter((item) => item !== null)); // Повертаємо масив
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+*/

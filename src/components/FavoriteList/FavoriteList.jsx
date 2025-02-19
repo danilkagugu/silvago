@@ -1,19 +1,7 @@
 import css from "./FavoriteList.module.css";
 import FavoriteItem from "../FavoriteItem/FavoriteItem";
-import { removeProductFavorite } from "../../redux/product/operations";
-import { useDispatch } from "react-redux";
 
 const FavoriteList = ({ favoriteProducts, id }) => {
-  const dispatch = useDispatch();
-
-  const handleRemoveFavorite = async (productId, volumeId) => {
-    try {
-      dispatch(removeProductFavorite({ productId, volumeId }));
-    } catch (error) {
-      console.error("Error removing favorite product: ", error);
-    }
-  };
-
   return (
     <section className={css.wishlist}>
       <header className={css.wishlistHeader}>
@@ -23,15 +11,14 @@ const FavoriteList = ({ favoriteProducts, id }) => {
 
       {favoriteProducts.length > 0 ? (
         <ul className={css.catalogGrid}>
-          {favoriteProducts.map((item) => (
+          {favoriteProducts.map((item, index) => (
             <li
-              key={`${item?.selectedVariation?.idTorgsoft}`}
+              key={`${item?.selectedVariation?.idTorgsoft}-${index}`}
               className={css.listItem}
               id={item.volumeId}
             >
               <FavoriteItem
                 product={item}
-                handleRemoveFavorite={handleRemoveFavorite}
                 favoriteProducts={favoriteProducts}
                 id={id}
               />
