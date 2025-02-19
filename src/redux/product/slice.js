@@ -92,6 +92,7 @@ const productSlice = createSlice({
         state.error = null;
       })
       .addCase(getProductById.fulfilled, (state, action) => {
+        // console.log("action.payload", action.payload);
         state.productDetails = action.payload;
         state.loading = false;
       })
@@ -103,6 +104,7 @@ const productSlice = createSlice({
       })
       .addCase(toogleFavorite.fulfilled, (state, action) => {
         state.favorites = action.payload;
+        // console.log("state.favorites: ", state.favorites);
         state.favoritesQuantity = state.favorites.length;
         state.loading = false;
       })
@@ -113,12 +115,14 @@ const productSlice = createSlice({
       })
 
       .addCase(getFavoriteProducts.fulfilled, (state, action) => {
-        if (!Array.isArray(action.payload)) {
-          console.error("action.payload не є масивом");
-          state.loading = false;
-          return;
-        }
+        // if (!Array.isArray(action.payload)) {
+        //   console.error("action.payload не є масивом");
+        //   state.loading = false;
+        //   return;
+        // }
+        // console.log("ДО state.favorites: ", state.favorites);
         state.favorites = action.payload;
+        // console.log("ПІСЛЯ state.favorites: ", state.favorites);
         state.favoritesQuantity = state.favorites.length;
         state.loading = false;
       })

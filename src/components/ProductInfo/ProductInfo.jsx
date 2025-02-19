@@ -1,80 +1,43 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import css from "./ProductInfo.module.css";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  selectFavoritesProducts,
-  selectProductDetails,
-  selectProductLoading,
-} from "../../redux/product/selectors";
-import {
-  addProductFavorite,
-  fetchProductVariation,
-  getFavoriteProducts,
-  getProductById,
-  removeProductFavorite,
-} from "../../redux/product/operations";
-import { addProduct } from "../../redux/basket/operations";
-import {
-  fetchAllBrandsTorgsoft,
-  fetchAllCategories,
-} from "../../redux/inventoryStore/operations";
-import {
-  selectAllBrandsTorgsoft,
-  selectAllCategories,
-} from "../../redux/inventoryStore/selectors";
+import { useDispatch } from "react-redux";
+import { toogleFavorite } from "../../redux/product/operations";
+import { addToCart } from "../../redux/basket/operations";
 
 import ProductMainInfo from "./ProductMainInfo/ProductMainInfo";
 import ProductMedia from "./ProductMedia/ProductMedia";
 import ProductCharacteristics from "./ProductCharacteristics/ProductCharacteristics";
 import ProductDescriptionTabs from "./ProductDescriptionTabs/ProductDescriptionTabs";
 import ProductAdditionalInfoTabs from "./ProductAdditionalInfoTabs/ProductAdditionalInfoTabs";
-import { getUserInfo } from "../../redux/auth/operations";
-import { selectUserData } from "../../redux/auth/selectors";
 
-const ProductInfo = () => {
+const ProductInfo = ({
+  id,
+  productDetails,
+  brandsTorgsoft,
+  favorites,
+  categories,
+  loading,
+}) => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   const { slug } = useParams();
 
-  const [quantities, setQuantities] = useState({});
+  // const [quantities, setQuantities] = useState({});
+  const [quantity, setQuantity] = useState(1);
   const [descriptionTab, setDescriptionTab] = useState("Опис");
   const [descriptionInfoTab, setDescriptionInfoTab] = useState("Доставка");
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const productDetails = useSelector(selectProductDetails);
-  console.log("productDetails: ", productDetails);
-  const brandsTorgsoft = useSelector(selectAllBrandsTorgsoft);
-  const favorites = useSelector(selectFavoritesProducts);
-  console.log("favorites: ", favorites);
-  const categories = useSelector(selectAllCategories);
-  const userData = useSelector(selectUserData) || {};
-  const { id } = userData;
-
-  const loading = useSelector(selectProductLoading);
+  const [selectedVariation, setSelectedVariation] = useState(
+    productDetails.selectedVariation
+  );
+  // const loading = useSelector(selectProductLoading);
 
   useEffect(() => {
-    dispatch(getProductById(slug));
-    dispatch(fetchAllCategories());
-    dispatch(fetchAllBrandsTorgsoft());
-    dispatch(getFavoriteProducts(id));
-    dispatch(getUserInfo());
-  }, [dispatch, slug, id]);
-
-  // const toggleDescription = () => {
-  //   if (isExpanded) {
-  //     // Почати процес закриття
-  //     setIsClosing(true);
-  //     setTimeout(() => {
-  //       setIsExpanded(false); // Прибрати видимість
-  //       setIsClosing(false); // Скинути стан закриття
-  //     }, 300); // Відповідає тривалості transition для висоти
-  //   } else {
-  //     setIsExpanded(true);
-  //   }
-  // };
+    setQuantity(1); // При зміні варіації значення quantity завжди скидається на 1
+  }, [selectedVariation]);
 
   useEffect(() => {
     if (isExpanded) {
@@ -91,17 +54,6 @@ const ProductInfo = () => {
       // document.documentElement.classList.remove(css.noScroll);
     };
   }, [isExpanded]);
-
-  useEffect(() => {
-    if (productDetails?.product) {
-      // Оновлення кількості продукту в кошику
-      setQuantities((prevQuantities) => ({
-        ...prevQuantities,
-        [productDetails.volume._id]:
-          prevQuantities[productDetails.volume._id] || 1,
-      }));
-    }
-  }, [productDetails, slug]);
 
   useEffect(() => {
     if (productDetails?.product && productDetails?.volume) {
@@ -127,98 +79,70 @@ const ProductInfo = () => {
     }
   }, [productDetails]);
 
-  const handleToggleFavorite = async (product, idTorgsoft) => {
-    if (!product || !product._id) {
-      console.warn("Product is invalid.");
-      return;
-    }
-
-    const isFavorite = favorites.some(
-      (fav) =>
-        fav.productId === product._id &&
-        fav.allVariations.idTorgsoft === volume.idTorgsoft
-    );
-    const action = isFavorite
-      ? removeProductFavorite({
-          userId: id,
-          productId: product._id,
-          idTorgsoft,
-        })
-      : addProductFavorite({ userId: id, productId: product._id, idTorgsoft });
-
-    await dispatch(action);
-    dispatch(getFavoriteProducts(id));
-  };
-
-  const handleAddToBasket = () => {
+  const handleFavoriteToggle = () => {
     dispatch(
-      addProduct({
-        slug: volume.slug,
-        quantity: quantities[volume._id],
-        volume: volume.volume,
-        tone: volume.tone
-          ? parseInt(volume.tone.match(/\d+/)?.[0]) || null
-          : null,
+      toogleFavorite({
+        userId: id,
+        productId: productDetails.productId,
+        idTorgsoft: selectedVariation.idTorgsoft,
+      })
+    );
+  };
+  const handleAddToCart = () => {
+    dispatch(
+      addToCart({
+        userId: id,
+        productId: productDetails.productId,
+        idTorgsoft: selectedVariation.idTorgsoft,
+        quantity,
       })
     );
   };
 
-  const handleVolumeChange = (productId, volumeId) => {
-    // Змінюємо лише об'єм, залишаючи поточний тон
-    const activeVariation = product.variations.find(
-      (item) =>
-        item.idTorgsoft === volumeId && (volumeId || item.tone === volume.tone)
-    );
-    dispatch(
-      fetchProductVariation({
-        productId,
-        volumeId,
-        tone: volume.tone, // Поточний тон залишається
-      })
-    );
-    navigate(`/product/${activeVariation?.slug}`);
-  };
-
-  const handleToneChange = (productId, tone) => {
-    const productVariations = product.variations.filter(
-      (variant) => variant.tone === tone
+  const handleVolumeChange = (volumeId) => {
+    const newVariation = productDetails.variations.find(
+      (variant) => variant.idTorgsoft === volumeId
     );
 
-    // Знаходимо варіацію з поточним об'ємом
-    let matchingVariation = productVariations.find(
-      (variant) => variant.volume === volume.volume
-    );
-
-    // Якщо такої немає, беремо першу доступну варіацію
-    if (!matchingVariation && productVariations.length > 0) {
-      matchingVariation = productVariations[0];
-    }
-
-    // Якщо знайшли варіацію, оновлюємо обидва параметри
-    if (matchingVariation) {
-      dispatch(
-        fetchProductVariation({
-          productId,
-          volumeId: matchingVariation.idTorgsoft,
-          tone: tone,
-        })
-      );
-      navigate(`/product/${matchingVariation?.slug}`);
+    if (newVariation) {
+      setSelectedVariation(newVariation);
+      navigate(`/product/${newVariation?.slug}`);
     } else {
-      console.error("Варіацію з таким об'ємом і тоном не знайдено");
+      console.error("Варіацію з таким об'ємом не знайдено");
     }
   };
+
+  const handleToneChange = (tone) => {
+    const newVariation = productDetails.variations.find(
+      (variant) =>
+        variant.tone === tone && variant.volume === selectedVariation.volume
+    );
+
+    if (newVariation) {
+      setSelectedVariation(newVariation);
+      navigate(`/product/${newVariation?.slug}`);
+    } else {
+      console.error("Варіацію з таким тоном не знайдено");
+    }
+  };
+
+  const isFavorite = favorites.some(
+    (fav) =>
+      fav.productId.toString() === productDetails.productId.toString() &&
+      Number(fav?.selectedVariation?.idTorgsoft) ===
+        Number(selectedVariation?.idTorgsoft)
+  );
 
   if (!productDetails) {
     return <div>Завантаження...</div>;
   }
 
-  const { product, volume, breadcrumbs } = productDetails;
+  // const { product, volume, breadcrumbs } = productDetails;
 
   return (
     <>
       <section className={css.product}>
-        {product && (
+        {productDetails && (
           <div className={css.productContent}>
             <div
               className={`${css.productColumn} ${css.productColumnSticky} ${css.productColumnLeft}`}
@@ -227,10 +151,10 @@ const ProductInfo = () => {
                 brand={brandsTorgsoft.find(
                   (b) =>
                     b.name.trim().toLowerCase() ===
-                    product.brand.trim().toLowerCase()
+                    productDetails.brand.trim().toLowerCase()
                 )}
                 handleBrandClick={(brandId) => navigate(`/brand/${brandId}`)}
-                volume={volume}
+                volume={selectedVariation}
               />
             </div>
             <div
@@ -239,31 +163,26 @@ const ProductInfo = () => {
               <div className={css.productColumnContainer}>
                 <ProductMainInfo
                   categories={categories}
-                  product={product}
-                  volume={volume}
-                  breadcrumbs={breadcrumbs}
-                  handleToggleFavorite={handleToggleFavorite}
+                  product={productDetails}
+                  volume={selectedVariation}
+                  breadcrumbs={productDetails.breadcrumbs}
+                  handleFavoriteToggle={handleFavoriteToggle}
                   handleToneChange={handleToneChange}
                   handleVolumeChange={handleVolumeChange}
-                  handleAddToBasket={handleAddToBasket}
-                  quantities={quantities}
+                  handleAddToCart={handleAddToCart}
                   slug={slug}
-                  isFavorite={favorites.some(
-                    (fav) =>
-                      fav?.productId === product?._id &&
-                      fav.allVariations.idTorgsoft === volume.idTorgsoft
-                  )}
+                  isFavorite={isFavorite}
                   loading={loading}
                 />
 
                 <ProductCharacteristics
-                  product={product}
+                  product={productDetails}
                   productDetails={productDetails}
                 />
 
                 <ProductDescriptionTabs
                   descriptionTab={descriptionTab}
-                  product={product}
+                  product={productDetails}
                   setDescriptionTab={setDescriptionTab}
                 />
 

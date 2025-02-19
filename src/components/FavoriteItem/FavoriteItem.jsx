@@ -1,6 +1,6 @@
 import css from "./FavoriteItem.module.css";
 
-import { addProduct, addToCart } from "../../redux/basket/operations";
+import { addToCart, updateQuantityInCart } from "../../redux/basket/operations";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import FavoriteProductImage from "./FavoretiProductImage/FavoretiProductImage";
@@ -8,33 +8,82 @@ import FavoriteProductInfo from "./FavoriteProductInfo/FavoriteProductInfo";
 import FavoriteProductModifications from "./FavoriteProductModifications/FavoriteProductModifications";
 import FavoriteProductActions from "./FavoriteProductActions/FavoriteProductActions";
 import { selectTopProducts } from "../../redux/product/selectors";
-import {
-  addProductFavorite,
-  getFavoriteProducts,
-  removeProductFavorite,
-  toogleFavorite,
-} from "../../redux/product/operations";
+import { toogleFavorite } from "../../redux/product/operations";
 
 const FavoriteItem = ({ product, favoriteProducts, id }) => {
+  const [localQuantities, setLocalQuantities] = useState({});
   const [quantity, setQuantity] = useState(1);
-  const [quantities, setQuantities] = useState(
-    product.allVariations.reduce(
-      (acc, variant) => ({
-        ...acc,
-        [variant.idTorgsoft]: 1,
-      }),
-      {}
-    )
-  );
+  // const [quantities, setQuantities] = useState(
+  //   product.allVariations.reduce(
+  //     (acc, variant) => ({
+  //       ...acc,
+  //       [variant.idTorgsoft]: 1,
+  //     }),
+  //     {}
+  //   )
+  // );
   const dispatch = useDispatch();
 
   const [selectedVariation, setSelectedVariation] = useState(
     product.selectedVariation
   );
+
   useEffect(() => {
     setQuantity(1); // При зміні варіації значення quantity завжди скидається на 1
   }, [selectedVariation]);
+
   const topProducts = useSelector(selectTopProducts);
+
+  const handleQuantityChangee = (item, newQuantity) => {
+    if (newQuantity < 1) return; // Мінімальна кількість - 1
+
+    // if (newQuantity > item.selectedVariation.quantity) {
+    //   // Якщо користувач хоче більше, ніж є в наявності, показуємо повідомлення
+    //   setShowOutOfStockMessage((prev) => ({
+    //     ...prev,
+    //     [item.selectedVariation.idTorgsoft]: true,
+    //   }));
+
+    //   // Приховуємо повідомлення через 2 секунди
+    //   setTimeout(() => {
+    //     setShowOutOfStockMessage((prev) => ({
+    //       ...prev,
+    //       [item.selectedVariation.idTorgsoft]: false,
+    //     }));
+    //   }, 2000);
+
+    //   return; // Зупиняємо виконання, щоб не відправляти зайвий запит
+    // }
+    setLocalQuantities((prev) => ({
+      ...prev,
+      [item.productId]: newQuantity,
+    }));
+
+    dispatch(
+      updateQuantityInCart({
+        userId: id.id,
+        productId: item.productId,
+        idTorgsoft: item.selectedVariation.idTorgsoft,
+        quantity: newQuantity,
+      })
+    );
+  };
+
+  const handleInputChange = (e, item) => {
+    let value = e.target.value.replace(/\D/, ""); // Видаляємо нецифрові символи
+
+    if (value) {
+      value = parseInt(value, 10); // Конвертуємо у число
+      if (value > item.selectedVariation.quantity) {
+        value = item.selectedVariation.quantity; // Обмежуємо максимальною кількістю
+      }
+    }
+
+    setLocalQuantities((prev) => ({
+      ...prev,
+      [item.productId]: value || "", // Якщо поле порожнє, залишаємо ""
+    }));
+  };
 
   const handleQuantityChanges = (e) => {
     setQuantity(Math.max(Number(e.target.value), 1)); // Мінімум 1
@@ -47,21 +96,6 @@ const FavoriteItem = ({ product, favoriteProducts, id }) => {
         productId: product.productId,
         idTorgsoft: selectedVariation.idTorgsoft,
         quantity,
-      })
-    );
-  };
-
-  const handleAddToBasket = () => {
-    if (quantities[product.volumeId] > product.quantityInStock) {
-      console.log("quantities: ", quantities);
-      console.error("Not enough stock for this volume.");
-      return;
-    }
-    dispatch(
-      addProduct({
-        slug: product.slug,
-        quantity: quantities[product.volumeId],
-        volume: product.volume,
       })
     );
   };
@@ -91,48 +125,21 @@ const FavoriteItem = ({ product, favoriteProducts, id }) => {
     }
   };
 
-  const handleDecrement = (idTorgsoft) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [idTorgsoft]: Math.max(prev[idTorgsoft] - 1, 1),
-    }));
-  };
-
-  const handleIncrement = (idTorgsoft) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [idTorgsoft]: Math.min(prev[idTorgsoft] + 1, selectedVariation.quantity),
-    }));
-  };
-
-  const handleQuantityChange = (idTorgsoft, value) => {
-    setQuantities((prev) => ({
-      ...prev,
-      [idTorgsoft]: Math.min(
-        Math.max(value, 1),
-        selectedVariation.quantity || 1
-      ),
-    }));
-  };
-
-  const handleToggleFavorite = async (productId, idTorgsoft) => {
-    const isFavorite = favoriteProducts.some(
-      (fav) =>
-        fav.productId === productId && fav.variation.idTorgsoft === idTorgsoft
-    );
-
-    const action = isFavorite
-      ? removeProductFavorite({ userId: id.id, productId, idTorgsoft })
-      : addProductFavorite({ userId: id.id, productId, idTorgsoft });
-
-    await dispatch(action);
-    dispatch(getFavoriteProducts(id.id));
-  };
+  // const handleQuantityChange = (idTorgsoft, value) => {
+  //   setQuantities((prev) => ({
+  //     ...prev,
+  //     [idTorgsoft]: Math.min(
+  //       Math.max(value, 1),
+  //       selectedVariation.quantity || 1
+  //     ),
+  //   }));
+  // };
 
   const isFavorite = favoriteProducts.some(
     (fav) =>
-      fav.productId === product.productId &&
-      fav.selectedVariation.idTorgsoft === selectedVariation?.idTorgsoft
+      fav.productId.toString() === product.productId.toString() &&
+      Number(fav.selectedVariation.idTorgsoft) ===
+        Number(selectedVariation?.idTorgsoft)
   );
   const handleFavoriteToggle = () => {
     dispatch(
@@ -169,14 +176,14 @@ const FavoriteItem = ({ product, favoriteProducts, id }) => {
             volumeDetail={selectedVariation}
           />
           <FavoriteProductActions
-            handleAddToBasket={handleAddToBasket}
-            handleDecrement={handleDecrement}
-            handleIncrement={handleIncrement}
-            handleQuantityChange={handleQuantityChange}
-            handleToggleFavorite={handleToggleFavorite}
+            // handleQuantityChange={handleQuantityChange}
+            handleQuantityChangee={handleQuantityChangee}
+            handleInputChange={handleInputChange}
+            localQuantities={localQuantities}
+            setLocalQuantities={setLocalQuantities}
             isFavorite={isFavorite}
             product={product}
-            quantities={quantities}
+            // quantities={quantities}
             volumeDetail={selectedVariation}
             id={id}
             handleFavoriteToggle={handleFavoriteToggle}

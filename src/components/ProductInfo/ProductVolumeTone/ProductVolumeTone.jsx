@@ -35,9 +35,7 @@ const ProductVolumeTone = ({
                           ? css.modificationButtonStockout
                           : ""
                       }`}
-                      onClick={() =>
-                        handleVolumeChange(product._id, variant.idTorgsoft)
-                      }
+                      onClick={() => handleVolumeChange(variant.idTorgsoft)}
                     >
                       {`${variant.volume + " " + product.measure}`}
                       {!isVolumeAvailable && (
@@ -86,9 +84,7 @@ const ProductVolumeTone = ({
                             ? css.modificationButtonStockout
                             : ""
                         }`}
-                        onClick={() =>
-                          handleToneChange(product._id, uniqueTone)
-                        }
+                        onClick={() => handleToneChange(uniqueTone)}
                       >
                         {parseInt(uniqueTone.match(/\d+/)[0])}
                         {!isToneAvailable && (

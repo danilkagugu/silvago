@@ -6,13 +6,13 @@ import { CiHeart } from "react-icons/ci";
 const FavoriteProductActions = ({
   volumeDetail,
   quantities,
-  handleQuantityChange,
-
+  handleQuantityChangee,
+  handleInputChange,
+  localQuantities,
+  product,
   isFavorite,
   handleFavoriteToggle,
   handleAddToCart,
-  quantity,
-  setQuantity,
 }) => {
   return (
     <>
@@ -23,13 +23,17 @@ const FavoriteProductActions = ({
               <div className={css.counter}>
                 <div className={css.counterContainer}>
                   <button
-                    className={`${css.counterBtn} ${
-                      quantities[volumeDetail.idTorgsoft] === 1
-                        ? css.disabled
-                        : ""
-                    }`}
-                    // onClick={() => handleDecrement(volumeDetail.idTorgsoft)}
-                    onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
+                    className={`${css.counterBtn} 
+                    
+                     
+                    `}
+                    onClick={() =>
+                      handleQuantityChangee(
+                        product,
+                        (localQuantities[product.productId] ||
+                          product.quantity) - 1
+                      )
+                    }
                   >
                     <FiMinus className={`${css.icon} ${css.iconMinus}`} />
                   </button>
@@ -38,30 +42,31 @@ const FavoriteProductActions = ({
                       className={css.counterField}
                       type="number"
                       // value={quantities[volumeDetail.idTorgsoft]}
-                      value={quantity}
-                      min={1}
-                      max={volumeDetail.quantity}
-                      // onChange={(e) =>
-                      //   handleQuantityChange(
-                      //     volumeDetail.idTorgsoft,
-                      //     parseInt(e.target.value, 10)
-                      //   )
-                      // }
-                      onChange={handleQuantityChange}
+                      value={
+                        localQuantities[product.productId] ?? product.quantity
+                      }
+                      min={"1"}
+                      max={product.selectedVariation.quantity}
+                      onChange={(e) => handleInputChange(e, product)}
                     />
                   </div>
                   <button
                     className={`${css.counterBtn}
-                     ${
-                       quantities[volumeDetail.idTorgsoft] ===
-                       volumeDetail.quantity
-                         ? css.disabled
-                         : ""
-                     }
+                    ${
+                      (localQuantities[product.productId] ||
+                        product.quantity) >= product.selectedVariation.quantity
+                        ? css.disabled
+                        : ""
+                    }
                     `}
-                    // onClick={() => handleIncrement(volumeDetail.idTorgsoft)}
                     // disabled={quantity >= volumeDetail.quantity}
-                    onClick={() => setQuantity((prev) => prev + 1)}
+                    onClick={() =>
+                      handleQuantityChangee(
+                        product,
+                        (localQuantities[product.productId] ||
+                          product.quantity) + 1
+                      )
+                    }
                   >
                     <FaPlus className={`${css.icon} ${css.iconPlus}`} />
                   </button>

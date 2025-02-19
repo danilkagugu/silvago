@@ -86,16 +86,12 @@ export const toogleFavoriteApi = async (
   idTorgsoft,
   token
 ) => {
-  console.log("userId", userId);
-  console.log("productId", productId);
-  console.log("idTorgsoft", idTorgsoft);
   const instance = createPrivateAxiosInstance(token);
   const { data } = await instance.post(`/api/product/toggle-favorite`, {
     userId,
     productId,
     idTorgsoft,
   });
-  console.log("data", data);
   return data;
 };
 

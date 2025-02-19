@@ -70,6 +70,7 @@ export const getProductById = createAsyncThunk(
   async (slug, thunkAPI) => {
     try {
       const data = await productById(slug);
+      // console.log("data: ", data);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

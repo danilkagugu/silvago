@@ -7,7 +7,7 @@ const ProductTitle = ({ volume }) => {
         <div
           className={`${css.productHeaderBlock} ${css.productHeaderTitleBlock}`}
         >
-          <h1 className={css.productTitle}>{volume.fullName}</h1>
+          <h1 className={css.productTitle}>{volume?.fullName}</h1>
         </div>
         <div className={css.productHeaderBlock}>
           <div className={css.productHeaderBlockBarcode}>
