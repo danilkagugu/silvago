@@ -8,7 +8,7 @@ import { CiTrash } from "react-icons/ci";
 import {
   getCart,
   removeFromCart,
-  updateProductQuantityBasket,
+  updateQuantityInCart,
 } from "../../redux/basket/operations";
 import { useDispatch, useSelector } from "react-redux";
 import { selectItemsCart, selectLoading } from "../../redux/basket/selectors";
@@ -19,8 +19,8 @@ import { selectUserData } from "../../redux/auth/selectors";
 const ModalBasket = ({ closeModal, open }) => {
   const dispatch = useDispatch();
   const [showOutOfStockMessage, setShowOutOfStockMessage] = useState({});
+  const [localQuantities, setLocalQuantities] = useState({});
   const userData = useSelector(selectUserData);
-  // console.log("userData: ", userData);
   const navigate = useNavigate();
   const loading = useSelector(selectLoading);
   const itemsCart = useSelector(selectItemsCart);
@@ -29,20 +29,67 @@ const ModalBasket = ({ closeModal, open }) => {
     dispatch(getCart());
   }, [dispatch]);
 
-  const handleQuantityChange = async (productId, volume, quantity, tone) => {
-    try {
-      if (quantity < 1) return;
-      dispatch(
-        updateProductQuantityBasket({
-          productId,
-          volume,
-          quantity,
-          tone,
-        })
-      );
-    } catch (error) {
-      console.error("Помилка оновлення кількості товару:", error);
+  const handleQuantityChange = (item, newQuantity) => {
+    if (newQuantity < 1) return; // Мінімальна кількість - 1
+
+    if (newQuantity > item.selectedVariation.quantity) {
+      // Якщо користувач хоче більше, ніж є в наявності, показуємо повідомлення
+      setShowOutOfStockMessage((prev) => ({
+        ...prev,
+        [item.selectedVariation.idTorgsoft]: true,
+      }));
+
+      // Приховуємо повідомлення через 2 секунди
+      setTimeout(() => {
+        setShowOutOfStockMessage((prev) => ({
+          ...prev,
+          [item.selectedVariation.idTorgsoft]: false,
+        }));
+      }, 2000);
+
+      return; // Зупиняємо виконання, щоб не відправляти зайвий запит
     }
+    setLocalQuantities((prev) => ({
+      ...prev,
+      [item.productId]: newQuantity,
+    }));
+
+    dispatch(
+      updateQuantityInCart({
+        userId: userData.id,
+        productId: item.productId,
+        idTorgsoft: item.selectedVariation.idTorgsoft,
+        quantity: newQuantity,
+      })
+    );
+  };
+
+  const handleInputChange = (e, item) => {
+    let value = e.target.value.replace(/\D/, ""); // Видаляємо нецифрові символи
+
+    if (value) {
+      value = parseInt(value, 10); // Конвертуємо у число
+      if (value > item.selectedVariation.quantity) {
+        value = item.selectedVariation.quantity; // Обмежуємо максимальною кількістю
+      }
+    }
+
+    setLocalQuantities((prev) => ({
+      ...prev,
+      [item.productId]: value || "", // Якщо поле порожнє, залишаємо ""
+    }));
+  };
+
+  const handleInputBlur = (item) => {
+    let newQuantity = localQuantities[item.productId];
+
+    if (!newQuantity || newQuantity < 1) {
+      newQuantity = 1; // Мінімальна кількість - 1
+    } else if (newQuantity > item.selectedVariation.quantity) {
+      newQuantity = item.selectedVariation.quantity; // Обмежуємо максимальною кількістю
+    }
+
+    handleQuantityChange(item, newQuantity);
   };
 
   const calculateTotalAmount = () => {
@@ -59,7 +106,7 @@ const ModalBasket = ({ closeModal, open }) => {
   };
 
   const handleRemove = (product) => {
-    console.log("product: ", product);
+    // console.log("product: ", product);
     const isConfirmed = window.confirm(
       "Ви впевнені, що хочете видалити цей продукт?"
     );
@@ -75,26 +122,6 @@ const ModalBasket = ({ closeModal, open }) => {
     }
   };
 
-  // const handleIncrement = (item, details) => {
-  //   console.log("item: ", item);
-  //   if (item.quantity < details.volume.quantity) {
-  //     handleQuantityChange(item._id, item.volume, item.quantity + 1, item.tone);
-  //   } else {
-  //     // Оновлюємо стан для конкретного товару
-  //     setShowOutOfStockMessage((prev) => ({
-  //       ...prev,
-  //       [item.idTorgsoft]: true,
-  //     }));
-
-  //     // Приховуємо повідомлення через 2 секунди для конкретного товару
-  //     setTimeout(() => {
-  //       setShowOutOfStockMessage((prev) => ({
-  //         ...prev,
-  //         [item.idTorgsoft]: false,
-  //       }));
-  //     }, 2000);
-  //   }
-  // };
   return (
     <div
       className={`${css.modalOverley} `}
@@ -198,10 +225,10 @@ const ModalBasket = ({ closeModal, open }) => {
                                   <div
                                     className={`${css.cartPrice} ${css.old}`}
                                   >
-                                    {item.selectedVariation.discountPrice} грн
+                                    {item.selectedVariation.retailPrice} грн
                                   </div>
                                   <div className={css.cartPrice}>
-                                    {item.selectedVariation.retailPrice} грн
+                                    {item.selectedVariation.discountPrice} грн
                                   </div>
                                 </>
                               ) : (
@@ -226,10 +253,10 @@ const ModalBasket = ({ closeModal, open }) => {
                                           } else {
                                             // Зменшуємо кількість
                                             handleQuantityChange(
-                                              item._id,
-                                              item.volume,
-                                              item.quantity - 1,
-                                              item.tone
+                                              item,
+                                              (localQuantities[
+                                                item.productId
+                                              ] || item.quantity) - 1
                                             );
                                           }
                                         }}
@@ -244,32 +271,36 @@ const ModalBasket = ({ closeModal, open }) => {
                                           type="text"
                                           // value={item.quantity}
                                           value={
-                                            item.selectedVariation.quantity <
+                                            localQuantities[item.productId] ??
                                             item.quantity
-                                              ? item.selectedVariation.quantity
-                                              : item.quantity
                                           }
                                           min={"1"}
                                           max={item.selectedVariation.quantity}
                                           onChange={(e) =>
-                                            handleQuantityChange(
-                                              item._id,
-                                              item.volume,
-                                              Number(e.target.value),
-                                              item.tone
-                                            )
+                                            handleInputChange(e, item)
                                           }
+                                          onBlur={() => handleInputBlur(item)}
                                         />
                                       </div>
                                       <button
                                         className={`${css.counterBtn} ${
-                                          item.quantity ===
+                                          (localQuantities[item.productId] ||
+                                            item.quantity) >=
                                           item.selectedVariation.quantity
                                             ? css.disabled
                                             : ""
                                         }`}
-                                        // onClick={() =>
-                                        //   handleIncrement(item, details)
+                                        onClick={() =>
+                                          handleQuantityChange(
+                                            item,
+                                            (localQuantities[item.productId] ||
+                                              item.quantity) + 1
+                                          )
+                                        }
+                                        // disabled={
+                                        //   (localQuantities[item.productId] ||
+                                        //     item.quantity) >=
+                                        //   item.selectedVariation.quantity
                                         // }
                                       >
                                         <GoPlus
@@ -281,7 +312,7 @@ const ModalBasket = ({ closeModal, open }) => {
                                       className={css.counterMessage}
                                       style={{
                                         display: showOutOfStockMessage[
-                                          item.idTorgsoft
+                                          item.selectedVariation.idTorgsoft
                                         ]
                                           ? "block"
                                           : "none",

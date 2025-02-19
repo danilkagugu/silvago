@@ -9,6 +9,7 @@ import {
   removeFromCartApi,
   sendOrder,
   updateProductQuantity,
+  updateQuantityInCartApi,
 } from "../../services/productApi";
 
 export const getBasketInfo = createAsyncThunk(
@@ -80,14 +81,31 @@ export const addToCart = createAsyncThunk(
 export const removeFromCart = createAsyncThunk(
   "basket/removeFromCart",
   async ({ userId, productId, idTorgsoft }, thunkAPI) => {
-    console.log("userId: ", userId);
-    console.log("idTorgsoft: ", idTorgsoft);
     try {
       const token = thunkAPI.getState().auth.token;
       const data = await removeFromCartApi(
         userId,
         productId,
         idTorgsoft,
+        token
+      );
+      console.log("data", data);
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+export const updateQuantityInCart = createAsyncThunk(
+  "basket/updateQuantityInCart",
+  async ({ userId, productId, idTorgsoft, quantity }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.token;
+      const data = await updateQuantityInCartApi(
+        userId,
+        productId,
+        idTorgsoft,
+        quantity,
         token
       );
       return data;

@@ -9,6 +9,7 @@ import {
   getCart,
   removeFromCart,
   updateProductQuantityBasket,
+  updateQuantityInCart,
 } from "./operations";
 
 const INITIAL_STATE = {
@@ -38,40 +39,63 @@ const basketSlice = createSlice({
         state.error = null;
       })
       .addCase(getCart.fulfilled, (state, action) => {
-        // ✅ Обробка отримання кошика
-        state.cartItems = action.payload || [];
+        // Якщо приходить об'єкт, беремо його `items`, інакше залишаємо масив
+        state.cartItems = action.payload;
 
-        // console.log("action.payload: ", action.payload);
-
-        state.allQuantity = state.cartItems.reduce((total, item) => {
-          return total + item.quantity;
-        }, 0);
-        state.totalPrice = state.cartItems.reduce((total, item) => {
-          return total + item.selectedVariation.discountPrice * item.quantity;
-        }, 0);
+        state.allQuantity = state.cartItems.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
+        state.totalPrice = state.cartItems.reduce(
+          (total, item) =>
+            total + item.selectedVariation.discountPrice * item.quantity,
+          0
+        );
 
         state.loading = false;
         state.error = null;
       })
 
       .addCase(addToCart.fulfilled, (state, action) => {
-        // ✅ Додаємо обробку додавання в кошик
+        // console.log("action.payload: ", action.payload);
+
+        state.cartItems = action.payload;
+        // console.log("state.cartItems: ", state.cartItems);
+
+        state.allQuantity = state.cartItems.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
+        state.totalPrice = state.cartItems.reduce(
+          (total, item) =>
+            total + item.selectedVariation.discountPrice * item.quantity,
+          0
+        );
+
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(removeFromCart.fulfilled, (state, action) => {
+        console.log("action.payload: ", action.payload);
+
         state.cartItems = action.payload;
 
-        state.allQuantity = state.cartItems.reduce((total, item) => {
-          return total + item.quantity;
-        }, 0);
-        // console.log("ПІСЛЯ state.cartItems: ", state.cartItems);
-        state.totalPrice = state.cartItems.reduce((total, item) => {
-          return total + item.price * item.quantity;
-        }, 0);
+        state.allQuantity = state.cartItems.reduce(
+          (total, item) => total + item.quantity,
+          0
+        );
+        state.totalPrice = state.cartItems.reduce(
+          (total, item) =>
+            total + item.selectedVariation.discountPrice * item.quantity,
+          0
+        );
 
         state.loading = false;
         state.error = null;
       })
 
-      .addCase(removeFromCart.fulfilled, (state, action) => {
-        state.cartItems = action.payload.cartItems || [];
+      .addCase(updateQuantityInCart.fulfilled, (state, action) => {
+        state.cartItems = action.payload;
         state.allQuantity = state.cartItems.reduce(
           (total, item) => total + item.quantity,
           0
@@ -147,6 +171,7 @@ const basketSlice = createSlice({
           fetchProductDetails.pending,
           addToCart.pending,
           removeFromCart.pending,
+          updateQuantityInCart.pending,
           getCart.pending
         ),
         (state) => {
@@ -164,6 +189,7 @@ const basketSlice = createSlice({
           fetchProductDetails.rejected,
           addToCart.rejected,
           removeFromCart.rejected,
+          updateQuantityInCart.rejected,
           getCart.rejected
         ),
         (state) => {
