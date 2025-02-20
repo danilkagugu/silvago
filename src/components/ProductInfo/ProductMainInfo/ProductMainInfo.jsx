@@ -12,10 +12,15 @@ const ProductMainInfo = ({
   isFavorite,
   handleToneChange,
   handleVolumeChange,
-
   handleAddToCart,
   loading,
   breadcrumbs,
+  handleQuantityChange,
+  localQuantities,
+  selectedVariation,
+  quantityInCart,
+  handleInputChange,
+  isInCart,
 }) => {
   return (
     <div className={css.productGroup}>
@@ -45,7 +50,17 @@ const ProductMainInfo = ({
         />
       </div>
       <div className={css.productGroupItem}>
-        <ProductBuy handleAddToCart={handleAddToCart} volume={volume} />
+        <ProductBuy
+          handleAddToCart={handleAddToCart}
+          volume={volume}
+          handleQuantityChange={handleQuantityChange}
+          localQuantities={localQuantities}
+          selectedVariation={selectedVariation}
+          quantityInCart={quantityInCart}
+          handleInputChange={handleInputChange}
+          product={product}
+          isInCart={isInCart}
+        />
       </div>
     </div>
   );

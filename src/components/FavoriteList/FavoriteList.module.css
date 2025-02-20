@@ -25,6 +25,9 @@
   border: 0;
   cursor: pointer;
 }
+.btnClearList:hover {
+  color: #545454;
+}
 
 .catalogGrid {
   display: flex;

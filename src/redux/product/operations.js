@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
   addFavorite,
   changeVariation,
+  clearFavoritesApi,
   fetchFilteredProductsApi,
   getCountProductByFiltersApi,
   getDefaultVariations,
@@ -109,7 +110,6 @@ export const getFavoriteProducts = createAsyncThunk(
     try {
       const token = thunkAPI.getState().auth.token;
       const data = await getFavorite(userId, token);
-      // console.log("data: ", data);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);
@@ -140,6 +140,18 @@ export const toogleFavorite = createAsyncThunk(
         idTorgsoft,
         token
       );
+      return data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+  }
+);
+export const clearFavorites = createAsyncThunk(
+  "products/clearFavorites",
+  async ({ userId }, thunkAPI) => {
+    try {
+      const token = thunkAPI.getState().auth.token;
+      const data = await clearFavoritesApi(userId, token);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.message);

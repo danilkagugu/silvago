@@ -131,10 +131,32 @@
 .btn.special {
   color: #fff;
   border: 0;
-  background: #e79eb0;
+  background: #3b3b3b;
   box-shadow: none;
   padding: 0 16px;
   margin-top: 8px;
+}
+
+.btn.special:hover {
+  background: #4a4a4a;
+  border-color: #fff;
+  color: #fff;
+}
+
+.btn.inBasket {
+  border: 1px solid #fff;
+  background: none;
+  box-shadow: none;
+  text-shadow: none;
+  font-weight: normal;
+}
+.btn.inBasket.special {
+  border-color: #515151;
+  color: #686868;
+}
+
+.btn.inBasket.special:hover {
+  background: rgba(159, 159, 159, 0.1);
 }
 
 .btnText {

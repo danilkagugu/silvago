@@ -25,12 +25,14 @@ import {
   selectAllCategories,
 } from "../../redux/inventoryStore/selectors";
 import Skeleton from "react-loading-skeleton";
+import { selectItemsCart } from "../../redux/basket/selectors";
 
 const ProductDetail = () => {
   const dispatch = useDispatch();
   const { slug } = useParams();
 
   const userData = useSelector(selectUserData) || {};
+  const itemsCart = useSelector(selectItemsCart);
   // console.log("userData: ", userData);
   // console.log("id: ", id);
   const productDetails = useSelector(selectProductDetails);
@@ -73,6 +75,7 @@ const ProductDetail = () => {
           brandsTorgsoft={brandsTorgsoft}
           favorites={favorites}
           categories={categories}
+          itemsCart={itemsCart}
         />
       </div>
       <ViewedProducts />

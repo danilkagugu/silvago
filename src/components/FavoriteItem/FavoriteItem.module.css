@@ -12,6 +12,31 @@
   position: relative;
 }
 
+.removeBtn {
+  display: none;
+  position: absolute;
+  z-index: 50;
+  top: 8px;
+  right: 11px;
+  border: 0;
+  cursor: pointer;
+}
+.removeBtn:hover {
+  color: #545454;
+}
+
+.removeIcon {
+  display: inline-block;
+
+  vertical-align: middle;
+  font-size: 18px;
+  fill: currentColor;
+}
+
+.cardContainer:hover .removeBtn {
+  display: block;
+}
+
 .catalogCardMain {
   position: relative;
 }
