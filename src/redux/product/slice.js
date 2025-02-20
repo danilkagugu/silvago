@@ -14,6 +14,7 @@ import {
   fetchPriceRenge,
   getCountProductByFilters,
   toogleFavorite,
+  clearFavorites,
 } from "./operations";
 
 const INITIAL_STATE = {
@@ -103,10 +104,26 @@ const productSlice = createSlice({
         state.favoritesQuantity = newFavorites.length;
       })
       .addCase(toogleFavorite.fulfilled, (state, action) => {
-        state.favorites = action.payload;
-        // console.log("state.favorites: ", state.favorites);
+        // const { productId, idTorgsoft } = action.meta.arg;
+        // console.log("idTorgsoft: ", idTorgsoft);
+        // console.log("productId: ", productId);
+        // console.log("action.payload: ", action.payload);
+
+        // // Фільтруємо лише конкретну варіацію, а не весь товар
+        // state.favorites = state.favorites.filter(
+        //   (fav) =>
+        //     !(fav.productId === productId && fav.idTorgsoft === idTorgsoft)
+        // );
+        // state.favorites = action.payload;
+        // state.favoritesQuantity = state.favorites.length;
+        console.log("Updated favorites from backend:", action.payload);
+
+        state.favorites = action.payload.favorites; // Оновлюємо стан реальними даними
         state.favoritesQuantity = state.favorites.length;
-        state.loading = false;
+      })
+      .addCase(clearFavorites.fulfilled, (state) => {
+        state.favorites = [];
+        state.favoritesQuantity = 0;
       })
 
       .addCase(removeProductFavorite.fulfilled, (state, action) => {

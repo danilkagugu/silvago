@@ -94,6 +94,13 @@ export const toogleFavoriteApi = async (
   });
   return data;
 };
+export const clearFavoritesApi = async (userId, token) => {
+  const instance = createPrivateAxiosInstance(token);
+  const { data } = await instance.post(`/api/product/favorites/clear`, {
+    userId,
+  });
+  return data;
+};
 
 export const addProductToBasket = async (
   slug,

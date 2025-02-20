@@ -4,8 +4,7 @@ import { FaPlus } from "react-icons/fa6";
 import { CiHeart } from "react-icons/ci";
 
 const FavoriteProductActions = ({
-  volumeDetail,
-  quantities,
+  selectedVariation,
   handleQuantityChangee,
   handleInputChange,
   localQuantities,
@@ -13,25 +12,30 @@ const FavoriteProductActions = ({
   isFavorite,
   handleFavoriteToggle,
   handleAddToCart,
+  quantityInCart,
+  itemsCart,
 }) => {
+  // console.log("product", product);
+  const isInCart = !!itemsCart.find(
+    (item) =>
+      item.productId === product.productId &&
+      item.selectedVariation.idTorgsoft === selectedVariation.idTorgsoft
+  );
+
   return (
     <>
-      {volumeDetail?.quantity > 0 && (
+      {selectedVariation?.quantity > 0 && (
         <div>
           <div className={css.catalogCardFooterButtons}>
             <div className={css.catalogCardFooterOrder}>
               <div className={css.counter}>
                 <div className={css.counterContainer}>
                   <button
-                    className={`${css.counterBtn} 
-                    
-                     
-                    `}
+                    className={`${css.counterBtn} `}
                     onClick={() =>
                       handleQuantityChangee(
-                        product,
-                        (localQuantities[product.productId] ||
-                          product.quantity) - 1
+                        (localQuantities[selectedVariation.idTorgsoft] ??
+                          quantityInCart) - 1
                       )
                     }
                   >
@@ -40,32 +44,40 @@ const FavoriteProductActions = ({
                   <div className={css.counterInput}>
                     <input
                       className={css.counterField}
-                      type="number"
-                      // value={quantities[volumeDetail.idTorgsoft]}
-                      value={
-                        localQuantities[product.productId] ?? product.quantity
-                      }
+                      type="text"
+                      // value={quantities[selectedVariation.idTorgsoft]}
+                      value={localQuantities[selectedVariation.idTorgsoft] ?? 1}
                       min={"1"}
                       max={product.selectedVariation.quantity}
                       onChange={(e) => handleInputChange(e, product)}
+                      onBlur={() =>
+                        handleQuantityChangee(
+                          localQuantities[selectedVariation.idTorgsoft] ??
+                            quantityInCart
+                        )
+                      }
                     />
                   </div>
                   <button
                     className={`${css.counterBtn}
+                    
                     ${
-                      (localQuantities[product.productId] ||
-                        product.quantity) >= product.selectedVariation.quantity
+                      (localQuantities[selectedVariation.idTorgsoft] ??
+                        quantityInCart) >= selectedVariation.quantity
                         ? css.disabled
                         : ""
                     }
                     `}
-                    // disabled={quantity >= volumeDetail.quantity}
+                    // disabled={quantity >= selectedVariation.quantity}
                     onClick={() =>
                       handleQuantityChangee(
-                        product,
-                        (localQuantities[product.productId] ||
-                          product.quantity) + 1
+                        (localQuantities[selectedVariation.idTorgsoft] ??
+                          quantityInCart) + 1
                       )
+                    }
+                    disabled={
+                      (localQuantities[selectedVariation.idTorgsoft] ||
+                        quantityInCart) >= selectedVariation.quantity
                     }
                   >
                     <FaPlus className={`${css.icon} ${css.iconPlus}`} />
@@ -73,10 +85,14 @@ const FavoriteProductActions = ({
                 </div>
               </div>
               <button
-                className={`${css.btn} ${css.special}`}
+                className={`${css.btn} ${css.special} ${
+                  isInCart ? css.inBasket : ""
+                }`}
                 onClick={handleAddToCart}
               >
-                <span className={css.btnText}>Купити</span>
+                <span className={`${css.btnText}`}>
+                  {isInCart ? "В кошику" : "Купити"}
+                </span>
               </button>
             </div>
           </div>

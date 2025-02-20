@@ -51,7 +51,7 @@ const ModalBasket = ({ closeModal, open }) => {
     }
     setLocalQuantities((prev) => ({
       ...prev,
-      [item.productId]: newQuantity,
+      [item.selectedVariation.idTorgsoft]: newQuantity,
     }));
 
     dispatch(
@@ -76,12 +76,12 @@ const ModalBasket = ({ closeModal, open }) => {
 
     setLocalQuantities((prev) => ({
       ...prev,
-      [item.productId]: value || "", // Якщо поле порожнє, залишаємо ""
+      [item.selectedVariation.idTorgsoft]: value || "", // Якщо поле порожнє, залишаємо ""
     }));
   };
 
   const handleInputBlur = (item) => {
-    let newQuantity = localQuantities[item.productId];
+    let newQuantity = localQuantities[item.selectedVariation.idTorgsoft];
 
     if (!newQuantity || newQuantity < 1) {
       newQuantity = 1; // Мінімальна кількість - 1
@@ -216,7 +216,9 @@ const ModalBasket = ({ closeModal, open }) => {
                               // onClick={() => handleProductClick(item.slug)}
                             >
                               <div className={css.cartTitle}>
-                                <Link to={`/product/${item.slug}`}>
+                                <Link
+                                  to={`/product/${item.selectedVariation.slug}`}
+                                >
                                   {item.selectedVariation.fullName}
                                 </Link>
                               </div>
@@ -255,7 +257,8 @@ const ModalBasket = ({ closeModal, open }) => {
                                             handleQuantityChange(
                                               item,
                                               (localQuantities[
-                                                item.productId
+                                                item.selectedVariation
+                                                  .idTorgsoft
                                               ] || item.quantity) - 1
                                             );
                                           }
@@ -271,8 +274,9 @@ const ModalBasket = ({ closeModal, open }) => {
                                           type="text"
                                           // value={item.quantity}
                                           value={
-                                            localQuantities[item.productId] ??
-                                            item.quantity
+                                            localQuantities[
+                                              item.selectedVariation.idTorgsoft
+                                            ] ?? item.quantity
                                           }
                                           min={"1"}
                                           max={item.selectedVariation.quantity}
@@ -284,8 +288,9 @@ const ModalBasket = ({ closeModal, open }) => {
                                       </div>
                                       <button
                                         className={`${css.counterBtn} ${
-                                          (localQuantities[item.productId] ||
-                                            item.quantity) >=
+                                          (localQuantities[
+                                            item.selectedVariation.idTorgsoft
+                                          ] || item.quantity) >=
                                           item.selectedVariation.quantity
                                             ? css.disabled
                                             : ""
@@ -293,8 +298,9 @@ const ModalBasket = ({ closeModal, open }) => {
                                         onClick={() =>
                                           handleQuantityChange(
                                             item,
-                                            (localQuantities[item.productId] ||
-                                              item.quantity) + 1
+                                            (localQuantities[
+                                              item.selectedVariation.idTorgsoft
+                                            ] || item.quantity) + 1
                                           )
                                         }
                                         // disabled={

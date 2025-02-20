@@ -3,7 +3,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import css from "./ProductInfo.module.css";
 import { useDispatch } from "react-redux";
 import { toogleFavorite } from "../../redux/product/operations";
-import { addToCart } from "../../redux/basket/operations";
+import {
+  addToCart,
+  removeFromCart,
+  updateQuantityInCart,
+} from "../../redux/basket/operations";
 
 import ProductMainInfo from "./ProductMainInfo/ProductMainInfo";
 import ProductMedia from "./ProductMedia/ProductMedia";
@@ -18,15 +22,17 @@ const ProductInfo = ({
   favorites,
   categories,
   loading,
+  itemsCart,
 }) => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
   const { slug } = useParams();
-
+  // console.log("itemsCart", itemsCart);
   // const [quantities, setQuantities] = useState({});
-  const [quantity, setQuantity] = useState(1);
+  const [localQuantities, setLocalQuantities] = useState({});
+  console.log("localQuantities: ", localQuantities);
   const [descriptionTab, setDescriptionTab] = useState("Опис");
   const [descriptionInfoTab, setDescriptionInfoTab] = useState("Доставка");
   const [isExpanded, setIsExpanded] = useState(false);
@@ -34,10 +40,6 @@ const ProductInfo = ({
     productDetails.selectedVariation
   );
   // const loading = useSelector(selectProductLoading);
-
-  useEffect(() => {
-    setQuantity(1); // При зміні варіації значення quantity завжди скидається на 1
-  }, [selectedVariation]);
 
   useEffect(() => {
     if (isExpanded) {
@@ -79,6 +81,20 @@ const ProductInfo = ({
     }
   }, [productDetails]);
 
+  useEffect(() => {
+    const cartItem = itemsCart.find(
+      (item) =>
+        item.productId.toString() === productDetails.productId.toString() &&
+        Number(item.selectedVariation.idTorgsoft) ===
+          Number(selectedVariation.idTorgsoft)
+    );
+
+    setLocalQuantities((prev) => ({
+      ...prev,
+      [selectedVariation.idTorgsoft]: cartItem ? cartItem.quantity : 1,
+    }));
+  }, [selectedVariation, itemsCart]);
+
   const handleFavoriteToggle = () => {
     dispatch(
       toogleFavorite({
@@ -88,17 +104,19 @@ const ProductInfo = ({
       })
     );
   };
+
   const handleAddToCart = () => {
     dispatch(
       addToCart({
         userId: id,
         productId: productDetails.productId,
         idTorgsoft: selectedVariation.idTorgsoft,
-        quantity,
+        quantity:
+          localQuantities[productDetails.selectedVariation.idTorgsoft] ??
+          quantityInCart,
       })
     );
   };
-
   const handleVolumeChange = (volumeId) => {
     const newVariation = productDetails.variations.find(
       (variant) => variant.idTorgsoft === volumeId
@@ -106,6 +124,16 @@ const ProductInfo = ({
 
     if (newVariation) {
       setSelectedVariation(newVariation);
+      const cartItem = itemsCart.find(
+        (item) =>
+          item.productId === productDetails.productId &&
+          item.selectedVariation.idTorgsoft === newVariation.idTorgsoft
+      );
+
+      setLocalQuantities((prev) => ({
+        ...prev,
+        [newVariation.idTorgsoft]: cartItem ? cartItem.quantity : 1,
+      }));
       navigate(`/product/${newVariation?.slug}`);
     } else {
       console.error("Варіацію з таким об'ємом не знайдено");
@@ -133,12 +161,76 @@ const ProductInfo = ({
         Number(selectedVariation?.idTorgsoft)
   );
 
-  if (!productDetails) {
-    return <div>Завантаження...</div>;
-  }
+  // if (!productDetails) {
+  //   return <div>Завантаження...</div>;
+  // }
 
   // const { product, volume, breadcrumbs } = productDetails;
 
+  const handleQuantityChange = (newQuantity) => {
+    const cartItem = itemsCart.find(
+      (item) =>
+        item.productId === productDetails.productId &&
+        item.selectedVariation.idTorgsoft === selectedVariation.idTorgsoft
+    );
+
+    if (!cartItem) {
+      // Якщо товару немає в кошику – просто змінюємо localQuantities
+      setLocalQuantities((prev) => ({
+        ...prev,
+        [selectedVariation.idTorgsoft]: newQuantity,
+      }));
+      return;
+    }
+    if (newQuantity < 1) {
+      dispatch(
+        removeFromCart({
+          userId: id,
+          productId: productDetails.productId,
+          idTorgsoft: selectedVariation.idTorgsoft,
+        })
+      );
+    } else {
+      dispatch(
+        updateQuantityInCart({
+          userId: id,
+          productId: productDetails.productId,
+          idTorgsoft: selectedVariation.idTorgsoft,
+          quantity: newQuantity,
+        })
+      );
+    }
+  };
+
+  const handleInputChange = (e, item) => {
+    let value = e.target.value.replace(/\D/, ""); // Видаляємо нецифрові символи
+
+    if (value) {
+      value = parseInt(value, 10); // Конвертуємо у число
+      if (value > item.selectedVariation.quantity) {
+        value = item.selectedVariation.quantity; // Обмежуємо максимальною кількістю
+      }
+    }
+
+    setLocalQuantities((prev) => ({
+      ...prev,
+      [selectedVariation.idTorgsoft]: value || "", // Якщо поле порожнє, залишаємо ""
+    }));
+  };
+
+  const cartItem = itemsCart.find(
+    (item) =>
+      item.productId === productDetails.productId &&
+      item.selectedVariation.idTorgsoft ===
+        productDetails.selectedVariation.idTorgsoft
+  );
+  const isInCart = !!itemsCart.find(
+    (item) =>
+      item.productId === productDetails.productId &&
+      item.selectedVariation.idTorgsoft === selectedVariation.idTorgsoft
+  );
+  // console.log("isInCart", isInCart);
+  const quantityInCart = cartItem ? cartItem.quantity : 1;
   return (
     <>
       <section className={css.product}>
@@ -173,6 +265,12 @@ const ProductInfo = ({
                   slug={slug}
                   isFavorite={isFavorite}
                   loading={loading}
+                  handleQuantityChange={handleQuantityChange}
+                  localQuantities={localQuantities}
+                  selectedVariation={selectedVariation}
+                  quantityInCart={quantityInCart}
+                  handleInputChange={handleInputChange}
+                  isInCart={isInCart}
                 />
 
                 <ProductCharacteristics

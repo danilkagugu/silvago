@@ -6,7 +6,6 @@ const FavoriteProductModifications = ({
   handleVolumeChange,
   handleToneChange,
 }) => {
-  // console.log("product", product);
   return (
     <>
       <div className={`${css.modification} ${css.modificationCompact}`}>
@@ -15,37 +14,40 @@ const FavoriteProductModifications = ({
         </div>
 
         <div className={css.modificationList}>
-          {product.allVariations
+          {product &&
+            product?.allVariations
 
-            .filter((variant) => variant.tone === volumeDetail.tone) // Фільтруємо об'єми для поточного тону
-            .sort((a, b) => a.volume - b.volume)
-            .map((variant) => {
-              const isVolumeAvailable = variant.quantity > 0; // Перевіряємо наявність об'єму
-              const isCurrentVolume =
-                volumeDetail.idTorgsoft === variant.idTorgsoft;
-              // console.log("isCurrentVolume", isCurrentVolume);
-              return (
-                <span
-                  className={`${css.btn} ${css.modificationButton} ${
-                    isCurrentVolume ? css.modificationButtonActive : ""
-                  } ${
-                    !isVolumeAvailable && !isCurrentVolume ? css.buttonGray : ""
-                  }`}
-                  key={variant.idTorgsoft}
-                  onClick={() => handleVolumeChange(variant.idTorgsoft)}
-                >
-                  {/* {variant.volume} мл */}
-                  {`${variant.volume + " " + product.measure}`}
-                  {!isVolumeAvailable && (
-                    <div className={`${css.tooltipWrapper}`}>
-                      <div className={`${css.tooltip} ${css.tooltipTop}`}>
-                        Немає в наявності
+              .filter((variant) => variant.tone === volumeDetail?.tone) // Фільтруємо об'єми для поточного тону
+              .sort((a, b) => a.volume - b.volume)
+              .map((variant) => {
+                const isVolumeAvailable = variant.quantity > 0; // Перевіряємо наявність об'єму
+                const isCurrentVolume =
+                  volumeDetail?.idTorgsoft === variant.idTorgsoft;
+                // console.log("isCurrentVolume", isCurrentVolume);
+                return (
+                  <span
+                    className={`${css.btn} ${css.modificationButton} ${
+                      isCurrentVolume ? css.modificationButtonActive : ""
+                    } ${
+                      !isVolumeAvailable && !isCurrentVolume
+                        ? css.buttonGray
+                        : ""
+                    }`}
+                    key={variant.idTorgsoft}
+                    onClick={() => handleVolumeChange(variant.idTorgsoft)}
+                  >
+                    {/* {variant.volume} мл */}
+                    {`${variant.volume + " " + product.measure}`}
+                    {!isVolumeAvailable && (
+                      <div className={`${css.tooltipWrapper}`}>
+                        <div className={`${css.tooltip} ${css.tooltipTop}`}>
+                          Немає в наявності
+                        </div>
                       </div>
-                    </div>
-                  )}
-                </span>
-              );
-            })}
+                    )}
+                  </span>
+                );
+              })}
         </div>
       </div>
       {product.allVariations.some((variant) => variant.tone) && ( // Відображення тільки якщо є тони
@@ -65,10 +67,10 @@ const FavoriteProductModifications = ({
                   const isToneAvailable = product.allVariations.some(
                     (variant) =>
                       variant.tone === uniqueTone &&
-                      variant.volume === volumeDetail.volume &&
+                      variant.volume === volumeDetail?.volume &&
                       variant.quantity > 0 // Перевіряємо, чи є товар у наявності
                   );
-                  const isCurrentTone = volumeDetail.tone === uniqueTone;
+                  const isCurrentTone = volumeDetail?.tone === uniqueTone;
                   return (
                     <span
                       key={uniqueTone}

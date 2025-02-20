@@ -4,18 +4,24 @@ import { selectFavoritesProducts } from "../../redux/product/selectors";
 import { selectUserData } from "../../redux/auth/selectors";
 import { getFavoriteProducts } from "../../redux/product/operations";
 import { useEffect } from "react";
+import { selectItemsCart } from "../../redux/basket/selectors";
 
 const Favorite = () => {
   const dispatch = useDispatch();
   const favoriteProducts = useSelector(selectFavoritesProducts);
   const id = useSelector(selectUserData);
+  const itemsCart = useSelector(selectItemsCart);
 
   useEffect(() => {
-    dispatch(getFavoriteProducts(id.id));
-  }, [dispatch, id.id, favoriteProducts.length]);
+    dispatch(getFavoriteProducts(id?.id));
+  }, [dispatch, id?.id, favoriteProducts.length]);
   return (
     <>
-      <FavoriteList favoriteProducts={favoriteProducts} id={id} />
+      <FavoriteList
+        favoriteProducts={favoriteProducts}
+        id={id}
+        itemsCart={itemsCart}
+      />
     </>
   );
 };
