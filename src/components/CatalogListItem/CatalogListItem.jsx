@@ -21,7 +21,6 @@ import {
 import { addProduct } from "../../redux/basket/operations";
 
 const CatalogListItem = ({ product }) => {
-  console.log("product: ", product);
   const dispatch = useDispatch();
 
   const favorites = useSelector(selectFavoritesProducts);
@@ -41,7 +40,6 @@ const CatalogListItem = ({ product }) => {
   const [activeVariation, setActiveVariation] = useState(
     product.activeVariation || product.variations[0]
   );
-  console.log("activeVariation", activeVariation);
 
   useEffect(() => {
     setActiveVariation(product.activeVariation || product.variations[0]);

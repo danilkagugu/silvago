@@ -22,7 +22,6 @@ const CatalogList = ({
   query,
 }) => {
   const isMobile = window.innerWidth <= 1440;
-  console.log("categoriesCount", categoriesCount);
   const { updateFilters } = useCatalogFilters();
 
   const dispatch = useDispatch();

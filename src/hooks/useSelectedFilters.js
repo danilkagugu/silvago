@@ -22,7 +22,6 @@ export const parseFiltersFromUrl = (pathname, search) => {
   }
   const searchParams = new URLSearchParams(search);
   const query = searchParams.get("query") || "";
-  console.log("queryQQQ: ", query);
   if (!filtersPart)
     return { brands: [], categories: [], price: [], page: 1, query };
   console.log("filtersPart", filtersPart);

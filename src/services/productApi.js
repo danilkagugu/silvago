@@ -67,7 +67,6 @@ export const addFavorite = async (userId, productId, idTorgsoft, token) => {
     productId,
     idTorgsoft,
   });
-  console.log("data", data);
   return data;
 };
 
@@ -76,7 +75,6 @@ export const removeFavorite = async (userId, productId, idTorgsoft, token) => {
   const { data } = await instance.delete(`/api/product/favorites`, {
     data: { userId, productId, idTorgsoft },
   });
-  console.log("data", data);
   return data;
 };
 
@@ -117,7 +115,6 @@ export const addProductToBasket = async (
     volume,
     tone,
   });
-  console.log("tone", tone);
   return data;
 };
 
@@ -152,7 +149,6 @@ export const removeFromCartApi = async (
   token
 ) => {
   const instance = createPrivateAxiosInstance(token);
-  console.log("userId", userId);
   const { data } = await instance.delete(`/api/product/cart/remove`, {
     data: { userId, productId, idTorgsoft }, // Передаємо дані в `data`
     headers: { Authorization: `Bearer ${token}` }, // Додаємо токен
@@ -183,7 +179,6 @@ export const deleteProductFromBasket = async ({ productId, volume, token }) => {
   const { data } = await instance.delete(`/api/product/basket/delete`, {
     data: { productId: productId, volume: volume },
   });
-  console.log("data", data);
   return data;
 };
 
@@ -208,7 +203,6 @@ export const updateProductQuantity = async ({
     quantity,
     tone,
   });
-  console.log("data", data);
   return data;
 };
 
@@ -261,7 +255,6 @@ export const getPriceRenge = async () => {
 };
 
 export const getCountProductByFiltersApi = async (filters) => {
-  console.log("filters: ", filters);
   const instance = createPublicAxiosInstance();
 
   // Формуємо параметри фільтрів для запиту
@@ -272,7 +265,6 @@ export const getCountProductByFiltersApi = async (filters) => {
       return `${key}=${value}`;
     })
     .join("&");
-  // console.log('queryString',queryString);
   const url = queryString
     ? `/api/product/filter?${queryString}`
     : `/api/product/filter`;
@@ -300,7 +292,6 @@ export const fetchFilteredProductsApi = async ({
 
   // Функція для формування URL у потрібному форматі
   const buildCustomUrl = (params) => {
-    console.log("params: ", params);
     const hasFilters =
       (Array.isArray(params.brand) && params.brand.length > 0) ||
       (Array.isArray(params.category) && params.category.length > 0) ||
@@ -319,10 +310,8 @@ export const fetchFilteredProductsApi = async ({
         ? `/api/product/catalog/category/${categorySlug}/filter`
         : `/api/product/catalog/category/${categorySlug}`;
     } else if (query) {
-      console.log("нема фільтри");
       baseUrl = `/api/product/catalog/search`;
       if (hasFilters) {
-        console.log("є фільтри");
         baseUrl = `/api/product/catalog/search/filter`;
       }
     } else {
@@ -331,7 +320,6 @@ export const fetchFilteredProductsApi = async ({
         ? "/api/product/catalog/filter"
         : "/api/product/catalog";
     }
-    console.log("baseUrl", baseUrl);
     const validParams = Object.entries(params).filter(([key, value]) => {
       if (key === "page" && value === 1) return false; // Пропускаємо page=1
       if (key === "limit" && value === 20) return false; // Пропускаємо limit=20
@@ -361,7 +349,6 @@ export const fetchFilteredProductsApi = async ({
     page,
     limit,
   });
-  console.log("URL запиту на бекенд:", url);
 
   try {
     // Надсилаємо GET-запит
